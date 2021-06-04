@@ -24,3 +24,6 @@ Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name
 
 // Rotas das Tarefas
 Route::post('/new_task_submit', [App\Http\Controllers\TarefaController::class, 'new_task_submit'])->name('new_task_submit');
+
+// Rotas dos Clientes
+Route::get('/clientes', [App\Http\Controllers\ClienteController::class, 'clientes'])->name('clientes');

@@ -248,7 +248,7 @@ return [
         ],
         [
             'text'        => 'Clientes',
-            'url'         => 'admin/pages',
+            'url'         => '/clientes',
             'icon'        => 'fas fa-hospital-user',
             // 'label'       => 4,
             'label_color' => 'success',
