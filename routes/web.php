@@ -27,3 +27,4 @@ Route::post('/new_task_submit', [App\Http\Controllers\TarefaController::class, '
 
 // Rotas dos Clientes
 Route::get('/clientes', [App\Http\Controllers\ClienteController::class, 'clientes'])->name('clientes');
+Route::post('/new_cliente_submit', [App\Http\Controllers\ClienteController::class, 'new_cliente_submit'])->name('new_cliente_submit');

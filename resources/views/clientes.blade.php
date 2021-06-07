@@ -15,51 +15,46 @@
         <!-- /.card-header -->
         <div class="card-body">
           <div id="example1_wrapper" class="dataTables_wrapper dt-bootstrap4">
-              <div class="row">
-                <div class="col-sm-8 col-md-6">
+              
+                {{-- <div class="col-sm-8 col-md-6">
+                    <div class="dt-buttons btn-group flex-wrap"></div>
+                </div> --}}
+                {{-- <div class="col-sm-4 col-md-4"> --}}
+                    {{-- <div id="example1_filter" class="dataTables_filter"></div> --}}
+                {{-- </div> --}}
+            
+                <div class="col-sm-8 col-md-6" style="margin-bottom: -30px">
                     <div class="dt-buttons btn-group flex-wrap"></div>
                 </div>
-                <div class="col-sm-4 col-md-4">
-                    <div id="example1_filter" class="dataTables_filter"></div>
-                </div>
-            </div>
             </div>
             <div class="row">
                 <div class="col-sm-12">
-
+                    
                     <table id="example1" class="table table-bordered table-striped dataTable dtr-inline" role="grid" aria-describedby="example1_info">
+                        
                     <thead>
                         <tr role="row">
                             <th>#</th>
                             <th class="sorting sorting_asc" tabindex="0" aria-controls="example1" rowspan="1" colspan="1" aria-sort="ascending" title="Classificar crescente / decrescente">Cliente</th>
                             <th class="sorting" tabindex="0" aria-controls="example1" rowspan="1" colspan="1">Endereço</th>
                             <th class="sorting" tabindex="0" aria-controls="example1" rowspan="1" colspan="1">Telefone</th>
+                            <th class="sorting" tabindex="0" aria-controls="example1" rowspan="1" colspan="1">Celular</th>
                             <th class="sorting" tabindex="0" aria-controls="example1" rowspan="1" colspan="1">E-mail</th>
                         </tr>
                     </thead>
                     <tbody>
-
-                    <tr class="odd">
-                    <td>1</td>
-                    <td class="dtr-control sorting_1" tabindex="0">Novitá</td>
-                    <td>SGON, Quadra 3, CL Lote 1/10, Sala 268/273</td>
-                    <td>3041-3218</td>
-                    <td>daiane@novitahomecare.com.br</td>
-                    </tr>
-                    <tr class="odd">
-                        <td>2</td>
-                        <td class="dtr-control sorting_1" tabindex="0">Indoor</td>
-                        <td>SCRN 716 Bloco D Loja 24A Asa Norte - Brasília-DF</td>
-                        <td>3037-3444</td>
-                        <td>enfermagem@indoorhomecare.com.br</td>
-                    </tr>
-                    <tr class="odd">
-                        <td>3</td>
-                        <td class="dtr-control sorting_1" tabindex="0">SOS Vida</td>
-                        <td>SHN Qd 02, nº 87, Bl F Sala 818, Executive Office Tower - Asa Norte</td>
-                        <td>3771-5490</td>
-                        <td>quesia.moreira@sosvida.com.br</td>
-                    </tr>
+                        @foreach ($clientes as $cliente)
+                            <tr class="odd">
+                                <td>{{$cliente->id}}</td>
+                                <td class="dtr-control sorting_1" tabindex="0">{{$cliente->cliente}}</td>
+                                <td>{{$cliente->endereco}}</td>
+                                <td>{{$cliente->telefone}}</td>
+                                <td>{{$cliente->celular}}</td>
+                                <td>{{$cliente->email}}</td>
+                            </tr>
+                        @endforeach
+                   
+                    
 
                 </tbody>
                     <tfoot>
@@ -83,8 +78,7 @@
                             <span aria-hidden="true">&times;</span>
                         </button>
                         </div>
-                        {{-- <form action="{{route('new_task_submit')}}" method="post"> --}}
-                        <form action="#" method="post">
+                        <form action="{{route('new_cliente_submit')}}" method="post">
                         <div class="modal-body">
                             @csrf
                             <div class="row form-group">
@@ -106,7 +100,7 @@
                                 </div>
                             </div>
                             <div class="row form-group">
-                                <label for="tarefa">E-mail:</label>
+                                <label for="e-mail">E-mail:</label>
                                 <input type="email" class="form-control" name="e-mail" id="e-mail" placeholder="e-mail de contato" required>
                             </div>
 

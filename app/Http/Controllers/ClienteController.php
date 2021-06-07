@@ -14,10 +14,8 @@ class ClienteController extends Controller
      */
     public function clientes()
     {
-        // $clientes = DB::SELECT("SELECT * FROM clientes");
-
-        return view('clientes');
-        // return view('clientes', ['tasks'=> $clientes]);
+        $clientes = DB::SELECT("SELECT * FROM clientes");
+        return view('clientes', ['clientes'=> $clientes]);
     }
 
     /**
@@ -36,9 +34,28 @@ class ClienteController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function new_cliente_submit(Request $request)
     {
-        //
+        //ADICIONA NOVO CLIENTE
+
+        //BUSCA DADOS DOS INPUTS
+        $newCliente = $request->input('cliente');
+        $newEndereco = $request->input('endereco');
+        $newTelefone = $request->input('telefone');
+        $newCelular = $request->input('celular');
+        $newEmail = $request->input('e-mail');
+
+        //SALVA OS DADOS DOS INPUTS NO BANDO DE DADOS
+        $TBCliente = new Cliente();
+        $TBCliente->cliente = $newCliente;
+        $TBCliente->endereco = $newEndereco;
+        $TBCliente->telefone = $newTelefone;
+        $TBCliente->celular = $newCelular;
+        $TBCliente->email = $newEmail;
+        $TBCliente->save();
+
+        return redirect()->to('/clientes');
+
     }
 
     /**
