@@ -262,7 +262,7 @@ return [
         ],
         [
             'text'        => 'Equipamentos',
-            'url'         => 'admin/pages',
+            'url'         => '/equipamentos',
             'icon'        => 'fas fa-stethoscope',
             // 'label'       => 4,
             'label_color' => 'success',

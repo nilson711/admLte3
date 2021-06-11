@@ -45,7 +45,24 @@ class TarefaController extends Controller
         $TBtarefa = new Tarefa();
         $TBtarefa->tarefa = $newtarefa;
         $TBtarefa->save();
-        
+
+        return redirect()->to('/home');
+    }
+
+    public function checkTarefa (Request $request)
+    {
+        //ATUALIZA O CHECK DA TAREFA NO BD
+
+        //BUSCA DADOS DOS INPUTS
+        $newtarefa = $request->input('tarefa');
+        $newcheckTarefa = $request->input('checkTarefa');
+
+        //SALVA OS DADOS DOS INPUTS NO BANCO DE DADOS
+        $TBtarefa = new Tarefa();
+        $TBtarefa->tarefa = $newtarefa;
+        $TBtarefa->visible = $newcheckTarefa;
+        $TBtarefa->save();
+
         return redirect()->to('/home');
 
     }

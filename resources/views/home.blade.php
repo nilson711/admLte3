@@ -8,10 +8,10 @@
 
 @section('content')
     <p>Painel de Informações</p>
-    
+
   <div class="row">
 
-    <div class="col-md-6">   
+    <div class="col-md-6">
 
       <div class="card">
       <div class="card-header">
@@ -58,7 +58,7 @@
                             </button>
                           </div>
                           <div class="modal-body">
-                            There are many variations of passages of Lorem Ipsum available, but the majority have suffered alteration in some form, by injected humour, or randomised words which don't look even slightly believable. If you are going to use a passage of Lorem Ipsum, you need to be sure there isn't anything embarrassing hidden in the middle of text. 
+                            There are many variations of passages of Lorem Ipsum available, but the majority have suffered alteration in some form, by injected humour, or randomised words which don't look even slightly believable. If you are going to use a passage of Lorem Ipsum, you need to be sure there isn't anything embarrassing hidden in the middle of text.
                           </div>
                           <div class="modal-footer">
                             <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -69,7 +69,7 @@
                     </div>
 
             </td>
-              
+
             </tr>
             <tr>
               <td>2</td>
@@ -77,7 +77,7 @@
               <td>Indoor</td>
               <td><i class="fas fa-minus-circle" title="Recolhimento"></i></td>
               <td><button type="button" class="btn btn-outline-info btn-sm" title="Informações da Solicitação" data-toggle="modal" data-target="#ModalInfoSolicitacao"><i class="fas fa-info-circle"></i></button></td>
-              
+
             </tr>
             <tr>
               <td>3</td>
@@ -85,7 +85,7 @@
               <td>Catedral</td>
               <td><i class="fas fa-times-circle" title="Recolhimento Total"></i></td>
               <td><button type="button" class="btn btn-outline-info btn-sm" title="Informações da Solicitação" data-toggle="modal" data-target="#ModalInfoSolicitacao"><i class="fas fa-info-circle"></i></button></td>
-              
+
             </tr>
             <tr>
               <td>4</td>
@@ -93,7 +93,7 @@
               <td>SOS Vida</td>
               <td><i class="fas fa-tools" title="Troca/Manutenção"></i></i></td>
               <td><button type="button" class="btn btn-outline-info btn-sm" title="Informações da Solicitação" data-toggle="modal" data-target="#ModalInfoSolicitacao"><i class="fas fa-info-circle"></i></button></td>
-              
+
             </tr>
             <tr>
               <td>5</td>
@@ -101,7 +101,7 @@
               <td>Mederi</td>
               <td><i class="fas fa-dolly" title="Mudança de Local"></i></td>
               <td><button type="button" class="btn btn-outline-info btn-sm" title="Informações da Solicitação" data-toggle="modal" data-target="#ModalInfoSolicitacao"><i class="fas fa-info-circle"></i></button></td>
-              
+
             </tr>
           </tbody>
         </table>
@@ -132,18 +132,21 @@
         </div>
         <!-- /.card-header -->
         <div class="card-body">
+            <form action="{{route('checkTarefa')}}" method="post">
           <ul class="todo-list ui-sortable" data-widget="todo-list">
-            
+
             @foreach ($tasks as $task)
-            
+
               <li class="" style="">
                 <!-- drag handle -->
                 <span class="handle ui-sortable-handle">
                 </span>
                 <!-- checkbox -->
+
                 <div class="icheck-primary d-inline ml-2">
-                  <input type="checkbox" value="" name="todo1" id="todoCheck1">
-                  <label for="todoCheck1"></label>
+                    <label for="checkTarefa"></label>
+                    <input type="checkbox" value="0" name="checkTarefa" id="checkTarefa">
+                
                 </div>
                 <!-- todo text -->
                 <span class="text">{{$task->tarefa}}</span>
@@ -156,20 +159,20 @@
                 </div>
               </li>
             @endforeach
-    
-            
+
+
           </ul>
           @if (count($tasks) === 0)
-           <p>Não existem tarefas</p>   
+           <p>Não existem tarefas</p>
           @else
               <small>{{count($tasks)}} Tarefa(s)</small>
           @endif
         </div>
         <!-- /.card-body -->
         <div class="card-footer clearfix">
-          
+
             <button type="button" class="btn btn-outline-primary float-right" data-toggle="modal" data-target="#ModalAddTarefa"><i class="fas fa-plus"></i> Nova Tarefa</button>
-        
+
 
           <!-- Modal -->
           <div class="modal fade" id="ModalAddTarefa" tabindex="-1" role="dialog" aria-labelledby="ModalAddTarefa" aria-hidden="true">
@@ -188,7 +191,7 @@
                         <label for="tarefa">Tarefa</label>
                         <input type="text" class="form-control" name="tarefa" id="tarefa" placeholder="Digite aqui" maxlength="50">
                       </div>
-                  
+
                   </div>
                   <div class="modal-footer">
                     <div class="form-group">
@@ -205,11 +208,11 @@
         </div>
       </div>
     </div>
-    
+
 
 
       <!-- TO DO List -->
-      
+
       <!-- /.card -->
     </section>
 @stop

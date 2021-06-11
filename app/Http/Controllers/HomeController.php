@@ -24,8 +24,8 @@ class HomeController extends Controller
      */
     public function index()
     {
-        $tasks = DB::SELECT("SELECT * FROM tarefas");
-                
+        $tasks = DB::SELECT("SELECT * FROM tarefas WHERE visible = 1 ");
+
         return view('home', ['tasks'=> $tasks]);
     }
 }
