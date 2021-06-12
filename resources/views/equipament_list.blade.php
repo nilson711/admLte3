@@ -409,6 +409,9 @@
                                     </td>
 
                                     </td>
+                                    <td>
+                                        <p>botão</p>
+                                    </td>
                                     {{-- <td>{{$equip->rent_equip}}</td> --}}
                                     {{-- <td style="text-align: center; vertical-align: middle"> --}}
                                         {{-- @if ($equip->rent_equip == '0')
