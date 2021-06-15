@@ -255,7 +255,7 @@ return [
         ],
         [
             'text'        => 'Pacientes',
-            'url'         => 'admin/pages',
+            'url'         => '/pacientes',
             'icon'        => 'fas fa-procedures',
             // 'label'       => 4,
             'label_color' => 'success',

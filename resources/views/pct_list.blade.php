@@ -1,6 +1,6 @@
 @extends('adminlte::page')
 
-@section('title', 'Clientes')
+@section('title', 'Pcts')
 
 @section('content_header')
 
@@ -10,7 +10,7 @@
 
     <div class="card">
         <div class="card-header">
-          <h3 class="card-title">Clientes</h3>
+          <h3 class="card-title">Pacientes</h3>
         </div>
         <!-- /.card-header -->
         <div class="card-body">
@@ -34,27 +34,41 @@
 
                         <thead>
                             <tr role="row">
-                                <th>#</th>
-                                <th class="sorting sorting_asc" tabindex="0" aria-controls="example1" rowspan="1" colspan="1" aria-sort="ascending" title="Classificar crescente / decrescente">Cliente</th>
-                                {{-- <th class="sorting col-sm-4" tabindex="0" aria-controls="example1" rowspan="1" colspan="1">Endereço</th> --}}
-                                <th class="sorting col-sm-1" tabindex="0" aria-controls="example1" rowspan="1" colspan="1">Telefone</th>
-                                <th class="sorting" tabindex="0" aria-controls="example1" rowspan="1" colspan="1">Celular</th>
-                                <th class="sorting" tabindex="0" aria-controls="example1" rowspan="1" colspan="1">E-mail</th>
+                                <th class="col-sm-1" style="text-align: center">#</th>
+                                <th class="sorting sorting_asc col-sm-3" tabindex="0" aria-controls="example1" rowspan="1" colspan="1" aria-sort="ascending" title="Classificar crescente / decrescente">Nome</th>
+                                <th class="sorting col-sm-4" tabindex="0" aria-controls="example1" rowspan="1" colspan="1">Endereço</th>
+                                {{-- <th class="sorting col-sm-1" tabindex="0" aria-controls="example1" rowspan="1" colspan="1">Bairro</th> --}}
+                                <th class="sorting col-sm-1" tabindex="0" aria-controls="example1" rowspan="1" colspan="1">Cidade</th>
+                                {{-- <th class="sorting col-sm-1" tabindex="0" aria-controls="example1" rowspan="1" colspan="1">UF</th> --}}
+                                <th class="sorting col-sm-1" data-toggle="tooltip" title="Localização do Paciente" aria-controls="example1" rowspan="1" colspan="1" style="text-align: center"><i class="fas fa-map-marker-alt"></i></th>
+                                {{-- <th class="sorting" tabindex="0" aria-controls="example1" rowspan="1" colspan="1">Telefone</th> --}}
+                                {{-- <th class="sorting" tabindex="0" aria-controls="example1" rowspan="1" colspan="1">Celular</th> --}}
+                                {{-- <th class="sorting" tabindex="0" aria-controls="example1" rowspan="1" colspan="1">Home Care</th> --}}
                             </tr>
                         </thead>
                         <tbody>
-                            <div data-toggle="modal" data-target="#ModalAddCliente">
-                                <button data-toggle="tooltip" title="Adicionar novo Cliente" type="button" class="btn btn-sm btn-outline-primary float-right" ><i class="fas fa-plus"></i></button>
+                            <div data-toggle="modal" data-target="#ModalAddPct">
+                                <button data-toggle="tooltip" title="Adicionar novo Paciente" type="button" class="btn btn-sm btn-outline-primary float-right" ><i class="fas fa-plus"></i></button>
                             </div>
 
-                            @foreach ($clientes as $cliente)
+                            @foreach ($allPcts as $Pct)
                             <tr class="odd" style="line-height: 100%">
-                                <td>{{$cliente->id}}</td>
-                                <td>{{$cliente->cliente}}</td>
-                                {{-- <td>{{$cliente->endereco}}</td> --}}
-                                <td>{{$cliente->telefone}}</td>
-                                <td>{{$cliente->celular}}</td>
-                                <td>{{$cliente->email}}</td>
+                                <td style="text-align: center">{{$Pct->id}}</td>
+                                <td>{{$Pct->name_pct}}</td>
+                                <td>{{$Pct->end_pct}}</td>
+                                {{-- <td>{{$Pct->bairro_pct}}</td> --}}
+                                <td>
+                                    @foreach ( $allCities as $City)
+                                        @if ($City->id == $Pct->city_pct)
+                                            {{$City->nome}}
+                                        @endif
+                                    @endforeach
+                                </td>
+                                {{-- <td>{{$Pct->uf_pct}}</td> --}}
+                                <td style="text-align: center">{{$Pct->localization_pct}}</td>
+                                {{-- <td>{{$Pct->tel1_pct}}</td> --}}
+                                {{-- <td>{{$Pct->tel2_pct}}</td> --}}
+                                {{-- <td>{{$Pct->id_hc}}</td> --}}
                             </tr>
                         @endforeach
 
@@ -73,21 +87,22 @@
 
 
                 <!-- Modal -->
-                <div class="modal fade" id="ModalAddCliente" tabindex="-1" role="dialog" aria-labelledby="ModalAddCliente" aria-hidden="true">
+                <div class="modal fade" id="ModalAddPct" tabindex="-1" role="dialog" aria-labelledby="ModalAddPct" aria-hidden="true">
                     <div class="modal-dialog" role="document">
                     <div class="modal-content">
                         <div class="modal-header">
-                        <h5 class="modal-title" id="ModalAddCliente">Adicionar Novo Cliente</h5>
+                        <h5 class="modal-title" id="ModalAddPct">Adicionar Novo Pct</h5>
                         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                             <span aria-hidden="true">&times;</span>
                         </button>
                         </div>
-                        <form action="{{route('new_cliente_submit')}}" method="post">
+                        <form action="#" method="post">
+                        {{-- <form action="{{route('new_Pct_submit')}}" method="post"> --}}
                         <div class="modal-body">
                             @csrf
                             <div class="row form-group">
-                                <label for="cliente">Cliente:</label>
-                                <input type="text" class="form-control" name="cliente" id="cliente" placeholder="Nome do Home Care" maxlength="50" required>
+                                <label for="Pct">Pct:</label>
+                                <input type="text" class="form-control" name="Pct" id="Pct" placeholder="Nome do Home Care" maxlength="50" required>
                             </div>
                             <div class="row form-group">
                                 <label for="endereco">Endereço:</label>

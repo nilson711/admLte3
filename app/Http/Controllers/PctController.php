@@ -3,10 +3,26 @@
 namespace App\Http\Controllers;
 
 use App\Models\Pct;
+use App\Models\Cidade;
+
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class PctController extends Controller
 {
+
+    public function listaPcs()
+    {
+        $allPcts = new Pct;
+        $allPcts = DB::SELECT("SELECT * FROM pcts ORDER BY name_pct");
+
+        $allCities = new Cidade;
+        $allCities = DB::SELECT("SELECT * from cidades ORDER BY nome");
+
+
+        return view('pct_list', ['allPcts'=>$allPcts] + ['allCities'=>$allCities]);
+    }
+
     /**
      * Display a listing of the resource.
      *

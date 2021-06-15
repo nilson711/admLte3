@@ -33,3 +33,6 @@ Route::post('/new_cliente_submit', [App\Http\Controllers\ClienteController::clas
 // Rotas dos Equipamentos
 Route::get('/equipamentos', [App\Http\Controllers\EquipamentoController::class, 'listaEquips'])->name('listaEquips');
 Route::post('/newEquipSubmit', [App\Http\Controllers\EquipamentoController::class, 'newEquipSubmit'])->name('newEquipSubmit');
+
+//Rotas dos Pacientes
+Route::get('/pacientes', [App\Http\Controllers\PctController::class, 'listaPcs'])->name('listaPcs');
