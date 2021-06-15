@@ -4,7 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Cliente;
 use Illuminate\Http\Request;
-use \ DB;
+use Illuminate\Support\Facades\DB;
 class ClienteController extends Controller
 {
     /**

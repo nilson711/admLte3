@@ -36,18 +36,18 @@
                         <tr role="row">
                             <th>#</th>
                             <th class="sorting sorting_asc" tabindex="0" aria-controls="example1" rowspan="1" colspan="1" aria-sort="ascending" title="Classificar crescente / decrescente">Cliente</th>
-                            <th class="sorting" tabindex="0" aria-controls="example1" rowspan="1" colspan="1">Endereço</th>
-                            <th class="sorting" tabindex="0" aria-controls="example1" rowspan="1" colspan="1">Telefone</th>
+                            {{-- <th class="sorting col-sm-4" tabindex="0" aria-controls="example1" rowspan="1" colspan="1">Endereço</th> --}}
+                            <th class="sorting col-sm-1" tabindex="0" aria-controls="example1" rowspan="1" colspan="1">Telefone</th>
                             <th class="sorting" tabindex="0" aria-controls="example1" rowspan="1" colspan="1">Celular</th>
                             <th class="sorting" tabindex="0" aria-controls="example1" rowspan="1" colspan="1">E-mail</th>
                         </tr>
                     </thead>
                     <tbody>
                         @foreach ($clientes as $cliente)
-                            <tr class="odd">
+                            <tr class="odd" style="line-height: 100%">
                                 <td>{{$cliente->id}}</td>
                                 <td class="dtr-control sorting_1" tabindex="0">{{$cliente->cliente}}</td>
-                                <td>{{$cliente->endereco}}</td>
+                                {{-- <td>{{$cliente->endereco}}</td> --}}
                                 <td>{{$cliente->telefone}}</td>
                                 <td>{{$cliente->celular}}</td>
                                 <td>{{$cliente->email}}</td>
@@ -167,8 +167,9 @@
   $(function () {
     $("#example1").DataTable({
       "responsive": true, "lengthChange": false, "autoWidth": false,
-      "buttons": ["copy", "csv", "excel", "pdf", "print", "colvis"]
+      "buttons": ["copy", "csv", "excel", "pdf", "print"]
     }).buttons().container().appendTo('#example1_wrapper .col-md-6:eq(0)');
+    
     $('#example2').DataTable({
       "paging": true,
       "lengthChange": false,
@@ -179,5 +180,115 @@
       "responsive": true,
     });
   });
+</script>
+
+<script>
+    $(function () {
+      //Initialize Select2 Elements
+      $('.select2').select2()
+
+      //Initialize Select2 Elements
+      $('.select2bs4').select2({
+        theme: 'bootstrap4'
+      })
+
+      //Datemask dd/mm/yyyy
+      $('#datemask').inputmask('dd/mm/yyyy', { 'placeholder': 'dd/mm/yyyy' })
+      //Datemask2 mm/dd/yyyy
+      $('#datemask2').inputmask('mm/dd/yyyy', { 'placeholder': 'mm/dd/yyyy' })
+      //Money Euro
+      $('[data-mask]').inputmask()
+
+      //Date picker
+      $('#reservationdate').datetimepicker({
+          format: 'L'
+      });
+
+      //Date and time picker
+      $('#reservationdatetime').datetimepicker({ icons: { time: 'far fa-clock' } });
+
+      //Date range picker
+      $('#reservation').daterangepicker()
+      //Date range picker with time picker
+      $('#reservationtime').daterangepicker({
+        timePicker: true,
+        timePickerIncrement: 30,
+        locale: {
+          format: 'DD/MM/YYYY hh:mm A'
+        }
+      })
+      //Date range as a button
+      $('#daterange-btn').daterangepicker(
+        {
+          ranges   : {
+            'Today'       : [moment(), moment()],
+            'Yesterday'   : [moment().subtract(1, 'days'), moment().subtract(1, 'days')],
+            'Last 7 Days' : [moment().subtract(6, 'days'), moment()],
+            'Last 30 Days': [moment().subtract(29, 'days'), moment()],
+            'This Month'  : [moment().startOf('month'), moment().endOf('month')],
+            'Last Month'  : [moment().subtract(1, 'month').startOf('month'), moment().subtract(1, 'month').endOf('month')]
+          },
+          startDate: moment().subtract(29, 'days'),
+          endDate  : moment()
+        },
+        function (start, end) {
+          $('#reportrange span').html(start.format('MMMM D, YYYY') + ' - ' + end.format('MMMM D, YYYY'))
+        }
+      )
+
+      //Timepicker
+      $('#timepicker').datetimepicker({
+        format: 'LT'
+      })
+
+      //Bootstrap Duallistbox
+      $('.duallistbox').bootstrapDualListbox()
+
+      $("input[data-bootstrap-switch]").each(function(){
+        $(this).bootstrapSwitch('state', $(this).prop('checked'));
+      })
+
+    })
+
+  </script>
+
+<!-- jQuery -->
+{{-- <script src="js/jquery.min.js"></script> --}}
+<!-- Bootstrap 4 -->
+<script src="js/bootstrap.bundle.min.js"></script>
+<!-- Select2 -->
+<script src="js/select2.full.min.js"></script>
+<!-- Bootstrap4 Duallistbox -->
+<script src="js/jquery.bootstrap-duallistbox.min.js"></script>
+<!-- InputMask -->
+<script src="js/moment.min.js"></script>
+<script src="js/jquery.inputmask.min.js"></script>
+<!-- date-range-picker -->
+<script src="js/daterangepicker.js"></script>
+<!-- Tempusdominus Bootstrap 4 -->
+<script src="js/tempusdominus-bootstrap-4.min.js"></script>
+<!-- Bootstrap Switch -->
+<script src="js/bootstrap-switch.min.js"></script>
+<!-- BS-Stepper -->
+<script src="js/bs-stepper.min.js"></script>
+<!-- dropzonejs -->
+<script src="js/dropzone.min.js"></script>
+<!-- AdminLTE App -->
+<script src="js/adminlte.min.js"></script>
+<!-- AdminLTE for demo purposes -->
+<script src="js/demo.js"></script>
+<script src="js/functions-equips.js"></script>
+
+<script>
+  $(function () {
+  $('#datetimepicker5').datetimepicker({
+    locale: 'pt-br'
+  });
+});
+</script>
+<script>
+  $(function () {
+  $('[data-toggle="tooltip"]').tooltip()
+})
 </script>
 @stop

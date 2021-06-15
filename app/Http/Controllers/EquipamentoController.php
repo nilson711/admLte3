@@ -30,7 +30,10 @@ class EquipamentoController extends Controller
         // $equips = DB::SELECT("SELECT * FROM equipamentos");
 
         $equipsImplantados = new Equipamento();
-        $equipsImplantados = DB::SELECT("SELECT * FROM equipamentos WHERE pct_equip > 0");
+        $equipsImplantados = DB::SELECT("SELECT * FROM equipamentos WHERE pct_equip > 0 AND status_equip = 0");
+
+        $equipsManutencao = new Equipamento();
+        $equipsManutencao = DB::SELECT("SELECT * FROM equipamentos WHERE status_equip = 1");
 
         $fornecedores =  new Fornecedor();
         $fornecedores = DB::SELECT("SELECT id, name_fornec FROM fornecedors");
@@ -38,7 +41,7 @@ class EquipamentoController extends Controller
         $allPcts = new Pct;
         $allPcts = DB::SELECT("SELECT id, name_pct FROM pcts ORDER BY name_pct");
 
-        return view('equipament_list', ['equips'=>$equips] + ['fornecedores'=>$fornecedores] + ['allPcts'=>$allPcts] + ['equipsImplantados'=>$equipsImplantados]);
+        return view('equipament_list', ['equips'=>$equips] + ['fornecedores'=>$fornecedores] + ['allPcts'=>$allPcts] + ['equipsImplantados'=>$equipsImplantados] + ['equipsManutencao'=>$equipsManutencao]);
     }
     ///========================================================================================================================
 
