@@ -36,7 +36,7 @@
                             <tr role="row">
                                 <th class="col-sm-1" style="text-align: center">#</th>
                                 <th class="sorting sorting_asc col-sm-3" tabindex="0" aria-controls="example1" rowspan="1" colspan="1" aria-sort="ascending" title="Classificar crescente / decrescente">Nome</th>
-                                <th class="sorting col-sm-4" tabindex="0" aria-controls="example1" rowspan="1" colspan="1">Endereço</th>
+                                <th class="sorting col-sm-5" tabindex="0" aria-controls="example1" rowspan="1" colspan="1">Endereço</th>
                                 {{-- <th class="sorting col-sm-1" tabindex="0" aria-controls="example1" rowspan="1" colspan="1">Bairro</th> --}}
                                 <th class="sorting col-sm-1" tabindex="0" aria-controls="example1" rowspan="1" colspan="1">Cidade</th>
                                 {{-- <th class="sorting col-sm-1" tabindex="0" aria-controls="example1" rowspan="1" colspan="1">UF</th> --}}
@@ -65,7 +65,13 @@
                                     @endforeach
                                 </td>
                                 {{-- <td>{{$Pct->uf_pct}}</td> --}}
-                                <td style="text-align: center">{{$Pct->localization_pct}}</td>
+                                <td style="text-align: center">
+                                    @if ($Pct->localization_pct==0)
+
+                                    @else
+                                        <a href="{{$Pct->localization_pct}}">Local</a>
+                                    @endif
+                                </td>
                                 {{-- <td>{{$Pct->tel1_pct}}</td> --}}
                                 {{-- <td>{{$Pct->tel2_pct}}</td> --}}
                                 {{-- <td>{{$Pct->id_hc}}</td> --}}
@@ -88,10 +94,10 @@
 
                 <!-- Modal -->
                 <div class="modal fade" id="ModalAddPct" tabindex="-1" role="dialog" aria-labelledby="ModalAddPct" aria-hidden="true">
-                    <div class="modal-dialog" role="document">
+                    <div class="modal-dialog modal-lg" role="document">
                     <div class="modal-content">
                         <div class="modal-header">
-                        <h5 class="modal-title" id="ModalAddPct">Adicionar Novo Pct</h5>
+                        <h5 class="modal-title" id="ModalAddPct">Adicionar Novo Paciente</h5>
                         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                             <span aria-hidden="true">&times;</span>
                         </button>
@@ -100,29 +106,105 @@
                         {{-- <form action="{{route('new_Pct_submit')}}" method="post"> --}}
                         <div class="modal-body">
                             @csrf
+                            <div class="form-group">
+
+
                             <div class="row form-group">
-                                <label for="Pct">Pct:</label>
-                                <input type="text" class="form-control" name="Pct" id="Pct" placeholder="Nome do Home Care" maxlength="50" required>
-                            </div>
-                            <div class="row form-group">
-                                <label for="endereco">Endereço:</label>
-                                <input type="text" class="form-control" name="endereco" id="endereco" placeholder="Endereço" required>
-                            </div>
-                            <div class="row form-group">
-                                <div class="col-md-6">
-                                    <label for="telefone">Telefone:</label>
-                                    <input type="text" class="form-control" name="telefone" id="telefone" placeholder="Tel fixo" required>
+                                <div class="col-sm-6">
+                                    <label style="fo" for="Pct">Paciente:</label>
+                                    <input type="text" class="form-control form-control-sm" name="Pct" id="Pct" placeholder="Nome Completo do Paciente" maxlength="50" required>
                                 </div>
-                                <div class="col-md-6">
-                                    <label for="celular">Celular:</label>
-                                    <input type="text" class="form-control" name="celular" id="celular" placeholder="Celular" required>
+                                <div class="col-sm-4">
+                                    <label for="responsavel">Responsável:</label>
+                                    <input type="text" class="form-control form-control-sm" name="responsavel" id="responsavel" placeholder="Ex: Maria da Silva (Esposa)" maxlength="50" required>
+                                </div>
+                                <div class="col-sm-2">
+                                    <label for="telefone">Tel:</label>
+                                    <input type="text" class="form-control form-control-sm" style="font-size: 85%" name="telefone" id="telefone" placeholder="Celular" required>
                                 </div>
                             </div>
                             <div class="row form-group">
-                                <label for="e-mail">E-mail:</label>
-                                <input type="email" class="form-control" name="e-mail" id="e-mail" placeholder="e-mail de contato" required>
+                                <div class="col-sm-6">
+                                    <div class="input-group mb-3">
+                                        <div class="input-group-prepend">
+                                          <span class="input-group-text"><i class="fas fa-envelope"></i></span>
+                                        </div>
+                                        <input type="email" class="form-control form-control-sm" data-toggle="tooltip" title="E-mail do responsável" placeholder="E-mail de contato">
+                                      </div>
+                                </div>
+                                <div class="col-sm-4">
+                                    <input type="text" class="form-control form-control-sm" name="responsavel" id="responsavel" placeholder="Ex: Manoel da Silva (Filho)" maxlength="50" required>
+                                </div>
+                                <div class="col-sm-2">
+                                    <input type="text" class="form-control form-control-sm" style="font-size: 85%" name="telefone" id="telefone" placeholder="Celular" required>
+                                </div>
                             </div>
 
+
+                            <div class="row form-group">
+                                <div class="col-sm-12">
+                                    <label for="endereco">Endereço:</label>
+                                    <input type="text" class="form-control form-control-sm" data-toggle="tooltip" title="Use abreviações Ex: Qd, Cj, Bl, Cs, Sl, Lt, Apt, Cond, Nº etc. "  name="endereco" id="endereco" placeholder="Endereço" maxlength="100" required>
+                                </div>
+                            </div>
+                            <div class="row form-group">
+                                <div class="col-sm-3">
+                                    <input type="text" class="form-control form-control-sm" name="bairro" id="bairro" placeholder="Bairro" required>
+                                </div>
+                                <div>
+                                    <select name="city" id="city" class="form-control form-control-sm select" aria-hidden="true">
+                                        <option selected value="0">Selecione a Cidade</option>
+                                        @foreach ( $allCities as $City)
+                                            <option value={{$City->id}}>{{$City->nome}}</option>
+                                        @endforeach
+                                    </select>
+                                </div>
+
+                                <div>
+                                    <select name="uf" id="uf" class="form-control form-control-sm select" aria-hidden="true">
+                                        <option selected value="7">DF</option>
+                                        {{-- @foreach ($fornecedores as $fornecedor) --}}
+                                                {{-- <option value="{{$fornecedor->id}}">{{$fornecedor->name_fornec}}</option> --}}
+                                            {{-- @endforeach --}}
+                                        </select>
+                                </div>
+
+                                <div class="col-sm-2">
+                                    <input type="text" class="form-control form-control-sm" name="cep" id="cep" placeholder="CEP" required>
+                                </div>
+
+                                    <div class="col-sm-2">
+                                        <div class="input-group mb-3">
+                                            <div class="input-group-prepend">
+                                              <span class="input-group-text"><i class="fas fa-map-marker-alt"></i></span>
+                                            </div>
+                                            <input type="email" class="form-control form-control-sm" data-toggle="tooltip" title="Localização">
+                                          </div>
+                                    </div>
+
+                            </div>
+                            <div class="row form-group">
+                                <div class="col-sm-6">
+                                    <label for="obs">Observações:</label>
+                                    <input type="text" class="form-control form-control-sm" name="obs" id="obs" placeholder="Observações sobre o paciente" maxlength="50" required>
+                                </div>
+                                <div class="col-sm-3">
+                                    <label for="hc">Home Care</label>
+                                    <select name="hc" id="hc" class="form-control form-control-sm select" style="width: 100%;" aria-hidden="true">
+                                        <option selected value="0">Selecione</option>
+                                        {{-- @foreach ($fornecedores as $fornecedor) --}}
+                                                {{-- <option value="{{$fornecedor->id}}">{{$fornecedor->name_fornec}}</option> --}}
+                                            {{-- @endforeach --}}
+                                        </select>
+                                </div>
+                                <div class="col-sm-3">
+                                    <div class="custom-control custom-checkbox">
+                                        <input class="custom-control-input custom-control-input-danger" type="checkbox" id="customCheckbox4" checked="">
+                                        <label for="customCheckbox4" class="custom-control-label">Obeso</label>
+                                      </div>
+                                </div>
+                            </div>
+                        </div>
                         </div>
                         <div class="modal-footer">
                             <div class="form-group">
