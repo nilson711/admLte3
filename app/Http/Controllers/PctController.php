@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Pct;
 use App\Models\Cidade;
+use App\Models\Cliente;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -19,8 +20,10 @@ class PctController extends Controller
         $allCities = new Cidade;
         $allCities = DB::SELECT("SELECT * from cidades ORDER BY nome");
 
+        $clientes = new Cliente;
+        $clientes = DB::SELECT("SELECT * FROM clientes");
 
-        return view('pct_list', ['allPcts'=>$allPcts] + ['allCities'=>$allCities]);
+        return view('pct_list', ['allPcts'=>$allPcts] + ['allCities'=>$allCities] + ['clientes'=>$clientes]);
     }
 
     /**

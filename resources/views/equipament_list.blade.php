@@ -22,13 +22,13 @@
           <li class="nav-item">
             <a class="nav-link" id="custom-tabs-four-messages-tab" data-toggle="pill" href="#custom-tabs-four-messages" role="tab" aria-controls="custom-tabs-four-messages" aria-selected="false">Manutenção</a>
           </li>
-          
+
         </ul>
       </div>
       <div class="card-body">
 
 
-    {{--- ---- ----- ------ ---- --- ---------- ------- ------- ------- TAB ESTOQUE --------- --- ------- ------ -------- ------- ------- ------- ----------}} 
+    {{--- ---- ----- ------ ---- --- ---------- ------- ------- ------- TAB ESTOQUE --------- --- ------- ------ -------- ------- ------- ------- ----------}}
 
         <div class="tab-content" id="custom-tabs-four-tabContent">
           <div class="tab-pane fade active show" id="custom-tabs-four-home" role="tabpanel" aria-labelledby="custom-tabs-four-home-tab">
@@ -55,7 +55,7 @@
                                 {{-- <th class="sorting" tabindex="0" aria-controls="example1" rowspan="1" colspan="1" data-toggle="tooltip" title="Implantado"></th> --}}
                                 {{-- <th class="sorting" tabindex="0" aria-controls="example1" rowspan="1" colspan="1" data-toggle="tooltip" title="Alugado / Próprio"></th> --}}
                                 {{-- <th class="sorting" tabindex="0" aria-controls="example1" rowspan="1" colspan="1" data-toggle="tooltip" title="Alugado / Próprio">A/P</th> --}}
-                            </tr>   
+                            </tr>
                         </thead>
                         <tbody>
                             <div data-toggle="modal" data-target="#ModalAddEquip">
@@ -182,9 +182,9 @@
                                     <div id="rent_empresa" name="rent_empresa" style="visibility: hidden" data-toggle="tooltip" data-original-title="Empresa que alugou o equipamento" >
                                         <select name="value_rent_empresa" id="value_rent_empresa" class="form-control select" style="width: 100%;" aria-hidden="true" name="selectEmpresaRent" id="selectEmpresaRent">
                                         <option selected value="0">Selecione</option>
-                                        @foreach ($fornecedores as $fornecedor)
-                                                <option value="{{$fornecedor->id}}">{{$fornecedor->name_fornec}}</option>
-                                            @endforeach
+                                        {{-- @foreach ($fornecedores as $fornecedor) --}}
+                                                {{-- <option value="{{$fornecedor->id}}">{{$fornecedor->name_fornec}}</option> --}}
+                                            {{-- @endforeach --}}
                                         </select>
                                     </div>
                                     </div>
@@ -241,7 +241,7 @@
             </div>
         </div>
 
-        
+
 
 {{-------------------------------------------------------- TAB IMPLANTADOS ----------------------------------------------------------------}}
 
@@ -326,7 +326,7 @@
                                     </td>
 
                                     </td>
-                                   
+
                                     {{-- <td>{{$equip->rent_equip}}</td> --}}
                                     {{-- <td style="text-align: center; vertical-align: middle"> --}}
                                         {{-- @if ($equip->rent_equip == '0')
@@ -360,9 +360,9 @@
             </div>
           </div>
           <div class="tab-pane fade" id="custom-tabs-four-messages" role="tabpanel" aria-labelledby="custom-tabs-four-messages-tab">
-             
+
 {{-------------------------------------------------------- TAB MANUTENÇÃO ----------------------------------------------------------------}}
-            
+
             <div>
                 <div id="manutencao_wrapper" class="dataTables_wrapper dt-bootstrap4">
 
@@ -386,7 +386,7 @@
                                 {{-- <th class="sorting" tabindex="0" aria-controls="table_manutencao" rowspan="1" colspan="1" data-toggle="tooltip" title="Implantado"></th> --}}
                                 {{-- <th class="sorting" tabindex="0" aria-controls="table_manutencao" rowspan="1" colspan="1" data-toggle="tooltip" title="Alugado / Próprio"></th> --}}
                                 {{-- <th class="sorting" tabindex="0" aria-controls="table_manutencao" rowspan="1" colspan="1" data-toggle="tooltip" title="Alugado / Próprio">A/P</th> --}}
-                            </tr>   
+                            </tr>
                         </thead>
                         <tbody>
                             <div data-toggle="modal" data-target="#ModalManutencao">
@@ -572,7 +572,7 @@
             </div>
 
           </div>
-          
+
         </div>
       </div>
       <!-- /.card -->
@@ -628,18 +628,18 @@
         "responsive": true, "lengthChange": false, "autoWidth": false,
         "buttons": ["copy", "csv", "excel", "pdf", "print"]
       }).buttons().container().appendTo('#example1_wrapper .col-md-6:eq(0)');
-      
+
       $("#table_implantados").DataTable({
         "responsive": true, "lengthChange": false, "autoWidth": false,
         "buttons": ["copy", "csv", "excel", "pdf", "print"]
       }).buttons().container().appendTo('#implantados_wrapper .col-md-6:eq(0)');
-      
+
       $("#table_manutencao").DataTable({
         "responsive": true, "lengthChange": false, "autoWidth": false,
         "buttons": ["copy", "csv", "excel", "pdf", "print"]
       }).buttons().container().appendTo('#manutencao_wrapper .col-md-6:eq(0)');
-      
-      
+
+
       $('#example2').DataTable({
         "paging": true,
         "lengthChange": false,
