@@ -8,6 +8,10 @@
 
 @section('content')
 
+<body>
+    
+</body>
+
     <div class="card">
         <div class="card-header">
           <h3 class="card-title">Pacientes</h3>
@@ -142,12 +146,14 @@
                                 <div class="row form-group">
                                     <div class="col-sm-4">
                                         <label for="responsavel">Responsável:<span style="color: red">*</span></label>
-                                        <input type="text" class="form-control form-control-sm" data-toggle="tooltip" title="Responsável pelo paciente" name="responsavel" id="responsavel" placeholder="Ex: Maria da Silva (Esposa)" maxlength="30" required>
+                                        <input type="text" class="form-control form-control-sm" data-toggle="tooltip" title="Responsável pelo paciente. Ex: Maria da Silva (Esposa)" name="responsavel" id="responsavel" placeholder="Ex: Maria da Silva (Esposa)" maxlength="30" required>
                                     </div>
                                     <div class="col-sm-2">
                                         <label for="tel_resp" style="color: white">.</label>
-                                        <input type="text" class="form-control form-control-sm" style="font-size: 85%" name="tel_resp" id="tel_resp" placeholder="Celular" required>
+                                        <input type="text" class="form-control form-control-sm" style="font-size: 85%" name="tel_resp" id="tel_resp" placeholder="Celular" data-inputmask="&quot;mask&quot;: &quot;(99) 9 9999-9999&quot;" data-mask="" inputmode="text" required>
                                     </div>
+
+                                    {{-- <input type="text" class="form-control" data-inputmask="&quot;mask&quot;: &quot;(99) 9 9999-9999&quot;" data-mask="" inputmode="text"> --}}
                                     {{-- <div class="col-sm-6">
                                         <label for="contto" style="color: white">.</label>
                                         <div class="input-group mb-3">
@@ -159,11 +165,11 @@
                                     </div> --}}
                                     <div class="col-sm-4">
                                         <label for="tel_resp" style="color: white">.</label>
-                                        <input type="text" data-toggle="tooltip" title="Contato adicional" class="form-control form-control-sm" name="contato" id="contato" placeholder="Ex: Tiago da Silva (Filho)" maxlength="30">
+                                        <input type="text" data-toggle="tooltip" title="Contato adicional. Ex: Tiago da Silva (Filho)" class="form-control form-control-sm" name="contato" id="contato" placeholder="Ex: Tiago da Silva (Filho)" maxlength="30">
                                     </div>
                                     <div class="col-sm-2">
                                         <label for="tel_resp" style="color: white">.</label>
-                                        <input type="text" class="form-control form-control-sm" name="telefone" id="telefone" placeholder="Celular">
+                                        <input type="text" class="form-control form-control-sm" name="telefone" id="telefone" placeholder="Celular" data-inputmask="&quot;mask&quot;: &quot;(99) 9 9999-9999&quot;" data-mask="" inputmode="text">
                                     </div>
                                 </div>
 
@@ -172,11 +178,12 @@
                                 <div class="row form-group">
                                     <div class="col-sm-2">
                                         <label for="cep">CEP:</label>
-                                        <input type="text" data-toggle="tooltip" title="Digite o CEP para preencher o endereço automaticamente." class="form-control form-control-sm" name="cep" id="cep" placeholder="CEP" required maxlength="8">
+                                        <input type="text" data-toggle="tooltip" title="Digite o CEP para preencher o endereço automaticamente." class="form-control form-control-sm" name="cep" id="cep" value="" size="10" maxlength="9"placeholder="CEP" data-inputmask="&quot;mask&quot;: &quot;99999-999&quot;" data-mask="" inputmode="text" required onblur="pesquisacep(this.value);">
                                     </div>
+                                    
                                     <div class="col-sm-9">
                                         <label for="logradouro">Endereço:<span style="color: red">*</span></label>
-                                        <input type="text" class="form-control form-control-sm" data-toggle="tooltip" title="Use abreviações Ex: Qd, Cj, Bl, Cs, Sl, Lt, Apt, Cond, Nº etc. "  name="logradouro" id="logradouro" placeholder="Logradouro" maxlength="50" required>
+                                        <input type="text" class="form-control form-control-sm" data-toggle="tooltip" title="Use abreviações Ex: Qd, Cj, Bl, Cs, Sl, Lt, Apt, Cond, Nº etc. "  name="rua" id="rua" placeholder="rua" maxlength="50" required>
                                     </div>
                                     <div class="col-sm-1">
                                         <label for="nr">Nº:<span style="color: red">*</span></label>
@@ -191,21 +198,23 @@
                                         <input type="text" class="form-control form-control-sm" name="bairro" id="bairro" placeholder="Bairro" required>
                                     </div>
                                     <div>
-                                        <select name="city" id="city" class="form-control form-control-sm select" aria-hidden="true" required>
+                                        <input type="text" class="form-control form-control-sm" name="cidade" id="cidade" placeholder="Cidade" required>
+                                        {{-- <select name="cidade" id="cidade" class="form-control form-control-sm select" aria-hidden="true" required>
                                             <option selected value="">Selecione a Cidade</option>
                                             @foreach ( $allCities as $City)
                                                 <option value={{$City->id}}>{{$City->nome}}</option>
                                             @endforeach
-                                        </select>
+                                        </select> --}}
                                     </div>
 
                                     <div>
-                                        <select name="uf" id="uf" class="form-control form-control-sm select" aria-hidden="true">
-                                            <option selected value="7">DF</option>
+                                        <input type="text" class="form-control form-control-sm" name="uf" id="uf" placeholder="uf" required>
+                                        {{-- <select name="uf" id="uf" class="form-control form-control-sm select" aria-hidden="true">
+                                            <option selected value="7">DF</option> --}}
                                             {{-- @foreach ($fornecedores as $fornecedor) --}}
                                                     {{-- <option value="{{$fornecedor->id}}">{{$fornecedor->name_fornec}}</option> --}}
                                                 {{-- @endforeach --}}
-                                            </select>
+                                            {{-- </select> --}}
                                     </div>
 
                                     <div class="col-sm-1" data-toggle="tooltip" title="Localização">
@@ -216,6 +225,7 @@
 
 
                                 </div>
+
                                 <div class="row form-group">
                                     <div class="col-sm-12">
                                         <label for="obs">Observações:</label>
@@ -259,29 +269,31 @@
 @stop
 
 @section('js')
+<script type="text/javascript" src="localizaz_demo.js"></script>
     {{-- <script> console.log('Hi!'); </script> --}}
     <!-- jQuery -->
-<script src="js/jquery.min.js"></script>
-<!-- Bootstrap 4 -->
-<script src="js/bootstrap.bundle.min.js"></script>
-<!-- DataTables  & Plugins -->
-<script src="js/jquery.dataTables.min.js"></script>
-<script src="js/dataTables.bootstrap4.min.js"></script>
-<script src="js/dataTables.responsive.min.js"></script>
-<script src="js/responsive.bootstrap4.min.js"></script>
-<script src="js/dataTables.buttons.min.js"></script>
-<script src="js/buttons.bootstrap4.min.js"></script>
-<script src="js/jszip.min.js"></script>
-<script src="js/pdfmake.min.js"></script>
-<script src="js/vfs_fonts.js"></script>
-<script src="js/buttons.html5.min.js"></script>
-<script src="js/buttons.print.min.js"></script>
-<script src="js/buttons.colVis.min.js"></script>
-<!-- AdminLTE App -->
-<script src="js/adminlte.min.js"></script>
-<!-- AdminLTE for demo purposes -->
-<script src="js/demo.js"></script>
-<!-- Page specific script -->
+    <script src="js/jquery.min.js"></script>
+    <!-- Bootstrap 4 -->
+    <script src="js/bootstrap.bundle.min.js"></script>
+    <!-- DataTables  & Plugins -->
+    <script src="js/jquery.dataTables.min.js"></script>
+    <script src="js/dataTables.bootstrap4.min.js"></script>
+    <script src="js/dataTables.responsive.min.js"></script>
+    <script src="js/responsive.bootstrap4.min.js"></script>
+    <script src="js/dataTables.buttons.min.js"></script>
+    <script src="js/buttons.bootstrap4.min.js"></script>
+    <script src="js/jszip.min.js"></script>
+    <script src="js/pdfmake.min.js"></script>
+    <script src="js/vfs_fonts.js"></script>
+    <script src="js/buttons.html5.min.js"></script>
+    <script src="js/buttons.print.min.js"></script>
+    <script src="js/buttons.colVis.min.js"></script>
+    <script src="js/localizaz.js"></script>
+    <!-- AdminLTE App -->
+    <script src="js/adminlte.min.js"></script>
+    <!-- AdminLTE for demo purposes -->
+    <script src="js/demo.js"></script>
+    <!-- Page specific script -->
 <script>
   $(function () {
     $("#example1").DataTable({
@@ -368,8 +380,79 @@
       })
 
     })
-
   </script>
+
+<script>
+    
+    function limpa_formulário_cep() {
+            //Limpa valores do formulário de cep.
+            document.getElementById('rua').value=("");
+            document.getElementById('bairro').value=("");
+            document.getElementById('cidade').value=("");
+            document.getElementById('uf').value=("");
+            document.getElementById('ibge').value=("");
+    }
+
+    function meu_callback(conteudo) {
+        if (!("erro" in conteudo)) {
+            //Atualiza os campos com os valores.
+            document.getElementById('rua').value=(conteudo.logradouro);
+            document.getElementById('bairro').value=(conteudo.bairro);
+            document.getElementById('cidade').value=(conteudo.localidade);
+            document.getElementById('uf').value=(conteudo.uf);
+            document.getElementById('ibge').value=(conteudo.ibge);
+        } //end if.
+        else {
+            //CEP não Encontrado.
+            limpa_formulário_cep();
+            alert("CEP não encontrado.");
+        }
+    }
+        
+    function pesquisacep(valor) {
+
+        //Nova variável "cep" somente com dígitos.
+        var cep = valor.replace(/\D/g, '');
+
+        //Verifica se campo cep possui valor informado.
+        if (cep != "") {
+
+            //Expressão regular para validar o CEP.
+            var validacep = /^[0-9]{8}$/;
+
+            //Valida o formato do CEP.
+            if(validacep.test(cep)) {
+
+                //Preenche os campos com "..." enquanto consulta webservice.
+                document.getElementById('rua').value="coloca a rua";
+                document.getElementById('bairro').value="coloca o bairro";
+                document.getElementById('cidade').value="5599";
+                document.getElementById('uf').value="AM";
+                document.getElementById('ibge').value="...";
+
+                //Cria um elemento javascript.
+                var script = document.createElement('script');
+
+                //Sincroniza com o callback.
+                script.src = 'https://viacep.com.br/ws/'+ cep + '/json/?callback=meu_callback';
+
+                //Insere script no documento e carrega o conteúdo.
+                document.body.appendChild(script);
+
+            } //end if.
+            else {
+                //cep é inválido.
+                limpa_formulário_cep();
+                alert("Formato de CEP inválido.");
+            }
+        } //end if.
+        else {
+            //cep sem valor, limpa formulário.
+            limpa_formulário_cep();
+        }
+    };
+
+    </script>
 
 <!-- jQuery -->
 {{-- <script src="js/jquery.min.js"></script> --}}
@@ -397,6 +480,10 @@
 <!-- AdminLTE for demo purposes -->
 <script src="js/demo.js"></script>
 <script src="js/functions-equips.js"></script>
+<script src="js/buscacep.js"></script>
+{{-- <script src="js/localizaz.js"></script> --}}
+
+
 
 <script>
   $(function () {
