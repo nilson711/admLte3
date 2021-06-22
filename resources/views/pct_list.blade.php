@@ -9,7 +9,7 @@
 @section('content')
 
 <body>
-    
+
 </body>
 
     <div class="card">
@@ -44,14 +44,14 @@
                                 {{-- <th class="sorting col-sm-1" tabindex="0" aria-controls="example1" rowspan="1" colspan="1">Bairro</th> --}}
                                 <th class="sorting col-sm-1" tabindex="0" aria-controls="example1" rowspan="1" colspan="1">Cidade</th>
                                 {{-- <th class="sorting col-sm-1" tabindex="0" aria-controls="example1" rowspan="1" colspan="1">UF</th> --}}
-                                <th class="sorting col-sm-1" data-toggle="tooltip" title="Localização do Paciente" aria-controls="example1" rowspan="1" colspan="1" style="text-align: center"><i class="fas fa-map-marker-alt"></i></th>
+
                                 {{-- <th class="sorting" tabindex="0" aria-controls="example1" rowspan="1" colspan="1">Telefone</th> --}}
                                 {{-- <th class="sorting" tabindex="0" aria-controls="example1" rowspan="1" colspan="1">Celular</th> --}}
                                 {{-- <th class="sorting" tabindex="0" aria-controls="example1" rowspan="1" colspan="1">Home Care</th> --}}
                             </tr>
                         </thead>
                         <tbody>
-                            <div data-toggle="modal" data-target="#ModalAddPct">
+                            <div data-toggle="modal" data-target="#ModalAddPct" onmousemove="verificatexto()">
                                 <button data-toggle="tooltip" title="Adicionar novo Paciente" type="button" class="btn btn-sm btn-outline-primary float-right" ><i class="fas fa-plus"></i></button>
                             </div>
 
@@ -59,8 +59,21 @@
                             <tr class="odd" style="line-height: 100%">
                                 <td style="text-align: center">{{$Pct->id}}</td>
                                 <td>{{$Pct->name_pct}}</td>
-                                <td>{{$Pct->end_pct}}</td>
-                                {{-- <td>{{$Pct->bairro_pct}}</td> --}}
+                                <td><span id="rua_pct">{{$Pct->rua_pct}}</span>
+
+                                @php //BLOCO DE PHP QUE BUSCA NA STRING SE EXISTE UMA PALAVRA ESPECÍFICA
+                                    $stringBase     = $Pct->rua_pct;                //base na qual será efetuada a pesquisa
+                                    $stringPesquisa = 'Bloco';                      //o termo que desejamos pesquisar na string base
+                                    $stringRes = strpos($stringBase, $stringPesquisa);
+                                    if ($stringRes>1) {
+                                        echo "Apt";
+                                    }else {
+                                        echo "CS";
+                                    }
+                                @endphp
+
+                                    {{$Pct->nr_end_pct}} ({{$Pct->compl_pct}}) {{$Pct->bairro_pct}}</td>
+
                                 <td>
                                     @foreach ( $allCities as $City)
                                         @if ($City->id == $Pct->city_pct)
@@ -69,13 +82,6 @@
                                     @endforeach
                                 </td>
                                 {{-- <td>{{$Pct->uf_pct}}</td> --}}
-                                <td style="text-align: center">
-                                    @if ($Pct->localization_pct==0)
-
-                                    @else
-                                        <a href="{{$Pct->localization_pct}}">Local</a>
-                                    @endif
-                                </td>
                                 {{-- <td>{{$Pct->tel1_pct}}</td> --}}
                                 {{-- <td>{{$Pct->tel2_pct}}</td> --}}
                                 {{-- <td>{{$Pct->id_hc}}</td> --}}
@@ -106,8 +112,8 @@
                             <span aria-hidden="true">&times;</span>
                         </button>
                         </div>
-                        <form action="#" method="post">
-                        {{-- <form action="{{route('new_Pct_submit')}}" method="post"> --}}
+
+                        <form action="{{route('new_Pct_submit')}}" method="post">
                         <div class="modal-body">
                             @csrf
                             <div class="form-group">
@@ -150,40 +156,35 @@
                                     </div>
                                     <div class="col-sm-2">
                                         <label for="tel_resp" style="color: white">.</label>
-                                        <input type="text" class="form-control form-control-sm" style="font-size: 85%" name="tel_resp" id="tel_resp" placeholder="Celular" data-inputmask="&quot;mask&quot;: &quot;(99) 9 9999-9999&quot;" data-mask="" inputmode="text" required>
+                                        <input type="text" class="form-control form-control-sm" data-toggle="tooltip" title="Celular Ex: (61) 9234-5678" style="font-size: 90%" name="tel_resp" id="tel_resp" onkeypress="mascara(this, telefone)" maxlength="15" placeholder="(__) _____-____" required>
                                     </div>
 
-                                    {{-- <input type="text" class="form-control" data-inputmask="&quot;mask&quot;: &quot;(99) 9 9999-9999&quot;" data-mask="" inputmode="text"> --}}
-                                    {{-- <div class="col-sm-6">
-                                        <label for="contto" style="color: white">.</label>
-                                        <div class="input-group mb-3">
-                                            <div class="input-group-prepend">
-                                            <span class="input-group-text"><i class="fas fa-envelope"></i></span>
-                                            </div>
-                                            <input type="email" name="email_resp" id="email_resp" class="form-control form-control-sm" data-toggle="tooltip" title="E-mail do responsável" maxlength="50" placeholder="E-mail de contato">
-                                        </div>
-                                    </div> --}}
                                     <div class="col-sm-4">
-                                        <label for="tel_resp" style="color: white">.</label>
-                                        <input type="text" data-toggle="tooltip" title="Contato adicional. Ex: Tiago da Silva (Filho)" class="form-control form-control-sm" name="contato" id="contato" placeholder="Ex: Tiago da Silva (Filho)" maxlength="30">
+                                        <label for="resp2" style="color: white">.</label>
+                                        <input type="text" data-toggle="tooltip" title="Contato adicional. Ex: Tiago da Silva (Filho)" class="form-control form-control-sm" name="resp2" id="resp2" placeholder="Ex: Tiago da Silva (Filho)" maxlength="30">
                                     </div>
                                     <div class="col-sm-2">
-                                        <label for="tel_resp" style="color: white">.</label>
-                                        <input type="text" class="form-control form-control-sm" name="telefone" id="telefone" placeholder="Celular" data-inputmask="&quot;mask&quot;: &quot;(99) 9 9999-9999&quot;" data-mask="" inputmode="text">
+                                        <label for="tel_resp2" style="color: white">.</label>
+                                        <input type="text" class="form-control form-control-sm" data-toggle="tooltip" title="Celular Ex: (61) 9234-5678" name="tel_resp2" id="tel_resp2" onkeypress="mascara(this, telefone)" maxlength="15" placeholder="(__) _____-____" inputmode="text">
                                     </div>
                                 </div>
 
                                 <hr>
 
                                 <div class="row form-group">
-                                    <div class="col-sm-2">
-                                        <label for="cep">CEP:</label>
-                                        <input type="text" data-toggle="tooltip" title="Digite o CEP para preencher o endereço automaticamente." class="form-control form-control-sm" name="cep" id="cep" value="" size="10" maxlength="9"placeholder="CEP" data-inputmask="&quot;mask&quot;: &quot;99999-999&quot;" data-mask="" inputmode="text" required onblur="pesquisacep(this.value);">
-                                    </div>
-                                    
+                                          <div class="col-sm-2">
+                                              <label for="cep">Cep:</label>
+                                              <div class="input-group input-group-sm">
+                                                  <input type="text" class="form-control" data-toggle="tooltip" title="Digite o CEP (somente números) para preencher o endereço automaticamente." name="cep" id="cep" size="10" maxlength="8" onblur="pesquisacep(this.value);">
+                                                  <div class="input-group-append">
+                                                      <span class="input-group-text"><a href="https://buscacepinter.correios.com.br/app/endereco/index.php" target="blank" data-toggle="tooltip" title="Consultar Cep"><i class="far fa-question-circle"></i></a></i></span>
+                                                    </div>
+                                                </div>
+                                            </div>
+
                                     <div class="col-sm-9">
                                         <label for="logradouro">Endereço:<span style="color: red">*</span></label>
-                                        <input type="text" class="form-control form-control-sm" data-toggle="tooltip" title="Use abreviações Ex: Qd, Cj, Bl, Cs, Sl, Lt, Apt, Cond, Nº etc. "  name="rua" id="rua" placeholder="rua" maxlength="50" required>
+                                        <input type="text" class="form-control form-control-sm" data-toggle="tooltip" title="Rua, Rodovia, Avenida, Quadra, Conjunto"  name="rua" id="rua" placeholder="Logradouro" maxlength="50" required>
                                     </div>
                                     <div class="col-sm-1">
                                         <label for="nr">Nº:<span style="color: red">*</span></label>
@@ -191,23 +192,26 @@
                                     </div>
                                 </div>
                                 <div class="row form-group">
-                                    <div class="col-sm-3">
-                                        <input type="text" class="form-control form-control-sm" name="compl" id="compl" placeholder="Complemento">
+                                    <div class="col-sm-4">
+                                        <input type="text" class="form-control form-control-sm" name="compl" id="compl" placeholder="Complemento"  data-toggle="tooltip" title="Complemento ou Ponto de referência" maxlength="30">
                                     </div>
-                                    <div class="col-sm-3">
+                                    <div class="col-sm-4">
                                         <input type="text" class="form-control form-control-sm" name="bairro" id="bairro" placeholder="Bairro" required>
                                     </div>
-                                    <div>
-                                        <input type="text" class="form-control form-control-sm" name="cidade" id="cidade" placeholder="Cidade" required>
-                                        {{-- <select name="cidade" id="cidade" class="form-control form-control-sm select" aria-hidden="true" required>
+
+                                    <input type="text" class="form-control form-control-sm" name="cidade" id="cidade" style="display: none">
+                                    <div class="col-sm-3">
+                                        <select name="city" id="city" class="form-control form-control-sm select" aria-hidden="true" required>
                                             <option selected value="">Selecione a Cidade</option>
                                             @foreach ( $allCities as $City)
-                                                <option value={{$City->id}}>{{$City->nome}}</option>
+                                                <option value={{$City->id}}>
+                                                    {{$City->nome}}
+                                                </option>
                                             @endforeach
-                                        </select> --}}
+                                        </select>
                                     </div>
 
-                                    <div>
+                                    <div class="col-sm-1">
                                         <input type="text" class="form-control form-control-sm" name="uf" id="uf" placeholder="uf" required>
                                         {{-- <select name="uf" id="uf" class="form-control form-control-sm select" aria-hidden="true">
                                             <option selected value="7">DF</option> --}}
@@ -217,11 +221,11 @@
                                             {{-- </select> --}}
                                     </div>
 
-                                    <div class="col-sm-1" data-toggle="tooltip" title="Localização">
+                                    {{-- <div class="col-sm-1" data-toggle="tooltip" title="Localização">
                                         <button type="button" class="btn btn-sm btn-primary">
                                             <i class="fas fa-map-marker-alt"></i>
                                         </button>
-                                    </div>
+                                    </div> --}}
 
 
                                 </div>
@@ -232,6 +236,9 @@
                                         <input type="text" class="form-control form-control-sm" name="obs" id="obs" placeholder="Observações sobre o paciente" maxlength="100">
                                     </div>
                                 </div>
+                                {{-- <div class="col-sm-1" style="visibility: hidden">
+                                    <input type="text" class="form-control form-control-sm" name="cidade" id="cidade" placeholder="Cidade" required>
+                                </div> --}}
                         </div>
                         </div>
                         <div class="modal-footer">
@@ -269,7 +276,6 @@
 @stop
 
 @section('js')
-<script type="text/javascript" src="localizaz_demo.js"></script>
     {{-- <script> console.log('Hi!'); </script> --}}
     <!-- jQuery -->
     <script src="js/jquery.min.js"></script>
@@ -288,12 +294,95 @@
     <script src="js/buttons.html5.min.js"></script>
     <script src="js/buttons.print.min.js"></script>
     <script src="js/buttons.colVis.min.js"></script>
-    <script src="js/localizaz.js"></script>
+    {{-- <script src="js/localizaz.js"></script> --}}
     <!-- AdminLTE App -->
     <script src="js/adminlte.min.js"></script>
     <!-- AdminLTE for demo purposes -->
     <script src="js/demo.js"></script>
+
     <!-- Page specific script -->
+
+    <script>
+        function numberToReal(numero) {
+    var numero = numero.toFixed(2).split('.');
+    numero[0] = "R$ " + numero[0].split(/(?=(?:...)*$)/).join('.');
+    return numero.join(',');
+}
+
+function mascara(o,f){
+    v_obj=o
+    v_fun=f
+    setTimeout("execmascara()",1)
+}
+function execmascara(){
+    v_obj.value=v_fun(v_obj.value)
+}
+function leech(v){
+    v=v.replace(/o/gi,"0")
+    v=v.replace(/i/gi,"1")
+    v=v.replace(/z/gi,"2")
+    v=v.replace(/e/gi,"3")
+    v=v.replace(/a/gi,"4")
+    v=v.replace(/s/gi,"5")
+    v=v.replace(/t/gi,"7")
+    return v
+}
+function soNumeros(v){
+    return v.replace(/\D/g,"")
+}
+function telefone(v){
+    v=v.replace(/\D/g,"")                 //Remove tudo o que não é dígito
+    v=v.replace(/^(\d\d)(\d)/g,"($1) $2") //Coloca parênteses em volta dos dois primeiros dígitos
+    v=v.replace(/(\d{4})(\d)/,"$1-$2")    //Coloca hífen entre o quarto e o quinto dígitos
+    return v
+}
+function cpf(v){
+    v=v.replace(/\D/g,"")                    //Remove tudo o que não é dígito
+    v=v.replace(/(\d{3})(\d)/,"$1.$2")       //Coloca um ponto entre o terceiro e o quarto dígitos
+    v=v.replace(/(\d{3})(\d)/,"$1.$2")       //Coloca um ponto entre o terceiro e o quarto dígitos
+                                             //de novo (para o segundo bloco de números)
+    v=v.replace(/(\d{3})(\d{1,2})$/,"$1-$2") //Coloca um hífen entre o terceiro e o quarto dígitos
+    return v
+}
+function cep(v){
+    // v=v.replace(/D/g,"")                //Remove tudo o que não é dígito
+    v=v.replace(/\D/g,"")                    //Remove tudo o que não é dígito
+    v=v.replace(/^(\d{5})(\d)/,"$1-$2") //Esse é tão fácil que não merece explicações
+    return v
+}function soNumeros(v){
+    return v.replace(/\D/g,"")
+}
+function telefone(v){
+    v=v.replace(/\D/g,"")                 //Remove tudo o que não é dígito
+    v=v.replace(/^(\d\d)(\d)/g,"($1) $2") //Coloca parênteses em volta dos dois primeiros dígitos
+    v=v.replace(/(\d{4})(\d)/,"$1-$2")    //Coloca hífen entre o quarto e o quinto dígitos
+    return v
+}
+function cpf(v){
+    v=v.replace(/\D/g,"")                    //Remove tudo o que não é dígito
+    v=v.replace(/(\d{3})(\d)/,"$1.$2")       //Coloca um ponto entre o terceiro e o quarto dígitos
+    v=v.replace(/(\d{3})(\d)/,"$1.$2")       //Coloca um ponto entre o terceiro e o quarto dígitos
+                                             //de novo (para o segundo bloco de números)
+    v=v.replace(/(\d{3})(\d{1,2})$/,"$1-$2") //Coloca um hífen entre o terceiro e o quarto dígitos
+    return v
+}
+function mdata(v){
+    v=v.replace(/\D/g,"");
+    v=v.replace(/(\d{2})(\d)/,"$1/$2");
+    v=v.replace(/(\d{2})(\d)/,"$1/$2");
+
+    v=v.replace(/(\d{2})(\d{2})$/,"$1$2");
+    return v;
+}
+function mcc(v){
+    v=v.replace(/\D/g,"");
+    v=v.replace(/^(\d{4})(\d)/g,"$1 $2");
+    v=v.replace(/^(\d{4})\s(\d{4})(\d)/g,"$1 $2 $3");
+    v=v.replace(/^(\d{4})\s(\d{4})\s(\d{4})(\d)/g,"$1 $2 $3 $4");
+    return v;
+}
+    </script>
+
 <script>
   $(function () {
     $("#example1").DataTable({
@@ -382,77 +471,6 @@
     })
   </script>
 
-<script>
-    
-    function limpa_formulário_cep() {
-            //Limpa valores do formulário de cep.
-            document.getElementById('rua').value=("");
-            document.getElementById('bairro').value=("");
-            document.getElementById('cidade').value=("");
-            document.getElementById('uf').value=("");
-            document.getElementById('ibge').value=("");
-    }
-
-    function meu_callback(conteudo) {
-        if (!("erro" in conteudo)) {
-            //Atualiza os campos com os valores.
-            document.getElementById('rua').value=(conteudo.logradouro);
-            document.getElementById('bairro').value=(conteudo.bairro);
-            document.getElementById('cidade').value=(conteudo.localidade);
-            document.getElementById('uf').value=(conteudo.uf);
-            document.getElementById('ibge').value=(conteudo.ibge);
-        } //end if.
-        else {
-            //CEP não Encontrado.
-            limpa_formulário_cep();
-            alert("CEP não encontrado.");
-        }
-    }
-        
-    function pesquisacep(valor) {
-
-        //Nova variável "cep" somente com dígitos.
-        var cep = valor.replace(/\D/g, '');
-
-        //Verifica se campo cep possui valor informado.
-        if (cep != "") {
-
-            //Expressão regular para validar o CEP.
-            var validacep = /^[0-9]{8}$/;
-
-            //Valida o formato do CEP.
-            if(validacep.test(cep)) {
-
-                //Preenche os campos com "..." enquanto consulta webservice.
-                document.getElementById('rua').value="coloca a rua";
-                document.getElementById('bairro').value="coloca o bairro";
-                document.getElementById('cidade').value="5599";
-                document.getElementById('uf').value="AM";
-                document.getElementById('ibge').value="...";
-
-                //Cria um elemento javascript.
-                var script = document.createElement('script');
-
-                //Sincroniza com o callback.
-                script.src = 'https://viacep.com.br/ws/'+ cep + '/json/?callback=meu_callback';
-
-                //Insere script no documento e carrega o conteúdo.
-                document.body.appendChild(script);
-
-            } //end if.
-            else {
-                //cep é inválido.
-                limpa_formulário_cep();
-                alert("Formato de CEP inválido.");
-            }
-        } //end if.
-        else {
-            //cep sem valor, limpa formulário.
-            limpa_formulário_cep();
-        }
-    };
-
-    </script>
 
 <!-- jQuery -->
 {{-- <script src="js/jquery.min.js"></script> --}}
@@ -497,4 +515,28 @@
   $('[data-toggle="tooltip"]').tooltip()
 })
 </script>
+
+<script>
+    function verificatexto(){
+        var str = "Welcomo to TecAdmin.net";
+        var result = str.indexOf("Tec")>-1;
+        alert(result);
+    }
+</script>
+<script>
+    function funcTipoResid(){
+        var strRua = document.getElementById("rua_pct");
+        var resTipo = strRua.indexOf("Bloco")>-1;
+        var tipoResid = document.getElementById("tipo_resid");
+        // if (resTipo == true) {
+        //     tipoResid.innerHTML = "Bloco";
+        // } else {
+        //     tipoResid.innerHTML = "Casa";
+        // }
+        alert('é bloco');
+    }
+</script>
+
 @stop
+<span id="rua_pct">{{$Pct->rua_pct}}</span>
+                                    <span id="tipo_resid"></span>

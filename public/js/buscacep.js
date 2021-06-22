@@ -1,6 +1,6 @@
 // <!-- Adicionando Javascript -->
-    
-    
+
+
     function limpa_formulário_cep() {
             //Limpa valores do formulário de cep.
             document.getElementById('rua').value=("");
@@ -17,6 +17,13 @@
             document.getElementById('bairro').value=(conteudo.bairro);
             document.getElementById('cidade').value=(conteudo.localidade);
             document.getElementById('uf').value=(conteudo.uf);
+            //Busca o nome da cidade no campo cidade
+            var text1 = document.getElementById('cidade').value;
+                // alert(text1);
+                //Seleciona a Cidade no Select
+                $("#city option").filter(function() {
+                    return this.text == text1;
+                }).attr('selected', true);
             // document.getElementById('ibge').value=(conteudo.ibge);
         } //end if.
         else {
@@ -25,7 +32,7 @@
             alert("CEP não encontrado.");
         }
     }
-        
+
     function pesquisacep(valor) {
 
         //Nova variável "cep" somente com dígitos.
@@ -55,6 +62,8 @@
 
                 //Insere script no documento e carrega o conteúdo.
                 document.body.appendChild(script);
+
+
 
             } //end if.
             else {

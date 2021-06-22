@@ -41,9 +41,52 @@ class PctController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function create()
-    {
-        //
+     //ADICIONA NOVO PACIENTE
+
+     public function new_Pct_submit(Request $request){
+        //BUSCA OS DADOS OS INPUTS
+        $new_Pct = $request->input('Pct');
+        $new_peso = $request->input('peso');
+        $new_altura = $request->input('altura');
+        $new_hc = $request->input('hc');
+        $new_responsavel = $request->input('responsavel');
+        $new_tel_resp = $request->input('tel_resp');
+        $new_resp2 = $request->input('resp2');
+        $new_tel_resp2 = $request->input('tel_resp2');
+
+        $new_cep = $request->input('cep');
+        $new_rua = $request->input('rua');
+        $new_nr = $request->input('nr');
+        $new_compl = $request->input('compl');
+        $new_bairro = $request->input('bairro');
+        $new_city = $request->input('city');
+        // $new_uf = $request->input('uf');
+        $new_obs = $request->input('obs');
+
+        //SALVA DOS DADOS DOS INPUTS NO BANCO DE DADOS
+        $pctNew = new Pct();
+        $pctNew->name_pct =  $new_Pct;
+        $pctNew->peso =  $new_peso;
+        $pctNew->altura =  $new_altura;
+        $pctNew->id_hc =  $new_hc;
+        $pctNew->resp =  $new_responsavel;
+        $pctNew->tel_rep =  $new_tel_resp;
+        $pctNew->resp2 =  $new_resp2;
+        $pctNew->tel_resp2 =  $new_tel_resp2;
+
+        $pctNew->cep_pct =  $new_cep;
+        $pctNew->rua_pct =  $new_rua;
+        $pctNew->nr_end_pct =  $new_nr;
+        $pctNew->compl_pct =  $new_compl;
+        $pctNew->bairro_pct =  $new_bairro;
+        $pctNew->city_pct =  $new_city;
+        // $pctNew->uf_pct =  $new_uf;
+        $pctNew->obs_pct =  $new_obs;
+
+        $pctNew->save();
+
+        return redirect()->route('listaPcs');
+
     }
 
     /**
