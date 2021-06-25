@@ -13,7 +13,7 @@
 </body>
 
     <div class="card">
-        <div class="card-header">
+        <div class="card-header" >
           <h3 class="card-title">Pacientes</h3>
         </div>
         <!-- /.card-header -->
@@ -43,7 +43,7 @@
                                 <th class="sorting col-sm-5" tabindex="0" aria-controls="example1" rowspan="1" colspan="1">Endereço</th>
                                 {{-- <th class="sorting col-sm-1" tabindex="0" aria-controls="example1" rowspan="1" colspan="1">Bairro</th> --}}
                                 <th class="sorting col-sm-1" tabindex="0" aria-controls="example1" rowspan="1" colspan="1">Cidade</th>
-                                {{-- <th class="sorting col-sm-1" tabindex="0" aria-controls="example1" rowspan="1" colspan="1">UF</th> --}}
+                                <th class="sorting col-sm-1" tabindex="0" aria-controls="example1" rowspan="1" colspan="1"></th>
 
                                 {{-- <th class="sorting" tabindex="0" aria-controls="example1" rowspan="1" colspan="1">Telefone</th> --}}
                                 {{-- <th class="sorting" tabindex="0" aria-controls="example1" rowspan="1" colspan="1">Celular</th> --}}
@@ -51,17 +51,21 @@
                             </tr>
                         </thead>
                         <tbody>
-                            <div data-toggle="modal" data-target="#ModalAddPct" onmousemove="verificatexto()">
+                            <div data-toggle="modal" data-target="#ModalAddPct">
                                 <button data-toggle="tooltip" title="Adicionar novo Paciente" type="button" class="btn btn-sm btn-outline-primary float-right" ><i class="fas fa-plus"></i></button>
                             </div>
 
                             @foreach ($allPcts as $Pct)
                             <tr class="odd" style="line-height: 100%">
-                                <td style="text-align: center">{{$Pct->id}}</td>
+                                <td style="text-align: center">
+                                    <div >{{$Pct->id}}</div>
+                                </td>
+
+
                                 <td>{{$Pct->name_pct}}</td>
                                 <td><span id="rua_pct">{{$Pct->rua_pct}}</span>
 
-                                @php //BLOCO DE PHP QUE BUSCA NA STRING SE EXISTE UMA PALAVRA ESPECÍFICA
+                                {{-- @php //BLOCO DE PHP QUE BUSCA NA STRING SE EXISTE UMA PALAVRA ESPECÍFICA
                                     $stringBase     = $Pct->rua_pct;                //base na qual será efetuada a pesquisa
                                     $stringPesquisa = 'Bloco';                      //o termo que desejamos pesquisar na string base
                                     $stringRes = strpos($stringBase, $stringPesquisa);
@@ -70,7 +74,8 @@
                                     }else {
                                         echo "CS";
                                     }
-                                @endphp
+                                @endphp --}}
+
 
                                     {{$Pct->nr_end_pct}} ({{$Pct->compl_pct}}) {{$Pct->bairro_pct}}</td>
 
@@ -81,14 +86,19 @@
                                         @endif
                                     @endforeach
                                 </td>
-                                {{-- <td>{{$Pct->uf_pct}}</td> --}}
+
+                                <td style="text-align: center">
+                                    <div>
+                                    {{-- <div data-toggle="modal" data-target="#ModalEditPct"> --}}
+                                        <a href="{{route('editPct', ['id'=> $Pct->id])}}" id="btnEditar" data-toggle="tooltip" title="Editar" ><i class="fas fa-edit"></i></a>
+                                        {{-- FAZER EDIÇÃO POR AJAX (https://pt.stackoverflow.com/questions/261832/editar-dentro-de-um-modal) --}}
+                                    </div>
+                                </td>
                                 {{-- <td>{{$Pct->tel1_pct}}</td> --}}
                                 {{-- <td>{{$Pct->tel2_pct}}</td> --}}
                                 {{-- <td>{{$Pct->id_hc}}</td> --}}
                             </tr>
                         @endforeach
-
-
 
                 </tbody>
                     <tfoot>
@@ -102,7 +112,7 @@
 
 
 
-                <!-- Modal -->
+<!--///////////////////////////////// Modal NOVO PACIENTE /////////////////////////////////////////////-->
                 <div class="modal fade" id="ModalAddPct" tabindex="-1" role="dialog" aria-labelledby="ModalAddPct" aria-hidden="true">
                     <div class="modal-dialog modal-lg" role="document">
                     <div class="modal-content">
@@ -252,6 +262,158 @@
                     </div>
                     </div>
                 </div>
+
+<!--///////////////////////////////// Modal EDITAR PACIENTE /////////////////////////////////////////////-->
+                <div class="modal fade" id="ModalEditPct" tabindex="-1" role="dialog" aria-labelledby="ModalEditPct" aria-hidden="true">
+                    <div class="modal-dialog modal-lg" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                        <h5 class="modal-title" id="ModalEditPct">Editar Paciente</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                        </div>
+
+                        <form action="#" method="post">
+                        <div class="modal-body">
+                            @csrf
+                            <div class="form-group">
+                                <div class="row form-group">
+                                    <div class="col-sm-6">
+                                        <label for="editPct">Paciente: <span style="color: red">*</span></label>
+                                        <input type="text" class="form-control form-control-sm" name="editPct" id="editPct" placeholder="Nome Completo do Paciente" maxlength="50" required value="{{$Pct->name_pct}}">
+                                    </div>
+                                    <div class="col-sm-2">
+                                        <label for="peso">Peso:</label>
+                                        <select name="editpeso" id="editpeso" class="form-control form-control-sm select" aria-hidden="true">
+                                            <option selected value="0" value="{{$Pct->peso}}" >Selecione</option>
+                                            <option value="1">Até 90kg</option>
+                                            <option value="2">Entre 90kg e 180kg</option>
+                                            <option value="3">Acima de 180kg</option>
+                                        </select>
+                                    </div>
+                                    <div class="col-sm-2">
+                                        <label for="editaltura">Altura:</label>
+                                        <select name="editaltura" id="editaltura" class="form-control form-control-sm select" aria-hidden="true">
+                                            <option selected value="{{$Pct->altura}}" selected>Selecione</option>
+                                            <option value="1">- 1,90m</option>
+                                            <option value="2">+ 1,90m</option>
+                                        </select>
+                                    </div>
+                                    <div class="col-sm-2">
+                                        <label for="edithc">Home Care:<span style="color: red">*</span></label>
+                                        <select name="edithc" id="edithc" class="form-control form-control-sm select" style="width: 100%;" aria-hidden="true" required>
+                                            <option selected value="{{$Pct->id_hc}}">Selecione</option>
+                                            @foreach ($clientes as $cliente)
+                                                    <option value="{{$cliente->id}}">{{$cliente->cliente}}</option>
+                                                @endforeach
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="row form-group">
+                                    <div class="col-sm-4">
+                                        <label for="editresponsavel">Responsável:<span style="color: red">*</span></label>
+                                        <input type="text" class="form-control form-control-sm" data-toggle="tooltip" title="Responsável pelo paciente. Ex: Maria da Silva (Esposa)" name="responsavel" id="editresponsavel" placeholder="Ex: Maria da Silva (Esposa)" maxlength="30" required value="{{$Pct->resp}}">
+                                    </div>
+                                    <div class="col-sm-2">
+                                        <label for="edittel_resp" style="color: white">.</label>
+                                        <input type="text" class="form-control form-control-sm" data-toggle="tooltip" title="Celular Ex: (61) 9234-5678" style="font-size: 90%" name="edittel_resp" id="edittel_resp" onkeypress="mascara(this, telefone)" maxlength="15" placeholder="(__) _____-____" required value="{{$Pct->tel_rep}}">
+                                    </div>
+
+                                    <div class="col-sm-4">
+                                        <label for="editresp2" style="color: white">.</label>
+                                        <input type="text" data-toggle="tooltip" title="Contato adicional. Ex: Tiago da Silva (Filho)" class="form-control form-control-sm" name="editresp2" id="editresp2" placeholder="Ex: Tiago da Silva (Filho)" maxlength="30" value="{{$Pct->resp2}}">
+                                    </div>
+                                    <div class="col-sm-2">
+                                        <label for="edittel_resp2" style="color: white">.</label>
+                                        <input type="text" class="form-control form-control-sm" data-toggle="tooltip" title="Celular Ex: (61) 9234-5678" name="edittel_resp2" id="edittel_resp2" onkeypress="mascara(this, telefone)" maxlength="15" placeholder="(__) _____-____" inputmode="text" value="{{$Pct->tel_resp2}}">
+                                    </div>
+                                </div>
+
+                                <hr>
+
+                                <div class="row form-group">
+                                          <div class="col-sm-2">
+                                              <label for="editcep">Cep:</label>
+                                              <div class="input-group input-group-sm">
+                                                  <input type="text" class="form-control" data-toggle="tooltip" title="Digite o CEP (somente números) para preencher o endereço automaticamente." name="editcep" id="editcep" size="10" maxlength="8" onblur="pesquisacep(this.value);">
+                                                  <div class="input-group-append" value="{{$Pct->cep_pct}}">
+                                                      <span class="input-group-text"><a href="https://buscacepinter.correios.com.br/app/endereco/index.php" target="blank" data-toggle="tooltip" title="Consultar Cep"><i class="far fa-question-circle"></i></a></i></span>
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                    <div class="col-sm-9">
+                                        <label for="editlogradouro">Endereço:<span style="color: red">*</span></label>
+                                        <input type="text" class="form-control form-control-sm" data-toggle="tooltip" title="Rua, Rodovia, Avenida, Quadra, Conjunto"  name="editrua" id="editrua" placeholder="Logradouro" maxlength="50" required value="{{$Pct->rua_pct}}">
+                                    </div>
+                                    <div class="col-sm-1">
+                                        <label for="editnr">Nº:<span style="color: red">*</span></label>
+                                        <input type="text" class="form-control form-control-sm" data-toggle="tooltip" title="Número da Casa, Lote, Apt, Sala" name="editnr" id="editnr" maxlength="10"required value="{{$Pct->nr_end_pct}}">
+                                    </div>
+                                </div>
+                                <div class="row form-group">
+                                    <div class="col-sm-4">
+                                        <input type="text" class="form-control form-control-sm" name="editcompl" id="editcompl" placeholder="Complemento"  data-toggle="tooltip" title="Complemento ou Ponto de referência" maxlength="30" value="{{$Pct->compl_pct}}">>
+                                    </div>
+                                    <div class="col-sm-4">
+                                        <input type="text" class="form-control form-control-sm" name="editbairro" id="editbairro" placeholder="Bairro" required value="{{$Pct->bairro_pct}}">>
+                                    </div>
+
+                                    <input type="text" class="form-control form-control-sm" name="editcidade" id="editcidade" style="display: none">
+                                    <div class="col-sm-3">
+                                        <select name="editcity" id="editcity" class="form-control form-control-sm select" aria-hidden="true" required>
+                                            <option selected value="{{$Pct->city_pct}}">>Selecione a Cidade</option>
+                                            @foreach ( $allCities as $City)
+                                                <option value={{$City->id}}>
+                                                    {{$City->nome}}
+                                                </option>
+                                            @endforeach
+                                        </select>
+                                    </div>
+
+                                    <div class="col-sm-1">
+                                        <input type="text" class="form-control form-control-sm" name="edituf" id="edituf" placeholder="uf" required>
+                                        {{-- <select name="uf" id="uf" class="form-control form-control-sm select" aria-hidden="true">
+                                            <option selected value="7">DF</option> --}}
+                                            {{-- @foreach ($fornecedores as $fornecedor) --}}
+                                                    {{-- <option value="{{$fornecedor->id}}">{{$fornecedor->name_fornec}}</option> --}}
+                                                {{-- @endforeach --}}
+                                            {{-- </select> --}}
+                                    </div>
+
+                                    {{-- <div class="col-sm-1" data-toggle="tooltip" title="Localização">
+                                        <button type="button" class="btn btn-sm btn-primary">
+                                            <i class="fas fa-map-marker-alt"></i>
+                                        </button>
+                                    </div> --}}
+
+
+                                </div>
+
+                                <div class="row form-group">
+                                    <div class="col-sm-12">
+                                        <label for="editobs">Observações:</label>
+                                        <input type="text" class="form-control form-control-sm" name="editobs" id="editobs" placeholder="Observações sobre o paciente" maxlength="100" value="{{$Pct->obs_pct}}>
+                                    </div>
+                                </div>
+                                {{-- <div class="col-sm-1" style="visibility: hidden">
+                                    <input type="text" class="form-control form-control-sm" name="cidade" id="cidade" placeholder="Cidade" required>
+                                </div> --}}
+                        </div>
+                        </div>
+                        <div class="modal-footer">
+                            <div class="form-group">
+                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
+                            <a href=""></a>
+                            <button type="submit" class="btn btn-primary">Salvar</button>
+                            </div>
+                        </div>
+                        </form>
+                    </div>
+                    </div>
+                </div>
+
             </div>
 
         <!-- /.card-body -->
@@ -537,6 +699,6 @@ function mcc(v){
     }
 </script>
 
+
 @stop
-<span id="rua_pct">{{$Pct->rua_pct}}</span>
-                                    <span id="tipo_resid"></span>
+

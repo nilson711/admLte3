@@ -117,9 +117,25 @@ class PctController extends Controller
      * @param  \App\Models\Pct  $pct
      * @return \Illuminate\Http\Response
      */
-    public function edit(Pct $pct)
+
+
+    /////////////////SELECIONA O PACIENTE ATUAL E EXIBE SUAS INFORMAÇÕES PARA EDIÇÃO /////////////////////
+
+    public function editPct($id)
     {
-        //
+        // $pct = DB::SELECT("SELECT * FROM pcts WHERE id = $id");
+        // return redirect()->route('editPct', ['editPct' => $pct]);
+        $pctSel = new Pct;
+        $pctSel = DB::SELECT("SELECT * FROM pcts WHERE id = $id");
+        echo '<pre>';
+        print_r($pctSel);
+        // FAZER CONSULTA E EDIÇÃO PELO AJAX https://pt.stackoverflow.com/questions/261832/editar-dentro-de-um-modal
+
+    }
+
+    /////////////////FAZ UM SUBMIT COM OS DADOS EDITADOS /////////////////////
+    public function edit_Pct_submit(){
+
     }
 
     /**
