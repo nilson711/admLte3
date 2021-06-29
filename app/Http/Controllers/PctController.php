@@ -127,8 +127,8 @@ class PctController extends Controller
         // return redirect()->route('editPct', ['editPct' => $pct]);
         $pctSel = new Pct;
         $pctSel = DB::SELECT("SELECT * FROM pcts WHERE id = $id");
-        echo '<pre>';
-        print_r($pctSel);
+        // echo '<pre>';
+        // print_r($pctSel);
         // FAZER CONSULTA E EDIÇÃO PELO AJAX https://pt.stackoverflow.com/questions/261832/editar-dentro-de-um-modal
 
     }
