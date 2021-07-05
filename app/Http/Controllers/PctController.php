@@ -15,10 +15,11 @@ class PctController extends Controller
     public function listaPcs()
     {
         $allPcts = new Pct;
-        $allPcts = DB::SELECT("SELECT * FROM pcts ORDER BY name_pct");
+        $allPcts = DB::SELECT("SELECT pcts.id, pcts.name_pct, pcts.peso, pcts.altura, pcts.id_hc, pcts.resp, pcts.tel_resp, pcts.resp2, pcts.tel_resp2, pcts.cep_pct, pcts.rua_pct, pcts.nr_end_pct, pcts.compl_pct, pcts.bairro_pct, pcts.city_pct, pcts.obs_pct, clientes.cliente FROM pcts INNER JOIN clientes ON pcts.id_hc = clientes.id");
+        // $allPcts = DB::SELECT("SELECT * FROM pcts ORDER BY name_pct");
 
         $allCities = new Cidade;
-        $allCities = DB::SELECT("SELECT * from cidades ORDER BY nome");
+        $allCities = DB::SELECT("SELECT cidades.id, cidades.nome, cidades.id_estado, estados.uf from cidades INNER JOIN estados ON cidades.id_estado = estados.id ORDER BY cidades.nome");
 
         $clientes = new Cliente;
         $clientes = DB::SELECT("SELECT * FROM clientes");
@@ -70,7 +71,7 @@ class PctController extends Controller
         $pctNew->altura =  $new_altura;
         $pctNew->id_hc =  $new_hc;
         $pctNew->resp =  $new_responsavel;
-        $pctNew->tel_rep =  $new_tel_resp;
+        $pctNew->tel_resp =  $new_tel_resp;
         $pctNew->resp2 =  $new_resp2;
         $pctNew->tel_resp2 =  $new_tel_resp2;
 
@@ -134,8 +135,59 @@ class PctController extends Controller
     }
 
     /////////////////FAZ UM SUBMIT COM OS DADOS EDITADOS /////////////////////
-    public function edit_Pct_submit(){
+    public function edit_Pct_submit(Request $request, Pct $id){
+        //BUSCA OS DADOS OS INPUTS
+        $editId_pct = $request->input('editId_pct');
 
+        $editId_pct = Pct::find($id);
+        echo '<pre>';
+        print_r($editId_pct);
+        // $editId_pct = $request->input('editId_pct');
+        // $edit_Pct = $request->input('editPct');
+        // $edit_peso = $request->input('editpeso');
+        // $edit_altura = $request->input('editaltura');
+        // $edit_hc = $request->input('edithc');
+        // $edit_responsavel = $request->input('editresponsavel');
+        // $edit_tel_resp = $request->input('edittel_resp');
+        // $edit_resp2 = $request->input('editresp2');
+        // $edit_tel_resp2 = $request->input('edittel_resp2');
+
+        // $edit_cep = $request->input('editcep');
+        // $edit_rua = $request->input('editrua');
+        // $edit_nr = $request->input('editnr');
+        // $edit_compl = $request->input('editcompl');
+        // $edit_bairro = $request->input('editbairro');
+        // $edit_city = $request->input('editcity');
+
+        // $edit_obs = $request->input('editobs');
+
+        //SALVA DOS DADOS DOS INPUTS NO BANCO DE DADOS
+
+        // $pctEdit = DB::UPDATE("UPDATE pcts WHERE id_pct = $editId_pct");
+        // $pctSel = DB::SELECT("SELECT * FROM pcts WHERE id = $id");
+        // $pctEdit = DB::update('update users set votes = 100 where name = ?', ['John']);
+        // $pctEdit = DB::update('update pcts set votes = 100 where name = ?', ['John']);
+
+        // $pctEdit->name_pct =  $edit_Pct;
+        // $pctEdit->peso =  $edit_peso;
+        // $pctEdit->altura =  $edit_altura;
+        // $pctEdit->id_hc =  $edit_hc;
+        // $pctEdit->resp =  $edit_responsavel;
+        // $pctEdit->tel_resp =  $edit_tel_resp;
+        // $pctEdit->resp2 =  $edit_resp2;
+        // $pctEdit->tel_resp2 =  $edit_tel_resp2;
+
+        // $pctEdit->cep_pct =  $edit_cep;
+        // $pctEdit->rua_pct =  $edit_rua;
+        // $pctEdit->nr_end_pct =  $edit_nr;
+        // $pctEdit->compl_pct =  $edit_compl;
+        // $pctEdit->bairro_pct =  $edit_bairro;
+        // $pctEdit->city_pct =  $edit_city;
+        // $pctNew->uf_pct =  $new_uf;
+        // $pctEdit->obs_pct =  $edit_obs;
+
+        // $pctEdit->save();
+        // return redirect()->route('listaPcs');
     }
 
     /**

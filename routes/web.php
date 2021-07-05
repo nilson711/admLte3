@@ -38,4 +38,5 @@ Route::post('/newEquipSubmit', [App\Http\Controllers\EquipamentoController::clas
 Route::get('/pacientes', [App\Http\Controllers\PctController::class, 'listaPcs'])->name('listaPcs');
 Route::post('/new_Pct_submit', [App\Http\Controllers\PctController::class, 'new_Pct_submit'])->name('new_Pct_submit');
 Route::get('/editPct/{id}', [App\Http\Controllers\PctController::class, 'editPct'])->name('editPct');
-Route::post('/edit_Pct_submit', [App\Http\Controllers\PctController::class, 'edit_Pct_submit'])->name('edit_Pct_submit');
+Route::put('/edit_Pct_submit/{id}', [App\Http\Controllers\PctController::class, 'edit_Pct_submit'])->name('edit_Pct_submit');
+

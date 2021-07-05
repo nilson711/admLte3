@@ -12,6 +12,7 @@
 
 </body>
 
+
     <div class="card">
         <div class="card-header" >
           <h3 class="card-title">Pacientes</h3>
@@ -40,9 +41,9 @@
                             <tr role="row">
                                 <th class="col-sm-1" style="text-align: center">#</th>
                                 <th class="sorting sorting_asc col-sm-3" tabindex="0" aria-controls="example1" rowspan="1" colspan="1" aria-sort="ascending" title="Classificar crescente / decrescente">Nome</th>
-                                <th class="sorting col-sm-5" tabindex="0" aria-controls="example1" rowspan="1" colspan="1">Endereço</th>
+                                <th class="sorting col-sm-5" tabindex="0" aria-controls="example1" rowspan="1" colspan="1">Local</th>
                                 {{-- <th class="sorting col-sm-1" tabindex="0" aria-controls="example1" rowspan="1" colspan="1">Bairro</th> --}}
-                                <th class="sorting col-sm-1" tabindex="0" aria-controls="example1" rowspan="1" colspan="1">Cidade</th>
+                                <th class="sorting col-sm-1" tabindex="0" aria-controls="example1" rowspan="1" colspan="1">Home Care</th>
                                 <th class="sorting col-sm-1" tabindex="0" aria-controls="example1" rowspan="1" colspan="1"></th>
 
                                 {{-- <th class="sorting" tabindex="0" aria-controls="example1" rowspan="1" colspan="1">Telefone</th> --}}
@@ -63,7 +64,8 @@
 
 
                                 <td id="namePct">{{$Pct->name_pct}}</td>
-                                <td><span id="rua_pct">{{$Pct->rua_pct}}</span>
+                                <td>
+                                {{-- <td><span id="rua_pct">{{$Pct->rua_pct}}</span> --}}
 
                                 {{-- @php //BLOCO DE PHP QUE BUSCA NA STRING SE EXISTE UMA PALAVRA ESPECÍFICA
                                     $stringBase     = $Pct->rua_pct;                //base na qual será efetuada a pesquisa
@@ -77,19 +79,23 @@
                                 @endphp --}}
 
 
-                                    {{$Pct->nr_end_pct}} ({{$Pct->compl_pct}}) {{$Pct->bairro_pct}}</td>
-
-                                <td>
-                                    @foreach ( $allCities as $City)
+                                    {{-- {{$Pct->nr_end_pct}} ({{$Pct->compl_pct}}) {{$Pct->bairro_pct}}</td> --}}
+                                    {{-- {{$Pct->nr_end_pct}} ({{$Pct->compl_pct}}) {{$Pct->bairro_pct}}</td> --}}
+                                   {{$Pct->bairro_pct}} -
+                                   @foreach ( $allCities as $City)
                                         @if ($City->id == $Pct->city_pct)
-                                            {{$City->nome}}
+                                            {{$City->nome}}-{{$City->uf}}
                                         @endif
                                     @endforeach
                                 </td>
 
+                                <td>
+                                    {{$Pct->cliente}}
+                                </td>
+
                                 <td style="text-align: center">
                                     {{-- <div data-toggle="modal" data-target="#ModalEditPct" data-whatever="$Pct->id"> --}}
-                                    <div data-toggle="modal" data-target="#ModalEditPct" data-whatever="{{$Pct->id}}" data-whatever-name_pct="{{$Pct->name_pct}}" data-whatever-peso="{{$Pct->peso}}" data-whatever-altura="{{$Pct->altura}}" data-whatever-id_hc="{{$Pct->id_hc}}" data-whatever-resp="{{$Pct->resp}}" data-whatever-tel_rep="{{$Pct->tel_rep}}" data-whatever-resp2="{{$Pct->resp2}}" data-whatever-tel_resp2="{{$Pct->tel_resp2}}" data-whatever-cep_pct="{{$Pct->cep_pct}}" data-whatever-rua_pct="{{$Pct->rua_pct}}" data-whatever-nr_end_pct="{{$Pct->nr_end_pct}}" data-whatever-compl_pct="{{$Pct->compl_pct}}" data-whatever-bairro_pct="{{$Pct->bairro_pct}}" data-whatever-city_pct="{{$Pct->city_pct}}" data-whatever-obs_pct="{{$Pct->obs_pct}}">
+                                    <div data-toggle="modal" data-target="#ModalEditPct" data-whatever="{{$Pct->id}}" data-whatever-name_pct="{{$Pct->name_pct}}" data-whatever-peso="{{$Pct->peso}}" data-whatever-altura="{{$Pct->altura}}" data-whatever-id_hc="{{$Pct->id_hc}}" data-whatever-resp="{{$Pct->resp}}" data-whatever-tel_resp="{{$Pct->tel_resp}}" data-whatever-resp2="{{$Pct->resp2}}" data-whatever-tel_resp2="{{$Pct->tel_resp2}}" data-whatever-cep_pct="{{$Pct->cep_pct}}" data-whatever-rua_pct="{{$Pct->rua_pct}}" data-whatever-nr_end_pct="{{$Pct->nr_end_pct}}" data-whatever-compl_pct="{{$Pct->compl_pct}}" data-whatever-bairro_pct="{{$Pct->bairro_pct}}" data-whatever-city_pct="{{$Pct->city_pct}}" data-whatever-obs_pct="{{$Pct->obs_pct}}">
                                     <div>
                                         <a href="#" id="btnEditar" data-toggle="tooltip" title="Editar" ><i class="fas fa-edit"></i></a>
                                         {{-- <a href="#" name="btnEditar" id="btnEditar" data-toggle="tooltip" title="Editar" ><i class="fas fa-edit"></i></a> --}}
@@ -272,14 +278,22 @@
                     <div class="modal-content">
                         <div class="modal-header">
                         <h5 class="modal-title">Editar Paciente</h5>
+
+                            <div class="col-sm-1">
+                                <input class="form-control form-control-sm" name="editId_pct" id="editId_pct">
+                            </div>
+
+
+
                         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                             <span aria-hidden="true">&times;</span>
                         </button>
                         </div>
 
-                        <form action="#" method="post">
-                        <div class="modal-body">
+                        <form action="{{route('edit_Pct_submit',$Pct->id)}}" method="post">
+                            @method('put')
                             @csrf
+                        <div class="modal-body">
                             <div class="form-group">
                                 <div class="row form-group">
                                     <div class="col-sm-6">
@@ -316,7 +330,7 @@
                                 <div class="row form-group">
                                     <div class="col-sm-4">
                                         <label for="editresponsavel">Responsável:<span style="color: red">*</span></label>
-                                        <input type="text" class="form-control form-control-sm" data-toggle="tooltip" title="Responsável pelo paciente. Ex: Maria da Silva (Esposa)" name="responsavel" id="editresponsavel" placeholder="Ex: Maria da Silva (Esposa)" maxlength="30" required >
+                                        <input type="text" class="form-control form-control-sm" data-toggle="tooltip" title="Responsável pelo paciente. Ex: Maria da Silva (Esposa)" name="editresponsavel" id="editresponsavel" placeholder="Ex: Maria da Silva (Esposa)" maxlength="30" required >
                                     </div>
                                     <div class="col-sm-2">
                                         <label for="edittel_resp" style="color: white">.</label>
@@ -721,15 +735,16 @@ function mcc(v){
 
 <script>
     //FUNÇÃO QUE ATUALIZA O MODAL PARA EDITAR O REGISTRO ATUAL
-    $('#ModalEditPct').on('show.bs.modal', function (event) {   //Id do Modal 
+    $('#ModalEditPct').on('show.bs.modal', function (event) {   //Id do Modal
         var button = $(event.relatedTarget) // Button that triggered the modal
         var recipientId = button.data('whatever')
+        var recipient_id_pct = button.data('whatever')
         var recipient_name_pct = button.data('whatever-name_pct') // Busca a informação no data-whatever-name_pct do botão editar
         var recipient_peso = button.data('whatever-peso')
         var recipient_altura = button.data('whatever-altura')
         var recipient_id_hc = button.data('whatever-id_hc')
         var recipient_resp = button.data('whatever-resp')
-        var recipient_tel_rep = button.data('whatever-tel_rep')
+        var recipient_tel_resp = button.data('whatever-tel_resp')
         var recipient_resp2 = button.data('whatever-resp2')
         var recipient_tel_resp2 = button.data('whatever-tel_resp2')
         var recipient_tel_cep_pct = button.data('whatever-cep_pct')
@@ -743,13 +758,14 @@ function mcc(v){
         // Update the modal's content. We'll use jQuery here, but you could use a data binding library or other methods instead.
         //Atualiza o conteúdo do modal.
         var modal = $(this)
-        modal.find('.modal-title').text('New message to ' + recipientId)
+        modal.find('.modal-title').text('Editar Dados Paciente: ' + recipientId)
+        modal.find('#editId_pct').val(recipientId)
         modal.find('#editPct').val(recipient_name_pct)
         modal.find('#editpeso').val(recipient_peso)
         modal.find('#editaltura').val(recipient_altura)
         modal.find('#edithc').val(recipient_id_hc)
         modal.find('#editresponsavel').val(recipient_resp)
-        modal.find('#edittel_resp').val(recipient_tel_rep)
+        modal.find('#edittel_resp').val(recipient_tel_resp)
         modal.find('#editresp2').val(recipient_resp2)
         modal.find('#edittel_resp2').val(recipient_tel_resp2)
         modal.find('#editcep').val(recipient_tel_cep_pct)
