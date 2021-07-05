@@ -70,18 +70,18 @@ class PctController extends Controller
         $pctNew->altura =  $new_altura;
         $pctNew->id_hc =  $new_hc;
         $pctNew->resp =  $new_responsavel;
-        $pctNew->tel_rep =  $new_tel_resp;
+        $pctNew->tel_resp=  $new_tel_resp;
         $pctNew->resp2 =  $new_resp2;
         $pctNew->tel_resp2 =  $new_tel_resp2;
 
-        $pctNew->cep_pct =  $new_cep;
-        $pctNew->rua_pct =  $new_rua;
-        $pctNew->nr_end_pct =  $new_nr;
-        $pctNew->compl_pct =  $new_compl;
-        $pctNew->bairro_pct =  $new_bairro;
-        $pctNew->city_pct =  $new_city;
+        $pctNew->cep =  $new_cep;
+        $pctNew->rua =  $new_rua;
+        $pctNew->nr =  $new_nr;
+        $pctNew->compl =  $new_compl;
+        $pctNew->bairro =  $new_bairro;
+        $pctNew->city =  $new_city;
         // $pctNew->uf_pct =  $new_uf;
-        $pctNew->obs_pct =  $new_obs;
+        $pctNew->obs =  $new_obs;
 
         $pctNew->save();
 
@@ -95,6 +95,10 @@ class PctController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
+
+     public function funcRetornar(){
+        return back();
+     }
     public function store(Request $request)
     {
         //
@@ -123,19 +127,33 @@ class PctController extends Controller
 
     public function editPct($id)
     {
-        // $pct = DB::SELECT("SELECT * FROM pcts WHERE id = $id");
-        // return redirect()->route('editPct', ['editPct' => $pct]);
-        $pctSel = new Pct;
-        $pctSel = DB::SELECT("SELECT * FROM pcts WHERE id = $id");
+       
+        $allPcts = new Pct;
+        $allPcts = DB::SELECT("SELECT * FROM pcts ORDER BY name_pct");
+
+        $allCities = new Cidade;
+        $allCities = DB::SELECT("SELECT * from cidades ORDER BY nome");
+
+        $clientes = new Cliente;
+        $clientes = DB::SELECT("SELECT * FROM clientes");
+
+        $pctSel = Pct::find($id);
         // echo '<pre>';
         // print_r($pctSel);
+        // return $pctSel;
+        
+        return view('edit_pct', ['pctSel'=>$pctSel] + ['allPcts'=>$allPcts] + ['allCities'=>$allCities] + ['clientes'=>$clientes]);
+        // return view('edit_pct', compact('pctSel'));
+        
         // FAZER CONSULTA E EDIÇÃO PELO AJAX https://pt.stackoverflow.com/questions/261832/editar-dentro-de-um-modal
 
     }
 
     /////////////////FAZ UM SUBMIT COM OS DADOS EDITADOS /////////////////////
-    public function edit_Pct_submit(){
-
+    public function edit_Pct_submit(Request $request, $id){
+        $pctSel = Pct::find($id);
+        echo '<pre>';
+        print_r($pctSel);
     }
 
     /**

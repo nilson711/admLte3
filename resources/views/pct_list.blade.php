@@ -63,7 +63,7 @@
 
 
                                 <td id="namePct">{{$Pct->name_pct}}</td>
-                                <td><span id="rua_pct">{{$Pct->rua_pct}}</span>
+                                <td><span id="rua_pct">{{$Pct->rua}}</span>
 
                                 {{-- @php //BLOCO DE PHP QUE BUSCA NA STRING SE EXISTE UMA PALAVRA ESPECÍFICA
                                     $stringBase     = $Pct->rua_pct;                //base na qual será efetuada a pesquisa
@@ -77,11 +77,11 @@
                                 @endphp --}}
 
 
-                                    {{$Pct->nr_end_pct}} ({{$Pct->compl_pct}}) {{$Pct->bairro_pct}}</td>
+                                   nº {{$Pct->nr}} ({{$Pct->compl}}) {{$Pct->bairro}}</td>
 
                                 <td>
                                     @foreach ( $allCities as $City)
-                                        @if ($City->id == $Pct->city_pct)
+                                        @if ($City->id == $Pct->city)
                                             {{$City->nome}}
                                         @endif
                                     @endforeach
@@ -89,9 +89,10 @@
 
                                 <td style="text-align: center">
                                     {{-- <div data-toggle="modal" data-target="#ModalEditPct" data-whatever="$Pct->id"> --}}
-                                    <div data-toggle="modal" data-target="#ModalEditPct" data-whatever="{{$Pct->id}}" data-whatever-name_pct="{{$Pct->name_pct}}" data-whatever-peso="{{$Pct->peso}}" data-whatever-altura="{{$Pct->altura}}" data-whatever-id_hc="{{$Pct->id_hc}}" data-whatever-resp="{{$Pct->resp}}" data-whatever-tel_rep="{{$Pct->tel_rep}}" data-whatever-resp2="{{$Pct->resp2}}" data-whatever-tel_resp2="{{$Pct->tel_resp2}}" data-whatever-cep_pct="{{$Pct->cep_pct}}" data-whatever-rua_pct="{{$Pct->rua_pct}}" data-whatever-nr_end_pct="{{$Pct->nr_end_pct}}" data-whatever-compl_pct="{{$Pct->compl_pct}}" data-whatever-bairro_pct="{{$Pct->bairro_pct}}" data-whatever-city_pct="{{$Pct->city_pct}}" data-whatever-obs_pct="{{$Pct->obs_pct}}">
+                                    {{-- <div data-toggle="modal" data-target="#ModalEditPct" data-whatever="{{$Pct->id}}" data-whatever-name_pct="{{$Pct->name_pct}}" data-whatever-peso="{{$Pct->peso}}" data-whatever-altura="{{$Pct->altura}}" data-whatever-id_hc="{{$Pct->id_hc}}" data-whatever-resp="{{$Pct->resp}}" data-whatever-tel_rep="{{$Pct->tel_resp}}" data-whatever-resp2="{{$Pct->resp2}}" data-whatever-tel_resp2="{{$Pct->tel_resp2}}" data-whatever-cep_pct="{{$Pct->cep_pct}}" data-whatever-rua_pct="{{$Pct->rua_pct}}" data-whatever-nr_end_pct="{{$Pct->nr_end_pct}}" data-whatever-compl_pct="{{$Pct->compl_pct}}" data-whatever-bairro_pct="{{$Pct->bairro_pct}}" data-whatever-city_pct="{{$Pct->city_pct}}" data-whatever-obs_pct="{{$Pct->obs_pct}}"> --}}
+                                    
                                     <div>
-                                        <a href="#" id="btnEditar" data-toggle="tooltip" title="Editar" ><i class="fas fa-edit"></i></a>
+                                        <a href="{{route('editPct', $Pct->id)}}" id="btnEditar" data-toggle="tooltip" title="Editar" ><i class="fas fa-edit"></i></a>
                                         {{-- <a href="#" name="btnEditar" id="btnEditar" data-toggle="tooltip" title="Editar" ><i class="fas fa-edit"></i></a> --}}
                                         {{-- FAZER EDIÇÃO POR AJAX (https://pt.stackoverflow.com/questions/261832/editar-dentro-de-um-modal) --}}
                                         {{-- FAZER EDIÇÃO POR JAVASCRIPT https://www.ti-enxame.com/pt/javascript/como-usar-o-modal-bootstrap-para-editar-os-dados-da-tabela-no-mvc/1072415570/ --}}
@@ -276,14 +277,15 @@
                             <span aria-hidden="true">&times;</span>
                         </button>
                         </div>
-
+                        
                         <form action="#" method="post">
-                        <div class="modal-body">
+                            {{ method_field('PUT') }}
+                            <div class="modal-body">
                             @csrf
                             <div class="form-group">
                                 <div class="row form-group">
                                     <div class="col-sm-6">
-                                        <label for="editPct">Paciente: <span style="color: red">*</span></label>
+                                        <label for="editPct">Paciente ddd: <span style="color: red">*</span></label>
                                         <input type="text" class="form-control form-control-sm" name="editPct" id="editPct" placeholder="Nome Completo do Paciente" maxlength="50" required>
                                     </div>
                                     <div class="col-sm-2">
@@ -389,15 +391,15 @@
                                 {{-- <div class="col-sm-1" style="visibility: hidden">
                                     <input type="text" class="form-control form-control-sm" name="cidade" id="cidade" placeholder="Cidade" required>
                                 </div> --}}
-                        </div>
-                        </div>
-                        <div class="modal-footer">
-                            <div class="form-group">
-                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
-                            <a href=""></a>
-                            <button type="submit" class="btn btn-primary">Salvar</button>
                             </div>
-                        </div>
+                            </div>
+                            <div class="modal-footer">
+                                <div class="form-group">
+                                <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
+                                <a href=""></a>
+                                <button type="submit" class="btn btn-primary">Salvar</button>
+                                </div>
+                            </div>
                         </form>
                     </div>
                     </div>
@@ -679,7 +681,7 @@ function mcc(v){
 <script src="js/adminlte.min.js"></script>
 <!-- AdminLTE for demo purposes -->
 <script src="js/demo.js"></script>
-<script src="js/functions-equips.js"></script>
+{{-- <script src="js/functions-equips.js"></script> --}}
 <script src="js/buscacep.js"></script>
 {{-- <script src="js/localizaz.js"></script> --}}
 
@@ -729,7 +731,7 @@ function mcc(v){
         var recipient_altura = button.data('whatever-altura')
         var recipient_id_hc = button.data('whatever-id_hc')
         var recipient_resp = button.data('whatever-resp')
-        var recipient_tel_rep = button.data('whatever-tel_rep')
+        var recipient_tel_resp= button.data('whatever-tel_rep')
         var recipient_resp2 = button.data('whatever-resp2')
         var recipient_tel_resp2 = button.data('whatever-tel_resp2')
         var recipient_tel_cep_pct = button.data('whatever-cep_pct')
