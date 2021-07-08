@@ -389,9 +389,9 @@
                             </tr>
                         </thead>
                         <tbody>
-                            <div data-toggle="modal" data-target="#ModalManutencao">
+                            {{-- <div data-toggle="modal" data-target="#ModalManutencao">
                                 <button data-toggle="tooltip" title="Adicionar novo equipamento" type="button" class="btn btn-sm btn-outline-primary float-right" ><i class="fas fa-plus"></i></button>
-                            </div>
+                            </div> --}}
                             @foreach ($equipsManutencao as $equipManutencao)
                                 <tr class="odd" style="text-align: center; vertical-align: middle; line-height: 100%">
                                     <td style="text-align: center; vertical-align: middle">{{$equipManutencao->id}}</td>
@@ -625,18 +625,18 @@
 <script>
     $(function () {
       $("#example1").DataTable({
-        "responsive": true, "lengthChange": false, "autoWidth": false,
-        "buttons": ["copy", "csv", "excel", "pdf", "print"]
+        "responsive": true, "lengthChange": false, "autoWidth": false
+        // ,        "buttons": ["copy", "csv", "excel", "pdf", "print"]
       }).buttons().container().appendTo('#example1_wrapper .col-md-6:eq(0)');
 
       $("#table_implantados").DataTable({
-        "responsive": true, "lengthChange": false, "autoWidth": false,
-        "buttons": ["copy", "csv", "excel", "pdf", "print"]
+        "responsive": true, "lengthChange": false, "autoWidth": false
+        // ,        "buttons": ["copy", "csv", "excel", "pdf", "print"]
       }).buttons().container().appendTo('#implantados_wrapper .col-md-6:eq(0)');
 
       $("#table_manutencao").DataTable({
-        "responsive": true, "lengthChange": false, "autoWidth": false,
-        "buttons": ["copy", "csv", "excel", "pdf", "print"]
+        "responsive": true, "lengthChange": false, "autoWidth": false
+        // ,        "buttons": ["copy", "csv", "excel", "pdf", "print"]
       }).buttons().container().appendTo('#manutencao_wrapper .col-md-6:eq(0)');
 
 

@@ -15,7 +15,7 @@
 
       <div class="card">
       <div class="card-header">
-        <h3 class="card-title">Solicitações</h3>
+        <h3 class="card-title" data-toggle="tootip" title="teste">Solicitações</h3>
 
         <div class="card-tools">
           <ul class="pagination pagination-sm float-right">
@@ -146,7 +146,7 @@
                 <div class="icheck-primary d-inline ml-2">
                     <label for="checkTarefa"></label>
                     <input type="checkbox" value="0" name="checkTarefa" id="checkTarefa">
-                
+
                 </div>
                 <!-- todo text -->
                 <span class="text">{{$task->tarefa}}</span>

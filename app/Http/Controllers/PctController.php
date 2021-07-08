@@ -23,7 +23,7 @@ class PctController extends Controller
         $clientes = new Cliente;
         $clientes = DB::SELECT("SELECT * FROM clientes");
 
-        return view('pct_list', ['allPcts'=>$allPcts] + ['allCities'=>$allCities] + ['clientes'=>$clientes]);
+        return view('pct_list2', ['allPcts'=>$allPcts] + ['allCities'=>$allCities] + ['clientes'=>$clientes]);
     }
 
     /**
@@ -127,7 +127,7 @@ class PctController extends Controller
 
     public function editPct($id)
     {
-       
+
         $allPcts = new Pct;
         $allPcts = DB::SELECT("SELECT * FROM pcts ORDER BY name_pct");
 
@@ -141,19 +141,60 @@ class PctController extends Controller
         // echo '<pre>';
         // print_r($pctSel);
         // return $pctSel;
-        
+
         return view('edit_pct', ['pctSel'=>$pctSel] + ['allPcts'=>$allPcts] + ['allCities'=>$allCities] + ['clientes'=>$clientes]);
         // return view('edit_pct', compact('pctSel'));
-        
+
         // FAZER CONSULTA E EDIÇÃO PELO AJAX https://pt.stackoverflow.com/questions/261832/editar-dentro-de-um-modal
 
     }
 
     /////////////////FAZ UM SUBMIT COM OS DADOS EDITADOS /////////////////////
     public function edit_Pct_submit(Request $request, $id){
-        $pctSel = Pct::find($id);
-        echo '<pre>';
-        print_r($pctSel);
+         //BUSCA OS DADOS OS INPUTS
+         $edit_Pct = $request->input('Pct');
+         $edit_peso = $request->input('peso');
+         $edit_altura = $request->input('altura');
+         $edit_hc = $request->input('hc');
+         $edit_responsavel = $request->input('responsavel');
+         $edit_tel_resp = $request->input('tel_resp');
+         $edit_resp2 = $request->input('resp2');
+         $edit_tel_resp2 = $request->input('tel_resp2');
+
+         $edit_cep = $request->input('cep');
+         $edit_rua = $request->input('rua');
+         $edit_nr = $request->input('nr');
+         $edit_compl = $request->input('compl');
+         $edit_bairro = $request->input('bairro');
+         $edit_city = $request->input('city');
+         // $new_uf = $request->input('uf');
+         $edit_obs = $request->input('obs');
+
+         //SALVA DOS DADOS DOS INPUTS NO BANCO DE DADOS
+        $pctEdit = Pct::find($id);
+        $pctEdit->name_pct =  $edit_Pct;
+        $pctEdit->peso =  $edit_peso;
+        $pctEdit->altura =  $edit_altura;
+        $pctEdit->id_hc =  $edit_hc;
+        $pctEdit->resp =  $edit_responsavel;
+        $pctEdit->tel_resp=  $edit_tel_resp;
+        $pctEdit->resp2 =  $edit_resp2;
+        $pctEdit->tel_resp2 =  $edit_tel_resp2;
+
+        $pctEdit->cep =  $edit_cep;
+        $pctEdit->rua =  $edit_rua;
+        $pctEdit->nr =  $edit_nr;
+        $pctEdit->compl =  $edit_compl;
+        $pctEdit->bairro =  $edit_bairro;
+        $pctEdit->city =  $edit_city;
+        // $pctNew->uf_pct =  $edit_uf;
+        $pctEdit->obs =  $edit_obs;
+
+        $pctEdit->save();
+
+        return redirect()->route('listaPcs');
+
+
     }
 
     /**
