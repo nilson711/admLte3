@@ -2,7 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Pct;
 use App\Models\Cliente;
+use App\Models\Equipamento;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 class ClienteController extends Controller
@@ -16,6 +18,22 @@ class ClienteController extends Controller
     {
         $clientes = DB::SELECT("SELECT * FROM clientes");
         return view('clientes', ['clientes'=> $clientes]);
+    }
+
+    // Lista todos o pacientes do Home Care
+    public function listapcthc($id)
+    {
+        $clientes = DB::SELECT("SELECT * FROM clientes");
+
+        $allPcts = new Pct;
+        $allPcts = DB::SELECT("SELECT * FROM pcts ORDER BY name_pct");
+
+        $equipsDoPct = new Equipamento();
+        $equipsDoPct = DB::SELECT("SELECT * FROM equipamentos WHERE pct_equip > 0 AND status_equip = 0");
+
+        $clienteSel = Cliente::find($id);
+
+        return view('listaPctsHc', ['allPcts'=>$allPcts] + ['clientes'=>$clientes] + ['clienteSel'=>$clienteSel] + ['equipsDoPct'=>$equipsDoPct]);
     }
 
     /**

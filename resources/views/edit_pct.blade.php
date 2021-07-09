@@ -22,8 +22,7 @@
 
                   <div class="card-body p-0">
                       <form action="{{route('edit_Pct_submit', $pctSel->id)}}" method="post" >
-                      {{-- <form action="#" method="post"> --}}
-                        {{-- {{ method_field('PUT') }} --}}
+
                         <div class="modal-body" >
                         @csrf
                         <input type="hidden" name="id_pct" value="{{$pctSel->id}}">

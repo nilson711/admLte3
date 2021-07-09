@@ -40,6 +40,7 @@
                                 <th class="sorting col-sm-1" tabindex="0" aria-controls="example1" rowspan="1" colspan="1">Telefone</th>
                                 <th class="sorting" tabindex="0" aria-controls="example1" rowspan="1" colspan="1">Celular</th>
                                 <th class="sorting" tabindex="0" aria-controls="example1" rowspan="1" colspan="1">E-mail</th>
+                                <th class="sorting" tabindex="0" aria-controls="example1" rowspan="1" colspan="1"></th>
                             </tr>
                         </thead>
                         <tbody>
@@ -55,11 +56,16 @@
                                 <td>{{$cliente->telefone}}</td>
                                 <td>{{$cliente->celular}}</td>
                                 <td>{{$cliente->email}}</td>
+                                <td>
+                                    <span data-toggle="tooltip" title="Lista de Pacientes">
+                                        <a href="{{route('listapcthc', $cliente->id)}}" style="margin-right: 10px"><i class="fas fa-info-circle"></i></a>
+                                    </span>
+                                    <span data-toggle="tooltip" title="Editar">
+                                        <a href="#" id="btnEditar" ><i class="fas fa-edit"></i></a>
+                                    </span>
+                                </td>
                             </tr>
                         @endforeach
-
-
-
                 </tbody>
                     <tfoot>
                     {{-- <tr><th rowspan="1" colspan="1">Rendering engine</th><th rowspan="1" colspan="1">Browser</th><th rowspan="1" colspan="1">Platform(s)</th><th rowspan="1" colspan="1">Engine version</th><th rowspan="1" colspan="1" style="">CSS grade</th></tr> --}}
@@ -72,7 +78,7 @@
 
 
 
-                <!-- Modal -->
+<!------------------------------ Modal ADICIONAR NOVO CLIENTE------------------------------------>
                 <div class="modal fade" id="ModalAddCliente" tabindex="-1" role="dialog" aria-labelledby="ModalAddCliente" aria-hidden="true">
                     <div class="modal-dialog" role="document">
                     <div class="modal-content">

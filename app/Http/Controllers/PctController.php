@@ -129,7 +129,7 @@ class PctController extends Controller
     {
 
         $allPcts = new Pct;
-        $allPcts = DB::SELECT("SELECT * FROM pcts ORDER BY name_pct");
+            $allPcts = DB::SELECT("SELECT * FROM pcts ORDER BY name_pct");
 
         $allCities = new Cidade;
         $allCities = DB::SELECT("SELECT * from cidades ORDER BY nome");
@@ -142,7 +142,8 @@ class PctController extends Controller
         // print_r($pctSel);
         // return $pctSel;
 
-        return view('edit_pct', ['pctSel'=>$pctSel] + ['allPcts'=>$allPcts] + ['allCities'=>$allCities] + ['clientes'=>$clientes]);
+        // return view('edit_pct', ['pctSel'=>$pctSel] + ['allPcts'=>$allPcts] + ['allCities'=>$allCities] + ['clientes'=>$clientes]);
+        return view('prontuario_pct', ['pctSel'=>$pctSel] + ['allPcts'=>$allPcts] + ['allCities'=>$allCities] + ['clientes'=>$clientes]);
         // return view('edit_pct', compact('pctSel'));
 
         // FAZER CONSULTA E EDIÇÃO PELO AJAX https://pt.stackoverflow.com/questions/261832/editar-dentro-de-um-modal

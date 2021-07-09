@@ -28,6 +28,7 @@ Route::post('/checkTarefa', [App\Http\Controllers\TarefaController::class, 'chec
 
 // Rotas dos Clientes
 Route::get('/clientes', [App\Http\Controllers\ClienteController::class, 'clientes'])->name('clientes');
+Route::get('/listapcthc/{id}', [App\Http\Controllers\ClienteController::class, 'listapcthc'])->name('listapcthc');
 Route::post('/new_cliente_submit', [App\Http\Controllers\ClienteController::class, 'new_cliente_submit'])->name('new_cliente_submit');
 
 // Rotas dos Equipamentos
