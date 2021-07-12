@@ -140,18 +140,18 @@
           </div>
           <!-- /.col -->
           <div class="col-md-9">
-            <div class="card">
+            <div class="card card-primary card-outline card-outline-tabs">
               <div class="card-header p-2">
-                <ul class="nav nav-pills">
-                  <li class="nav-item"><a class="nav-link active" href="#activity" data-toggle="tab">Dados</a></li>
-                  <li class="nav-item"><a class="nav-link" href="#timeline" data-toggle="tab">Equipamentos</a></li>
+                <ul class="nav nav-tabs">
+                  <li class="nav-item"><a class="nav-link active" href="#tabDadosPct" data-toggle="tab">Dados</a></li>
+                  <li class="nav-item"><a class="nav-link" href="#tabEquipamentosPct" data-toggle="tab">Equipamentos</a></li>
                   <li class="nav-item"><a class="nav-link" href="#settings" data-toggle="tab">Histórico</a></li>
                 </ul>
               </div><!-- /.card-header -->
               <div class="card-body">
                 <div class="tab-content">
-                  <div class="active tab-pane" id="activity">
-                    <!-- Formulário de Dados -->
+                  <div class="active tab-pane" id="tabDadosPct">
+<!---------------------------------------------------- FORMUÁRIO DADOS DO PACIENTE ------------------------------------------------>
                     <form action="{{route('edit_Pct_submit', $pctSel->id)}}" method="post" >
 
                         <div >
@@ -166,7 +166,6 @@
                                     <label for="tel_resp" style="color: white">.</label>
                                     <input type="text" class="form-control" data-toggle="tooltip" title="Celular Ex: (61) 99234-5678" name="tel_resp" id="tel_resp" onkeypress="mascara(this, telefone)" maxlength="16" placeholder="(__) _____-____" required value = "{{$pctSel->tel_resp}}">
                                 </div>
-
                                 <div class="col-sm-4">
                                     <label for="resp2" style="color: white">.</label>
                                     <input type="text" data-toggle="tooltip" title="Contato adicional. Ex: Tiago da Silva (Filho)" class="form-control" name="resp2" id="resp2" placeholder="Ex: Tiago da Silva (Filho)" maxlength="30" value="{{$pctSel->resp2}}">
@@ -245,101 +244,132 @@
                         </div>
                     </form>
 
-                    <!--/ Formulário de Dados -->
+<!---------------------------------------------------- EQUIPAMENTOS DO PACIENTE ------------------------------------------------>
                 </div>
                   <!-- /.tab-pane -->
-                  <div class="tab-pane" id="timeline">
-                    <!-- The timeline -->
-                    <div class="timeline timeline-inverse">
-                      <!-- timeline time label -->
-                      <div class="time-label">
-                        <span class="bg-danger">
-                          10 Feb. 2014
-                        </span>
-                      </div>
-                      <!-- /.timeline-label -->
-                      <!-- timeline item -->
-                      <div>
-                        <i class="fas fa-envelope bg-primary"></i>
+                  <div class="tab-pane" id="tabEquipamentosPct">
+                    <!-- The tabEquipamentosPct -->
+                    <div>
+                        <div>
+                            <div id="implantados_wrapper" class="dataTables_wrapper dt-bootstrap4">
 
-                        <div class="timeline-item">
-                          <span class="time"><i class="far fa-clock"></i> 12:05</span>
+                                <div class="col-sm-8 col-md-6" style="margin-bottom: -30px">
+                                    <div class="dt-buttons btn-group flex-wrap"></div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-sm-12">
 
-                          <h3 class="timeline-header"><a href="#">Support Team</a> sent you an email</h3>
+                                    <table id="table_implantados" class="table table-sm  table-striped dataTable dtr-inline" role="grid" aria-describedby="table_implantados_info">
 
-                          <div class="timeline-body">
-                            Etsy doostang zoodles disqus groupon greplin oooj voxy zoodles,
-                            weebly ning heekya handango imeem plugg dopplr jibjab, movity
-                            jajah plickers sifteo edmodo ifttt zimbra. Babblely odeo kaboodle
-                            quora plaxo ideeli hulu weebly balihoo...
-                          </div>
-                          <div class="timeline-footer">
-                            <a href="#" class="btn btn-primary btn-sm">Read more</a>
-                            <a href="#" class="btn btn-danger btn-sm">Delete</a>
-                          </div>
+                                    <thead>
+                                        <tr role="row">
+                                            <th class="col-sm-1" style="text-align: center">#</th>
+                                            {{-- <th>PCT</th> --}}
+                                            <th style="text-align: center" class="sorting sorting_asc col-sm-1" tabindex="0" aria-controls="table_implantados" rowspan="1" colspan="1" aria-sort="ascending" title="Classificar crescente / decrescente">Patr</th>
+                                            <th class="sorting col-sm-3" tabindex="0" aria-controls="table_implantados" rowspan="1" colspan="1">Equipamento</th>
+                                            {{-- <th class="sorting" tabindex="0" aria-controls="table_implantados" rowspan="1" colspan="1" data-toggle="tooltip" title="Status do Equipamento" style="text-align: center"><i class="fas fa-cogs"></i></th> --}}
+                                            {{-- <th class="sorting" tabindex="0" aria-controls="table_implantados" rowspan="1" colspan="1" data-toggle="tooltip" title="Alugado / Próprio"></th> --}}
+                                            <th class="sorting" tabindex="0" aria-controls="table_implantados" rowspan="1" colspan="1" data-toggle="tooltip" title="Alugado / Próprio">A/P</th>
+                                            <th class="sorting" tabindex="0" aria-controls="table_implantados" rowspan="1" colspan="1" data-toggle="tooltip" title="Alugado / Próprio">Início</th>
+                                            <th class="sorting" tabindex="0" aria-controls="table_implantados" rowspan="1" colspan="1">
+                                                <div data-toggle="modal" data-target="#">
+                                                    <button data-toggle="tooltip" title="Adicionar novo Equipamento" type="button" class="btn btn-sm btn-outline-primary float-left" >
+                                                        <i class="fas fa-plus"></i>
+                                                    </button>
+                                                </div>
+                                            </th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        @foreach ($equipsPct as $equipPct)
+                                            <tr class="odd" style="text-align: center; vertical-align: middle; line-height: 100%">
+                                                <td style="text-align: center; vertical-align: middle">{{$equipPct->id}}</td>
+                                                {{-- <td>{{$equip->pct_equip}}</td> --}}
+                                                {{-- <td>
+                                                    @if ($equip->pct_equip == '0')
+                                                    @else
+                                                        @foreach ($namePcts as $namePct)
+                                                        @if ($namePct->id == $equip->id)
+                                                            <p data-toggle="tooltip" data-placement="top" title="" data-original-title= {{$namePct->name_pct}} style="color:green" ><i class="fa fa-bed"></i></p>
+                                                        @endif
+                                                        @endforeach
+                                                    @endif
+                                                </td> --}}
+                                                <td style="text-align: center; vertical-align: middle" class="dtr-control sorting_1" tabindex="0">{{$equipPct->patr}}</td>
+                                                <td style="text-align: left; vertical-align: middle">{{$equipPct->name_equip}}</td>
+                                                {{-- <td>{{$equip->status_equip}}</td> --}}
+                                                {{-- <td style="text-align: center; vertical-align: middle"> --}}
+
+                                                    {{-- @if ($equipPct->status_equip == '0')
+                                                        <p style="color:green"><i class="fa fa-check"></i></p>
+                                                    @else
+                                                        <p style="color: red"><i class="fa fa-times"></i></p> --}}
+                                                        {{-- <p data-toggle="tooltip" data-placement="top" title="" data-original-title="Em manutenção" style="color: red"><i class="fa fa-times"></i></p> --}}
+                                                    {{-- @endif --}}
+
+
+                                                <td style="text-align: left; vertical-align: middle">
+                                                    {{-- Mostra a Alugado/Próprio --}}
+                                                    @if ($equipPct->rent_equip == '0')
+                                                        {{-- <p style="color:green"><i class="fa fa-check-circle"></i></p> --}}
+                                                        {{-- <p data-toggle="tooltip" data-placement="top" title="" data-original-title="Próprio" style="color:green"><i class="fa fa-check-circle"></i></p> --}}
+                                                    @else
+                                                        @foreach ($fornecedores as $fornecedor)
+                                                        @if ($fornecedor->id == $equipPct->rent_empresa)
+                                                            {{-- <p style="color: rgb(247, 170, 3)"><i class="fa fa-exchange-alt"></i></p> --}}
+                                                            {{-- <p data-toggle="tooltip" data-placement="top" title="" data-original-title="" style="color: rgb(247, 170, 3)"><i class="fa fa-exchange-alt"></i></p> --}}
+                                                            {{$fornecedor->name_fornec}}
+                                                        @endif
+                                                        @endforeach
+                                                    @endif
+                                                </td>
+                                                <td style="text-align: left">
+                                                    01/01/2021
+                                                </td>
+                                                <td style="text-align: left">
+                                                    {{-- <div data-toggle="modal" data-target="#ModalEditPct" data-whatever="$Pct->id"> --}}
+                                                    {{-- <div data-toggle="modal" data-target="#ModalEditPct" data-whatever="{{$Pct->id}}" data-whatever-name_pct="{{$Pct->name_pct}}" data-whatever-peso="{{$Pct->peso}}" data-whatever-altura="{{$Pct->altura}}" data-whatever-id_hc="{{$Pct->id_hc}}" data-whatever-resp="{{$Pct->resp}}" data-whatever-tel_resp="{{$Pct->tel_resp}}" data-whatever-resp2="{{$Pct->resp2}}" data-whatever-tel_resp2="{{$Pct->tel_resp2}}" data-whatever-cep_pct="{{$Pct->cep}}" data-whatever-rua="{{$Pct->rua}}" data-whatever-nr="{{$Pct->nr}}" data-whatever-compl="{{$Pct->compl}}" data-whatever-bairro="{{$Pct->bairro}}" data-whatever-city="{{$Pct->city}}" data-whatever-obs="{{$Pct->obs}}"> --}}
+                                                    <div>
+                                                        <span data-toggle="tooltip" title="Editar">
+                                                            {{-- <a href="#" id="btnEditar" style="margin-right: 10px" ><i class="fas fa-exchange-alt"></i></a> --}}
+                                                            <select name="solicita" id="solicita" class=" form-control form-control-sm select" aria-hidden="true">
+                                                                <option value="0" >Selecione</option>
+                                                                <option value="1"{{ $equipPct->status_equip == "1" ? 'selected' : ''}}>Reparo/Troca</option>
+                                                                <option value="2"{{ $equipPct->status_equip == "2" ? 'selected' : ''}}>Recolhimento</option>
+                                                                <option value="3"{{ $equipPct->status_equip == "3" ? 'selected' : ''}}>Recarga</option>
+                                                            </select>
+                                                        </span>
+
+                                                    </div>
+                                                </td>
+                                                <td>
+                                                    <span data-toggle="tooltip" title="Solicitação Pendente" style="text-align: center">
+                                                        @if ($equipPct->id == 3)
+                                                        <a href="#" data-toggle="modal" style="color: rgb(200, 200, 0)"><i class="fas fa-exclamation-triangle"></i></a>
+                                                        @else
+                                                        <a href="#" data-toggle="modal" data-target="#" style="color: rgb(200, 200, 0); visibility: hidden"><i class="fas fa-exclamation-triangle"></i></a>
+
+                                                        @endif
+                                                    </span>
+                                                </td>
+                                                </td>
+                                            </tr>
+                                        @endforeach
+
+
+
+                                </tbody>
+                                    <tfoot>
+                                    {{-- <tr><th rowspan="1" colspan="1">Rendering engine</th><th rowspan="1" colspan="1">Browser</th><th rowspan="1" colspan="1">Platform(s)</th><th rowspan="1" colspan="1">Engine version</th><th rowspan="1" colspan="1" style="">CSS grade</th></tr> --}}
+                                    </tfoot>
+                                </table>
+
+                                </div>
+                            </div>
+                            <div class="card-footer clearfix">
+                            </div>
                         </div>
-                      </div>
-                      <!-- END timeline item -->
-                      <!-- timeline item -->
-                      <div>
-                        <i class="fas fa-user bg-info"></i>
-
-                        <div class="timeline-item">
-                          <span class="time"><i class="far fa-clock"></i> 5 mins ago</span>
-
-                          <h3 class="timeline-header border-0"><a href="#">Sarah Young</a> accepted your friend request
-                          </h3>
-                        </div>
-                      </div>
-                      <!-- END timeline item -->
-                      <!-- timeline item -->
-                      <div>
-                        <i class="fas fa-comments bg-warning"></i>
-
-                        <div class="timeline-item">
-                          <span class="time"><i class="far fa-clock"></i> 27 mins ago</span>
-
-                          <h3 class="timeline-header"><a href="#">Jay White</a> commented on your post</h3>
-
-                          <div class="timeline-body">
-                            Take me to your leader!
-                            Switzerland is small and neutral!
-                            We are more like Germany, ambitious and misunderstood!
-                          </div>
-                          <div class="timeline-footer">
-                            <a href="#" class="btn btn-warning btn-flat btn-sm">View comment</a>
-                          </div>
-                        </div>
-                      </div>
-                      <!-- END timeline item -->
-                      <!-- timeline time label -->
-                      <div class="time-label">
-                        <span class="bg-success">
-                          3 Jan. 2014
-                        </span>
-                      </div>
-                      <!-- /.timeline-label -->
-                      <!-- timeline item -->
-                      <div>
-                        <i class="fas fa-camera bg-purple"></i>
-
-                        <div class="timeline-item">
-                          <span class="time"><i class="far fa-clock"></i> 2 days ago</span>
-
-                          <h3 class="timeline-header"><a href="#">Mina Lee</a> uploaded new photos</h3>
-
-                          <div class="timeline-body">
-                            <img src="https://placehold.it/150x100" alt="...">
-                            <img src="https://placehold.it/150x100" alt="...">
-                            <img src="https://placehold.it/150x100" alt="...">
-                            <img src="https://placehold.it/150x100" alt="...">
-                          </div>
-                        </div>
-                      </div>
-                      <!-- END timeline item -->
-                      <div>
-                        <i class="far fa-clock bg-gray"></i>
-                      </div>
                     </div>
                   </div>
                   <!-- /.tab-pane -->

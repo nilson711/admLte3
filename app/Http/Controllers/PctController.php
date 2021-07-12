@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use App\Models\Pct;
 use App\Models\Cidade;
 use App\Models\Cliente;
+use App\Models\Equipamento;
+use App\Models\Fornecedor;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -129,7 +131,7 @@ class PctController extends Controller
     {
 
         $allPcts = new Pct;
-            $allPcts = DB::SELECT("SELECT * FROM pcts ORDER BY name_pct");
+        $allPcts = DB::SELECT("SELECT * FROM pcts ORDER BY name_pct");
 
         $allCities = new Cidade;
         $allCities = DB::SELECT("SELECT * from cidades ORDER BY nome");
@@ -137,16 +139,17 @@ class PctController extends Controller
         $clientes = new Cliente;
         $clientes = DB::SELECT("SELECT * FROM clientes");
 
+        $equipsPct = new Equipamento();
+        $equipsPct = DB::SELECT("SELECT * FROM equipamentos WHERE pct_equip = $id");
+
+        $fornecedores =  new Fornecedor();
+        $fornecedores = DB::SELECT("SELECT id, name_fornec FROM fornecedors");
+
         $pctSel = Pct::find($id);
-        // echo '<pre>';
-        // print_r($pctSel);
-        // return $pctSel;
 
         // return view('edit_pct', ['pctSel'=>$pctSel] + ['allPcts'=>$allPcts] + ['allCities'=>$allCities] + ['clientes'=>$clientes]);
-        return view('prontuario_pct', ['pctSel'=>$pctSel] + ['allPcts'=>$allPcts] + ['allCities'=>$allCities] + ['clientes'=>$clientes]);
+        return view('prontuario_pct', ['pctSel'=>$pctSel] + ['allPcts'=>$allPcts] + ['allCities'=>$allCities] + ['clientes'=>$clientes] + ['equipsPct'=>$equipsPct] + ['fornecedores'=>$fornecedores]);
         // return view('edit_pct', compact('pctSel'));
-
-        // FAZER CONSULTA E EDIÇÃO PELO AJAX https://pt.stackoverflow.com/questions/261832/editar-dentro-de-um-modal
 
     }
 
