@@ -33,8 +33,8 @@
                                     <input type="text" class="form-control" name="Pct" id="Pct" placeholder="Nome Completo do Paciente" maxlength="50" value="{{$pctSel->name_pct}}">
                                 </div>
                                 <div class="col-sm-2">
-                                    <label for="peso">Peso:</label>
-                                    <select name="peso" id="peso" class="form-control select" aria-hidden="true">
+                                    <label for="peso" data-toggle="tooltip" title="Informação para saber se o paciente vai precisar de equipamento para Obeso ou Normal.">Peso:</label>
+                                    <select name="peso" id="peso" class="form-control select" aria-hidden="true" >
                                         <option value="0" >Selecione</option>
                                         <option value="1"{{ $pctSel->peso == "1" ? 'selected' : ''}}>Até 90kg</option>
                                         <option value="2"{{ $pctSel->peso == "2" ? 'selected' : ''}}>Entre 90kg e 180kg</option>

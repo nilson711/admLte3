@@ -78,7 +78,7 @@
                                             <span data-toggle="tooltip" title="Informações do Pacientes" style="text-align: center">
                                                 <a href="#" data-toggle="modal" data-target="#ModalInfoPct" title="Info" style="margin-right: 10px" data-whatever="{{$Pct->id}}" data-whatever-name_pct="{{$Pct->name_pct}}" data-whatever-peso="{{$Pct->peso}}" data-whatever-altura="{{$Pct->altura}}" data-whatever-id_hc="{{$Pct->id_hc}}" data-whatever-resp="{{$Pct->resp}}" data-whatever-tel_resp="{{$Pct->tel_resp}}" data-whatever-resp2="{{$Pct->resp2}}" data-whatever-tel_resp2="{{$Pct->tel_resp2}}" data-whatever-cep_pct="{{$Pct->cep}}" data-whatever-rua="{{$Pct->rua}}" data-whatever-nr="{{$Pct->nr}}" data-whatever-compl="{{$Pct->compl}}" data-whatever-bairro="{{$Pct->bairro}}" data-whatever-city="{{$Pct->city}}" data-whatever-obs="{{$Pct->obs}}"><i class="fas fa-info-circle"></i></a>
                                             </span>
-                                            <span data-toggle="tooltip" title="Editar">
+                                            <span data-toggle="tooltip" title="Prontuário do Paciente">
                                                 <a href="{{route('editPct', $Pct->id)}}" id="btnEditar" ><i class="fas fa-edit"></i></a>
                                             </span>
                                         </div>
@@ -612,7 +612,7 @@ function mcc(v){
       })
 
     })
-  </script>
+</script>
 
 
 <!-- jQuery -->

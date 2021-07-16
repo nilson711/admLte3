@@ -141,6 +141,10 @@ class PctController extends Controller
 
         $equipsPct = new Equipamento();
         $equipsPct = DB::SELECT("SELECT * FROM equipamentos WHERE pct_equip = $id");
+        $equipsCount = Count($equipsPct);
+
+        $equipsEstoque = DB::SELECT("SELECT name_equip FROM equipamentos WHERE pct_equip = 0 GROUP BY name_equip ORDER BY name_equip");
+        $equipsEstoqueCount = Count($equipsEstoque);
 
         $fornecedores =  new Fornecedor();
         $fornecedores = DB::SELECT("SELECT id, name_fornec FROM fornecedors");
@@ -148,7 +152,7 @@ class PctController extends Controller
         $pctSel = Pct::find($id);
 
         // return view('edit_pct', ['pctSel'=>$pctSel] + ['allPcts'=>$allPcts] + ['allCities'=>$allCities] + ['clientes'=>$clientes]);
-        return view('prontuario_pct', ['pctSel'=>$pctSel] + ['allPcts'=>$allPcts] + ['allCities'=>$allCities] + ['clientes'=>$clientes] + ['equipsPct'=>$equipsPct] + ['fornecedores'=>$fornecedores]);
+        return view('prontuario_pct', ['pctSel'=>$pctSel] + ['equipsEstoque'=>$equipsEstoque] + ['equipsEstoqueCount'=>$equipsEstoqueCount] + ['allPcts'=>$allPcts] + ['allCities'=>$allCities] + ['clientes'=>$clientes] + ['equipsPct'=>$equipsPct] + ['fornecedores'=>$fornecedores] + ['equipsCount'=>$equipsCount]);
         // return view('edit_pct', compact('pctSel'));
 
     }

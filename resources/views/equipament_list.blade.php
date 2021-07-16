@@ -182,9 +182,9 @@
                                     <div id="rent_empresa" name="rent_empresa" style="visibility: hidden" data-toggle="tooltip" data-original-title="Empresa que alugou o equipamento" >
                                         <select name="value_rent_empresa" id="value_rent_empresa" class="form-control select" style="width: 100%;" aria-hidden="true" name="selectEmpresaRent" id="selectEmpresaRent">
                                         <option selected value="0">Selecione</option>
-                                        {{-- @foreach ($fornecedores as $fornecedor) --}}
-                                                {{-- <option value="{{$fornecedor->id}}">{{$fornecedor->name_fornec}}</option> --}}
-                                            {{-- @endforeach --}}
+                                        @foreach ($fornecedores as $fornecedor)
+                                                <option value="{{$fornecedor->id}}">{{$fornecedor->name_fornec}}</option>
+                                            @endforeach
                                         </select>
                                     </div>
                                     </div>
