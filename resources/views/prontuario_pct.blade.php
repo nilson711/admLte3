@@ -94,7 +94,7 @@
 
                         <div class="col-md-9">
                             <div class="card card-primary" style="padding: 10px">
-                            <input type="hidden" name="id_pct" value="{{$pctSel->id}}">
+                            <input type="hidden" name="id_pct" id="id_pct" value="{{$pctSel->id}}">
                             <div class="row form-group">
                                 <div class="col-sm-4">
                                     <label for="responsavel">Responsável:<span style="color: red">*</span></label>
@@ -370,7 +370,7 @@
                         </button>
                         </div>
 
-                        <form action="#" method="post">
+                        <form action="">
                         <div class="modal-body">
                             @csrf
                             <div class="form-group">
@@ -389,12 +389,12 @@
                                                     <tr class="odd" style="vertical-align: middle; line-height: 100%">
                                                         <td>
                                                             <div class="form-group">
-                                                                <div class="form-check" onchange="funcEquipsSel()">
-                                                                    <input class="form-check-input" type="checkbox" style="transform: scale(1.2)">
+                                                                <div id="checkSelEquip" class="form-check" onclick="coletaDados(); ContarSelecionados()">
+                                                                    <input class="checkbox" type="checkbox" id=" {{$equipEstoque->name_equip}}" style="transform: scale(1.2)">
                                                                 </div>
                                                             </div>
                                                         </td>
-                                                        <td>
+                                                        <td id="nomeEquip" class="nomeEquip">
                                                             {{$equipEstoque->name_equip}}
                                                         </td>
                                                     </tr>
@@ -406,19 +406,23 @@
                                     </div>
                                 </div>
                         </div>
-                        <p id="equipsSelecionados"></p>
-                        </div>
-                        <div class="modal-footer">
-                            <div class="form-group">
-                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
+                        <p id="QtdequipsSelecionados"></p>
+                        <p id="NomeEquipsSelecionados"></p>
+
+                    </div>
+                    <div class="modal-footer">
+                        <div class="form-group">
+
+                            <button type="button" class="btn btn-outline-secondary" data-dismiss="modal">Cancelar</button>
                             <a href=""></a>
-                            <button type="submit" class="btn btn-primary">Salvar</button>
-                            </div>
+                            <button type="submit" class="btn btn-outline-primary">Salvar</button>
                         </div>
-                        </form>
                     </div>
-                    </div>
-                </div>
+
+                </form>
+            </div>
+        </div>
+    </div>
 <!--//////////////////////////////////////////////////// FIM MODAL SOLICITAÇÃO ////////////////////////////////////////////////-->
                 <!-- /.tab-content -->
               </div><!-- /.card-body -->
@@ -446,13 +450,12 @@
 
 @section('js')
 
-public function funcEquipsSel(){
 
-}
 <!-- Select2 -->
 <script src= {{asset('js/select2.full.min.js')}}></script>
 
 <script src= {{asset('js/bootstrap.bundle.min.js')}}></script>
+<script src= {{asset('js/functions-equips.js')}} defer></script>
 
 <script>
     $(function () {

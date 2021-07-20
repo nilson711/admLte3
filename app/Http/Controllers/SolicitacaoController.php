@@ -3,10 +3,42 @@
 namespace App\Http\Controllers;
 
 use App\Models\Solicitacao;
+use App\Models\Equipamento;
+use App\Models\Fornecedor;
+use App\Models\Pct;
+use App\Models\Provider;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Http\Request;
 
 class SolicitacaoController extends Controller
 {
+
+    //ADICIONA NOVA SOLICITAÇÃO
+
+    public function new_solicita(Request $request){
+        //BUSCA OS DADOS OS INPUTS
+        $newIdPct = $request->input('id_pct');
+        $newSelEquip = $request->input('checkSelEquip');
+
+        $newdata_rent = $request->input('data_rent','0');
+
+
+
+        //SALVA DOS DADOS DOS INPUTS NO BANCO DE DADOS
+        $solicitacao = new Solicitacao();
+        $solicitacao->pct_solicit =  $newIdPct;
+        $solicitacao->pct_solicit =  $newIdPct;
+
+
+        $solicitacao->save();
+
+        return redirect()->route('listaEquips');
+
+    }
+
+///========================================================================================================================
+
     /**
      * Display a listing of the resource.
      *

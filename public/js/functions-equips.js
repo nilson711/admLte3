@@ -1,4 +1,4 @@
-const { now } = require("lodash");
+
 
 function locacaoSelecionada() {
     var rent_equip = document.getElementById("rent_equip");
@@ -89,5 +89,46 @@ function locacaoSelecionada() {
     }
   }
 
+  function ContarSelecionados (){
+    var checkBoxes = document.querySelectorAll(".checkbox");
+    var QtdequipsSelecionados = document.getElementById("QtdequipsSelecionados");
+    var selecionados = 0;
 
+    //soma a quantidade de checkbox selecionados
+    checkBoxes.forEach(function(el){
+        if (el.checked) {
+        selecionados++;
+        }
+    });
 
+      QtdequipsSelecionados.innerHTML = "Total: " + selecionados + " equipamento(s) selecionado(s)";
+
+    // console.log(selecionados);
+    // console.log(QtdequipsSelecionados);
+
+}
+
+function coletaDados(){
+    var ids = document.getElementsByClassName('checkbox');
+    coletaIDs(ids);
+ }
+
+ function coletaIDs(dados){
+    var array_dados = dados;
+    var newArray = [];
+    for(var x = 0; x <= array_dados.length; x++){
+         if(typeof array_dados[x] == 'object'){
+           if(array_dados[x].checked){
+              newArray.push(array_dados[x].id)
+           }
+         }
+    }
+//    if(newArray.length <= 0){
+//      alert("Selecione um pelo menos 1 item!");
+//    }else{
+//      alert("Seu novo array de IDs tem os seguites ids [ "+newArray+" ]");
+//    }
+console.log(newArray);
+
+NomeEquipsSelecionados.innerHTML = newArray;
+ }
