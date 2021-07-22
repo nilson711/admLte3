@@ -380,34 +380,35 @@
                                             <table class="table table-sm table-striped table-head-fixed text-nowrap">
                                               <thead>
                                                 <tr>
-                                                  <th>#</th>
-                                                  <th>Equipamento</th>
+                                                  <th>Qtd</th>
+                                                  <th>Equipamentos disponíveis</th>
                                                 </tr>
                                               </thead>
                                               <tbody>
-                                                @foreach ( $equipsEstoque as $equipEstoque)
+                                                @foreach ( $allEquipsEstoque as $equipEstoque)
                                                     <tr class="odd" style="vertical-align: middle; line-height: 100%">
                                                         <td>
-                                                            <div class="form-group">
-                                                                <div id="checkSelEquip" class="form-check" onclick="coletaDados(); ContarSelecionados()">
-                                                                    <input class="checkbox" type="checkbox" id=" {{$equipEstoque->name_equip}}" style="transform: scale(1.2)">
-                                                                </div>
+                                                            <div style="margin-left: -40px" id="checkSelEquip" class="form-check col-sm-6" onclick="coletaDados(); ContarSelecionados()">
+                                                                {{-- <input type="number" onchange="cadastraNotaImportada(this.value)" class="form-control disciplina" name="" value="0"> --}}
+                                                                <input class="checkbox" type="checkbox" id=" {{$equipEstoque->name_equip}}" name="{{$equipEstoque->name_equip}}" style="margin-right: 7px; transform: scale(1.2)">
+                                                                <input class="qtdDoItem" type="number" name="qtdDoItem" min="0" value="0" onchange="qtdSolicitada(this.value)" style="width: 50px; margin-rigth: 10px">
                                                             </div>
                                                         </td>
                                                         <td id="nomeEquip" class="nomeEquip">
                                                             {{$equipEstoque->name_equip}}
+                                                            ({{$equipEstoque->qtdName}})
                                                         </td>
                                                     </tr>
                                                 @endforeach
                                               </tbody>
                                             </table>
-                                            <p>{{$equipsEstoqueCount}}</p>
                                           </div>
                                     </div>
                                 </div>
                         </div>
                         <p id="QtdequipsSelecionados"></p>
-                        <p id="NomeEquipsSelecionados"></p>
+                        {{-- <p id="NomeEquipsSelecionados"></p> --}}
+                        <textarea name="NomeEquipsSelecionados" id="NomeEquipsSelecionados" cols="60" rows="3"></textarea>
 
                     </div>
                     <div class="modal-footer">

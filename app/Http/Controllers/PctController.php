@@ -10,6 +10,7 @@ use App\Models\Fornecedor;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use PHPUnit\Framework\Constraint\Count;
 
 class PctController extends Controller
 {
@@ -146,13 +147,17 @@ class PctController extends Controller
         $equipsEstoque = DB::SELECT("SELECT name_equip FROM equipamentos WHERE pct_equip = 0 GROUP BY name_equip ORDER BY name_equip");
         $equipsEstoqueCount = Count($equipsEstoque);
 
+        $allEquipsEstoque = DB::SELECT("SELECT name_equip, count(*) AS qtdName FROM equipamentos WHERE pct_equip = 0 GROUP BY name_equip ORDER BY name_equip");
+        //O count(*) faz a contagem em cada tipo de equipamento pelo group e atribui a qtdName e este pode ser buscado na view
+        $allEquipsEstoqueCount = Count($allEquipsEstoque);
+
         $fornecedores =  new Fornecedor();
         $fornecedores = DB::SELECT("SELECT id, name_fornec FROM fornecedors");
 
         $pctSel = Pct::find($id);
 
         // return view('edit_pct', ['pctSel'=>$pctSel] + ['allPcts'=>$allPcts] + ['allCities'=>$allCities] + ['clientes'=>$clientes]);
-        return view('prontuario_pct', ['pctSel'=>$pctSel] + ['equipsEstoque'=>$equipsEstoque] + ['equipsEstoqueCount'=>$equipsEstoqueCount] + ['allPcts'=>$allPcts] + ['allCities'=>$allCities] + ['clientes'=>$clientes] + ['equipsPct'=>$equipsPct] + ['fornecedores'=>$fornecedores] + ['equipsCount'=>$equipsCount]);
+        return view('prontuario_pct', ['pctSel'=>$pctSel] + ['allEquipsEstoqueCount'=>$allEquipsEstoqueCount] + ['allEquipsEstoque'=>$allEquipsEstoque] + ['equipsEstoque'=>$equipsEstoque] + ['equipsEstoqueCount'=>$equipsEstoqueCount] + ['allPcts'=>$allPcts] + ['allCities'=>$allCities] + ['clientes'=>$clientes] + ['equipsPct'=>$equipsPct] + ['fornecedores'=>$fornecedores] + ['equipsCount'=>$equipsCount]);
         // return view('edit_pct', compact('pctSel'));
 
     }

@@ -1,3 +1,4 @@
+const { functionsIn } = require("lodash");
 
 
 function locacaoSelecionada() {
@@ -89,46 +90,62 @@ function locacaoSelecionada() {
     }
   }
 
+ /*********************************************************************************************************************************
+  Função conta a quantidade de itens selecionados com o checkbox nas linhas da tabela
+   */
   function ContarSelecionados (){
-    var checkBoxes = document.querySelectorAll(".checkbox");
-    var QtdequipsSelecionados = document.getElementById("QtdequipsSelecionados");
-    var selecionados = 0;
+    var checkBoxes = document.querySelectorAll(".checkbox");                        //Seleciona todos os objetos da classe "checkbox"
+    var QtdequipsSelecionados = document.getElementById("QtdequipsSelecionados");   //Seleciona o elemento pelo id
+    var selecionados = 0;                                                           //cria uma variâvel chamada "selecionados" e atribui o valor 0 a ela
 
     //soma a quantidade de checkbox selecionados
-    checkBoxes.forEach(function(el){
-        if (el.checked) {
-        selecionados++;
+    checkBoxes.forEach(function(el){                    //faz um forEach por todos os checkboxes da tabela
+        if (el.checked) {                               //verifica que o checkbox está marcado
+        selecionados++;                                 //se estiver marcado adiciona um incremento a variável
         }
     });
-
-      QtdequipsSelecionados.innerHTML = "Total: " + selecionados + " equipamento(s) selecionado(s)";
-
-    // console.log(selecionados);
-    // console.log(QtdequipsSelecionados);
-
+    //mostra a quantidade de checkboxes selecionados no elemento Html na página.
+    QtdequipsSelecionados.innerHTML = "Total: " + selecionados + " equipamento(s) selecionado(s)";
 }
 
+/*********************************************************************************************************************************
+ * Função coletaDados busca na tabela o nome dos itens selecionados
+ */
 function coletaDados(){
-    var ids = document.getElementsByClassName('checkbox');
+    var ids = document.getElementsByClassName('checkbox');  //Seleciona todos os objetos da classe "checkbox"
     coletaIDs(ids);
  }
 
  function coletaIDs(dados){
-    var array_dados = dados;
-    var newArray = [];
+    var array_dados = dados;                        //cria variável com os dados do array
+    var newArray = [];                              //cria o array
+    // var qtd_i = qtds;
     for(var x = 0; x <= array_dados.length; x++){
-         if(typeof array_dados[x] == 'object'){
-           if(array_dados[x].checked){
-              newArray.push(array_dados[x].id)
+         if(typeof array_dados[x] == 'object'){     //typeof retorna o tipo de operando. verifica de o array_dados é um objeto
+           if(array_dados[x].checked){              //verifica no array_dados se estão marcados
+              newArray.push(array_dados[x].id)      //o push adiciona o dado selecionado ao array
            }
          }
     }
-//    if(newArray.length <= 0){
-//      alert("Selecione um pelo menos 1 item!");
-//    }else{
-//      alert("Seu novo array de IDs tem os seguites ids [ "+newArray+" ]");
-//    }
-console.log(newArray);
+    //    if(newArray.length <= 0){
+        //      alert("Selecione um pelo menos 1 item!");
+        //    }else{
+            //      alert("Seu novo array de IDs tem os seguites ids [ "+newArray+" ]");
+            //    }
+            // console.log(newArray);
 
-NomeEquipsSelecionados.innerHTML = newArray;
+            NomeEquipsSelecionados.innerHTML = newArray;    //exibe na página os elementos do array (nomes dos equipamentos)
+            document.getElementsByName('qtdDoItem').focus();
+
  }
+
+ /*********************************************************************************************************************************
+ * Função busca a quantidade solicitada
+ */
+ function qtdSolicitada(value) {
+    $(document).ready(function(){
+        // alert(value);
+        document.getElementsByName('checkbox');
+    });
+}
+
