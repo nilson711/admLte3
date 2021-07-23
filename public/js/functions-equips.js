@@ -1,5 +1,4 @@
-const { functionsIn } = require("lodash");
-
+// const { functionsIn } = require("lodash");
 
 function locacaoSelecionada() {
     var rent_equip = document.getElementById("rent_equip");
@@ -111,6 +110,7 @@ function locacaoSelecionada() {
 /*********************************************************************************************************************************
  * Função coletaDados busca na tabela o nome dos itens selecionados
  */
+
 function coletaDados(){
     var ids = document.getElementsByClassName('checkbox');  //Seleciona todos os objetos da classe "checkbox"
     coletaIDs(ids);
@@ -118,24 +118,21 @@ function coletaDados(){
 
  function coletaIDs(dados){
     var array_dados = dados;                        //cria variável com os dados do array
+    var q = 0;
     var newArray = [];                              //cria o array
+
     // var qtd_i = qtds;
     for(var x = 0; x <= array_dados.length; x++){
          if(typeof array_dados[x] == 'object'){     //typeof retorna o tipo de operando. verifica de o array_dados é um objeto
            if(array_dados[x].checked){              //verifica no array_dados se estão marcados
-              newArray.push(array_dados[x].id)      //o push adiciona o dado selecionado ao array
-           }
-         }
+                q = qtd_solicitada;
+                    newArray.push( q + array_dados[x].id)      //o push adiciona o dado selecionado ao array
+            }
+        }
     }
-    //    if(newArray.length <= 0){
-        //      alert("Selecione um pelo menos 1 item!");
-        //    }else{
-            //      alert("Seu novo array de IDs tem os seguites ids [ "+newArray+" ]");
-            //    }
-            // console.log(newArray);
+    console.log(newArray);
+    // NomeEquipsSelecionados.innerHTML = newArray;    //exibe na página os elementos do array (nomes dos equipamentos)
 
-            NomeEquipsSelecionados.innerHTML = newArray;    //exibe na página os elementos do array (nomes dos equipamentos)
-            document.getElementsByName('qtdDoItem').focus();
 
  }
 
@@ -145,7 +142,25 @@ function coletaDados(){
  function qtdSolicitada(value) {
     $(document).ready(function(){
         // alert(value);
-        document.getElementsByName('checkbox');
+
+
+    var array_qtd = value;                        //cria variável com os dados do array
+        // var newArray = [];                              //cria o array
+
+        // var qtd_i = qtds;
+        // for(var x = 0; x <= array_qtd.length; x++){
+            //  if(typeof array_qtd[x] == 'object'){     //typeof retorna o tipo de operando. verifica de o array_dados é um objeto
+            //    if(array_qtd[x]>0){
+                             //verifica no array_dados é maior que 0
+                //   newArray.push(array_dados[x].id)      //o push adiciona o dado selecionado ao array
+            //    }
+            //  }
+        // }
+        // NomeEquipsSelecionados.innerHTML =  NomeEquipsSelecionados.innerHTML + value;    //exibe na página os elementos do array (nomes dos equipamentos)
+
+        qtd_solicitada = value;
     });
+
+
 }
 

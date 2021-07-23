@@ -388,10 +388,10 @@
                                                 @foreach ( $allEquipsEstoque as $equipEstoque)
                                                     <tr class="odd" style="vertical-align: middle; line-height: 100%">
                                                         <td>
-                                                            <div style="margin-left: -40px" id="checkSelEquip" class="form-check col-sm-6" onclick="coletaDados(); ContarSelecionados()">
+                                                            <div style="margin-left: -40px" id="checkSelEquip" class="form-check col-sm-6" onclick="ContarSelecionados()">
                                                                 {{-- <input type="number" onchange="cadastraNotaImportada(this.value)" class="form-control disciplina" name="" value="0"> --}}
-                                                                <input class="checkbox" type="checkbox" id=" {{$equipEstoque->name_equip}}" name="{{$equipEstoque->name_equip}}" style="margin-right: 7px; transform: scale(1.2)">
-                                                                <input class="qtdDoItem" type="number" name="qtdDoItem" min="0" value="0" onchange="qtdSolicitada(this.value)" style="width: 50px; margin-rigth: 10px">
+                                                                <input class="qtdDoItem" type="number" name="qtdDoItem" min="0" value="0" onchange="qtdSolicitada(this.value)" style="width: 50px">
+                                                                <input class="checkbox" type="checkbox" id="{{$equipEstoque->name_equip}}" name="{{$equipEstoque->name_equip}}" style="margin-left: 7px; transform: scale(1.2)">
                                                             </div>
                                                         </td>
                                                         <td id="nomeEquip" class="nomeEquip">
@@ -406,9 +406,10 @@
                                     </div>
                                 </div>
                         </div>
+                        <button type="button" class="btn btn-sm btn-outline-success" onclick="coletaDados()">OK</button>
                         <p id="QtdequipsSelecionados"></p>
-                        {{-- <p id="NomeEquipsSelecionados"></p> --}}
-                        <textarea name="NomeEquipsSelecionados" id="NomeEquipsSelecionados" cols="60" rows="3"></textarea>
+                        <p id="NomeEquipsSelecionados"></p>
+                        {{-- <textarea name="NomeEquipsSelecionados" id="NomeEquipsSelecionados" cols="60" rows="3"></textarea> --}}
 
                     </div>
                     <div class="modal-footer">
@@ -476,53 +477,53 @@
       $('[data-mask]').inputmask()
 
       //Date picker
-      $('#reservationdate').datetimepicker({
-          format: 'L'
-      });
+    //   $('#reservationdate').datetimepicker({
+    //       format: 'L'
+    //   });
 
       //Date and time picker
-      $('#reservationdatetime').datetimepicker({ icons: { time: 'far fa-clock' } });
+    //   $('#reservationdatetime').datetimepicker({ icons: { time: 'far fa-clock' } });
 
       //Date range picker
-      $('#reservation').daterangepicker()
+    //   $('#reservation').daterangepicker()
       //Date range picker with time picker
-      $('#reservationtime').daterangepicker({
-        timePicker: true,
-        timePickerIncrement: 30,
-        locale: {
-          format: 'DD/MM/YYYY hh:mm A'
-        }
-      })
+    //   $('#reservationtime').daterangepicker({
+    //     timePicker: true,
+    //     timePickerIncrement: 30,
+    //     locale: {
+    //       format: 'DD/MM/YYYY hh:mm A'
+    //     }
+    //   })
       //Date range as a button
-      $('#daterange-btn').daterangepicker(
-        {
-          ranges   : {
-            'Today'       : [moment(), moment()],
-            'Yesterday'   : [moment().subtract(1, 'days'), moment().subtract(1, 'days')],
-            'Last 7 Days' : [moment().subtract(6, 'days'), moment()],
-            'Last 30 Days': [moment().subtract(29, 'days'), moment()],
-            'This Month'  : [moment().startOf('month'), moment().endOf('month')],
-            'Last Month'  : [moment().subtract(1, 'month').startOf('month'), moment().subtract(1, 'month').endOf('month')]
-          },
-          startDate: moment().subtract(29, 'days'),
-          endDate  : moment()
-        },
-        function (start, end) {
-          $('#reportrange span').html(start.format('MMMM D, YYYY') + ' - ' + end.format('MMMM D, YYYY'))
-        }
-      )
+    //   $('#daterange-btn').daterangepicker(
+    //     {
+    //       ranges   : {
+    //         'Today'       : [moment(), moment()],
+    //         'Yesterday'   : [moment().subtract(1, 'days'), moment().subtract(1, 'days')],
+    //         'Last 7 Days' : [moment().subtract(6, 'days'), moment()],
+    //         'Last 30 Days': [moment().subtract(29, 'days'), moment()],
+    //         'This Month'  : [moment().startOf('month'), moment().endOf('month')],
+    //         'Last Month'  : [moment().subtract(1, 'month').startOf('month'), moment().subtract(1, 'month').endOf('month')]
+    //       },
+    //       startDate: moment().subtract(29, 'days'),
+    //       endDate  : moment()
+    //     },
+    //     function (start, end) {
+    //       $('#reportrange span').html(start.format('MMMM D, YYYY') + ' - ' + end.format('MMMM D, YYYY'))
+    //     }
+    //   )
 
       //Timepicker
-      $('#timepicker').datetimepicker({
-        format: 'LT'
-      })
+    //   $('#timepicker').datetimepicker({
+    //     format: 'LT'
+    //   })
 
       //Bootstrap Duallistbox
-      $('.duallistbox').bootstrapDualListbox()
+    //   $('.duallistbox').bootstrapDualListbox()
 
-      $("input[data-bootstrap-switch]").each(function(){
-        $(this).bootstrapSwitch('state', $(this).prop('checked'));
-      })
+    //   $("input[data-bootstrap-switch]").each(function(){
+    //     $(this).bootstrapSwitch('state', $(this).prop('checked'));
+    //   })
 
     })
 </script>
