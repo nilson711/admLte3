@@ -117,22 +117,24 @@ function coletaDados(){
  }
 
  function coletaIDs(dados){
-    var array_dados = dados;                        //cria variável com os dados do array
-    var q = 0;
-    var newArray = [];                              //cria o array
-
-    // var qtd_i = qtds;
+    var array_dados = dados;                            //cria variável com os dados do array
+    var newArray = [];                                  //cria o array
     for(var x = 0; x <= array_dados.length; x++){
-         if(typeof array_dados[x] == 'object'){     //typeof retorna o tipo de operando. verifica de o array_dados é um objeto
-           if(array_dados[x].checked){              //verifica no array_dados se estão marcados
-                q = qtd_solicitada;
-                    newArray.push( q + array_dados[x].id)      //o push adiciona o dado selecionado ao array
+         if(typeof array_dados[x] == 'object'){         //typeof retorna o tipo de operando. verifica de o array_dados é um objeto
+           if(array_dados[x].checked){                  //verifica no array_dados se estão marcados
+                newArray.push(array_dados[x].name)      //o push adiciona o dado selecionado ao array
             }
         }
     }
-    console.log(newArray);
+    // console.log(newArray);
     // NomeEquipsSelecionados.innerHTML = newArray;    //exibe na página os elementos do array (nomes dos equipamentos)
 
+    //CRIA UMA LISTA A PARTIR DO ARRAY ///////////////////////////////////////////////////////////////////////////////////////////
+    let sum = newArray;
+    const codeHTML = sum.reduce((html, item) => {
+        return html + "<li>" + item + "</li>";
+            }, "");
+    document.querySelector("#foo").innerHTML = codeHTML;
 
  }
 
@@ -140,27 +142,39 @@ function coletaDados(){
  * Função busca a quantidade solicitada
  */
  function qtdSolicitada(value) {
-    $(document).ready(function(){
-        // alert(value);
-
-
     var array_qtd = value;                        //cria variável com os dados do array
-        // var newArray = [];                              //cria o array
-
-        // var qtd_i = qtds;
-        // for(var x = 0; x <= array_qtd.length; x++){
+        var newArrayQtd = [];                              //cria o array
+        for(var x = 0; x <= array_qtd.length; x++){
             //  if(typeof array_qtd[x] == 'object'){     //typeof retorna o tipo de operando. verifica de o array_dados é um objeto
-            //    if(array_qtd[x]>0){
-                             //verifica no array_dados é maior que 0
-                //   newArray.push(array_dados[x].id)      //o push adiciona o dado selecionado ao array
-            //    }
+            if(array_qtd[x]>0){                       //verifica no array_dados é maior que 0
+                // alert('entrou');
+                newArrayQtd.push(array_qtd[x])      //o push adiciona o dado selecionado ao array
+               }
             //  }
-        // }
-        // NomeEquipsSelecionados.innerHTML =  NomeEquipsSelecionados.innerHTML + value;    //exibe na página os elementos do array (nomes dos equipamentos)
+        }
+        NomeEquipsSelecionados.innerHTML =  NomeEquipsSelecionados.innerHTML + value;    //exibe na página os elementos do array (nomes dos equipamentos)
 
-        qtd_solicitada = value;
-    });
+        // qtd_solicitada = value;
 
+        // console.log(value);
+        console.log(newArrayQtd);
 
+    // });
+}
+
+function buscaSelecionados(ClassQtdDoItem, ClassCheckbox){
+let qtd = document.getElementsByClassName(ClassQtdDoItem).value;
+let name = document.getElementsByClassName(ClassCheckbox);
+
+var array_dados = qtd + name;                        //cria variável com os dados do array
+    var newArray = [];                              //cria o array
+    for(var x = 0; x <= array_dados.length; x++){
+         if(typeof array_dados[x] == 'object'){     //typeof retorna o tipo de operando. verifica de o array_dados é um objeto
+        //    if(array_dados[x].checked){              //verifica no array_dados se estão marcados
+                    newArray.push(array_dados[x])      //o push adiciona o dado selecionado ao array
+            // }
+        }
+    }
+    console.log(name);
 }
 

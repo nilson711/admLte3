@@ -361,7 +361,7 @@
                 </div>
                 <!--//////////////////////////////////////////////////// Modal SOLICITAÇÃO /////////////////////////////////////////////-->
                 <div class="modal fade" id="modalSolicit" tabindex="-1" role="dialog" aria-labelledby="modalSolicit" aria-hidden="true">
-                    <div class="modal-dialog modal-md" role="document">
+                    <div class="modal-dialog modal-lg" role="document">
                     <div class="modal-content">
                         <div class="modal-header">
                         <h5 class="modal-title" id="modalSolicit">Solicitar Novo Equipamento</h5>
@@ -375,40 +375,46 @@
                             @csrf
                             <div class="form-group">
                                 <div class="row form-group">
-                                    <div class="col-sm-12">
+                                    <div class="col-sm-6">
                                         <div class="card-body table-responsive p-0" style="height: 300px;">
-                                            <table class="table table-sm table-striped table-head-fixed text-nowrap">
+                                            <table class="table table-sm table-striped table-head-fixed text-nowrap" id= "tableEquips">
                                               <thead>
                                                 <tr>
-                                                  <th>Qtd</th>
+                                                  <th></th>
                                                   <th>Equipamentos disponíveis</th>
                                                 </tr>
                                               </thead>
                                               <tbody>
-                                                @foreach ( $allEquipsEstoque as $equipEstoque)
-                                                    <tr class="odd" style="vertical-align: middle; line-height: 100%">
-                                                        <td>
-                                                            <div style="margin-left: -40px" id="checkSelEquip" class="form-check col-sm-6" onclick="ContarSelecionados()">
+                                                  @foreach ( $allEquipsEstoque as $equipEstoque)
+                                                  <tr class="tr-row" style="vertical-align: middle; line-height: 100%">
+                                                  <td>
+                                                            <div style="margin-left: -40px" id="checkSelEquip" class="checkSelEquip form-check col-sm-6" onclick="ContarSelecionados()">
+                                                                {{-- <input class="qtdDoItem" type="number" min="0" value="0" onchange="qtdSolicitada(this.value)" style="width: 50px"> --}}
                                                                 {{-- <input type="number" onchange="cadastraNotaImportada(this.value)" class="form-control disciplina" name="" value="0"> --}}
-                                                                <input class="qtdDoItem" type="number" name="qtdDoItem" min="0" value="0" onchange="qtdSolicitada(this.value)" style="width: 50px">
-                                                                <input class="checkbox" type="checkbox" id="{{$equipEstoque->name_equip}}" name="{{$equipEstoque->name_equip}}" style="margin-left: 7px; transform: scale(1.2)">
+                                                                <input class="checkbox" type="checkbox" id= " {{$equipEstoque->name_equip}}" name=" {{$equipEstoque->name_equip}}" onclick="coletaDados()" style="margin-left: 7px; transform: scale(1.2)">
                                                             </div>
-                                                        </td>
-                                                        <td id="nomeEquip" class="nomeEquip">
-                                                            {{$equipEstoque->name_equip}}
-                                                            ({{$equipEstoque->qtdName}})
-                                                        </td>
-                                                    </tr>
+                                                    </td>
+                                                    <td id="nomeEquip" class="nomeEquip">
+                                                        {{$equipEstoque->name_equip}}
+                                                        ({{$equipEstoque->qtdName}})
+                                                    </td>
+                                                </tr>
                                                 @endforeach
                                               </tbody>
                                             </table>
                                           </div>
                                     </div>
+                                    <div class="class col-sm-6">
+                                        <b id="QtdequipsSelecionados"></b>
+
+                                                <li id="NomeEquipsSelecionados"></li>
+                                                <div id="foo"></div>
+
+                                    </div>
                                 </div>
                         </div>
-                        <button type="button" class="btn btn-sm btn-outline-success" onclick="coletaDados()">OK</button>
-                        <p id="QtdequipsSelecionados"></p>
-                        <p id="NomeEquipsSelecionados"></p>
+                        {{-- <button type="button" class="btn btn-sm btn-outline-success" onclick="buscaSelecionados('qtdDoItem', 'checkbox')">OK</button> --}}
+
                         {{-- <textarea name="NomeEquipsSelecionados" id="NomeEquipsSelecionados" cols="60" rows="3"></textarea> --}}
 
                     </div>
@@ -452,6 +458,17 @@
 
 @section('js')
 
+{{-- <script>
+    $('.btnSelector').on('click', function() {
+    // var valores = document.querySelectorAll("table tr td");
+    var valores = document.querySelectorAll("table tr td");
+
+    for (i = 0; i < valores.length; i++) {
+        console.log(valores[i].innerHTML);
+    }
+}) --}}
+
+{{-- </script> --}}
 
 <!-- Select2 -->
 <script src= {{asset('js/select2.full.min.js')}}></script>
