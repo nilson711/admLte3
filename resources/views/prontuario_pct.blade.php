@@ -302,8 +302,13 @@
 
                         </div>
                     </div>
+                    <hr>
                     <div class="row">
-                        <p>teste</p>
+                        Solicitações pendentes:<br>
+                        @foreach ($solicitacoes as $solicitacao )
+                        - {{$solicitacao->equips_solicit}} ({{$solicitacao->obs_solicit}})<br>
+                        @endforeach
+
                     </div>
 
                   </div>
