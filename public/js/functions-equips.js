@@ -136,6 +136,8 @@ function coletaDados(){
             }, "");
     document.querySelector("#foo").innerHTML = codeHTML;
 
+    document.querySelector("#textEquips").innerHTML = sum;
+
  }
 
  /*********************************************************************************************************************************
@@ -176,5 +178,9 @@ var array_dados = qtd + name;                        //cria variável com os dad
         }
     }
     console.log(name);
+}
+
+function retornaPag(){
+
 }
 

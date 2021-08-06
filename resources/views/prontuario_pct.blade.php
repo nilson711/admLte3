@@ -359,78 +359,79 @@
                   </div>
                   <!-- /.tab-pane -->
                 </div>
-                <!--//////////////////////////////////////////////////// Modal SOLICITAÇÃO /////////////////////////////////////////////-->
-                <div class="modal fade" id="modalSolicit" tabindex="-1" role="dialog" aria-labelledby="modalSolicit" aria-hidden="true">
-                    <div class="modal-dialog modal-lg" role="document">
-                    <div class="modal-content">
-                        <div class="modal-header">
-                        <h5 class="modal-title" id="modalSolicit">Solicitar Novo Equipamento</h5>
-                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                            <span aria-hidden="true">&times;</span>
-                        </button>
-                        </div>
+ <!--//////////////////////////////////////////////////// Modal SOLICITAÇÃO /////////////////////////////////////////////-->
 
-                        <form action="">
-                        <div class="modal-body">
-                            @csrf
-                            <div class="form-group">
-                                <div class="row form-group">
-                                    <div class="col-sm-6">
-                                        <div class="card-body table-responsive p-0" style="height: 300px;">
-                                            <table class="table table-sm table-striped table-head-fixed text-nowrap" id= "tableEquips">
-                                              <thead>
-                                                <tr>
-                                                  <th></th>
-                                                  <th>Equipamentos disponíveis</th>
-                                                </tr>
-                                              </thead>
-                                              <tbody>
-                                                  @foreach ( $allEquipsEstoque as $equipEstoque)
-                                                  <tr class="tr-row" style="vertical-align: middle; line-height: 100%">
-                                                  <td>
-                                                            <div style="margin-left: -40px" id="checkSelEquip" class="checkSelEquip form-check col-sm-6" onclick="ContarSelecionados()">
-                                                                {{-- <input class="qtdDoItem" type="number" min="0" value="0" onchange="qtdSolicitada(this.value)" style="width: 50px"> --}}
-                                                                {{-- <input type="number" onchange="cadastraNotaImportada(this.value)" class="form-control disciplina" name="" value="0"> --}}
-                                                                <input class="checkbox" type="checkbox" id= " {{$equipEstoque->name_equip}}" name=" {{$equipEstoque->name_equip}}" onclick="coletaDados()" style="margin-left: 7px; transform: scale(1.2)">
-                                                            </div>
-                                                    </td>
-                                                    <td id="nomeEquip" class="nomeEquip">
-                                                        {{$equipEstoque->name_equip}}
-                                                        ({{$equipEstoque->qtdName}})
-                                                    </td>
-                                                </tr>
-                                                @endforeach
-                                              </tbody>
-                                            </table>
-                                          </div>
-                                    </div>
-                                    <div class="class col-sm-6">
-                                        <b id="QtdequipsSelecionados"></b>
-
-                                                <li id="NomeEquipsSelecionados"></li>
-                                                <div id="foo"></div>
-
-                                    </div>
-                                </div>
-                        </div>
-                        {{-- <button type="button" class="btn btn-sm btn-outline-success" onclick="buscaSelecionados('qtdDoItem', 'checkbox')">OK</button> --}}
-
-                        {{-- <textarea name="NomeEquipsSelecionados" id="NomeEquipsSelecionados" cols="60" rows="3"></textarea> --}}
-
-                    </div>
-                    <div class="modal-footer">
-                        <div class="form-group">
-
-                            <button type="button" class="btn btn-outline-secondary" data-dismiss="modal">Cancelar</button>
-                            <a href=""></a>
-                            <button type="submit" class="btn btn-outline-primary">Salvar</button>
-                        </div>
-                    </div>
-
-                </form>
-            </div>
+  <div class="modal fade bd-example-modal-lg" id="modalSolicit" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="exampleModalLabel">Solicitação de Equipamento(s) - Paciente: {{$pctSel->name_pct}}</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
         </div>
+        <div class="modal-body">
+            <form action="{{route('new_solicita')}}" method="POST">
+                @csrf
+                <div class="form-group">
+                    <div class="row form-group">
+                        <div class="col-sm-6">
+                            <div class="card-body table-responsive p-0" style="height: 300px;">
+                                <table class="table table-sm table-striped table-head-fixed text-nowrap" id= "tableEquips">
+                                <thead>
+                                    <tr>
+                                    <th></th>
+                                    <th>Equipamentos disponíveis</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach ( $allEquipsEstoque as $equipEstoque)
+                                    <tr class="tr-row" style="vertical-align: middle; line-height: 100%">
+                                    <td>
+                                                <div style="margin-left: -40px" id="checkSelEquip" class="checkSelEquip form-check col-sm-6" onclick="ContarSelecionados()">
+                                                    {{-- <input class="qtdDoItem" type="number" min="0" value="0" onchange="qtdSolicitada(this.value)" style="width: 50px"> --}}
+                                                    {{-- <input type="number" onchange="cadastraNotaImportada(this.value)" class="form-control disciplina" name="" value="0"> --}}
+                                                    <input class="checkbox" type="checkbox" id= " {{$equipEstoque->name_equip}}" name=" {{$equipEstoque->name_equip}}" onclick="coletaDados()" style="margin-left: 7px; transform: scale(1.2)">
+                                                </div>
+                                        </td>
+                                        <td id="nomeEquip" class="nomeEquip">
+                                            {{$equipEstoque->name_equip}}
+                                            ({{$equipEstoque->qtdName}})
+                                        </td>
+                                    </tr>
+                                    @endforeach
+                                </tbody>
+                                </table>
+                            </div>
+                        </div>
+                        <div class="class col-sm-6">
+                            <p>Solicito a implantação dos equipamentos abaixo:</p>
+                            <input type="number" name="idPct" id="idPct" value="{{$pctSel->id}}" style="display: none">
+                            <div id="foo"></div>
+                            <textarea name="textEquips" id="textEquips" style="display: none"></textarea>
+                            <hr style="margin-top: 3px; margin-botton: 0px">
+                            <p id="QtdequipsSelecionados" style="margin-top: -10px"></p>
+                                    <div class="row form-group">
+                                        <div class="col-md-12">
+                                            <label for="obsSolicitacao">Observações:</label>
+                                            {{-- <input type="text" class="form-control" name="obsSolicitacao" id="obsSolicitacao" placeholder="Observações sobre a solicitação" maxlength="100"> --}}
+                                            <textarea class="form-control" name="obsSolicitacao" id="obsSolicitacao" rows="3" placeholder="Observações sobre a solicitação" maxlength="150"></textarea>
+                                        </div>
+                                    </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-outline-secondary" data-dismiss="modal">Cancelar</button>
+                    <button type="submit" class="btn btn-outline-primary">Solicitar</button>
+            </div>
+        </form>
+      </div>
     </div>
+  </div>
+
+
 <!--//////////////////////////////////////////////////// FIM MODAL SOLICITAÇÃO ////////////////////////////////////////////////-->
                 <!-- /.tab-content -->
               </div><!-- /.card-body -->

@@ -9,7 +9,7 @@ use App\Models\Pct;
 use App\Models\Provider;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Http\Request;
+
 
 class SolicitacaoController extends Controller
 {
@@ -18,22 +18,22 @@ class SolicitacaoController extends Controller
 
     public function new_solicita(Request $request){
         //BUSCA OS DADOS OS INPUTS
-        $newIdPct = $request->input('id_pct');
-        $newSelEquip = $request->input('checkSelEquip');
-
-        $newdata_rent = $request->input('data_rent','0');
-
-
+        $listEquipSel = $request->input('textEquips');
+        $obsSolicitacao = $request->input('obsSolicitacao');
+        $idPct = $request->input('idPct');
 
         //SALVA DOS DADOS DOS INPUTS NO BANCO DE DADOS
         $solicitacao = new Solicitacao();
-        $solicitacao->pct_solicit =  $newIdPct;
-        $solicitacao->pct_solicit =  $newIdPct;
-
+        $solicitacao->pct_solicit =  $idPct;
+        $solicitacao->type_solicit =  1;                // 1 = implantação
+        $solicitacao->equips_solicit =  $listEquipSel;
+        $solicitacao->obs_solicit =  $obsSolicitacao;
 
         $solicitacao->save();
 
-        return redirect()->route('listaEquips');
+        return back()->withInput();
+        // return redirect()->route('editPct');
+        // echo($listEquipSel);
 
     }
 
