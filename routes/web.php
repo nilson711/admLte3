@@ -43,4 +43,5 @@ Route::post('/edit_Pct_submit/{id}', [App\Http\Controllers\PctController::class,
 
 //Rotas das Solicitações
 Route::post('/new_solicita', [App\Http\Controllers\SolicitacaoController::class, 'new_solicita'])->name('new_solicita');
+Route::get('/solicitacoes', [App\Http\Controllers\SolicitacaoController::class, 'solicitacoes'])->name('solicitacoes');
 

@@ -9,7 +9,7 @@ use App\Models\Pct;
 use App\Models\Provider;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
-
+use SebastianBergmann\Environment\Console;
 
 class SolicitacaoController extends Controller
 {
@@ -21,6 +21,7 @@ class SolicitacaoController extends Controller
         $listEquipSel = $request->input('textEquips');
         $obsSolicitacao = $request->input('obsSolicitacao');
         $idPct = $request->input('idPct');
+        $checkUrgente = $request->input('checkUrgente');
 
         //SALVA DOS DADOS DOS INPUTS NO BANCO DE DADOS
         $solicitacao = new Solicitacao();
@@ -28,8 +29,10 @@ class SolicitacaoController extends Controller
         $solicitacao->type_solicit =  1;                // 1 = implantação
         $solicitacao->equips_solicit =  $listEquipSel;
         $solicitacao->obs_solicit =  $obsSolicitacao;
+        $solicitacao->priority =  (isset($checkUrgente))? 1 : 0; //verifica se o check está  marcado. se tiver retorna 1, se não retorna 2
 
         $solicitacao->save();
+
 
         return back()->withInput();
         // return redirect()->route('editPct');
@@ -44,9 +47,20 @@ class SolicitacaoController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function solicitacoes()
     {
-        //
+        $solicitacoes = new Solicitacao();
+        $solicitacoes = DB::SELECT("SELECT S.id, S.priority, P.name_pct, P.id_hc, S.type_solicit, S.date_solicit, C.cliente, P.rua, P.nr, P.bairro, P.compl, S.equips_solicit, S.obs_solicit
+                        FROM solicitacaos AS S
+                        INNER JOIN pcts AS P ON S.pct_solicit = P.id
+                        INNER JOIN clientes AS C ON C.id = P.id_hc
+                        WHERE s.status_solicit=0
+                        ORDER BY S.priority DESC, S.id ASC
+
+                        ");
+
+
+        return view('solicitacoes', ['solicitacoes'=>$solicitacoes]);
     }
 
     /**

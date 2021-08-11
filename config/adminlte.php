@@ -269,7 +269,7 @@ return [
         ],
         [
             'text'        => 'Solicitações',
-            'url'         => 'admin/pages',
+            'url'         => '/solicitacoes',
             'icon'        => 'fas fa-exclamation-triangle',
             // 'label'       => 4,
             'label_color' => 'success',

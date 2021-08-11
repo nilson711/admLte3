@@ -17,15 +17,6 @@
       <div class="card-header">
         <h3 class="card-title" data-toggle="tootip" title="teste">Solicitações</h3>
 
-        <div class="card-tools">
-          <ul class="pagination pagination-sm float-right">
-            <li class="page-item"><a class="page-link" href="#">«</a></li>
-            <li class="page-item"><a class="page-link" href="#">1</a></li>
-            <li class="page-item"><a class="page-link" href="#">2</a></li>
-            <li class="page-item"><a class="page-link" href="#">3</a></li>
-            <li class="page-item"><a class="page-link" href="#">»</a></li>
-          </ul>
-        </div>
       </div>
       <!-- /.card-header -->
       <div class="card-body p-0">
@@ -40,54 +31,87 @@
             </tr>
           </thead>
           <tbody>
-            <tr>
-              <td>1</td>
-              <td>Leda Paiva Dezolt</td>
-              <td>Novitá</td>
-              <td><i class="fas fa-plus-circle" title="Implantação"></i></td>
-              <td>
-                <button type="button" class="btn btn-outline-info btn-sm" title="Informações da Solicitação" data-toggle="modal" data-target="#ModalInfoSolicitacao"><i class="fas fa-info-circle"></i></button>
-                  <!-- Modal -->
-                    <div class="modal fade" id="ModalInfoSolicitacao" tabindex="-1" role="dialog" aria-labelledby="ModalInfoSolicitacaoLabel" aria-hidden="true">
-                      <div class="modal-dialog" role="document">
-                        <div class="modal-content">
-                          <div class="modal-header">
-                            <h5 class="modal-title" id="ModalInfoSolicitacaoLabel">#1 - Novitá - Pct Leda Paiva Dezolt</h5>
-                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                              <span aria-hidden="true">&times;</span>
-                            </button>
-                          </div>
-                          <div class="modal-body">
-                            There are many variations of passages of Lorem Ipsum available, but the majority have suffered alteration in some form, by injected humour, or randomised words which don't look even slightly believable. If you are going to use a passage of Lorem Ipsum, you need to be sure there isn't anything embarrassing hidden in the middle of text.
-                          </div>
-                          <div class="modal-footer">
-                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                            {{-- <button type="button" class="btn btn-primary">Save changes</button> --}}
-                          </div>
+              @foreach ($solicitacoes as $solicitacao )
+                {{-- @php
+                    echo '<pre>';
+                        print_r($solicitacao);
+                @endphp --}}
+              <tr>
+                  <td>{{$solicitacao->id}}</td>
+                  <td>{{$solicitacao->name_pct}}</td>
+                  <td>{{$solicitacao->cliente}}</td>
+                  <td>
+                      @switch($solicitacao->type_solicit)
+                        @case(1)
+                            <i class="fas fa-plus-circle" data-toggle="tooltip" title="Implantação" style="color: rgb(20, 187, 20)"></i>
+                        @break
+                        @case(2)
+                            <i class="fas fa-minus-circle" data-toggle="tooltip" title="Recolhimento" style="color: black"></i>
+                        @break
+                        @case(3)
+                            <i class="fas fa-tools" data-toggle="tooltip" title="Troca/Manutenção" style="color: orange"></i>
+                        @break
+                        @case(4)
+                            <i class="fas fa-dolly" data-toggle="tooltip" title="Mudança"></i>
+                        @break
+                        @case(5)
+                            <i class="fas fa-times-circle" data-toggle="tooltip" title="Recolhimento Total" style="color: red"></i>
+                            @break
+                        @case(6)
+                            <i class="fas fa-battery-full" data-toggle="tooltip" title="Cilindro O2" style="color: rgb(149, 223, 240); transform: rotate(-90deg)"></i>
+
+                            {{-- <i class="fas fa-lungs" data-toggle="tooltip" title="Cilindro O2" style="color: rgb(58, 203, 240)"></i> --}}
+
+                            {{-- <img src="oxygen-tank.png" alt="O2" width="30"> --}}
+                        @break
+
+                        @default
+                            <i class="fas fa-plus-circle" data-toggle="tooltip" title="nenhum"></i>
+                      @endswitch
+
+                    </td>
+                  <td>
+                      <button type="button" class="btn btn-outline-info btn-sm" title="Informações da Solicitação" data-toggle="modal" data-target="#ModalInfoSolicitacao"><i class="fas fa-info-circle"></i></button>
+                      <!-- Modal -->
+                      <div class="modal fade" id="ModalInfoSolicitacao" tabindex="-1" role="dialog" aria-labelledby="ModalInfoSolicitacaoLabel" aria-hidden="true">
+                          <div class="modal-dialog" role="document">
+                              <div class="modal-content">
+                                  <div class="modal-header">
+                                      <h5 class="modal-title" id="ModalInfoSolicitacaoLabel"># {{$solicitacao->id}} - {{$solicitacao->name_pct}} - {{$solicitacao->cliente}}</h5>
+                                      <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                          <span aria-hidden="true">&times;</span>
+                                        </button>
+                                    </div>
+                                    <div class="modal-body">
+                                        There are many variations of passages of Lorem Ipsum available, but the majority have suffered alteration in some form, by injected humour, or randomised words which don't look even slightly believable. If you are going to use a passage of Lorem Ipsum, you need to be sure there isn't anything embarrassing hidden in the middle of text.
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                                        {{-- <button type="button" class="btn btn-primary">Save changes</button> --}}
+                                    </div>
+                                </div>
+                            </div>
                         </div>
-                      </div>
-                    </div>
-
-            </td>
-
-            </tr>
-            <tr>
+                    </td>
+                </tr>
+                @endforeach
+            {{-- <tr>
               <td>2</td>
               <td>Raimundo Felix da Silva</td>
               <td>Indoor</td>
               <td><i class="fas fa-minus-circle" title="Recolhimento"></i></td>
-              <td><button type="button" class="btn btn-outline-info btn-sm" title="Informações da Solicitação" data-toggle="modal" data-target="#ModalInfoSolicitacao"><i class="fas fa-info-circle"></i></button></td>
+              <td><button type="button" class="btn btn-outline-info btn-sm" title="Informações da Solicitação" data-toggle="modal" data-target="#ModalInfoSolicitacao"><i class="fas fa-info-circle"></i></button></td> --}}
 
-            </tr>
-            <tr>
+            {{-- </tr> --}}
+            {{-- <tr>
               <td>3</td>
               <td>Julio dos Santos</td>
               <td>Catedral</td>
               <td><i class="fas fa-times-circle" title="Recolhimento Total"></i></td>
               <td><button type="button" class="btn btn-outline-info btn-sm" title="Informações da Solicitação" data-toggle="modal" data-target="#ModalInfoSolicitacao"><i class="fas fa-info-circle"></i></button></td>
 
-            </tr>
-            <tr>
+            </tr> --}}
+            {{-- <tr>
               <td>4</td>
               <td>Manoel da Silva</td>
               <td>SOS Vida</td>
@@ -102,7 +126,7 @@
               <td><i class="fas fa-dolly" title="Mudança de Local"></i></td>
               <td><button type="button" class="btn btn-outline-info btn-sm" title="Informações da Solicitação" data-toggle="modal" data-target="#ModalInfoSolicitacao"><i class="fas fa-info-circle"></i></button></td>
 
-            </tr>
+            </tr> --}}
           </tbody>
         </table>
       </div>
@@ -223,4 +247,10 @@
 
 @section('js')
     <script> console.log('Hi!'); </script>
+
+    <script>
+        $(function () {
+        $('[data-toggle="tooltip"]').tooltip()
+      })
+      </script>
 @stop

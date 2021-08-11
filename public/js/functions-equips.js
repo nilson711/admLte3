@@ -180,7 +180,14 @@ var array_dados = qtd + name;                        //cria variável com os dad
     console.log(name);
 }
 
-function retornaPag(){
+function urgente() {
+    // Get the checkbox
+    var checkUrgente = document.getElementById("checkUrgente");
 
-}
+    // If the checkbox is checked, display the output text
+    if (checkUrgente.checked == true){
+        alert('ATENÇÃO! \nAo marcar uma solicitação como "Urgente" ela aparecerá como prioridade na lista de atendimentos. \nIsso afetará a logística das demais solicitações. \nPortanto só marque se for realmente necessário!' )
+    }
+
+  }
 
