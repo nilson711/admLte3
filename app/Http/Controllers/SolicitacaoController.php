@@ -42,6 +42,21 @@ class SolicitacaoController extends Controller
 
 ///========================================================================================================================
 
+////ROTA PARA INICIAR O ATENDIMENTO DA SOLICITAÇÃO ///////
+/* coloca o valor do status para 1 para que informe que a solicitação está em andamento */
+public function iniciar_solicit(Request $request, $id){
+    //BUSCA O DADO
+    $status1 = $request->input('status');
+    //SALVA
+    $solicit = Solicitacao::find($id);
+
+    $solicit->status_solicit = $status1 + 1;
+
+    $solicit->save();
+
+    return back()->withInput();
+}
+///========================================================================================================================
     /**
      * Display a listing of the resource.
      *
@@ -50,13 +65,12 @@ class SolicitacaoController extends Controller
     public function solicitacoes()
     {
         $solicitacoes = new Solicitacao();
-        $solicitacoes = DB::SELECT("SELECT S.id, S.priority, P.name_pct, P.id_hc, S.type_solicit, S.date_solicit, C.cliente, P.rua, P.nr, P.bairro, P.compl, S.equips_solicit, S.obs_solicit
+        $solicitacoes = DB::SELECT("SELECT S.id, S.priority, S.status_solicit, P.name_pct, P.id_hc, S.type_solicit, S.date_solicit, C.cliente, P.rua, P.nr, P.bairro, P.compl, S.equips_solicit, S.obs_solicit
                         FROM solicitacaos AS S
                         INNER JOIN pcts AS P ON S.pct_solicit = P.id
                         INNER JOIN clientes AS C ON C.id = P.id_hc
-                        WHERE s.status_solicit=0
+                        WHERE s.status_solicit= 0 OR s.status_solicit= 1
                         ORDER BY S.priority DESC, S.id ASC
-
                         ");
 
 

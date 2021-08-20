@@ -32,7 +32,7 @@ class HomeController extends Controller
                         FROM solicitacaos AS S
                         INNER JOIN pcts AS P ON S.pct_solicit = P.id
                         INNER JOIN clientes AS C ON C.id = P.id_hc
-                        WHERE s.status_solicit=0");
+                        WHERE s.status_solicit=0 OR s.status_solicit=1");
 
         return view('home', ['tasks'=> $tasks] + ['solicitacoes'=>$solicitacoes]);
     }
