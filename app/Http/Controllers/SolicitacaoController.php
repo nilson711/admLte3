@@ -45,17 +45,57 @@ class SolicitacaoController extends Controller
 ////ROTA PARA INICIAR O ATENDIMENTO DA SOLICITAÇÃO ///////
 /* coloca o valor do status para 1 para que informe que a solicitação está em andamento */
 public function iniciar_solicit(Request $request, $id){
-    //BUSCA O DADO
-    $status1 = $request->input('status');
-    //SALVA
-    $solicit = Solicitacao::find($id);
+    
 
-    $solicit->status_solicit = $status1 + 1;
-
-    $solicit->save();
-
-    return back()->withInput();
+    switch ($request->submitbutton) {
+        case '0':
+            //BUSCA O DADO
+            $status1 = $request->input('status');
+            //SALVA
+            $solicit = Solicitacao::find($id);
+            $solicit->status_solicit = 0;
+            $solicit->save();
+            return back()->withInput();
+        break;
+        case '1':
+            //BUSCA O DADO
+            $status1 = $request->input('status');
+            //SALVA
+            $solicit = Solicitacao::find($id);
+            $solicit->status_solicit = 1;
+            $solicit->save();
+            return back()->withInput();
+        break;
+        case '2':
+            //BUSCA O DADO
+            $status1 = $request->input('status');
+            //SALVA
+            $solicit = Solicitacao::find($id);
+            $solicit->status_solicit = 2;
+            $solicit->save();
+            return back()->withInput();
+        break;
+        case '3':
+            //BUSCA O DADO
+            $status1 = $request->input('status');
+            //SALVA
+            $solicit = Solicitacao::find($id);
+            $solicit->status_solicit = 3;
+            $solicit->save();
+            return back()->withInput();
+        break;
+            
+        default:
+            # code...
+        break;
+    }
 }
+///========================================================================================================================
+
+    
+
+
+
 ///========================================================================================================================
     /**
      * Display a listing of the resource.

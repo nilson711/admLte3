@@ -190,6 +190,13 @@ function urgente() {
     }
 
   }
+  /*********************************************************************************************************************************
+ * Função cancela uma solicitação
+ */
+function func_cancelar(){
+    let status = document.getElementById('status').value;
+    status = 3;
+}
 
 
 
