@@ -45,11 +45,10 @@ class SolicitacaoController extends Controller
 ////ROTA PARA INICIAR O ATENDIMENTO DA SOLICITAÇÃO ///////
 /* coloca o valor do status para 1 para que informe que a solicitação está em andamento */
 public function iniciar_solicit(Request $request, $id){
-    
 
     switch ($request->submitbutton) {
         case '0':
-            //BUSCA O DADO
+            //SE O VALUE DO SBMITBUTTON FOR 0 (RETORNA STATUS PARA 0 - PENDENTE)
             $status1 = $request->input('status');
             //SALVA
             $solicit = Solicitacao::find($id);
@@ -58,7 +57,7 @@ public function iniciar_solicit(Request $request, $id){
             return back()->withInput();
         break;
         case '1':
-            //BUSCA O DADO
+            //SE O VALUE DO SBMITBUTTON FOR 1 (RETORNA STATUS PARA 1 - EM ATENDIMENTO)
             $status1 = $request->input('status');
             //SALVA
             $solicit = Solicitacao::find($id);
@@ -67,16 +66,17 @@ public function iniciar_solicit(Request $request, $id){
             return back()->withInput();
         break;
         case '2':
-            //BUSCA O DADO
+            //SE O VALUE DO SBMITBUTTON FOR 2 (RETORNA STATUS PARA 2 - FINALIZADA)
             $status1 = $request->input('status');
             //SALVA
             $solicit = Solicitacao::find($id);
             $solicit->status_solicit = 2;
+
             $solicit->save();
             return back()->withInput();
         break;
         case '3':
-            //BUSCA O DADO
+            //SE O VALUE DO SBMITBUTTON FOR 3 (RETORNA STATUS PARA 3 - CANCELADA)
             $status1 = $request->input('status');
             //SALVA
             $solicit = Solicitacao::find($id);
@@ -84,7 +84,7 @@ public function iniciar_solicit(Request $request, $id){
             $solicit->save();
             return back()->withInput();
         break;
-            
+
         default:
             # code...
         break;
@@ -92,7 +92,14 @@ public function iniciar_solicit(Request $request, $id){
 }
 ///========================================================================================================================
 
-    
+public function add_equip_pct(Request $request, $id){
+    if ($request->btn_submit_equip > 0) {
+            $selEquipPct = Equipamento::find($id);
+            $solicit = new Solicitacao();
+            $selEquipPct->pct_equip = $solicit->pct_solicit;
+    }
+}
+
 
 
 
@@ -113,9 +120,16 @@ public function iniciar_solicit(Request $request, $id){
                         ORDER BY S.priority DESC, S.id ASC
                         ");
 
+        $equips = new Equipamento();
+        $equips = DB::SELECT("SELECT * FROM equipamentos WHERE pct_equip = 0");
 
-        return view('solicitacoes', ['solicitacoes'=>$solicitacoes]);
+        return view('solicitacoes', ['solicitacoes'=>$solicitacoes] + ['equips'=>$equips]);
+
+
+
     }
+
+
 
     /**
      * Show the form for creating a new resource.

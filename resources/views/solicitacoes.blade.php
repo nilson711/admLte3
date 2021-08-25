@@ -73,7 +73,34 @@
                         {{ $solicitacao->rua }} - nº {{ $solicitacao->nr }}<br>
                         {{ $solicitacao->compl }} - {{ $solicitacao->bairro }}<br>
                         <hr>
-                        <i class="fas fa-procedures"></i>: {{ $solicitacao->equips_solicit }}<br>
+                        <i class="fas fa-procedures"></i>:
+                        {{-- <div class="form-group">
+                            <select name="hc" id="hc" class="form-control select2 select2-hidden-accessible" style="width: 100%;" aria-hidden="true" required>]
+                                @foreach ($equips as $equip)
+                                    <option value = "{{$equip->id}}">{{$equip->patr}} - {{$equip->name_equip}}</option>
+                                @endforeach
+                            </select>
+                        </div> --}}
+                        <!-- /.form-group -->
+
+                        <div>
+                                @foreach (explode(',', $solicitacao->equips_solicit) as $itemEquip) {{-- Separa os itens por vírgula e joga numa lista --}}
+                                    <div class="form-group">
+                                        <label for="selEquip">
+                                            <li>{{$itemEquip}}</li>
+                                        </label>
+                                            <select name="selEquip" class="form-control select2 select2-hidden-accessible" style="width: 100%;" aria-hidden="true" required>]
+                                                    <option value="" selected>Selecione</option>
+                                                @foreach ($equips as $equip)
+                                                    <option value = "{{$equip->id}}">{{$equip->patr}} - {{$equip->name_equip}}</option>
+                                                    @endforeach
+                                            </select>
+                                            <hr>
+                                    </div>
+                                @endforeach
+                                    <!-- /.form-group -->
+                        </div>
+                        <br>
                             Obs: {{ $solicitacao->obs_solicit }}
                             <hr>
                         <form action="{{route('iniciar_solicit', $solicitacao->id)}}" method="post">
@@ -96,7 +123,7 @@
                                             </a>
                                         </li>
                                     </ul>
-                                
+
                                 @else
                                     <ul class="nav nav-pills ml-auto p-2">
                                         <li class="nav-item">
@@ -121,20 +148,20 @@
                                             </a>
                                         </li>
                                     </ul>
-                                    
+
                                 @endif
 
                                 <input type="number" name="status" id="status" value="{{$solicitacao->status_solicit}}" style="display: none">
                             </div>
                             {{-- ////////////////////////////////////////////////////////////////////////////////////////////////////// --}}
                             <div class="card">
-                                {{-- <div class="card-header d-flex p-0">
-                                <ul class="nav nav-pills ml-auto p-2">
+                                <div class="card-header d-flex p-0">
+                                {{-- <ul class="nav nav-pills ml-auto p-2">
                                     <li class="nav-item"><a class="nav-link" href="#tab_finalizar" data-toggle="tab">Finalizar</a></li>
                                     <li class="nav-item"><a class="nav-link" href="#tab_cancelar" data-toggle="tab">Cancelar</a></li>
                                     <li class="nav-item"><a class="nav-link" href="#tab_retornar" data-toggle="tab">Retornar</a></li>
-                                    <li class="nav-item dropdown"> 
-                                    <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#">
+                                    <li class="nav-item dropdown"> --}}
+                                    {{-- <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#">
                                         Opções <span class="caret"></span>
                                     </a>
                                     <div class="dropdown-menu">
@@ -143,19 +170,32 @@
                                         <a class="dropdown-item" tabindex="-1" href="#tab_cancelar" data-toggle="tab">Cancelar</a>
                                         <div class="dropdown-divider"></div>
                                         <a class="dropdown-item" tabindex="-1" href="#tab_retornar" data-toggle="tab">Retornar</a>
-                                    </div>
-                                </li>
-                                </ul>
-                                </div> --}}
+                                    </div> --}}
+                                {{-- </li>
+                                </ul> --}}
+                                </div>
                                 <!-- /.card-header -->
                                 <div class="card-body">
                                 <div class="tab-content">
                                     <div class="tab-pane active" id="tab_none">
-                                    
+
                                     </div>
                                     <div class="tab-pane" id="tab_finalizar">
                                         Formulario com os equipamentos para incluir no cadastro do paciente.
-                                        
+
+                                        <div>
+                                          <div class="form-group">
+                                                <select name="hc" id="hc" class="form-control select2 select2-hidden-accessible" style="width: 100%;" aria-hidden="true" required>]
+                                                    @foreach ($equips as $equip)
+                                                        <option value="">Digite o nº patrimônio</option>
+                                                        <option value = "{{$equip->id}}">{{$equip->patr}} - {{$equip->name_equip}}</option>
+                                                    @endforeach
+                                                </select>
+                                          </div>
+                                          <!-- /.form-group -->
+                                        </div>
+
+
                                         <button class="btn btn-app bg-success btn-block swalDefaultFinalized" name="submitbutton" value="2" type="submit" style="color: green">
                                             <i class="far fa-check-square"></i> Finalizar
                                         </button>
@@ -171,7 +211,7 @@
                                     <div class="tab-pane " id="tab_retornar">
                                        <p style="text-align: center">
                                            Retorna a solicitação para a lista de solicitações pendentes.
-                                        </p> 
+                                        </p>
                                         <button class="btn btn-app bg-secondary btn-block swalDefaultInfo" name="submitbutton" value="0" type="submit" style="color: red">
                                             <i class="fas fa-undo"></i> Retornar
                                         </button>
@@ -181,11 +221,11 @@
                                 <!-- /.tab-content -->
                                 </div><!-- /.card-body -->
                             </div>
-                            
-                                
-                                    
+
+
+
                         </form>
-                                                        
+
                     </div>
 
                     <!-- /.card-body -->
@@ -278,12 +318,19 @@
   <!-- Google Font: Source Sans Pro -->
   <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
 
+  <!-- Select2 -->
+  <link rel="stylesheet" href="{{asset('css/select2.min.css')}}">
+  <link rel="stylesheet" href="{{asset('css/select2-bootstrap4.min.css')}}">
+
   <!-- SweetAlert2 -->
   <link rel="stylesheet" href="{{asset('css/bootstrap-4.min.css')}}">
   <!-- Toastr -->
   <link rel="stylesheet" href="{{asset('css/toastr.css')}}">
 
- 
+ <!-- DataTables -->
+ <link rel="stylesheet" href="css/dataTables.bootstrap4.min.css">
+ <link rel="stylesheet" href="css/responsive.bootstrap4.min.css">
+ <link rel="stylesheet" href="css/buttons.bootstrap4.min.css">
 
 @stop
 
@@ -293,8 +340,59 @@
 {{-- <script src= {{asset('js/jquery.min.js')}}></script> --}}
 <script src= {{asset('js/toastr.min.js')}}></script>
 <script src= {{asset('js/sweetalert2.min.js')}}></script>
+<!-- Select2 -->
+<script src= {{asset('js/select2.full.min.js')}}></script>
+
+<!-- DataTables  & Plugins -->
+<script src="js/jquery.dataTables.min.js"></script>
+<script src="js/dataTables.bootstrap4.min.js"></script>
+<script src="js/dataTables.responsive.min.js"></script>
+<script src="js/responsive.bootstrap4.min.js"></script>
+<script src="js/dataTables.buttons.min.js"></script>
+<script src="js/buttons.bootstrap4.min.js"></script>
+<script src="js/jszip.min.js"></script>
+<script src="js/pdfmake.min.js"></script>
+<script src="js/vfs_fonts.js"></script>
+<script src="js/buttons.html5.min.js"></script>
+<script src="js/buttons.print.min.js"></script>
+<script src="js/buttons.colVis.min.js"></script>
+
+<script>
+    $(function () {
+      //Initialize Select2 Elements
+      $('.select2').select2();
+
+    //Initialize Select2 Elements
+      $('.select2bs4').select2({
+        theme: 'bootstrap4'
+      });
+      $("#example1").DataTable({
+        "responsive": true, "lengthChange": false, "autoWidth": false
+        // ,        "buttons": ["copy", "csv", "excel", "pdf", "print"]
+      }).buttons().container().appendTo('#example1_wrapper .col-md-6:eq(0)');
+
+      $("#table_implantados").DataTable({
+        "responsive": true, "lengthChange": false, "autoWidth": false
+        // ,        "buttons": ["copy", "csv", "excel", "pdf", "print"]
+      }).buttons().container().appendTo('#implantados_wrapper .col-md-6:eq(0)');
+
+      $("#table_manutencao").DataTable({
+        "responsive": true, "lengthChange": false, "autoWidth": false
+        // ,        "buttons": ["copy", "csv", "excel", "pdf", "print"]
+      }).buttons().container().appendTo('#manutencao_wrapper .col-md-6:eq(0)');
 
 
+      $('#example2').DataTable({
+        "paging": true,
+        "lengthChange": false,
+        "searching": false,
+        "ordering": true,
+        "info": true,
+        "autoWidth": false,
+        "responsive": true,
+      });
+    });
+  </script>
 
 <script>
     console.log('Hi!');
@@ -338,7 +436,7 @@ function iniciarAtendimento() {
         showConfirmButton: false,
         timer: 3000
       });
-  
+
       $('.swalDefaultSuccess').click(function() {
         Toast.fire({
           icon: 'success',
@@ -375,7 +473,7 @@ function iniciarAtendimento() {
           title: 'Lorem ipsum dolor sit amet, consetetur sadipscing elitr.'
         })
       });
-  
+
       $('.toastrDefaultSuccess').click(function() {
         toastr.success('Lorem ipsum dolor sit amet, consetetur sadipscing elitr.')
       });
@@ -388,7 +486,7 @@ function iniciarAtendimento() {
       $('.toastrDefaultWarning').click(function() {
         toastr.warning('Lorem ipsum dolor sit amet, consetetur sadipscing elitr.')
       });
-  
+
       $('.toastsDefaultDefault').click(function() {
         $(document).Toasts('create', {
           title: 'Toast Title',

@@ -62,7 +62,6 @@
                                                       @foreach ($clientes as $cliente)
                                                           <option value = "{{$cliente->id}}" {{$cliente->id == $pctSel->id_hc ? 'selected' : ''}}>{{$cliente->cliente}}</option>
                                                       @endforeach
-
                                                   </select>
                                               </a>
                                             </li>
