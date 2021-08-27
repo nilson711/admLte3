@@ -1,3 +1,4 @@
+
 @extends('adminlte::page')
 
 @section('title', 'Solicitações')
@@ -9,16 +10,76 @@
 @section('content')
 {{-- <p>Painel de Informações</p> --}}
 
-<div class="row">
+<div >
 
-    <div class="col-md-12">
+    <div>
 
         @foreach ($solicitacoes as $solicitacao )
-            @if ($solicitacao->priority == 1)
-                <div class="card card-danger collapsed-card">
-                    <div class="card-header">
-                        <h3 class="card-title">
-                            @switch($solicitacao->type_solicit)
+            @if ($solicitacao->priority == 0)
+            <div class="col-12">
+                <div class="info-box">
+                  <span class="info-box-icon bg-info">
+                    @switch($solicitacao->type_solicit)
+                        @case(1)
+                            <i class="fas fa-plus-circle fa-lg" data-toggle="tooltip"
+                                title="Implantação"
+                                style="color: rgb(255, 255, 255)"></i>
+                        @break
+                        @case(2)
+                            <i class="fas fa-minus-circle fa-lg" data-toggle="tooltip"
+                                title=" Recolhimento"
+                                style="color: black"></i>
+                        @break
+                        @case(3)
+                            <i class="fas fa-tools fa-lg" data-toggle="tooltip"
+                                title="Troca/Manutenção"
+                                style="color: rgb(255, 255, 255)"></i>
+                        @break
+                        @case(4)
+                            <i class="fas fa-dolly fa-lg" data-toggle="tooltip"
+                                title="Mudança"></i>
+                        @break
+                        @case(5)
+                            <i class="fas fa-times-circle fa-lg" data-toggle="tooltip"
+                                title="Recolhimento Total"
+                                style="color: rgb(0, 0, 0)"></i>
+                        @break
+                        @case(6)
+                            <i class="fas fa-battery-full fa-lg" data-toggle="tooltip"
+                                title="Cilindro O2"
+                                style="color: rgb(252, 252, 252); transform: rotate(-90deg)"></i>
+                        @break
+
+                        @default
+                            <i class="fas fa-plus-circle" data-toggle="tooltip" title="nenhum"></i>
+                    @endswitch
+                    </span>
+
+                  <div class="info-box-content">
+                        <span class="info-box-number">
+                          Nº: {{$solicitacao->id}} ({{ $solicitacao->cliente }})
+                            @if ($solicitacao->status_solicit == 0)
+                            <i class="fas fa-ambulance" id="ambulancia" style="display: none"></i><br>
+                            @else
+                            <i class="fas fa-ambulance" id="ambulancia" data-toggle="tooltip" title="Em atendimento" style="display: inline; color:rgb(255, 81, 0)"></i><br>
+                            @endif
+                        </span>
+                    <span class="info-box-text">
+
+                            <p>{{ $solicitacao->name_pct }}</p>
+                            <i class="fas fa-map-marker-alt" data-toggle="tooltip" title="{{ $solicitacao->bairro }}"></i>
+
+                    </span>
+                  </div>
+                  <!-- /.info-box-content -->
+                </div>
+                <!-- /.info-box -->
+            </div>
+            @else
+            <div class="col-12">
+                <div class="info-box">
+                    <span class="info-box-icon bg-danger">
+                        @switch($solicitacao->type_solicit)
                                 @case(1)
                                     <i class="fas fa-plus-circle fa-lg" data-toggle="tooltip"
                                         title="Implantação"
@@ -52,259 +113,16 @@
                                 @default
                                     <i class="fas fa-plus-circle" data-toggle="tooltip" title="nenhum"></i>
                             @endswitch
+                    </span>
 
-                            &nbsp Nº: {{$solicitacao->id}} ({{ $solicitacao->cliente }})&nbsp
-                                @if ($solicitacao->status_solicit == 0)
-                                    <i class="fas fa-ambulance" id="ambulancia" style="display: none"></i><br>
-                                @else
-                                    <i class="fas fa-ambulance" id="ambulancia" data-toggle="tooltip" title="Em atendimento" style="display: inline; color:yellow"></i><br>
-                                @endif
-                            <strong>{{ $solicitacao->name_pct }}</strong><br>
-                            {{ $solicitacao->bairro }}
-                        </h3>
-                        <div class="card-tools">
-                            <button type="button" class="btn btn-tool" data-card-widget="collapse"><i class="fas fa-plus"></i>
-                            </button>
-                        </div>
-
-                    </div>
-                    <div class="card-body">
-                        <i class="fas fa-map-marker-alt"></i>:
-                        {{ $solicitacao->rua }} - nº {{ $solicitacao->nr }}<br>
-                        {{ $solicitacao->compl }} - {{ $solicitacao->bairro }}<br>
-                        <hr>
-                        <i class="fas fa-procedures"></i>:
-                        {{-- <div class="form-group">
-                            <select name="hc" id="hc" class="form-control select2 select2-hidden-accessible" style="width: 100%;" aria-hidden="true" required>]
-                                @foreach ($equips as $equip)
-                                    <option value = "{{$equip->id}}">{{$equip->patr}} - {{$equip->name_equip}}</option>
-                                @endforeach
-                            </select>
-                        </div> --}}
-                        <!-- /.form-group -->
-
-                        <div>
-                                @foreach (explode(',', $solicitacao->equips_solicit) as $itemEquip) {{-- Separa os itens por vírgula e joga numa lista --}}
-                                    <div class="form-group">
-                                        <label for="selEquip">
-                                            <li>{{$itemEquip}}</li>
-                                        </label>
-                                            <select name="selEquip" class="form-control select2 select2-hidden-accessible" style="width: 100%;" aria-hidden="true" required>]
-                                                    <option value="" selected>Selecione</option>
-                                                @foreach ($equips as $equip)
-                                                    <option value = "{{$equip->id}}">{{$equip->patr}} - {{$equip->name_equip}}</option>
-                                                    @endforeach
-                                            </select>
-                                            <hr>
-                                    </div>
-                                @endforeach
-                                    <!-- /.form-group -->
-                        </div>
-                        <br>
-                            Obs: {{ $solicitacao->obs_solicit }}
-                            <hr>
-                        <form action="{{route('iniciar_solicit', $solicitacao->id)}}" method="post">
-                            @csrf
-                            <div class="form-group">
-                                @if($solicitacao->status_solicit == 0)
-                                    <ul class="nav nav-pills ml-auto p-2">
-                                        <li class="nav-item">
-                                            <a >
-                                                <button class="btn btn-app swalDefaultSuccess" name="submitbutton" value="1" type="submit" style="color: green">
-                                                    <i class="fas fa-play"></i> Iniciar
-                                                </button>
-                                            </a>
-                                        </li>
-                                        <li class="nav-item">
-                                            <a data-toggle="tab" href="#tab_cancelar" >
-                                                <button class="btn btn-app "  style="color: red">
-                                                    <i class="fas fa-window-close"></i> Cancelar
-                                                </button>
-                                            </a>
-                                        </li>
-                                    </ul>
-
-                                @else
-                                    <ul class="nav nav-pills ml-auto p-2">
-                                        <li class="nav-item">
-                                            <a data-toggle="tab" href="#tab_finalizar" >
-                                                <button class="btn btn-app"  style="color: green">
-                                                    <i class="far fa-check-square"></i> Finalizar
-                                                </button>
-                                            </a>
-                                        </li>
-                                        <li class="nav-item">
-                                            <a data-toggle="tab" href="#tab_cancelar" >
-                                                <button class="btn btn-app "  style="color: red">
-                                                    <i class="fas fa-window-close"></i> Cancelar
-                                                </button>
-                                            </a>
-                                        </li>
-                                        <li class="nav-item">
-                                            <a href="#tab_retornar" data-toggle="tab">
-                                                <button class="btn btn-app " name="submitbutton" value="0" type="submit" style="color: rgb(0, 0, 0)">
-                                                    <i class="fas fa-undo"></i> Retornar
-                                                </button>
-                                            </a>
-                                        </li>
-                                    </ul>
-
-                                @endif
-
-                                <input type="number" name="status" id="status" value="{{$solicitacao->status_solicit}}" style="display: none">
-                            </div>
-                            {{-- ////////////////////////////////////////////////////////////////////////////////////////////////////// --}}
-                            <div class="card">
-                                <div class="card-header d-flex p-0">
-                                {{-- <ul class="nav nav-pills ml-auto p-2">
-                                    <li class="nav-item"><a class="nav-link" href="#tab_finalizar" data-toggle="tab">Finalizar</a></li>
-                                    <li class="nav-item"><a class="nav-link" href="#tab_cancelar" data-toggle="tab">Cancelar</a></li>
-                                    <li class="nav-item"><a class="nav-link" href="#tab_retornar" data-toggle="tab">Retornar</a></li>
-                                    <li class="nav-item dropdown"> --}}
-                                    {{-- <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#">
-                                        Opções <span class="caret"></span>
-                                    </a>
-                                    <div class="dropdown-menu">
-                                        <a class="dropdown-item" tabindex="-1" href="#tab_iniciar" data-toggle="tab">Iniciar</a>
-                                        <a class="dropdown-item" tabindex="-1" href="#tab_finalizar" data-toggle="tab">Finalizar</a>
-                                        <a class="dropdown-item" tabindex="-1" href="#tab_cancelar" data-toggle="tab">Cancelar</a>
-                                        <div class="dropdown-divider"></div>
-                                        <a class="dropdown-item" tabindex="-1" href="#tab_retornar" data-toggle="tab">Retornar</a>
-                                    </div> --}}
-                                {{-- </li>
-                                </ul> --}}
-                                </div>
-                                <!-- /.card-header -->
-                                <div class="card-body">
-                                <div class="tab-content">
-                                    <div class="tab-pane active" id="tab_none">
-
-                                    </div>
-                                    <div class="tab-pane" id="tab_finalizar">
-                                        Formulario com os equipamentos para incluir no cadastro do paciente.
-
-                                        <div>
-                                          <div class="form-group">
-                                                <select name="hc" id="hc" class="form-control select2 select2-hidden-accessible" style="width: 100%;" aria-hidden="true" required>]
-                                                    @foreach ($equips as $equip)
-                                                        <option value="">Digite o nº patrimônio</option>
-                                                        <option value = "{{$equip->id}}">{{$equip->patr}} - {{$equip->name_equip}}</option>
-                                                    @endforeach
-                                                </select>
-                                          </div>
-                                          <!-- /.form-group -->
-                                        </div>
-
-
-                                        <button class="btn btn-app bg-success btn-block swalDefaultFinalized" name="submitbutton" value="2" type="submit" style="color: green">
-                                            <i class="far fa-check-square"></i> Finalizar
-                                        </button>
-                                        </div>
-                                    <!-- /.tab-pane -->
-                                    <div class="tab-pane" id="tab_cancelar">
-                                        Aponta o motivo do cancelamento da Solicitação.
-                                        <button class="btn btn-app bg-danger btn-block swalDefaultError" name="submitbutton" value="3" type="submit" style="color: red">
-                                            <i class="fas fa-window-close"></i> Cancelar
-                                        </button>
-                                    </div>
-                                    <!-- /.tab-pane -->
-                                    <div class="tab-pane " id="tab_retornar">
-                                       <p style="text-align: center">
-                                           Retorna a solicitação para a lista de solicitações pendentes.
-                                        </p>
-                                        <button class="btn btn-app bg-secondary btn-block swalDefaultInfo" name="submitbutton" value="0" type="submit" style="color: red">
-                                            <i class="fas fa-undo"></i> Retornar
-                                        </button>
-                                    </div>
-                                    <!-- /.tab-pane -->
-                                </div>
-                                <!-- /.tab-content -->
-                                </div><!-- /.card-body -->
-                            </div>
-
-
-
-                        </form>
-
-                    </div>
-
-                    <!-- /.card-body -->
+                  <div class="info-box-content">
+                    <span class="info-box-text">Likes</span>
+                    <span class="info-box-number">93,139</span>
+                  </div>
+                  <!-- /.info-box-content -->
                 </div>
-            @else
-                <div class="card card-primary collapsed-card">
-                    <div class="card-header">
-                    <h3 class="card-title">
-                        @if ($solicitacao->priority == 1)
-                            <i class="fas fa-exclamation" data-toggle="tooltip" title="Prioridade" style="color: red"></i>
-                        @endif
-                        @switch($solicitacao->type_solicit)
-                            @case(1)
-                                <i class="fas fa-plus-circle fa-lg" data-toggle="tooltip"
-                                    title="Implantação"
-                                    style="color: rgb(255, 255, 255)"></i>
-                            @break
-                            @case(2)
-                                <i class="fas fa-minus-circle fa-lg" data-toggle="tooltip"
-                                    title="Recolhimento"
-                                    style="color: black"></i>
-                            @break
-                            @case(3)
-                                <i class="fas fa-tools fa-lg" data-toggle="tooltip"
-                                    title="Troca/Manutenção"
-                                    style="color: rgb(255, 255, 255)"></i>
-                            @break
-                            @case(4)
-                                <i class="fas fa-dolly fa-lg" data-toggle="tooltip"
-                                    title="Mudança"></i>
-                            @break
-                            @case(5)
-                                <i class="fas fa-times-circle fa-lg" data-toggle="tooltip"
-                                    title="Recolhimento Total"
-                                    style="color: rgb(0, 0, 0)"></i>
-                            @break
-                            @case(6)
-                                <i class="fas fa-battery-full fa-lg" data-toggle="tooltip"
-                                    title="Cilindro O2"
-                                    style="color: rgb(252, 252, 252); transform: rotate(-90deg)"></i>
-                            @break
-
-                            @default
-                                <i class="fas fa-plus-circle" data-toggle="tooltip" title="nenhum"></i>
-                        @endswitch
-                        &nbsp Nº: {{$solicitacao->id}} ({{ $solicitacao->cliente }})&nbsp
-                                @if ($solicitacao->status_solicit ==0)
-                                    <i class="fas fa-ambulance" id="ambulancia" style="display: none"></i><br>
-                                @else
-                                    <i class="fas fa-ambulance" id="ambulancia" style="display: inline"></i><br>
-                                @endif
-                            <strong>{{ $solicitacao->name_pct }}</strong><br>
-                            {{ $solicitacao->bairro }}
-                    </h3>
-                    <div class="card-tools">
-                        <button type="button" class="btn btn-tool" data-card-widget="collapse"><i class="fas fa-plus"></i>
-                        </button>
-                    </div>
-                    </div>
-                    <div class="card-body">
-                        <i class="fas fa-map-marker-alt"></i>:
-                        {{ $solicitacao->rua }} - nº {{ $solicitacao->nr }}<br>
-                        {{ $solicitacao->compl }} - {{ $solicitacao->bairro }}<br>
-                        <hr>
-                        <i class="fas fa-procedures"></i>: {{ $solicitacao->equips_solicit }}<br>
-                            Obs:{{ $solicitacao->obs_solicit }}
-                            <hr>
-                            <a class="btn btn-app">
-                                <i class="fas fa-play"></i> Iniciar
-                            </a>
-                            <a class="btn btn-app">
-                                <i class="far fa-check-square"></i> Finalizar
-                            </a>
-                            <a class="btn btn-app">
-                                <i class="fas fa-window-close"></i> Cancelar
-                            </a>
-                    </div>
-                    <!-- /.card-body -->
-                </div>
+                <!-- /.info-box -->
+              </div>
             @endif
         @endforeach
     </div>
@@ -318,19 +136,19 @@
   <!-- Google Font: Source Sans Pro -->
   <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
 
-  <!-- Select2 -->
-  <link rel="stylesheet" href="{{asset('css/select2.min.css')}}">
-  <link rel="stylesheet" href="{{asset('css/select2-bootstrap4.min.css')}}">
-
   <!-- SweetAlert2 -->
   <link rel="stylesheet" href="{{asset('css/bootstrap-4.min.css')}}">
   <!-- Toastr -->
   <link rel="stylesheet" href="{{asset('css/toastr.css')}}">
 
- <!-- DataTables -->
- <link rel="stylesheet" href="css/dataTables.bootstrap4.min.css">
- <link rel="stylesheet" href="css/responsive.bootstrap4.min.css">
- <link rel="stylesheet" href="css/buttons.bootstrap4.min.css">
+<!-- Select2 -->
+<link rel="stylesheet" href="{{asset('css/select2.min.css')}}">
+<link rel="stylesheet" href="{{asset('css/select2-bootstrap4.min.css')}}">
+
+<!-- DataTables -->
+<link rel="stylesheet" href="css/dataTables.bootstrap4.min.css">
+<link rel="stylesheet" href="css/responsive.bootstrap4.min.css">
+<link rel="stylesheet" href="css/buttons.bootstrap4.min.css">
 
 @stop
 
@@ -408,7 +226,6 @@
     // var dateStr = document.getElementById('data_solicit').split('-');
     // var dataBr = dateStr.val(dateStr[2]) + '/'
     // dateStr[1] + '/' + dateStr[0]);
-
     // console.log(dataBr);
 </script>
 
@@ -421,7 +238,6 @@ function iniciarAtendimento() {
     document.getElementById("ambulancia").style="display: inline";
     visibility = "visible"
     // style.display = "block"
-
   } else {
     txt = "You pressed Cancel!";
   }
@@ -589,3 +405,4 @@ function iniciarAtendimento() {
     });
   </script>
 @stop
+
