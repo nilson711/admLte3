@@ -47,4 +47,4 @@ Route::get('/solicitacoes', [App\Http\Controllers\SolicitacaoController::class, 
 Route::post('/iniciar_solicit/{id}', [App\Http\Controllers\SolicitacaoController::class, 'iniciar_solicit'])->name('iniciar_solicit');
 Route::post('/cancelar_solicit/{id}', [App\Http\Controllers\SolicitacaoController::class, 'cancelar_solicit'])->name('cancelar_solicit');
 Route::post('/add_equip_pct/{id}', [App\Http\Controllers\SolicitacaoController::class, 'add_equip_pct'])->name('add_equip_pct');
-
+Route::get('/edit_solicit/{id}', [App\Http\Controllers\SolicitacaoController::class, 'edit_solicit'])->name('edit_solicit');

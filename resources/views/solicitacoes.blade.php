@@ -17,6 +17,8 @@
         @foreach ($solicitacoes as $solicitacao )
             @if ($solicitacao->priority == 0)
             <div class="col-12">
+              
+              <a href="{{route('edit_solicit', $solicitacao->id)}}">
                 <div class="info-box">
                   <span class="info-box-icon bg-info">
                     @switch($solicitacao->type_solicit)
@@ -59,21 +61,45 @@
                         <span class="info-box-number">
                           Nº: {{$solicitacao->id}} ({{ $solicitacao->cliente }})
                             @if ($solicitacao->status_solicit == 0)
-                            <i class="fas fa-ambulance" id="ambulancia" style="display: none"></i><br>
+                              <i class="fas fa-ambulance" id="ambulancia" style="display: none"></i><br>
                             @else
-                            <i class="fas fa-ambulance" id="ambulancia" data-toggle="tooltip" title="Em atendimento" style="display: inline; color:rgb(255, 81, 0)"></i><br>
+                              <i class="fas fa-ambulance" id="ambulancia" data-toggle="tooltip" title="Em atendimento" style="display: inline; color:rgb(255, 81, 0)"></i><br>
                             @endif
                         </span>
-                    <span class="info-box-text">
-
-                            <p>{{ $solicitacao->name_pct }}</p>
-                            <i class="fas fa-map-marker-alt" data-toggle="tooltip" title="{{ $solicitacao->bairro }}"></i>
-
-                    </span>
+                        <span class="info-box-text">
+                                <p>{{ $solicitacao->name_pct }}</p>
+                                {{-- <i class="fas fa-map-marker-alt" data-toggle="tooltip" title="{{ $solicitacao->bairro }}"></i> --}}
+                        </span>
                   </div>
                   <!-- /.info-box-content -->
                 </div>
                 <!-- /.info-box -->
+              </a>
+                
+                      <!-- Modal -->
+                      <div class="modal fade" id="modalFinalizar" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                          <div class="modal-dialog modal-dialog-centered" role="document">
+                          <div class="modal-content">
+                              <div class="modal-header">
+                              <h5 class="modal-title" id="exampleModalLabel">Finalizar Solicitação</h5>
+                              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                  <span aria-hidden="true">&times;</span>
+                              </button>
+                              </div>
+                              <div class="modal-body">
+                              Aqui puxa todas as linhas lançadas na tabela itens do paciente.
+                              </div>
+                              <div class="modal-footer">
+                                <div class="btn-group mr-5" role="group">
+                                  <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                                </div>
+                                <div class="btn-group mr-2" role="group">
+                                  <button type="button" class="btn btn-primary">Save changes</button>
+                                </div>
+                              </div>
+                          </div>
+                          </div>
+                      </div>
             </div>
             @else
             <div class="col-12">
@@ -116,8 +142,17 @@
                     </span>
 
                   <div class="info-box-content">
-                    <span class="info-box-text">Likes</span>
-                    <span class="info-box-number">93,139</span>
+                    <span class="info-box-number">
+                      Nº: {{$solicitacao->id}} ({{ $solicitacao->cliente }})
+                            @if ($solicitacao->status_solicit == 0)
+                              <i class="fas fa-ambulance" id="ambulancia" style="display: none"></i><br>
+                            @else
+                              <i class="fas fa-ambulance" id="ambulancia" data-toggle="tooltip" title="Em atendimento" style="display: inline; color:rgb(255, 81, 0)"></i><br>
+                            @endif
+                    </span>
+                    <span class="info-box-text">
+                      <p>{{ $solicitacao->name_pct }}</p>
+                    </span>
                   </div>
                   <!-- /.info-box-content -->
                 </div>

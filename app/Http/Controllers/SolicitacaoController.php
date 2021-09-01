@@ -11,6 +11,10 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use SebastianBergmann\Environment\Console;
 
+use App\Models\Cidade;
+use App\Models\Cliente;
+
+
 class SolicitacaoController extends Controller
 {
 
@@ -101,8 +105,6 @@ public function add_equip_pct(Request $request, $id){
 }
 
 
-
-
 ///========================================================================================================================
     /**
      * Display a listing of the resource.
@@ -124,8 +126,47 @@ public function add_equip_pct(Request $request, $id){
         $equips = DB::SELECT("SELECT * FROM equipamentos WHERE pct_equip = 0");
 
         return view('solicitacoes', ['solicitacoes'=>$solicitacoes] + ['equips'=>$equips]);
+    }
 
+    /////////////////SELECIONA A SOLICITAÇÃO ATUAL E EXIBE SUAS INFORMAÇÕES PARA EDIÇÃO /////////////////////
 
+    public function edit_solicit($id)
+    {
+        
+
+        $pct_sel = new Pct;
+        
+        $allCities = new Cidade;
+        $allCities = DB::SELECT("SELECT * from cidades ORDER BY nome");
+
+        $clientes = new Cliente;
+        $clientes = DB::SELECT("SELECT * FROM clientes");
+
+        $allEquipsEstoque = DB::SELECT("SELECT name_equip, count(*) AS qtdName 
+                                        FROM equipamentos 
+                                        WHERE pct_equip = 0 
+                                        GROUP BY name_equip 
+                                        ORDER BY name_equip");
+        //O count(*) faz a contagem em cada tipo de equipamento pelo group e atribui a qtdName e este pode ser buscado na view
+        $allEquipsEstoqueCount = Count($allEquipsEstoque);
+
+        $fornecedores =  new Fornecedor();
+        $fornecedores = DB::SELECT("SELECT id, name_fornec FROM fornecedors");
+
+        $solicitacoes = new Solicitacao();
+        $solicitacoes = DB::SELECT("SELECT equips_solicit, obs_solicit FROM solicitacaos WHERE pct_solicit = $id AND status_solicit=0");
+        
+        $solicitSel = Solicitacao::find($id);
+
+        $solicitAtual = DB::SELECT("SELECT S.id, S.priority, S.status_solicit, P.name_pct, P.id_hc, S.type_solicit, S.date_solicit, C.cliente, P.rua, P.nr, P.bairro, P.compl, S.equips_solicit, S.obs_solicit
+                        FROM solicitacaos AS S
+                        INNER JOIN pcts AS P ON S.pct_solicit = P.id
+                        INNER JOIN clientes AS C ON C.id = P.id_hc
+                        WHERE S.id = $id
+                        ");
+                        //Este select com INNER JOIN tem que ser recebido na view por num foeach
+
+        return view('edit_solicit', ['solicitSel'=>$solicitSel] + ['pct_sel'=>$pct_sel] +  compact('solicitAtual'));
 
     }
 
