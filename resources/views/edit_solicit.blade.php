@@ -11,9 +11,14 @@
 <body>
 
 <div class="col-md-12">
-  
-  <p>Detalhes da Solicitação</p>
+  <div class="row">
+    <div class="col-sm-6">
+      <p>Detalhes da Solicitação</p>
+    </div>
+    
+  </div>
 
+  @foreach ($solicitAtual as $atual)
   <div class="card card-primary">
     <div class="card-header">
       <h3 class="card-title">
@@ -51,46 +56,77 @@
               @default
                   <i class="fas fa-plus-circle" data-toggle="tooltip" title="nenhum"></i>
           @endswitch
-           nº: {{$solicitSel->id}}
-           
-      </h3>
+           nº: {{$solicitSel->id}} ({{$atual->cliente}})
+           @if ($atual->status_solicit ==0)
+              <i class="fas fa-ambulance" id="ambulancia" style="display: none"></i><br>
+          @else
+              <i class="fas fa-ambulance" id="ambulancia" style="display: inline; color: yellow"></i><br>
+          @endif
+
+        </h3>
+        
+          <div class="card-tools float-right" >
+            <button type="button" class="btn btn-tool">
+              <a href="{{route('solicitacoes')}}">
+                <i class="fas fa-times fa-2x" ></i>
+              </a>
+            </button>
+          </div>
     </div>
     <!-- /.card-header -->
     <!-- form start -->
     
-@foreach ($solicitAtual as $atual)
-  {{$atual->name_pct}}
-  {{$atual->cliente}}
+
 
   <div class="card-body">
+    <label>
+      PCT: {{$atual->name_pct}}
+      PCT: {{$atual->id}}
+      
+    </label>  <br>
     <i class="fas fa-map-marker-alt"></i>:
     {{ $atual->rua }} - nº {{ $atual->nr }}<br>
     {{ $atual->compl }} - {{ $atual->bairro }}<br>
     <hr>
     <i class="fas fa-procedures"></i>:
-
     <div>
         @foreach (explode(',', $atual->equips_solicit) as $itemEquip) {{-- Separa os itens por vírgula e joga numa lista --}}
             <div class="form-group">
+              <div>
+                  <li class="li_itens" >{{$itemEquip}}</li>
+                    {{-- <i class="fas fa-plus"></i> --}}
+                    @csrf
+                    <form action="{{route('add_equip_pct')}}" method="get">
+                      <div class="input-group input-group-sm">
+                          <select name="selectEquip" class="selectEquip form-control select2 select2-hidden-accessible" onchange="coletaProdutoSelecionado()" style="width: 100%;" aria-hidden="true" required>]
+                            <option value="" selected>Selecione</option>
+                              @foreach ($equips as $equip)
+                              <option value = "{{$equip->id}}">{{$equip->patr}} - {{$equip->name_equip}}</option>
+                              @endforeach
+                          </select>
+                        </div>
+                        <hr>
+                        
+                      {{-- <a href="javascript:history.back()">
+                        <button type="submit">Confirma</button>
 
-                    <li style="line-height: 40%">{{$itemEquip}}</li>
-
-                {{-- <div>
-                    <i class="fas fa-plus"></i>
-                    <select class="form-control select2 select2-hidden-accessible" style="width: 100%;" aria-hidden="true" required>]
-                                <option value="" selected>Selecione</option>
-                            @foreach ($equips as $equip)
-                                <option value = "{{$equip->id}}">{{$equip->patr}} - {{$equip->name_equip}}</option>
-                                @endforeach
-                        </select>
-
-                </div> --}}
+                      </a> --}}
+                      
+                      <input type="text" name="pctForEquip" value="{{$atual->id}}" style="display: none">
+                      
+                      @endforeach
+                      <a href="javascript:history.back()">
+                        <button type="submit" class="btn btn-info btn-flat">Ok</button>
+                      </a>
+                    </form>
+                </div>
                     {{-- <hr> --}}
             </div>
-        @endforeach
             <!-- /.form-group -->
     </div>
-
+    <label for="totItens">Total de itens:</label>
+    <input id="totItens" type="text" style="border: none" disabled><br>
+    
         Obs: {{ $atual->obs_solicit }}
         <hr>
     <form action="{{route('iniciar_solicit', $atual->id)}}" method="post">
@@ -208,7 +244,6 @@
         </div>
 
 
-
     </form>
 
 </div>
@@ -231,6 +266,14 @@
      <!-- SweetAlert2 -->
     <link rel="stylesheet" href= {{asset('css/bootstrap-4.min.css')}}>
 
+    <!-- Select2 -->
+<link rel="stylesheet" href="{{asset('css/select2.min.css')}}">
+<link rel="stylesheet" href="{{asset('css/select2-bootstrap4.min.css')}}">
+
+<!-- DataTables -->
+<link rel="stylesheet" href="{{asset('css/dataTables.bootstrap4.min.css')}}">
+<link rel="stylesheet" href="{{asset('css/responsive.bootstrap4.min.css')}}">
+<link rel="stylesheet" href="{{asset('css/buttons.bootstrap4.min.css')}}">
 
 @stop
 
@@ -254,6 +297,26 @@
 <!-- AdminLTE App -->
 <script src= {{asset('js/adminlte.min.js')}}></script>
 <script src= {{asset('js/demo.js')}}></script>
+<!-- jQuery -->
+{{-- <script src= {{asset('js/jquery.min.js')}}></script> --}}
+
+<!-- Select2 -->
+<script src= {{asset('js/select2.full.min.js')}}></script>
+
+<!-- DataTables  & Plugins -->
+<script src= {{asset('js/jquery.dataTables.min.js')}}></script>
+<script src= {{asset('js/dataTables.bootstrap4.min.js')}}></script>
+<script src= {{asset('js/dataTables.responsive.min.js')}}></script>
+<script src= {{asset('js/responsive.bootstrap4.min.js')}}></script>
+<script src= {{asset('js/dataTables.buttons.min.js')}}></script>
+<script src= {{asset('js/buttons.bootstrap4.min.js')}}></script>
+<script src= {{asset('js/jszip.min.js')}}></script>
+<script src= {{asset('js/pdfmake.min.js')}}></script>
+<script src= {{asset('js/vfs_fonts.js')}}></script>
+<script src= {{asset('js/buttons.html5.min.js')}}></script>
+<script src= {{asset('js/buttons.print.min.js')}}></script>
+<script src= {{asset('js/buttons.colVis.min.js')}}></script>
+<script src= {{asset('js/functions-equips.js')}} defer></script>
 
 <script>
     // <!-- Adicionando Javascript -->
@@ -556,9 +619,52 @@ function mcc(v){
   });
 </script>
 
+<script>
+  $(function () {
+    //Initialize Select2 Elements
+    $('.select2').select2();
+
+  //Initialize Select2 Elements
+    $('.select2bs4').select2({
+      theme: 'bootstrap4'
+    });
+    $("#example1").DataTable({
+      "responsive": true, "lengthChange": false, "autoWidth": false
+      // ,        "buttons": ["copy", "csv", "excel", "pdf", "print"]
+    }).buttons().container().appendTo('#example1_wrapper .col-md-6:eq(0)');
+
+    $("#table_implantados").DataTable({
+      "responsive": true, "lengthChange": false, "autoWidth": false
+      // ,        "buttons": ["copy", "csv", "excel", "pdf", "print"]
+    }).buttons().container().appendTo('#implantados_wrapper .col-md-6:eq(0)');
+
+    $("#table_manutencao").DataTable({
+      "responsive": true, "lengthChange": false, "autoWidth": false
+      // ,        "buttons": ["copy", "csv", "excel", "pdf", "print"]
+    }).buttons().container().appendTo('#manutencao_wrapper .col-md-6:eq(0)');
+
+
+    $('#example2').DataTable({
+      "paging": true,
+      "lengthChange": false,
+      "searching": false,
+      "ordering": true,
+      "info": true,
+      "autoWidth": false,
+      "responsive": true,
+    });
+  });
+</script>
 {{-- <script>
       console.log($solicitAtual);
 </script> --}}
+<script type="text/javascript">
+  $(document).ready(function(){   
+    //AQUI ACONTECE A CONTAGEM  
+      // alert($(".li_itens").length) 
+    document.getElementById('totItens').value = ($(".li_itens").length);                                
+  });
+</script>
 
 @stop
 

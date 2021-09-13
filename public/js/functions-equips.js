@@ -108,6 +108,29 @@ function locacaoSelecionada() {
 }
 
 /*********************************************************************************************************************************
+ * Função coletaProdutoSelecionado busca na tabela o nome dos itens selecionados
+ */
+
+ function coletaProdutoSelecionado(){
+    var idsEquip = document.getElementsByClassName('selectEquip');  //Seleciona todos os objetos da classe "selectEquip"
+    coletaIDsEquip(idsEquip);
+ }
+ function coletaIDsEquip(dados){
+    var array_dados_equip = dados;                            //cria variável com os dados do array
+    var newArrayEquip = [];                                  //cria o array
+    for(var x = 0; x <= array_dados_equip.length; x++){
+         if(typeof array_dados_equip[x] == 'object'){         //typeof retorna o tipo de operando. verifica de o array_dados_equip é um objeto
+        //    if(array_dados_equip[x].checked){                  //verifica no array_dados_equip se estão marcados
+        //    }
+           newArrayEquip.push(array_dados_equip[x].value)      //o push adiciona o dado selecionado ao array
+        }
+    }
+    console.log(newArrayEquip);
+    }
+    
+
+
+/*********************************************************************************************************************************
  * Função coletaDados busca na tabela o nome dos itens selecionados
  */
 

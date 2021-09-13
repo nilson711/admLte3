@@ -96,15 +96,45 @@ public function iniciar_solicit(Request $request, $id){
 }
 ///========================================================================================================================
 
-public function add_equip_pct(Request $request, $id){
-    if ($request->btn_submit_equip > 0) {
-            $selEquipPct = Equipamento::find($id);
-            $solicit = new Solicitacao();
-            $selEquipPct->pct_equip = $solicit->pct_solicit;
-    }
+public function add_equip_pct(Request $request){
+    
+    $selectEquips = $request->input('selectEquip');
+    $pctForEquip = $request->input('pctForEquip');
+
+   
+    
+    
+//BUSCA OS DADOS OS INPUTS
+// $selectEquip = $request->input('selectEquip');
+// $pctForEquip = $request->input('pctForEquip');
+
+
+//SALVA OS DADOS NO CAMPO INDINCANDO O PCT ATUAL
+// $regEquipSelecionado = Equipamento::find($selectEquip);
+// $regEquipSelecionado->pct_equip = $pctForEquip;
+// $regEquipSelecionado->save();
+
+return back()->withInput();
+
+// echo($pctForEquip);
+// echo($regEquipSelecionado);
 }
 
+///========================================================================================================================
+public function atualizarEstoque($input)
+{
 
+$resultado = [];
+        foreach ($input as $result) {
+            $resultado = $result;  
+            //dd($resultado['id']);
+            $teste = $this->produto
+                ->where([['id', $resultado['id']]])
+                ->update($resultado, 'estoque');
+            }
+
+            return $resultado;
+}
 ///========================================================================================================================
     /**
      * Display a listing of the resource.
@@ -150,6 +180,9 @@ public function add_equip_pct(Request $request, $id){
         //O count(*) faz a contagem em cada tipo de equipamento pelo group e atribui a qtdName e este pode ser buscado na view
         $allEquipsEstoqueCount = Count($allEquipsEstoque);
 
+        $equips = new Equipamento();
+        $equips = DB::SELECT("SELECT * FROM equipamentos WHERE pct_equip = 0");
+
         $fornecedores =  new Fornecedor();
         $fornecedores = DB::SELECT("SELECT id, name_fornec FROM fornecedors");
 
@@ -158,7 +191,7 @@ public function add_equip_pct(Request $request, $id){
         
         $solicitSel = Solicitacao::find($id);
 
-        $solicitAtual = DB::SELECT("SELECT S.id, S.priority, S.status_solicit, P.name_pct, P.id_hc, S.type_solicit, S.date_solicit, C.cliente, P.rua, P.nr, P.bairro, P.compl, S.equips_solicit, S.obs_solicit
+        $solicitAtual = DB::SELECT("SELECT S.id, S.priority, S.status_solicit, P.name_pct, P.id, P.id_hc, S.type_solicit, S.date_solicit, C.cliente, P.rua, P.nr, P.bairro, P.compl, S.equips_solicit, S.obs_solicit
                         FROM solicitacaos AS S
                         INNER JOIN pcts AS P ON S.pct_solicit = P.id
                         INNER JOIN clientes AS C ON C.id = P.id_hc
@@ -166,7 +199,7 @@ public function add_equip_pct(Request $request, $id){
                         ");
                         //Este select com INNER JOIN tem que ser recebido na view por num foeach
 
-        return view('edit_solicit', ['solicitSel'=>$solicitSel] + ['pct_sel'=>$pct_sel] +  compact('solicitAtual'));
+        return view('edit_solicit', ['solicitSel'=>$solicitSel] + ['pct_sel'=>$pct_sel] + ['equips'=>$equips] +  compact('solicitAtual'));
 
     }
 
