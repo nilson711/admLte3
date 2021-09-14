@@ -98,23 +98,22 @@ public function iniciar_solicit(Request $request, $id){
 
 public function add_equip_pct(Request $request){
     
-    $selectEquips = $request->input('selectEquip');
-    $pctForEquip = $request->input('pctForEquip');
+    //BUSCA OS DADOS OS INPUTS
+    $enviarEquip = $request->input('enviarEquip');  //Este input contém o array separado por vírgula
+    $pctForEquip = $request->input('pctForEquip');  //Este input busca o id do paciente
 
-   
-    
-    
-//BUSCA OS DADOS OS INPUTS
-// $selectEquip = $request->input('selectEquip');
-// $pctForEquip = $request->input('pctForEquip');
+    //SELECIONA O EQUIPAMENTO E ATRIBUI O PACIENTE ATUAL A ELE
+    foreach (explode(',', $enviarEquip) as $equip){     //separa o o conteúdo do input por vírgula
+        $regEquipSelecionado = Equipamento::find($equip);   //busca no Bd o id do equipamento
+        $regEquipSelecionado->pct_equip = $pctForEquip;     //atribui o id do pct ao equipamento
+       
+        $regEquipSelecionado->save();
+        // echo '<pre>'; 
+        // print_r($regEquipSelecionado);
+    }
+    echo("Equipamentos implantados com sucesso!");
 
-
-//SALVA OS DADOS NO CAMPO INDINCANDO O PCT ATUAL
-// $regEquipSelecionado = Equipamento::find($selectEquip);
-// $regEquipSelecionado->pct_equip = $pctForEquip;
-// $regEquipSelecionado->save();
-
-return back()->withInput();
+    // return back()->withInput();
 
 // echo($pctForEquip);
 // echo($regEquipSelecionado);

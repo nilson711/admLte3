@@ -108,7 +108,7 @@ function locacaoSelecionada() {
 }
 
 /*********************************************************************************************************************************
- * Função coletaProdutoSelecionado busca na tabela o nome dos itens selecionados
+ * Função coletaProdutoSelecionado busca na tabela o id dos itens selecionados
  */
 
  function coletaProdutoSelecionado(){
@@ -116,16 +116,23 @@ function locacaoSelecionada() {
     coletaIDsEquip(idsEquip);
  }
  function coletaIDsEquip(dados){
-    var array_dados_equip = dados;                            //cria variável com os dados do array
-    var newArrayEquip = [];                                  //cria o array
+    var array_dados_equip = dados;                                  //cria variável com os dados do array
+    var newArrayEquip = [];                                         //cria o array
     for(var x = 0; x <= array_dados_equip.length; x++){
-         if(typeof array_dados_equip[x] == 'object'){         //typeof retorna o tipo de operando. verifica de o array_dados_equip é um objeto
-        //    if(array_dados_equip[x].checked){                  //verifica no array_dados_equip se estão marcados
-        //    }
-           newArrayEquip.push(array_dados_equip[x].value)      //o push adiciona o dado selecionado ao array
+         if(typeof array_dados_equip[x] == 'object'){               //typeof retorna o tipo de operando. verifica de o array_dados_equip é um objeto
+           newArrayEquip.push(array_dados_equip[x].value)           //o push adiciona o dado selecionado ao array
         }
     }
     console.log(newArrayEquip);
+    
+    let sum = newArrayEquip;
+    const codeHTML = sum.reduce((html, item) => {
+        return html + "<li>" + item + "</li>";
+            }, "");
+  
+    document.querySelector("#equipSelecionados").innerHTML = sum;
+
+    document.getElementById('enviarEquip').value = document.querySelector("#equipSelecionados").innerHTML;
     }
     
 

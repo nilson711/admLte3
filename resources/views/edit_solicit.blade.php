@@ -118,6 +118,10 @@
                       <a href="javascript:history.back()">
                         <button type="submit" class="btn btn-info btn-flat">Ok</button>
                       </a>
+                      <div id="equipSelecionados" style="display: none"></div>
+                      <input type="text" name="enviarEquip" id="enviarEquip">
+                    
+                      
                     </form>
                 </div>
                     {{-- <hr> --}}
