@@ -58,7 +58,8 @@ public function iniciar_solicit(Request $request, $id){
             $solicit = Solicitacao::find($id);
             $solicit->status_solicit = 0;
             $solicit->save();
-            return back()->withInput();
+            // return back()->withInput();
+            return redirect()->to('/solicitacoes');
         break;
         case '1':
             //SE O VALUE DO SBMITBUTTON FOR 1 (RETORNA STATUS PARA 1 - EM ATENDIMENTO)
@@ -67,7 +68,9 @@ public function iniciar_solicit(Request $request, $id){
             $solicit = Solicitacao::find($id);
             $solicit->status_solicit = 1;
             $solicit->save();
-            return back()->withInput();
+            // return back()->withInput();
+            // return view('solicitacoes');
+            return redirect()->to('/solicitacoes');
         break;
         case '2':
             //SE O VALUE DO SBMITBUTTON FOR 2 (RETORNA STATUS PARA 2 - FINALIZADA)
@@ -77,7 +80,8 @@ public function iniciar_solicit(Request $request, $id){
             $solicit->status_solicit = 2;
 
             $solicit->save();
-            return back()->withInput();
+            // return back()->withInput();
+            return redirect()->to('/solicitacoes');
         break;
         case '3':
             //SE O VALUE DO SBMITBUTTON FOR 3 (RETORNA STATUS PARA 3 - CANCELADA)
@@ -86,7 +90,8 @@ public function iniciar_solicit(Request $request, $id){
             $solicit = Solicitacao::find($id);
             $solicit->status_solicit = 3;
             $solicit->save();
-            return back()->withInput();
+            // return back()->withInput();
+            return redirect()->to('/solicitacoes');
         break;
 
         default:
@@ -190,7 +195,7 @@ $resultado = [];
         
         $solicitSel = Solicitacao::find($id);
 
-        $solicitAtual = DB::SELECT("SELECT S.id, S.priority, S.status_solicit, P.name_pct, P.id, P.id_hc, S.type_solicit, S.date_solicit, C.cliente, P.rua, P.nr, P.bairro, P.compl, S.equips_solicit, S.obs_solicit
+        $solicitAtual = DB::SELECT("SELECT S.id AS SolicitId, S.priority, S.status_solicit, P.name_pct, P.id, P.id_hc, S.type_solicit, S.date_solicit, C.cliente, P.rua, P.nr, P.bairro, P.compl, S.equips_solicit, S.obs_solicit
                         FROM solicitacaos AS S
                         INNER JOIN pcts AS P ON S.pct_solicit = P.id
                         INNER JOIN clientes AS C ON C.id = P.id_hc

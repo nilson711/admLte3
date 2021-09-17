@@ -13,7 +13,7 @@
 <div class="col-md-12">
   <div class="row">
     <div class="col-sm-6">
-      <p>Detalhes da Solicitação</p>
+      {{-- <p>Detalhes da Solicitação</p> --}}
     </div>
     
   </div>
@@ -57,18 +57,18 @@
                   <i class="fas fa-plus-circle" data-toggle="tooltip" title="nenhum"></i>
           @endswitch
            nº: {{$solicitSel->id}} ({{$atual->cliente}})
-           @if ($atual->status_solicit ==0)
-              <i class="fas fa-ambulance" id="ambulancia" style="display: none"></i><br>
-          @else
-              <i class="fas fa-ambulance" id="ambulancia" style="display: inline; color: yellow"></i><br>
+           @if ($atual->status_solicit == 1)
+            <i class="fas fa-ambulance" id="ambulancia" style="display: inline; color: yellow" data-toggle="tooltip" title="Em atendimento"></i><br>
+           @else
+            <i class="fas fa-ambulance" id="ambulancia" style="display: none"></i><br>
           @endif
 
         </h3>
         
           <div class="card-tools float-right" >
-            <button type="button" class="btn btn-tool">
+            <button type="button" class="btn btn-block btn-danger btn-sm">
               <a href="{{route('solicitacoes')}}">
-                <i class="fas fa-times fa-2x" ></i>
+                <i class="fas fa-times" ></i>
               </a>
             </button>
           </div>
@@ -115,11 +115,9 @@
                       <input type="text" name="pctForEquip" value="{{$atual->id}}" style="display: none">
                       
                       @endforeach
-                      <a href="javascript:history.back()">
-                        <button type="submit" class="btn btn-info btn-flat">Ok</button>
-                      </a>
+                      
                       <div id="equipSelecionados" style="display: none"></div>
-                      <input type="text" name="enviarEquip" id="enviarEquip">
+                      <input type="text" name="enviarEquip" id="enviarEquip" style="display: none">
                     
                       
                     </form>
@@ -128,12 +126,20 @@
             </div>
             <!-- /.form-group -->
     </div>
-    <label for="totItens">Total de itens:</label>
-    <input id="totItens" type="text" style="border: none" disabled><br>
+    <div class="row">
+      <div class="col-5">
+        <label>Total de itens:</label>
+      </div>
+      <div class="col-6">
+        <strong>
+          <input id="totItens" type="text" style="border: none" disabled>
+        </strong>
+      </div>
+    </div>
     
         Obs: {{ $atual->obs_solicit }}
         <hr>
-    <form action="{{route('iniciar_solicit', $atual->id)}}" method="post">
+    <form action="{{route('iniciar_solicit', $atual->SolicitId)}}" method="post">
         @csrf
         <div class="form-group">
             @if($atual->status_solicit == 0)
@@ -146,8 +152,8 @@
                         </a>
                     </li>
                     <li class="nav-item">
-                        <a data-toggle="tab" href="#tab_cancelar" >
-                            <button class="btn btn-app "  style="color: red">
+                        <a >
+                            <button class="btn btn-app swalDefaultCancel" name="submitbutton" value="3"  style="color: red">
                                 <i class="fas fa-window-close"></i> Cancelar
                             </button>
                         </a>
@@ -156,13 +162,13 @@
 
             @else
                 <ul class="nav nav-pills ml-auto p-2">
-                    <li class="nav-item">
+                    {{-- <li class="nav-item">
                         <a data-toggle="modal" data-target="#modalFinalizar" >
                             <button class="btn btn-app"  style="color: green">
                                 <i class="far fa-check-square"></i> Modal
                             </button>
                         </a>
-                    </li>
+                    </li> --}}
                             <!-- Modal -->
                             <div class="modal fade" id="modalFinalizar" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
                                 <div class="modal-dialog" role="document">
@@ -184,22 +190,22 @@
                                 </div>
                             </div>
                     <li class="nav-item">
-                        <a data-toggle="tab" href="#tab_finalizar" >
-                            <button class="btn btn-app"  style="color: green">
+                        <a  >
+                            <button class="btn btn-app swalDefaultFinalized" name="submitbutton" value="2"  style="color: green">
                                 <i class="far fa-check-square"></i> Finalizar
                             </button>
                         </a>
                     </li>
                     <li class="nav-item">
-                        <a data-toggle="tab" href="#tab_cancelar" >
-                            <button class="btn btn-app "  style="color: red">
+                        <a  >
+                            <button class="btn btn-app swalDefaultCancel" name="submitbutton" value="3"  style="color: red">
                                 <i class="fas fa-window-close"></i> Cancelar
                             </button>
                         </a>
                     </li>
                     <li class="nav-item">
-                        <a href="#tab_retornar" data-toggle="tab">
-                            <button class="btn btn-app " name="submitbutton" value="0" type="submit" style="color: rgb(0, 0, 0)">
+                        <a >
+                            <button class="btn btn-app swalDefaultInfo" name="submitbutton" value="0" type="submit" style="color: rgb(0, 0, 0)">
                                 <i class="fas fa-undo"></i> Retornar
                             </button>
                         </a>
@@ -211,38 +217,7 @@
             <input type="number" name="status" id="status" value="{{$atual->status_solicit}}" style="display: none">
         </div>
         {{-- ////////////////////////////////////////////////////////////////////////////////////////////////////// --}}
-        <div class="card">
-           
-            <div class="card-body">
-            <div class="tab-content">
-                <div class="tab-pane active" id="tab_none">
-
-                </div>
-                <div class="tab-pane" id="tab_finalizar">
-                    Formulario com os equipamentos para incluir no cadastro do paciente.
-
-                    <button class="btn btn-app bg-success btn-block swalDefaultFinalized" name="submitbutton" value="2" type="submit" style="color: green">
-                        <i class="far fa-check-square"></i> Finalizar
-                    </button>
-                    </div>
-                <!-- /.tab-pane -->
-                <div class="tab-pane" id="tab_cancelar">
-                    Aponta o motivo do cancelamento da Solicitação.
-                    <button class="btn btn-app bg-danger btn-block swalDefaultError" name="submitbutton" value="3" type="submit" style="color: red">
-                        <i class="fas fa-window-close"></i> Cancelar
-                    </button>
-                </div>
-                <!-- /.tab-pane -->
-                <div class="tab-pane " id="tab_retornar">
-                   <p style="text-align: center">
-                       Retorna a solicitação para a lista de solicitações pendentes.
-                    </p>
-                    <button class="btn btn-app bg-secondary btn-block swalDefaultInfo" name="submitbutton" value="0" type="submit" style="color: red">
-                        <i class="fas fa-undo"></i> Retornar
-                    </button>
-                </div>
-                <!-- /.tab-pane -->
-            </div>
+        
             <!-- /.tab-content -->
             </div><!-- /.card-body -->
         </div>
@@ -471,8 +446,8 @@ function mcc(v){
 <script>
     $(function() {
     var Toast = Swal.mixin({
-      toast: true,
-      position: 'top-end',
+      toast: false,
+      position: 'center',
       showConfirmButton: false,
       timer: 3000
     });
@@ -480,19 +455,31 @@ function mcc(v){
     $('.swalDefaultSuccess').click(function() {
       Toast.fire({
         icon: 'success',
-        title: 'Dados do Paciente atualizados com sucesso!'
+        title: 'Solicitação iniciada com sucesso!'
+      })
+    });
+    $('.swalDefaultFinalized').click(function() {
+      Toast.fire({
+        icon: 'success',
+        title: 'Solicitação Finalizada!'
       })
     });
     $('.swalDefaultInfo').click(function() {
       Toast.fire({
         icon: 'info',
-        title: 'Lorem ipsum dolor sit amet, consetetur sadipscing elitr.'
+        title: 'Solicitação retornada!'
       })
     });
     $('.swalDefaultError').click(function() {
       Toast.fire({
         icon: 'error',
         title: 'Lorem ipsum dolor sit amet, consetetur sadipscing elitr.'
+      })
+    });
+    $('.swalDefaultCancel').click(function() {
+      Toast.fire({
+        icon: 'error',
+        title: 'Solicitação Cancelada!'
       })
     });
     $('.swalDefaultWarning').click(function() {

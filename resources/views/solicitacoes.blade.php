@@ -17,8 +17,6 @@
         @foreach ($solicitacoes as $solicitacao )
             @if ($solicitacao->priority == 0)
             <div class="col-12">
-              
-              <a href="{{route('edit_solicit', $solicitacao->id)}}">
                 <div class="info-box">
                   <span class="info-box-icon bg-info">
                     @switch($solicitacao->type_solicit)
@@ -55,15 +53,15 @@
                         @default
                             <i class="fas fa-plus-circle" data-toggle="tooltip" title="nenhum"></i>
                     @endswitch
-                    </span>
-
+                  </span>
+                  <a href="{{route('edit_solicit', $solicitacao->id)}}">
                   <div class="info-box-content">
                         <span class="info-box-number">
                           Nº: {{$solicitacao->id}} ({{ $solicitacao->cliente }})
-                            @if ($solicitacao->status_solicit == 0)
-                              <i class="fas fa-ambulance" id="ambulancia" style="display: none"></i><br>
-                            @else
+                            @if ($solicitacao->status_solicit == 1)
                               <i class="fas fa-ambulance" id="ambulancia" data-toggle="tooltip" title="Em atendimento" style="display: inline; color:rgb(255, 81, 0)"></i><br>
+                            @else
+                              <i class="fas fa-ambulance" id="ambulancia" style="display: none"></i><br>
                             @endif
                         </span>
                         <span class="info-box-text">
@@ -71,6 +69,7 @@
                                 {{-- <i class="fas fa-map-marker-alt" data-toggle="tooltip" title="{{ $solicitacao->bairro }}"></i> --}}
                         </span>
                   </div>
+                  
                   <!-- /.info-box-content -->
                 </div>
                 <!-- /.info-box -->
