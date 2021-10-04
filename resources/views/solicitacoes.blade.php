@@ -15,6 +15,7 @@
     <div>
 
         @foreach ($solicitacoes as $solicitacao )
+           
             @if ($solicitacao->priority == 0)
             <div class="col-12">
                 <div class="info-box">
@@ -53,27 +54,32 @@
                         @default
                             <i class="fas fa-plus-circle" data-toggle="tooltip" title="nenhum"></i>
                     @endswitch
+                                     
                   </span>
-                  <a href="{{route('edit_solicit', $solicitacao->id)}}">
+                  
                   <div class="info-box-content">
                         <span class="info-box-number">
-                          Nº: {{$solicitacao->id}} ({{ $solicitacao->cliente }})
+                          <small>
+                            Nº: {{$solicitacao->id}} ({{ $solicitacao->cliente }})
+                          </small>
                             @if ($solicitacao->status_solicit == 1)
-                              <i class="fas fa-ambulance" id="ambulancia" data-toggle="tooltip" title="Em atendimento" style="display: inline; color:rgb(255, 81, 0)"></i><br>
+                            <i class="fas fa-ambulance" id="ambulancia" data-toggle="tooltip" title={{$solicitacao->user_atend}} style="display: inline; color:rgb(255, 81, 0)"></i><br>
                             @else
-                              <i class="fas fa-ambulance" id="ambulancia" style="display: none"></i><br>
+                            <i class="fas fa-ambulance" id="ambulancia" style="display: none"></i><br>
                             @endif
-                        </span>
-                        <span class="info-box-text">
-                                <p>{{ $solicitacao->name_pct }}</p>
-                                {{-- <i class="fas fa-map-marker-alt" data-toggle="tooltip" title="{{ $solicitacao->bairro }}"></i> --}}
-                        </span>
+                          </span>
+                        <a href="{{route('edit_solicit', $solicitacao->id)}}">
+                              <span class="info-box-text">
+                                {{ $solicitacao->name_pct }}
+                              </span>
+                            </a>
+                            <small >{{ $solicitacao->bairro }}</small>
+                        {{-- <i class="fas fa-map-marker-alt" data-toggle="tooltip" title="{{ $solicitacao->bairro }}"></i> --}}
                   </div>
                   
                   <!-- /.info-box-content -->
                 </div>
                 <!-- /.info-box -->
-              </a>
                 
                       <!-- Modal -->
                       <div class="modal fade" id="modalFinalizar" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">

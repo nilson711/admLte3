@@ -57,11 +57,12 @@
                   <i class="fas fa-plus-circle" data-toggle="tooltip" title="nenhum"></i>
           @endswitch
            nº: {{$solicitSel->id}} ({{$atual->cliente}})
+           
            @if ($atual->status_solicit == 1)
-            <i class="fas fa-ambulance" id="ambulancia" style="display: inline; color: yellow" data-toggle="tooltip" title="Em atendimento"></i><br>
+              <i class="fas fa-ambulance" id="ambulancia" style="display: inline; color: yellow" data-toggle="tooltip" title={{$atual->user_atend}}></i><br>
            @else
-            <i class="fas fa-ambulance" id="ambulancia" style="display: none"></i><br>
-          @endif
+              <i class="fas fa-ambulance" id="ambulancia" style="display: none"></i><br>
+            @endif
 
         </h3>
         
@@ -84,76 +85,112 @@
       PCT: {{$atual->id}}
       
     </label>  <br>
-    <i class="fas fa-map-marker-alt"></i>:
-    {{ $atual->rua }} - nº {{ $atual->nr }}<br>
+    <i class="fas fa-map-marker-alt"></i>
+     {{ $atual->rua }} - nº {{ $atual->nr }}<br>
     {{ $atual->compl }} - {{ $atual->bairro }}<br>
+    <i class="fas fa-hand-point-right"></i>
+     {{ $atual->obs_solicit }}
     <hr>
-    <i class="fas fa-procedures"></i>:
+    <i class="fas fa-procedures"></i>
     <div>
+     
         @foreach (explode(',', $atual->equips_solicit) as $itemEquip) {{-- Separa os itens por vírgula e joga numa lista --}}
             <div class="form-group">
               <div>
                   <li class="li_itens" >{{$itemEquip}}</li>
                     {{-- <i class="fas fa-plus"></i> --}}
+                    <form action="{{route('add_equip_pct')}}" method="post">
                     @csrf
-                    <form action="{{route('add_equip_pct')}}" method="get">
+                    <input type="text" name="solicitForEquip" value="{{$solicitSel->id}}" style="display: none">
+                      @if ($atual->status_solicit == 0)
                       <div class="input-group input-group-sm">
-                          <select name="selectEquip" class="selectEquip form-control select2 select2-hidden-accessible" onchange="coletaProdutoSelecionado()" style="width: 100%;" aria-hidden="true" required>]
+                          <select name="selectEquip" class="selectEquip form-control select2 select2-hidden-accessible" onchange="coletaProdutoSelecionado()" on  style="width: 100%;" aria-hidden="true">]
                             <option value="" selected>Selecione</option>
                               @foreach ($equips as $equip)
                               <option value = "{{$equip->id}}">{{$equip->patr}} - {{$equip->name_equip}}</option>
                               @endforeach
                           </select>
-                        </div>
-                        <hr>
-                        
-                      {{-- <a href="javascript:history.back()">
-                        <button type="submit">Confirma</button>
-
-                      </a> --}}
-                      
+                      </div>
+                          
+                      <hr>
                       <input type="text" name="pctForEquip" value="{{$atual->id}}" style="display: none">
+
+                      @endif
+
                       
                       @endforeach
                       
                       <div id="equipSelecionados" style="display: none"></div>
-                      <input type="text" name="enviarEquip" id="enviarEquip" style="display: none">
-                    
                       
-                    </form>
+                      <input type="text" name="enviarEquip" id="enviarEquip" style="display: none">
+
+                      {{-- <input id="totItens" type="text" style="border: none; display: none" disabled ><br> --}}
+                      
+                      {{-- <input id="totImplantados" type="text" value="0" style="border: none" disabled><br> --}}
+                    
                 </div>
-                    {{-- <hr> --}}
+                @if ($atual->status_solicit == 0)
+                  <a id="btnConferido" style="visibility: hidden" >
+                      <button class="btn btn-app" type="button" data-toggle="modal" data-target='#modalConferir' style="color: green">
+                   
+                      {{-- <button class="btn btn-app" type="submit" style="color: green" name="submitbutton" value="2">   --}}
+                   
+                      <i class="fas fa-tasks"></i></i> Conferido
+                    </button>
+                  </a>
+                @else
+                
+                @endif
+                <hr>
+                <label for="">Equipamentos Selecionados</label>
+                @foreach ($equipsSel as $itemSel)
+                    <li>{{$itemSel->patr}} - {{$itemSel->name_equip}}</li>
+                @endforeach
             </div>
-            <!-- /.form-group -->
     </div>
-    <div class="row">
-      <div class="col-5">
-        <label>Total de itens:</label>
-      </div>
-      <div class="col-6">
-        <strong>
-          <input id="totItens" type="text" style="border: none" disabled>
-        </strong>
-      </div>
-    </div>
-    
-        Obs: {{ $atual->obs_solicit }}
-        <hr>
-    <form action="{{route('iniciar_solicit', $atual->SolicitId)}}" method="post">
-        @csrf
-        <div class="form-group">
+              <!-- Modal Conferir -->
+              <div class="modal fade" id="modalConferir" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                <div class="modal-dialog modal-dialog-centered" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Quantidade não confere</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                    </div>
+                    <div class="modal-body">
+                      <h5 id="txtAvisoQtd" style="color: red; display:none">Atenção - A quantidade de ítens solicitada é diferente da quantidade de itens selecionados!</h5>
+                      Justifique nas observações.
+                    <label for="obs_atend">Observações:</label><br>
+                    <textarea name="obs_atend" id="obs_atend" cols="38" rows="4"></textarea>
+                    </div>
+                    <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
+                    <button class="btn btn-primary swalDefaultFinalized" name="submitbutton" value="2" type="submit">Confirmar</button>
+                    </div>
+                </div>
+                </div>
+              </div>
+  </form>
+  <form action="{{route('iniciar_solicit', $atual->SolicitId)}}" method="post">
+    @csrf
+    <div class="form-group">
+          @if ($atual->status_solicit == 1)
+            <label for="obs_atend">Observações:</label><br>
+            <textarea name="obs_atend" id="obs_atend" cols="38" rows="4"></textarea>
+          @endif
             @if($atual->status_solicit == 0)
                 <ul class="nav nav-pills ml-auto p-2">
                     <li class="nav-item">
-                        <a >
-                            <button class="btn btn-app swalDefaultSuccess" name="submitbutton" value="1" type="submit" style="color: green">
+                        <a id="btnIniciar" >
+                            <button class="btn btn-app swalDefaultSuccess" onclick="txtCancelNoRequired()" name="submitbutton" value="1" type="submit" style="color: green; visibility: visible">
                                 <i class="fas fa-play"></i> Iniciar
                             </button>
                         </a>
                     </li>
                     <li class="nav-item">
-                        <a >
-                            <button class="btn btn-app swalDefaultCancel" name="submitbutton" value="3"  style="color: red">
+                        <a data-toggle="modal" data-target="#modalCancelar" onclick="txtCancelRequired()">
+                            <button class="btn btn-app" style="color: red">
                                 <i class="fas fa-window-close"></i> Cancelar
                             </button>
                         </a>
@@ -169,39 +206,24 @@
                             </button>
                         </a>
                     </li> --}}
-                            <!-- Modal -->
-                            <div class="modal fade" id="modalFinalizar" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-                                <div class="modal-dialog" role="document">
-                                <div class="modal-content">
-                                    <div class="modal-header">
-                                    <h5 class="modal-title" id="exampleModalLabel">Finalizar Solicitação</h5>
-                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                        <span aria-hidden="true">&times;</span>
-                                    </button>
-                                    </div>
-                                    <div class="modal-body">
-                                    Aqui puxa todas as linhas lançadas na tabela itens do paciente.
-                                    </div>
-                                    <div class="modal-footer">
-                                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                                    <button type="button" class="btn btn-primary">Save changes</button>
-                                    </div>
-                                </div>
-                                </div>
-                            </div>
+                            
                     <li class="nav-item">
-                        <a  >
-                            <button class="btn btn-app swalDefaultFinalized" name="submitbutton" value="2"  style="color: green">
+                        
+                        {{-- <a id="linkBtnFinalizar" data-toggle="modal" data-target='#modalFinalizar' onclick="coletaProdutoSelecionado()" style="visibility: hidden"> --}}
+                        <a id="linkBtnFinalizar" data-toggle="modal" data-target='#modalFinalizar' onclick="coletaProdutoSelecionado()">
+                            <button id="btnFinalizar" class="btn btn-app"  style="color: green" >
                                 <i class="far fa-check-square"></i> Finalizar
                             </button>
                         </a>
+                        
                     </li>
                     <li class="nav-item">
-                        <a  >
-                            <button class="btn btn-app swalDefaultCancel" name="submitbutton" value="3"  style="color: red">
+                        <a data-toggle="modal" data-target="#modalCancelar" >
+                            <button class="btn btn-app"  style="color: red" onclick="txtCancelRequired()">
                                 <i class="fas fa-window-close"></i> Cancelar
                             </button>
                         </a>
+                      
                     </li>
                     <li class="nav-item">
                         <a >
@@ -213,7 +235,69 @@
                 </ul>
 
             @endif
-
+            <!-- Modal Concluir -->
+            <div class="modal fade" id="modalFinalizar" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+              <div class="modal-dialog modal-dialog-centered" role="document">
+              <div class="modal-content">
+                  <div class="modal-header">
+                  <h5 class="modal-title" id="exampleModalLabel">Concluir Solicitação</h5>
+                  <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                      <span aria-hidden="true">&times;</span>
+                  </button>
+                  </div>
+                  <div class="modal-body">
+                    <h5 id="txtAvisoQtd" style="color: red; display:none">Atenção - A quantidade de ítens solicitada é diferente da quantidade de itens implantados!</h5>
+                  Deseja concluir esta solicitação?
+                  </div>
+                  <div class="modal-footer">
+                  <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
+                  <button class="btn btn-primary swalDefaultFinalized" name="submitbutton" value="2" type="submit">Confirmar</button>
+                  </div>
+              </div>
+              </div>
+            </div>
+            <!-- Modal Sem quipamento -->
+            <div class="modal fade" id="modalSemEquip" tabindex="-1" role="dialog" aria-labelledby="modalSemEquip" aria-hidden="true">
+              <div class="modal-dialog" role="document">
+              <div class="modal-content">
+                  <div class="modal-header">
+                  <h5 class="modal-title" id="modalSemEquip">Sem Equipamentos</h5>
+                  <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                      <span aria-hidden="true">&times;</span>
+                  </button>
+                  </div>
+                  <div class="modal-body">
+                  
+                  Não existe equipamentos Selecionados!
+                  </div>
+                  <div class="modal-footer">
+                  <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
+                  {{-- <button type="button" class="btn btn-primary swalDefaultFinalized" name="submitbutton" value="2" type="submit">Confirmar</button> --}}
+                  </div>
+              </div>
+              </div>
+            </div>
+            <!-- Modal Cancelar-->
+            <div class="modal fade" id="modalCancelar" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+              <div class="modal-dialog" role="document">
+              <div class="modal-content">
+                  <div class="modal-header">
+                  <h5 class="modal-title" id="exampleModalLabel">Deseja Cancelar a Solicitação?</h5>
+                  <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                      <span aria-hidden="true">&times;</span>
+                  </button>
+                  </div>
+                  <div class="modal-body">
+                    <p>Qual o motivo do cancelamento?</p>
+                  <textarea name="txtCancel" id="txtCancel" rows="5" style="width:100%" placeholder="Digite o motivo do cancelamento."></textarea>
+                  </div>
+                  <div class="modal-footer">
+                  <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
+                  <button type="submit" class="btn btn-primary swalDefaultCancel" name="submitbutton" value="3" type="submit">Confirmar</button>
+                  </div>
+              </div>
+              </div>
+            </div>
             <input type="number" name="status" id="status" value="{{$atual->status_solicit}}" style="display: none">
         </div>
         {{-- ////////////////////////////////////////////////////////////////////////////////////////////////////// --}}
@@ -649,12 +733,15 @@ function mcc(v){
 {{-- <script>
       console.log($solicitAtual);
 </script> --}}
+
+{{-- SOMA A QUANTIDADE DE ITENS NA TAG LI --}}
 <script type="text/javascript">
   $(document).ready(function(){   
     //AQUI ACONTECE A CONTAGEM  
       // alert($(".li_itens").length) 
-    document.getElementById('totItens').value = ($(".li_itens").length);                                
+    // document.getElementById('totItens').value = ($(".li_itens").length);                                                  
   });
+
 </script>
 
 @stop

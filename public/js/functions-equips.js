@@ -114,26 +114,60 @@ function locacaoSelecionada() {
  function coletaProdutoSelecionado(){
     var idsEquip = document.getElementsByClassName('selectEquip');  //Seleciona todos os objetos da classe "selectEquip"
     coletaIDsEquip(idsEquip);
+    
  }
  function coletaIDsEquip(dados){
     var array_dados_equip = dados;                                  //cria variável com os dados do array
     var newArrayEquip = [];                                         //cria o array
+    var somaSelecionados = 0; 
     for(var x = 0; x <= array_dados_equip.length; x++){
          if(typeof array_dados_equip[x] == 'object'){               //typeof retorna o tipo de operando. verifica de o array_dados_equip é um objeto
            newArrayEquip.push(array_dados_equip[x].value)           //o push adiciona o dado selecionado ao array
+            if (array_dados_equip[x].value =='') {                  //se o valor for vazio ele não soma
+                //não faz nada
+            } else {
+                somaSelecionados++;                                 //soma se o valor for diferente de vazio
+            }
         }
+       
     }
-    console.log(newArrayEquip);
     
     let sum = newArrayEquip;
     const codeHTML = sum.reduce((html, item) => {
         return html + "<li>" + item + "</li>";
             }, "");
   
-    document.querySelector("#equipSelecionados").innerHTML = sum;
+    var e = document.querySelector("#equipSelecionados").innerHTML = sum;
+    document.querySelector("#enviarEquip").value = e;
+    
+    console.log(newArrayEquip);
+    console.log(somaSelecionados);
+    
 
-    document.getElementById('enviarEquip').value = document.querySelector("#equipSelecionados").innerHTML;
+    // Se a quantidade de equipamentos selecionados for diferente do tamanho do newArrayEquip(equipamentos solicitados)
+        if (somaSelecionados !== sum.length ) {                                 
+            document.getElementById('txtAvisoQtd').style.display = "block"; //torna visível a mensagem de quantidade diferente
+        } else{
+            document.getElementById('txtAvisoQtd').style.display = "none";
+        }
+    
+
+    //Torna visível o Botão Conferido
+    if (document.getElementById('btnConferido').style.visibility = "hidden") {
+        document.getElementById('btnConferido').style.visibility = "visible";
+    } else {
+        document.getElementById('btnConferido').style.visibility = "hidden";
     }
+
+    //Torna visível o Botão Iniciar
+    if (document.getElementById('btnIniciar').style.visibility = "hidden") {
+        document.getElementById('btnIniciar').style.visibility = "visible";
+    } else {
+        document.getElementById('btnIniciar').style.visibility = "hidden";
+    }
+}
+
+
     
 
 
@@ -226,6 +260,46 @@ function urgente() {
 function func_cancelar(){
     let status = document.getElementById('status').value;
     status = 3;
+}
+
+ /*********************************************************************************************************************************
+ * Função Deixa o input com preenchimento obrigatório ou não
+ */
+function txtCancelRequired(){
+    document.getElementById('txtCancel').required = true;
+}
+function txtCancelNoRequired(){
+    document.getElementById('txtCancel').required = false;
+}
+
+/*********************************************************************************************************************************
+ * Função Deixa o botão FINALIZAR visivel somente se houver algum equipamento selecionado
+ */
+
+function habilitarBtnFinalizar(){
+
+    if (document.getElementById('linkBtnFinalizar').style.visibility = "hidden") {
+        document.getElementById('linkBtnFinalizar').style.visibility = "visible";
+        
+    } else {
+        document.getElementById('linkBtnFinalizar').style.visibility = "hidden";
+        
+    }
+    
+}
+
+/*********************************************************************************************************************************
+ * Habilitar botão conferido
+ */
+function btnConferido(){
+ if (document.getElementById('btnConferido').style.visibility = "hidden") {
+    document.getElementById('btnConferido').style.visibility = "visible";
+    
+} else {
+    document.getElementById('btnConferido').style.visibility = "hidden";
+    
+}
+
 }
 
 

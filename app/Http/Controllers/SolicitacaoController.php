@@ -33,7 +33,7 @@ class SolicitacaoController extends Controller
         $solicitacao->type_solicit =  1;                // 1 = implantação
         $solicitacao->equips_solicit =  $listEquipSel;
         $solicitacao->obs_solicit =  $obsSolicitacao;
-        $solicitacao->priority =  (isset($checkUrgente))? 1 : 0; //verifica se o check está  marcado. se tiver retorna 1, se não retorna 2
+        $solicitacao->priority =  (isset($checkUrgente))? 1 : 0; //verifica se o check está  marcado. se tiver retorna 1, se não retorna 0
 
         $solicitacao->save();
 
@@ -67,6 +67,7 @@ public function iniciar_solicit(Request $request, $id){
             //SALVA
             $solicit = Solicitacao::find($id);
             $solicit->status_solicit = 1;
+            $solicit->user_atend = auth()->user()->name;
             $solicit->save();
             // return back()->withInput();
             // return view('solicitacoes');
@@ -75,20 +76,27 @@ public function iniciar_solicit(Request $request, $id){
         case '2':
             //SE O VALUE DO SBMITBUTTON FOR 2 (RETORNA STATUS PARA 2 - FINALIZADA)
             $status1 = $request->input('status');
+            $obs_atend = $request->input('obs_atend');
             //SALVA
             $solicit = Solicitacao::find($id);
             $solicit->status_solicit = 2;
-
+            $solicit->obs_atend = $obs_atend;
             $solicit->save();
+            
+             
+            
             // return back()->withInput();
             return redirect()->to('/solicitacoes');
         break;
         case '3':
             //SE O VALUE DO SBMITBUTTON FOR 3 (RETORNA STATUS PARA 3 - CANCELADA)
             $status1 = $request->input('status');
+            $txtCancel = $request->input('txtCancel');
             //SALVA
             $solicit = Solicitacao::find($id);
             $solicit->status_solicit = 3;
+            $solicit->obs_atend =  $txtCancel;
+            $solicit->user_atend = auth()->user()->name;
             $solicit->save();
             // return back()->withInput();
             return redirect()->to('/solicitacoes');
@@ -106,22 +114,33 @@ public function add_equip_pct(Request $request){
     //BUSCA OS DADOS OS INPUTS
     $enviarEquip = $request->input('enviarEquip');  //Este input contém o array separado por vírgula
     $pctForEquip = $request->input('pctForEquip');  //Este input busca o id do paciente
+    $solicitForEquip = $request->input('solicitForEquip');  //Este input busca o id da solicitação
 
     //SELECIONA O EQUIPAMENTO E ATRIBUI O PACIENTE ATUAL A ELE
     foreach (explode(',', $enviarEquip) as $equip){     //separa o o conteúdo do input por vírgula
-        $regEquipSelecionado = Equipamento::find($equip);   //busca no Bd o id do equipamento
-        $regEquipSelecionado->pct_equip = $pctForEquip;     //atribui o id do pct ao equipamento
-       
-        $regEquipSelecionado->save();
+        if (empty($equip)) {
+            //se for nulo não faz nada
+        } else {
+            $regEquipSelecionado = Equipamento::find($equip);   //busca no Bd o id do equipamento
+            $regEquipSelecionado->pct_equip =  $pctForEquip;
+            $regEquipSelecionado->solicit_equip = $solicitForEquip;     //atribui o id da solicitação ao equipamento
+            $regEquipSelecionado->save();
+        }
+        
+        
+        // (isset($pctForEquip))? 0 : $pctForEquip;
+             //atribui o id do pct ao equipamento
+        
+    
         // echo '<pre>'; 
         // print_r($regEquipSelecionado);
     }
-    echo("Equipamentos implantados com sucesso!");
+    // echo("Equipamentos implantados com sucesso!");
+   
+    return back()->withInput();
 
-    // return back()->withInput();
-
-// echo($pctForEquip);
-// echo($regEquipSelecionado);
+    // echo($pctForEquip);
+    // echo($regEquipSelecionado);
 }
 
 ///========================================================================================================================
@@ -148,12 +167,12 @@ $resultado = [];
     public function solicitacoes()
     {
         $solicitacoes = new Solicitacao();
-        $solicitacoes = DB::SELECT("SELECT S.id, S.priority, S.status_solicit, P.name_pct, P.id_hc, S.type_solicit, S.date_solicit, C.cliente, P.rua, P.nr, P.bairro, P.compl, S.equips_solicit, S.obs_solicit
+        $solicitacoes = DB::SELECT("SELECT S.id, S.priority, S.status_solicit, P.name_pct, P.id_hc, S.user_atend, S.type_solicit, S.date_solicit, C.cliente, P.rua, P.nr, P.bairro, P.compl, S.equips_solicit, S.obs_solicit
                         FROM solicitacaos AS S
                         INNER JOIN pcts AS P ON S.pct_solicit = P.id
                         INNER JOIN clientes AS C ON C.id = P.id_hc
                         WHERE s.status_solicit= 0 OR s.status_solicit= 1
-                        ORDER BY S.priority DESC, S.id ASC
+                        ORDER BY S.priority DESC, P.bairro ASC
                         ");
 
         $equips = new Equipamento();
@@ -186,16 +205,17 @@ $resultado = [];
 
         $equips = new Equipamento();
         $equips = DB::SELECT("SELECT * FROM equipamentos WHERE pct_equip = 0");
-
+        
+        
         $fornecedores =  new Fornecedor();
         $fornecedores = DB::SELECT("SELECT id, name_fornec FROM fornecedors");
-
+        
         $solicitacoes = new Solicitacao();
         $solicitacoes = DB::SELECT("SELECT equips_solicit, obs_solicit FROM solicitacaos WHERE pct_solicit = $id AND status_solicit=0");
         
         $solicitSel = Solicitacao::find($id);
-
-        $solicitAtual = DB::SELECT("SELECT S.id AS SolicitId, S.priority, S.status_solicit, P.name_pct, P.id, P.id_hc, S.type_solicit, S.date_solicit, C.cliente, P.rua, P.nr, P.bairro, P.compl, S.equips_solicit, S.obs_solicit
+        
+        $solicitAtual = DB::SELECT("SELECT S.id AS SolicitId, S.priority, S.status_solicit, S.pct_solicit, P.name_pct, P.id, P.id_hc, S.type_solicit, S.user_atend, S.date_solicit, C.cliente, P.rua, P.nr, P.bairro, P.compl, S.equips_solicit, S.obs_solicit
                         FROM solicitacaos AS S
                         INNER JOIN pcts AS P ON S.pct_solicit = P.id
                         INNER JOIN clientes AS C ON C.id = P.id_hc
@@ -203,7 +223,23 @@ $resultado = [];
                         ");
                         //Este select com INNER JOIN tem que ser recebido na view por num foeach
 
-        return view('edit_solicit', ['solicitSel'=>$solicitSel] + ['pct_sel'=>$pct_sel] + ['equips'=>$equips] +  compact('solicitAtual'));
+        //Seleciona o id do paciente da solicitação atual
+        $pctSel = DB::SELECT("SELECT pct_solicit FROM solicitacaos WHERE id = $id");
+
+        //Converte o Array $pctSel em String 
+        $collection = collect($pctSel);
+        $idPctSel = $collection->implode('pct_solicit', ',');
+
+        //Seleciona o nº de patrimônio e nome do equipamento selecionado da solicitação atual
+        $equipsSel = DB::SELECT("SELECT patr, name_equip FROM equipamentos WHERE pct_equip = $idPctSel AND solicit_equip = $id;
+
+                        
+                        -- INNER JOIN pcts AS PCT ON SOLICIT.pct_solicit = PCT.id
+                        -- INNER JOIN equipamentos AS E ON E.id = PCT.id
+                        -- WHERE SOLICIT.id = $id
+                        ");
+
+        return view('edit_solicit', ['solicitSel'=>$solicitSel] + ['idPctSel'=>$idPctSel] + ['equipsSel'=>$equipsSel] + ['equips'=>$equips] +  compact('solicitAtual'));
 
     }
 
