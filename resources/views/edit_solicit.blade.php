@@ -15,7 +15,7 @@
     <div class="col-sm-6">
       {{-- <p>Detalhes da Solicitação</p> --}}
     </div>
-    
+
   </div>
 
   @foreach ($solicitAtual as $atual)
@@ -57,7 +57,7 @@
                   <i class="fas fa-plus-circle" data-toggle="tooltip" title="nenhum"></i>
           @endswitch
            nº: {{$solicitSel->id}} ({{$atual->cliente}})
-           
+
            @if ($atual->status_solicit == 1)
               <i class="fas fa-ambulance" id="ambulancia" style="display: inline; color: yellow" data-toggle="tooltip" title={{$atual->user_atend}}></i><br>
            @else
@@ -65,7 +65,7 @@
             @endif
 
         </h3>
-        
+
           <div class="card-tools float-right" >
             <button type="button" class="btn btn-block btn-danger btn-sm">
               <a href="{{route('solicitacoes')}}">
@@ -76,14 +76,14 @@
     </div>
     <!-- /.card-header -->
     <!-- form start -->
-    
+
 
 
   <div class="card-body">
     <label>
       PCT: {{$atual->name_pct}}
       PCT: {{$atual->id}}
-      
+
     </label>  <br>
     <i class="fas fa-map-marker-alt"></i>
      {{ $atual->rua }} - nº {{ $atual->nr }}<br>
@@ -92,8 +92,83 @@
      {{ $atual->obs_solicit }}
     <hr>
     <i class="fas fa-procedures"></i>
+
+    <div class="row">
+        <div class="col-md-12">
+          <div class="card card-default">
+            <div class="card-header">
+              <h3 class="card-title">bs-stepper</h3>
+            </div>
+            <div class="card-body p-0">
+              <div class="bs-stepper linear">
+                <div class="bs-stepper-header" role="tablist">
+                  <!-- your steps here -->
+                  <div class="step active" data-target="#select-equips">
+                    <button type="button" class="step-trigger" role="tab" aria-controls="select-equips" id="select-equips-trigger" aria-selected="true">
+                      <span class="bs-stepper-circle">1</span>
+                      <span class="bs-stepper-label">Selecionar</span>
+                    </button>
+                  </div>
+                  <div class="line"></div>
+                  <div class="step" data-target="#iniciar-solicit">
+                    <button type="button" class="step-trigger" role="tab" aria-controls="iniciar-solicit" id="iniciar-solicit-trigger" aria-selected="true">
+                      <span class="bs-stepper-circle">2</span>
+                      <span class="bs-stepper-label">Iniciar</span>
+                    </button>
+                  </div>
+                  <div class="line"></div>
+                  <div class="step" data-target="#finalizar-solicit">
+                    <button type="button" class="step-trigger" role="tab" aria-controls="finalizar-solicit" id="finalizar-solicit-trigger" aria-selected="false" disabled="disabled">
+                      <span class="bs-stepper-circle">3</span>
+                      <span class="bs-stepper-label">Finalizar</span>
+                    </button>
+                  </div>
+                </div>
+                <div class="bs-stepper-content">
+                  <!-- your steps content here -->
+                  <div id="select-equips" class="content active dstepper-block" role="tabpanel" aria-labelledby="select-equips-trigger">
+                    <div class="form-group">
+                      <label for="exampleInputEmail1">Selecionar Equipamentos</label>
+                    </div>
+                    <button class="btn btn-primary" onclick="stepper.next()">Next</button>
+                  </div>
+                  <div id="iniciar-solicit" class="content" role="tabpanel" aria-labelledby="iniciar-solicit-trigger">
+                    <div class="form-group">
+                        <label for="">iniciar Solicitação</label>
+                    </div>
+                    <button class="btn btn-primary" onclick="stepper.previous()">Previous</button>
+                    <button class="btn btn-primary" onclick="stepper.next()">Next</button>
+                  </div>
+                  <div id="finalizar-solicit" class="content" role="tabpanel" aria-labelledby="finalizar-solicit-trigger">
+                    <div class="form-group">
+                      <label for="exampleInputFile">File input</label>
+                      <div class="input-group">
+                        <div class="custom-file">
+                          <input type="file" class="custom-file-input" id="exampleInputFile">
+                          <label class="custom-file-label" for="exampleInputFile">Choose file</label>
+                        </div>
+                        <div class="input-group-append">
+                          <span class="input-group-text">Upload</span>
+                        </div>
+                      </div>
+                    </div>
+                    <button class="btn btn-primary" onclick="stepper.previous()">Previous</button>
+                    <button type="submit" class="btn btn-primary">Submit</button>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <!-- /.card-body -->
+            <div class="card-footer">
+              rodapé do steps
+            </div>
+          </div>
+          <!-- /.card -->
+        </div>
+      </div>
+
     <div>
-     
+
         @foreach (explode(',', $atual->equips_solicit) as $itemEquip) {{-- Separa os itens por vírgula e joga numa lista --}}
             <div class="form-group">
               <div>
@@ -111,35 +186,35 @@
                               @endforeach
                           </select>
                       </div>
-                          
+
                       <hr>
                       <input type="text" name="pctForEquip" value="{{$atual->id}}" style="display: none">
 
                       @endif
 
-                      
+
                       @endforeach
-                      
+
                       <div id="equipSelecionados" style="display: none"></div>
-                      
+
                       <input type="text" name="enviarEquip" id="enviarEquip" style="display: none">
 
                       {{-- <input id="totItens" type="text" style="border: none; display: none" disabled ><br> --}}
-                      
+
                       {{-- <input id="totImplantados" type="text" value="0" style="border: none" disabled><br> --}}
-                    
+
                 </div>
                 @if ($atual->status_solicit == 0)
                   <a id="btnConferido" style="visibility: hidden" >
                       <button class="btn btn-app" type="button" data-toggle="modal" data-target='#modalConferir' style="color: green">
-                   
+
                       {{-- <button class="btn btn-app" type="submit" style="color: green" name="submitbutton" value="2">   --}}
-                   
+
                       <i class="fas fa-tasks"></i></i> Conferido
                     </button>
                   </a>
                 @else
-                
+
                 @endif
                 <hr>
                 <label for="">Equipamentos Selecionados</label>
@@ -153,20 +228,23 @@
                 <div class="modal-dialog modal-dialog-centered" role="document">
                 <div class="modal-content">
                     <div class="modal-header">
-                    <h5 class="modal-title" id="exampleModalLabel">Quantidade não confere</h5>
+                    <h5 class="modal-title" id="exampleModalLabel">Equipamentos selecionados</h5>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                     </button>
                     </div>
                     <div class="modal-body">
-                      <h5 id="txtAvisoQtd" style="color: red; display:none">Atenção - A quantidade de ítens solicitada é diferente da quantidade de itens selecionados!</h5>
-                      Justifique nas observações.
+                        <h5 id="txtAvisoQtd" style="color: red; display:none">
+                        Atenção!<br>
+                        Ainda faltam equipamentos para selecionar.
+                        </h5>
+                        <h5>Deseja continuar?</h5>
                     <label for="obs_atend">Observações:</label><br>
                     <textarea name="obs_atend" id="obs_atend" cols="38" rows="4"></textarea>
                     </div>
                     <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
-                    <button class="btn btn-primary swalDefaultFinalized" name="submitbutton" value="2" type="submit">Confirmar</button>
+                    <button class="btn btn-primary swalDefaultAddEquip" name="submitbutton" value="2" type="submit">Confirmar</button>
                     </div>
                 </div>
                 </div>
@@ -206,16 +284,16 @@
                             </button>
                         </a>
                     </li> --}}
-                            
+
                     <li class="nav-item">
-                        
+
                         {{-- <a id="linkBtnFinalizar" data-toggle="modal" data-target='#modalFinalizar' onclick="coletaProdutoSelecionado()" style="visibility: hidden"> --}}
                         <a id="linkBtnFinalizar" data-toggle="modal" data-target='#modalFinalizar' onclick="coletaProdutoSelecionado()">
                             <button id="btnFinalizar" class="btn btn-app"  style="color: green" >
                                 <i class="far fa-check-square"></i> Finalizar
                             </button>
                         </a>
-                        
+
                     </li>
                     <li class="nav-item">
                         <a data-toggle="modal" data-target="#modalCancelar" >
@@ -223,7 +301,7 @@
                                 <i class="fas fa-window-close"></i> Cancelar
                             </button>
                         </a>
-                      
+
                     </li>
                     <li class="nav-item">
                         <a >
@@ -267,7 +345,7 @@
                   </button>
                   </div>
                   <div class="modal-body">
-                  
+
                   Não existe equipamentos Selecionados!
                   </div>
                   <div class="modal-footer">
@@ -301,7 +379,7 @@
             <input type="number" name="status" id="status" value="{{$atual->status_solicit}}" style="display: none">
         </div>
         {{-- ////////////////////////////////////////////////////////////////////////////////////////////////////// --}}
-        
+
             <!-- /.tab-content -->
             </div><!-- /.card-body -->
         </div>
@@ -311,10 +389,10 @@
 
 </div>
 @endforeach
-    
+
   </div>
-   
-</div>       
+
+</div>
 
 </section>
 @stop
@@ -323,6 +401,8 @@
     {{-- <link rel="stylesheet" href="css/admin_custom.css"> --}}
     <link rel="stylesheet" href={{asset('css/css')}}>
     <link rel="stylesheet" href={{asset('css/adminlte.min.css')}}>
+    <link rel="stylesheet" href="{{asset('css/bs-stepper.min.css')}}">
+
 
     <!-- Toastr -->
     <link rel="stylesheet" href= {{asset('css/toastr.min.css')}}>
@@ -344,6 +424,7 @@
 
 <script src= {{asset('js/sweetalert2.min.js')}}></script>
 <script src= {{asset('js/toastr.min.js')}}></script>
+<script src= {{asset('js/bs-stepper.min.js')}}></script>
 
 <script>
     $(function () {
@@ -381,6 +462,21 @@
 <script src= {{asset('js/buttons.colVis.min.js')}}></script>
 <script src= {{asset('js/functions-equips.js')}} defer></script>
 
+
+<script>
+    // BS-Stepper Init
+  document.addEventListener('DOMContentLoaded', function () {
+    window.stepper = new Stepper(document.querySelector('.bs-stepper'))
+  })
+</script>
+
+
+{{-- <script>
+    $(document).ready(function () {
+  var stepper = new Stepper($('.bs-stepper')[0])
+})
+
+</script> --}}
 <script>
     // <!-- Adicionando Javascript -->
     function limpa_formulário_cep() {
@@ -546,6 +642,12 @@ function mcc(v){
       Toast.fire({
         icon: 'success',
         title: 'Solicitação Finalizada!'
+      })
+    });
+    $('.swalDefaultAddEquip').click(function() {
+      Toast.fire({
+        icon: 'success',
+        title: 'Equipamentos selecionados com sucesso!'
       })
     });
     $('.swalDefaultInfo').click(function() {
@@ -736,10 +838,10 @@ function mcc(v){
 
 {{-- SOMA A QUANTIDADE DE ITENS NA TAG LI --}}
 <script type="text/javascript">
-  $(document).ready(function(){   
-    //AQUI ACONTECE A CONTAGEM  
-      // alert($(".li_itens").length) 
-    // document.getElementById('totItens').value = ($(".li_itens").length);                                                  
+  $(document).ready(function(){
+    //AQUI ACONTECE A CONTAGEM
+      // alert($(".li_itens").length)
+    // document.getElementById('totItens').value = ($(".li_itens").length);
   });
 
 </script>

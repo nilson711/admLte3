@@ -114,12 +114,12 @@ function locacaoSelecionada() {
  function coletaProdutoSelecionado(){
     var idsEquip = document.getElementsByClassName('selectEquip');  //Seleciona todos os objetos da classe "selectEquip"
     coletaIDsEquip(idsEquip);
-    
+
  }
  function coletaIDsEquip(dados){
     var array_dados_equip = dados;                                  //cria variável com os dados do array
     var newArrayEquip = [];                                         //cria o array
-    var somaSelecionados = 0; 
+    var somaSelecionados = 0;
     for(var x = 0; x <= array_dados_equip.length; x++){
          if(typeof array_dados_equip[x] == 'object'){               //typeof retorna o tipo de operando. verifica de o array_dados_equip é um objeto
            newArrayEquip.push(array_dados_equip[x].value)           //o push adiciona o dado selecionado ao array
@@ -129,28 +129,28 @@ function locacaoSelecionada() {
                 somaSelecionados++;                                 //soma se o valor for diferente de vazio
             }
         }
-       
+
     }
-    
+
     let sum = newArrayEquip;
     const codeHTML = sum.reduce((html, item) => {
         return html + "<li>" + item + "</li>";
             }, "");
-  
+
     var e = document.querySelector("#equipSelecionados").innerHTML = sum;
     document.querySelector("#enviarEquip").value = e;
-    
+
     console.log(newArrayEquip);
     console.log(somaSelecionados);
-    
+
 
     // Se a quantidade de equipamentos selecionados for diferente do tamanho do newArrayEquip(equipamentos solicitados)
-        if (somaSelecionados !== sum.length ) {                                 
+        if (somaSelecionados !== sum.length ) {
             document.getElementById('txtAvisoQtd').style.display = "block"; //torna visível a mensagem de quantidade diferente
         } else{
             document.getElementById('txtAvisoQtd').style.display = "none";
         }
-    
+
 
     //Torna visível o Botão Conferido
     if (document.getElementById('btnConferido').style.visibility = "hidden") {
@@ -168,7 +168,7 @@ function locacaoSelecionada() {
 }
 
 
-    
+
 
 
 /*********************************************************************************************************************************
@@ -280,26 +280,32 @@ function habilitarBtnFinalizar(){
 
     if (document.getElementById('linkBtnFinalizar').style.visibility = "hidden") {
         document.getElementById('linkBtnFinalizar').style.visibility = "visible";
-        
+
     } else {
         document.getElementById('linkBtnFinalizar').style.visibility = "hidden";
-        
+
     }
-    
+
 }
 
 /*********************************************************************************************************************************
  * Habilitar botão conferido
  */
 function btnConferido(){
- if (document.getElementById('btnConferido').style.visibility = "hidden") {
-    document.getElementById('btnConferido').style.visibility = "visible";
-    
-} else {
-    document.getElementById('btnConferido').style.visibility = "hidden";
-    
+    if (document.getElementById('btnConferido').style.visibility = "hidden") {
+        document.getElementById('btnConferido').style.visibility = "visible";
+    } else {
+        document.getElementById('btnConferido').style.visibility = "hidden";
+    }
 }
 
+/*********************************************************************************************************************************
+ * Converte o texto do input em MAIUSCULAS
+ */
+function upperCaseF(a){
+    setTimeout(function(){
+        a.value = a.value.toUpperCase();
+    }, 1);
 }
 
 

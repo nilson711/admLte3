@@ -59,7 +59,7 @@ class ClienteController extends Controller
         //BUSCA DADOS DOS INPUTS
         $newCliente = $request->input('cliente');
         $newEndereco = $request->input('endereco');
-        $newTelefone = $request->input('telefone');
+        $newTelefone = $request->input('tel');
         $newCelular = $request->input('celular');
         $newEmail = $request->input('e-mail');
 
