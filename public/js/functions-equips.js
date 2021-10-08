@@ -153,18 +153,18 @@ function locacaoSelecionada() {
 
 
     //Torna visível o Botão Conferido
-    if (document.getElementById('btnConferido').style.visibility = "hidden") {
-        document.getElementById('btnConferido').style.visibility = "visible";
-    } else {
-        document.getElementById('btnConferido').style.visibility = "hidden";
-    }
+    // if (document.getElementById('btnConferido').style.visibility = "hidden") {
+    //     document.getElementById('btnConferido').style.visibility = "visible";
+    // } else {
+    //     document.getElementById('btnConferido').style.visibility = "hidden";
+    // }
 
     //Torna visível o Botão Iniciar
-    if (document.getElementById('btnIniciar').style.visibility = "hidden") {
-        document.getElementById('btnIniciar').style.visibility = "visible";
-    } else {
-        document.getElementById('btnIniciar').style.visibility = "hidden";
-    }
+    // if (document.getElementById('btnIniciar').style.visibility = "hidden") {
+    //     document.getElementById('btnIniciar').style.visibility = "visible";
+    // } else {
+    //     document.getElementById('btnIniciar').style.visibility = "hidden";
+    // }
 }
 
 

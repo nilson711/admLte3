@@ -97,222 +97,160 @@
         <div class="col-md-12">
           <div class="card card-default">
             <div class="card-header">
-              <h3 class="card-title">bs-stepper</h3>
+              <h3 class="card-title"></h3>
             </div>
             <div class="card-body p-0">
-              <div class="bs-stepper linear">
-                <div class="bs-stepper-header" role="tablist">
-                  <!-- your steps here -->
-                  <div class="step active" data-target="#select-equips">
-                    <button type="button" class="step-trigger" role="tab" aria-controls="select-equips" id="select-equips-trigger" aria-selected="true">
-                      <span class="bs-stepper-circle">1</span>
-                      <span class="bs-stepper-label">Selecionar</span>
-                    </button>
-                  </div>
-                  <div class="line"></div>
-                  <div class="step" data-target="#iniciar-solicit">
-                    <button type="button" class="step-trigger" role="tab" aria-controls="iniciar-solicit" id="iniciar-solicit-trigger" aria-selected="true">
-                      <span class="bs-stepper-circle">2</span>
-                      <span class="bs-stepper-label">Iniciar</span>
-                    </button>
-                  </div>
-                  <div class="line"></div>
-                  <div class="step" data-target="#finalizar-solicit">
-                    <button type="button" class="step-trigger" role="tab" aria-controls="finalizar-solicit" id="finalizar-solicit-trigger" aria-selected="false" disabled="disabled">
-                      <span class="bs-stepper-circle">3</span>
-                      <span class="bs-stepper-label">Finalizar</span>
-                    </button>
-                  </div>
-                </div>
-                <div class="bs-stepper-content">
+              <div >
+                
+                <div>
                   <!-- your steps content here -->
-                  <div id="select-equips" class="content active dstepper-block" role="tabpanel" aria-labelledby="select-equips-trigger">
+                  <div id="select-equips" class="content active" role="tabpanel" aria-labelledby="select-equips-trigger">
                     <div class="form-group">
-                      <label for="exampleInputEmail1">Selecionar Equipamentos</label>
-                    </div>
-                    <button class="btn btn-primary" onclick="stepper.next()">Next</button>
-                  </div>
-                  <div id="iniciar-solicit" class="content" role="tabpanel" aria-labelledby="iniciar-solicit-trigger">
-                    <div class="form-group">
-                        <label for="">iniciar Solicitação</label>
-                    </div>
-                    <button class="btn btn-primary" onclick="stepper.previous()">Previous</button>
-                    <button class="btn btn-primary" onclick="stepper.next()">Next</button>
-                  </div>
-                  <div id="finalizar-solicit" class="content" role="tabpanel" aria-labelledby="finalizar-solicit-trigger">
-                    <div class="form-group">
-                      <label for="exampleInputFile">File input</label>
-                      <div class="input-group">
-                        <div class="custom-file">
-                          <input type="file" class="custom-file-input" id="exampleInputFile">
-                          <label class="custom-file-label" for="exampleInputFile">Choose file</label>
-                        </div>
-                        <div class="input-group-append">
-                          <span class="input-group-text">Upload</span>
+                      <label for="exampleInputEmail1">Solicitados</label>
+                      <div> 
+                        @foreach (explode(',', $atual->equips_solicit) as $itemEquip) {{-- Separa os itens por vírgula e joga numa lista --}}
+                            <div class="form-group">
+                              <div>
+                                  <li class="li_itens" >{{$itemEquip}}</li>
+                                    {{-- <i class="fas fa-plus"></i> --}}
+                                    <form action="{{route('add_equip_pct')}}" method="post">
+                                      @csrf
+                                        <input type="text" name="solicitForEquip" value="{{$solicitSel->id}}" style="display: none">
+                                          @if ($equipsSel == null) 
+                                              @if ($atual->status_solicit == 0)
+                                                  <div class="input-group input-group-sm">
+                                                      <select name="selectEquip" class="selectEquip form-control select2 select2-hidden-accessible" onchange="coletaProdutoSelecionado()" on  style="width: 100%;" aria-hidden="true">]
+                                                        <option value="" selected>Selecione</option>
+                                                          @foreach ($equips as $equip)
+                                                            <option value = "{{$equip->id}}">{{$equip->patr}} - {{$equip->name_equip}}</option>
+                                                          @endforeach
+                                                      </select>
+                                                  </div>
+                                              @endif
+                                              <hr>
+                                          @endif
+                                            <input type="text" name="pctForEquip" value="{{$atual->id}}" style="display: none">
+                                        <div id="equipSelecionados" style="display: none"></div>
+                                      <input type="text" name="enviarEquip" id="enviarEquip" style="display: none">
+                                     
+                                                    <!-- Modal Conferir -->
+                                                    
+                                                    <div class="modal fade" id="modalConferir" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                                      <div class="modal-dialog modal-dialog-centered" role="document">
+                                                      <div class="modal-content">
+                                                          <div class="modal-header">
+                                                          <h5 class="modal-title" id="exampleModalLabel">Equipamentos selecionados</h5>
+                                                          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                              <span aria-hidden="true">&times;</span>
+                                                          </button>
+                                                          </div>
+                                                          <div class="modal-body">
+                                                              <h5 id="txtAvisoQtd" style="color: red; display:none">
+                                                              Atenção!<br>
+                                                              Ainda faltam equipamentos para selecionar.
+                                                              </h5>
+                                                              <h5>Deseja continuar?</h5>
+                                                          <label for="obs_atend">Observações:</label><br>
+                                                          <textarea name="obs_atend" id="obs_atend" cols="38" rows="4"></textarea>
+                                                          </div>
+                                                          <div class="modal-footer">
+                                                          <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
+                                                          <button class="btn btn-primary swalDefaultAddEquip" name="submitbutton" value="2" type="submit">Confirmar</button>
+                                                          </div>
+                                                      </div>
+                                                      </div>
+                                                    </div>
+                                    </form>
+                                </div>
+                            </div>
+                          @endforeach
+
+
+                    <form action="{{route('iniciar_solicit', $atual->SolicitId)}}" method="post" enctype="multipart/form-data">
+                            @csrf
+                                @if ($equipsSel != null)
+                                    <label for="">Selecionados</label><br>
+                                    @foreach ($equipsSel as $itemSel)
+                                        <li style="color: blue">{{$itemSel->patr}} - {{$itemSel->name_equip}}</li>
+                                    @endforeach  
+
+                                    <ul class="nav nav-pills ml-auto p-2">
+                                      @if ($atual->status_solicit == 0)
+                                        <li class="nav-item">
+                                            <a id="btnIniciar" >
+                                                <button class="btn btn-app swalDefaultSuccess" onclick="txtCancelNoRequired()" name="submitbutton" value="1" type="submit" style="color: green; visibility: visible">
+                                                    <i class="fas fa-play"></i> OK
+                                                </button>
+                                            </a>
+                                        </li>
+                                      @endif
+
+                                      @if ($atual->status_solicit == 1)
+                                        <li class="nav-item">
+                                            <a id="linkBtnFinalizar" data-toggle="modal" data-target='#modalFinalizar' onclick="coletaProdutoSelecionado()">
+                                                <button id="btnFinalizar" class="btn btn-app"  style="color: green" >
+                                                    <i class="far fa-check-square"></i> Finalizar
+                                                </button>
+                                            </a>
+                                            
+                                          </li>
+                                          <li class="nav-item">
+                                            <a data-toggle="modal" data-target="#modalCancelar" >
+                                                <button class="btn btn-app"  style="color: red" onclick="txtCancelRequired()">
+                                                    <i class="fas fa-window-close"></i> Cancelar
+                                                </button>
+                                            </a>
+                    
+                                          </li>
+                                          <li class="nav-item">
+                                            <a >
+                                                <button class="btn btn-app swalDefaultInfo" name="submitbutton" value="0" type="submit" style="color: rgb(0, 0, 0)">
+                                                    <i class="fas fa-undo"></i> Retornar
+                                                </button>
+                                            </a>
+                                          </li>
+                                          @endif
+                                        
+                                        
+                                </ul>
+                                  
+
+                                @endif
+                                  @if ($equipsSel == null)
+                                        <a id="btnConferido" style="visibility: visible" >
+                                            <button class="btn btn-app" type="button" data-toggle="modal" data-target='#modalConferir' style="color: green">
+                                            {{-- <button class="btn btn-app" type="submit" style="color: green" name="submitbutton" value="2">   --}}
+                                              <i class="fas fa-check"></i>Confirma
+                                          </button>
+                                        </a>
+                                  @else
+                                    
+                              @endif
+                          
+                          </a>
                         </div>
                       </div>
-                    </div>
-                    <button class="btn btn-primary" onclick="stepper.previous()">Previous</button>
-                    <button type="submit" class="btn btn-primary">Submit</button>
+                    </div> 
+                    {{-- FINAL DO STEP --}}
+                    
                   </div>
                 </div>
               </div>
+              <!-- /.card-body -->
+              <div class="card-footer">
+                rodapé do steps
+              </div>
             </div>
-            <!-- /.card-body -->
-            <div class="card-footer">
-              rodapé do steps
-            </div>
+            <!-- /.card -->
           </div>
-          <!-- /.card -->
         </div>
-      </div>
+        
+        
+        
+        
+        
+      <div class="form-group">
 
-    <div>
-
-        @foreach (explode(',', $atual->equips_solicit) as $itemEquip) {{-- Separa os itens por vírgula e joga numa lista --}}
-            <div class="form-group">
-              <div>
-                  <li class="li_itens" >{{$itemEquip}}</li>
-                    {{-- <i class="fas fa-plus"></i> --}}
-                    <form action="{{route('add_equip_pct')}}" method="post">
-                    @csrf
-                    <input type="text" name="solicitForEquip" value="{{$solicitSel->id}}" style="display: none">
-                      @if ($atual->status_solicit == 0)
-                      <div class="input-group input-group-sm">
-                          <select name="selectEquip" class="selectEquip form-control select2 select2-hidden-accessible" onchange="coletaProdutoSelecionado()" on  style="width: 100%;" aria-hidden="true">]
-                            <option value="" selected>Selecione</option>
-                              @foreach ($equips as $equip)
-                              <option value = "{{$equip->id}}">{{$equip->patr}} - {{$equip->name_equip}}</option>
-                              @endforeach
-                          </select>
-                      </div>
-
-                      <hr>
-                      <input type="text" name="pctForEquip" value="{{$atual->id}}" style="display: none">
-
-                      @endif
-
-
-                      @endforeach
-
-                      <div id="equipSelecionados" style="display: none"></div>
-
-                      <input type="text" name="enviarEquip" id="enviarEquip" style="display: none">
-
-                      {{-- <input id="totItens" type="text" style="border: none; display: none" disabled ><br> --}}
-
-                      {{-- <input id="totImplantados" type="text" value="0" style="border: none" disabled><br> --}}
-
-                </div>
-                @if ($atual->status_solicit == 0)
-                  <a id="btnConferido" style="visibility: hidden" >
-                      <button class="btn btn-app" type="button" data-toggle="modal" data-target='#modalConferir' style="color: green">
-
-                      {{-- <button class="btn btn-app" type="submit" style="color: green" name="submitbutton" value="2">   --}}
-
-                      <i class="fas fa-tasks"></i></i> Conferido
-                    </button>
-                  </a>
-                @else
-
-                @endif
-                <hr>
-                <label for="">Equipamentos Selecionados</label>
-                @foreach ($equipsSel as $itemSel)
-                    <li>{{$itemSel->patr}} - {{$itemSel->name_equip}}</li>
-                @endforeach
-            </div>
-    </div>
-              <!-- Modal Conferir -->
-              <div class="modal fade" id="modalConferir" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-                <div class="modal-dialog modal-dialog-centered" role="document">
-                <div class="modal-content">
-                    <div class="modal-header">
-                    <h5 class="modal-title" id="exampleModalLabel">Equipamentos selecionados</h5>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
-                    </div>
-                    <div class="modal-body">
-                        <h5 id="txtAvisoQtd" style="color: red; display:none">
-                        Atenção!<br>
-                        Ainda faltam equipamentos para selecionar.
-                        </h5>
-                        <h5>Deseja continuar?</h5>
-                    <label for="obs_atend">Observações:</label><br>
-                    <textarea name="obs_atend" id="obs_atend" cols="38" rows="4"></textarea>
-                    </div>
-                    <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
-                    <button class="btn btn-primary swalDefaultAddEquip" name="submitbutton" value="2" type="submit">Confirmar</button>
-                    </div>
-                </div>
-                </div>
-              </div>
-  </form>
-  <form action="{{route('iniciar_solicit', $atual->SolicitId)}}" method="post">
-    @csrf
-    <div class="form-group">
-          @if ($atual->status_solicit == 1)
-            <label for="obs_atend">Observações:</label><br>
-            <textarea name="obs_atend" id="obs_atend" cols="38" rows="4"></textarea>
-          @endif
-            @if($atual->status_solicit == 0)
-                <ul class="nav nav-pills ml-auto p-2">
-                    <li class="nav-item">
-                        <a id="btnIniciar" >
-                            <button class="btn btn-app swalDefaultSuccess" onclick="txtCancelNoRequired()" name="submitbutton" value="1" type="submit" style="color: green; visibility: visible">
-                                <i class="fas fa-play"></i> Iniciar
-                            </button>
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a data-toggle="modal" data-target="#modalCancelar" onclick="txtCancelRequired()">
-                            <button class="btn btn-app" style="color: red">
-                                <i class="fas fa-window-close"></i> Cancelar
-                            </button>
-                        </a>
-                    </li>
-                </ul>
-
-            @else
-                <ul class="nav nav-pills ml-auto p-2">
-                    {{-- <li class="nav-item">
-                        <a data-toggle="modal" data-target="#modalFinalizar" >
-                            <button class="btn btn-app"  style="color: green">
-                                <i class="far fa-check-square"></i> Modal
-                            </button>
-                        </a>
-                    </li> --}}
-
-                    <li class="nav-item">
-
-                        {{-- <a id="linkBtnFinalizar" data-toggle="modal" data-target='#modalFinalizar' onclick="coletaProdutoSelecionado()" style="visibility: hidden"> --}}
-                        <a id="linkBtnFinalizar" data-toggle="modal" data-target='#modalFinalizar' onclick="coletaProdutoSelecionado()">
-                            <button id="btnFinalizar" class="btn btn-app"  style="color: green" >
-                                <i class="far fa-check-square"></i> Finalizar
-                            </button>
-                        </a>
-
-                    </li>
-                    <li class="nav-item">
-                        <a data-toggle="modal" data-target="#modalCancelar" >
-                            <button class="btn btn-app"  style="color: red" onclick="txtCancelRequired()">
-                                <i class="fas fa-window-close"></i> Cancelar
-                            </button>
-                        </a>
-
-                    </li>
-                    <li class="nav-item">
-                        <a >
-                            <button class="btn btn-app swalDefaultInfo" name="submitbutton" value="0" type="submit" style="color: rgb(0, 0, 0)">
-                                <i class="fas fa-undo"></i> Retornar
-                            </button>
-                        </a>
-                    </li>
-                </ul>
-
-            @endif
             <!-- Modal Concluir -->
             <div class="modal fade" id="modalFinalizar" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
               <div class="modal-dialog modal-dialog-centered" role="document">
@@ -325,7 +263,15 @@
                   </div>
                   <div class="modal-body">
                     <h5 id="txtAvisoQtd" style="color: red; display:none">Atenção - A quantidade de ítens solicitada é diferente da quantidade de itens implantados!</h5>
-                  Deseja concluir esta solicitação?
+                   <h5>Deseja concluir esta solicitação?</h5> <br>
+                   
+                      <div class="form-group">
+                        <label for="exampleFormControlFile1">Anexar Guia:</label>
+                        <input type="file" class="form-control-file" name="guia" id="guia">
+                      </div>
+                    
+                    <label for="obs_atend">Observações:</label><br>
+                    <textarea name="obs_atend" id="obs_atend" cols="38" rows="4"></textarea>
                   </div>
                   <div class="modal-footer">
                   <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
@@ -401,7 +347,7 @@
     {{-- <link rel="stylesheet" href="css/admin_custom.css"> --}}
     <link rel="stylesheet" href={{asset('css/css')}}>
     <link rel="stylesheet" href={{asset('css/adminlte.min.css')}}>
-    <link rel="stylesheet" href="{{asset('css/bs-stepper.min.css')}}">
+    {{-- <link rel="stylesheet" href="{{asset('css/bs-stepper.min.css')}}"> --}}
 
 
     <!-- Toastr -->
@@ -424,7 +370,7 @@
 
 <script src= {{asset('js/sweetalert2.min.js')}}></script>
 <script src= {{asset('js/toastr.min.js')}}></script>
-<script src= {{asset('js/bs-stepper.min.js')}}></script>
+{{-- <script src= {{asset('js/bs-stepper.min.js')}}></script> --}}
 
 <script>
     $(function () {
@@ -465,9 +411,9 @@
 
 <script>
     // BS-Stepper Init
-  document.addEventListener('DOMContentLoaded', function () {
-    window.stepper = new Stepper(document.querySelector('.bs-stepper'))
-  })
+  // document.addEventListener('DOMContentLoaded', function () {
+  //   window.stepper = new Stepper(document.querySelector('.bs-stepper'))
+  // })
 </script>
 
 

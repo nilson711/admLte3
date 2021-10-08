@@ -77,10 +77,17 @@ public function iniciar_solicit(Request $request, $id){
             //SE O VALUE DO SBMITBUTTON FOR 2 (RETORNA STATUS PARA 2 - FINALIZADA)
             $status1 = $request->input('status');
             $obs_atend = $request->input('obs_atend');
+            $nameFile = $request->id . '.' . $request->guia->extension() ;
+            // $guia = $request->file('guia')->storeAs('guias', $nameFile); // busca no input 'guia' o arquivo e armazena na pasta 'guias'
+            $guia = $request->file('guia')->resize(300, 200)->storeAs('guias', $nameFile); // busca no input 'guia' o arquivo e armazena na pasta 'guias'
+
+            
+
             //SALVA
             $solicit = Solicitacao::find($id);
             $solicit->status_solicit = 2;
             $solicit->obs_atend = $obs_atend;
+        
             $solicit->save();
             
              
