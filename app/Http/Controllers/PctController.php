@@ -8,6 +8,8 @@ use App\Models\Cliente;
 use App\Models\Equipamento;
 use App\Models\Fornecedor;
 use App\Models\Solicitacao;
+use Carbon\Carbon;
+
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -157,11 +159,12 @@ class PctController extends Controller
 
         $solicitacoes = new Solicitacao();
         $solicitacoes = DB::SELECT("SELECT id, status_solicit, equips_solicit, obs_solicit FROM solicitacaos WHERE pct_solicit = $id AND status_solicit < 2");
+        $solicitacoesFim = DB::SELECT("SELECT id, status_solicit, type_solicit, date_solicit, equips_solicit, obs_solicit FROM solicitacaos WHERE pct_solicit = $id AND status_solicit > 1");
 
         $pctSel = Pct::find($id);
 
         // return view('edit_pct', ['pctSel'=>$pctSel] + ['allPcts'=>$allPcts] + ['allCities'=>$allCities] + ['clientes'=>$clientes]);
-        return view('prontuario_pct', ['pctSel'=>$pctSel] + ['solicitacoes'=>$solicitacoes] + ['allEquipsEstoqueCount'=>$allEquipsEstoqueCount] + ['allEquipsEstoque'=>$allEquipsEstoque] + ['equipsEstoque'=>$equipsEstoque] + ['equipsEstoqueCount'=>$equipsEstoqueCount] + ['allPcts'=>$allPcts] + ['allCities'=>$allCities] + ['clientes'=>$clientes] + ['equipsPct'=>$equipsPct] + ['fornecedores'=>$fornecedores] + ['equipsCount'=>$equipsCount]);
+        return view('prontuario_pct', ['pctSel'=>$pctSel] + ['solicitacoes'=>$solicitacoes] + ['solicitacoesFim'=>$solicitacoesFim] + ['allEquipsEstoqueCount'=>$allEquipsEstoqueCount] + ['allEquipsEstoque'=>$allEquipsEstoque] + ['equipsEstoque'=>$equipsEstoque] + ['equipsEstoqueCount'=>$equipsEstoqueCount] + ['allPcts'=>$allPcts] + ['allCities'=>$allCities] + ['clientes'=>$clientes] + ['equipsPct'=>$equipsPct] + ['fornecedores'=>$fornecedores] + ['equipsCount'=>$equipsCount]);
         // return view('edit_pct', compact('pctSel'));
 
     }

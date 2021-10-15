@@ -70,7 +70,7 @@
                         </div>
                     </div>
                     <!-- /.card-header -->
-                   
+
 
 
 
@@ -274,7 +274,7 @@
                                                                 </ul>
                                                             @endif
                                                             @if ($equipsSel == null)
-                                                                <a id="btnConferido" style="visibility: visible">
+                                                                <a id="btnConferido" style="visibility: hidden">
                                                                     <button class="btn btn-app" type="button"
                                                                         data-toggle="modal" data-target='#modalConferir'
                                                                         style="color: green">

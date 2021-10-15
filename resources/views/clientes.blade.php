@@ -66,11 +66,11 @@
                                 </td>
                             </tr>
                         @endforeach
-                </tbody>
-                    <tfoot>
-                    {{-- <tr><th rowspan="1" colspan="1">Rendering engine</th><th rowspan="1" colspan="1">Browser</th><th rowspan="1" colspan="1">Platform(s)</th><th rowspan="1" colspan="1">Engine version</th><th rowspan="1" colspan="1" style="">CSS grade</th></tr> --}}
-                    </tfoot>
-                </table>
+                        </tbody>
+                        <tfoot>
+                        {{-- <tr><th rowspan="1" colspan="1">Rendering engine</th><th rowspan="1" colspan="1">Browser</th><th rowspan="1" colspan="1">Platform(s)</th><th rowspan="1" colspan="1">Engine version</th><th rowspan="1" colspan="1" style="">CSS grade</th></tr> --}}
+                        </tfoot>
+                    </table>
 
                 </div>
             </div>
@@ -144,7 +144,7 @@
     {{-- <link rel="stylesheet" href="css/all.min.css"> --}}
 
     <!-- DataTables -->
-    <link rel="stylesheet" href="{{asset('css/dataTables.bootstrap4.min.css')}}"
+    <link rel="stylesheet" href="{{asset('css/dataTables.bootstrap4.min.css')}}">
     <link rel="stylesheet" href="{{asset('css/responsive.bootstrap4.min.css')}}">
     <link rel="stylesheet" href="{{asset('css/buttons.bootstrap4.min.css')}}">
     <!-- Theme style -->

@@ -41,7 +41,7 @@
                 <ul class="nav nav-tabs">
                   <li class="nav-item"><a class="nav-link" href="#tabDadosPct" data-toggle="tab">Dados</a></li>
                   <li class="nav-item"><a class="nav-link active" href="#tabEquipamentosPct" data-toggle="tab">Equipamentos</a></li>
-                  <li class="nav-item"><a class="nav-link" href="#settings" data-toggle="tab">Histórico</a></li>
+                  <li class="nav-item"><a class="nav-link" href="#tabHistorico" data-toggle="tab">Histórico</a></li>
                 </ul>
               </div><!-- /.card-header -->
               <div class="card-body">
@@ -322,61 +322,84 @@
                               @endif
                           </li>
                         </ul>
-                            
+
                         @endforeach
 
                     </div>
 
                   </div>
-                  <!-- /.tab-pane -->
+                  <!-- /.HISTÓRICO -->
 
-                  <div class="tab-pane" id="settings">
-                    <form class="form-horizontal">
-                      <div class="form-group row">
-                        <label for="inputName" class="col-sm-2 col-form-label">Name</label>
-                        <div class="col-sm-10">
-                          <input type="email" class="form-control" id="inputName" placeholder="Name">
-                        </div>
-                      </div>
-                      <div class="form-group row">
-                        <label for="inputEmail" class="col-sm-2 col-form-label">Email</label>
-                        <div class="col-sm-10">
-                          <input type="email" class="form-control" id="inputEmail" placeholder="Email">
-                        </div>
-                      </div>
-                      <div class="form-group row">
-                        <label for="inputName2" class="col-sm-2 col-form-label">Name</label>
-                        <div class="col-sm-10">
-                          <input type="text" class="form-control" id="inputName2" placeholder="Name">
-                        </div>
-                      </div>
-                      <div class="form-group row">
-                        <label for="inputExperience" class="col-sm-2 col-form-label">Experience</label>
-                        <div class="col-sm-10">
-                          <textarea class="form-control" id="inputExperience" placeholder="Experience"></textarea>
-                        </div>
-                      </div>
-                      <div class="form-group row">
-                        <label for="inputSkills" class="col-sm-2 col-form-label">Skills</label>
-                        <div class="col-sm-10">
-                          <input type="text" class="form-control" id="inputSkills" placeholder="Skills">
-                        </div>
-                      </div>
-                      <div class="form-group row">
-                        <div class="offset-sm-2 col-sm-10">
-                          <div class="checkbox">
-                            <label>
-                              <input type="checkbox"> I agree to the <a href="#">terms and conditions</a>
-                            </label>
-                          </div>
-                        </div>
-                      </div>
-                      <div class="form-group row">
-                        <div class="offset-sm-2 col-sm-10">
-                          <button type="submit" class="btn btn-danger">Submit</button>
-                        </div>
-                      </div>
-                    </form>
+                  <div class="tab-pane" id="tabHistorico">
+                      
+                      <table id="example1" class="table table-sm  table-striped dataTable dtr-inline" role="grid" aria-describedby="example1_info">
+                          <thead>
+                              <tr role="row">
+                                <th>!</th>
+                                <th class="sorting sorting_asc" tabindex="0" aria-controls="example1" rowspan="1" colspan="1" aria-sort="ascending" title="Classificar crescente / decrescente">#</th>
+                                {{-- <th class="sorting col-sm-4" tabindex="0" aria-controls="example1" rowspan="1" colspan="1">Endereço</th> --}}
+                                <th class="sorting" tabindex="0" aria-controls="example1" rowspan="1" colspan="1">Data</th>
+                                <th class="sorting" tabindex="0" aria-controls="example1" rowspan="1" colspan="1">Solicitado</th>
+                                <th class="sorting" tabindex="0" aria-controls="example1" rowspan="1" colspan="1">Obs</th>
+                                <th class="sorting" tabindex="0" aria-controls="example1" rowspan="1" colspan="1">Guia</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach ($solicitacoesFim as $solicFim)
+                                <tr>
+                                    <td>
+                                        @switch($solicFim->type_solicit)
+                                            @case(1)
+                                                <i class="fas fa-plus-circle" data-toggle="tooltip" title="Implantação"
+                                                    style="color: rgb(2, 107, 19)"></i>
+                                            @break
+                                            @case(2)
+                                                <i class="fas fa-minus-circle" data-toggle="tooltip" title=" Recolhimento"
+                                                    style="color: black"></i>
+                                            @break
+                                            @case(3)
+                                                <i class="fas fa-tools" data-toggle="tooltip" title="Troca/Manutenção"
+                                                    style="color: rgb(230, 163, 40)"></i>
+                                            @break
+                                            @case(4)
+                                                <i class="fas fa-dolly" data-toggle="tooltip" title="Mudança"></i>
+                                            @break
+                                            @case(5)
+                                                <i class="fas fa-times-circle" data-toggle="tooltip" title="Recolhimento Total"
+                                                    style="color: rgb(253, 0, 0)"></i>
+                                            @break
+                                            @case(6)
+                                                <i class="fas fa-battery-empty" data-toggle="tooltip" title="Recarga de O2"
+                                                    style="color: rgb(80, 104, 240); transform: rotate(-90deg)"></i>
+                                            @break
+                                            @case(7)
+                                                <i class="fas fa-battery-empty" data-toggle="tooltip" title="Recolher O2"
+                                                    style="color: rgb(255, 0, 0); transform: rotate(-90deg)"></i>
+                                            @break
+                                            @case(8)
+                                                <i class="fas fa-battery-full" data-toggle="tooltip" title="Implantar O2"
+                                                    style="color: rgb(14, 36, 238); transform: rotate(-90deg)"></i>
+                                            @break
+
+                                            @default
+                                                <i class="fas fa-plus-circle" data-toggle="tooltip" title="nenhum"></i>
+                                        @endswitch
+                                    </td>
+                                    <td>{{$solicFim->id}}</td>
+                                    {{-- <td>{{}}</td> --}}
+                                    {{-- <td>{{\Carbon\Carbon::createFromFormat('d/m/y', now())}}</td> --}}
+                                    <td>{{date('d/m/Y', strtotime($solicFim->date_solicit))}}</td>
+                                    <td>{{$solicFim->equips_solicit}}</td>
+                                    <td>{{$solicFim->obs_solicit}}</td>
+                                    <td>Guia</td>
+                                </tr>
+                            @endforeach
+                        </tbody>
+                        <tfoot>
+                        {{-- <tr><th rowspan="1" colspan="1">Rendering engine</th><th rowspan="1" colspan="1">Browser</th><th rowspan="1" colspan="1">Platform(s)</th><th rowspan="1" colspan="1">Engine version</th><th rowspan="1" colspan="1" style="">CSS grade</th></tr> --}}
+                        </tfoot>
+                    </table>
+
                   </div>
                   <!-- /.tab-pane -->
                 </div>
@@ -450,7 +473,7 @@
             <div class="modal-footer">
                 <button type="button" class="btn btn-outline-secondary" data-dismiss="modal">Cancelar</button>
                     <button type="submit" class="btn btn-outline-primary ">Solicitar</button>
-                    
+
             </div>
         </form>
       </div>
@@ -487,11 +510,19 @@
 @stop
 
 @section('css')
+<link rel="stylesheet" href="{{asset('css/dataTables.bootstrap4.min.css')}}">
 
 <link rel="stylesheet" href="{{asset('css/select2.min.css')}}">
 <link rel="stylesheet" href="{{asset('css/select2-bootstrap4.min.css')}}">
 <link rel="stylesheet" href="{{asset('css/adminlte.min.css')}}">
 <link rel="stylesheet" href="{{asset('css/toastr.min.css')}}">
+
+<!-- DataTables -->
+<link rel="stylesheet" href="{{asset('css/dataTables.bootstrap4.min.css')}}">
+<link rel="stylesheet" href="{{asset('css/responsive.bootstrap4.min.css')}}">
+<link rel="stylesheet" href="{{asset('css/buttons.bootstrap4.min.css')}}">
+<!-- Theme style -->
+<link rel="stylesheet" href="{{asset('css/adminlte.min.css')}}">
 
 @stop
 
@@ -514,6 +545,51 @@
 <script src= {{asset('js/select2.full.min.js')}}></script>
 <script src= {{asset('js/bootstrap.bundle.min.js')}}></script>
 <script src= {{asset('js/functions-equips.js')}} defer></script>
+
+<!-- DataTables  & Plugins -->
+<script src= {{asset('js/jquery.dataTables.min.js')}}></script>
+<script src= {{asset('js/dataTables.bootstrap4.min.js')}}></script>
+<script src= {{asset('js/dataTables.responsive.min.js')}}></script>
+<script src= {{asset('js/responsive.bootstrap4.min.js')}}></script>
+<script src= {{asset('js/dataTables.buttons.min.js')}}></script>
+<script src= {{asset('js/buttons.bootstrap4.min.js')}}></script>
+<script src= {{asset('js/jszip.min.js')}}></script>
+<script src= {{asset('js/pdfmake.min.js')}}></script>
+<script src= {{asset('js/vfs_fonts.js')}}></script>
+<script src= {{asset('js/buttons.html5.min.js')}}></script>
+<script src= {{asset('js/buttons.print.min.js')}}></script>
+<script src= {{asset('js/buttons.colVis.min.js')}}></script>
+
+
+<script>
+    $(function () {
+      $("#example1").DataTable({
+        "responsive": true, "lengthChange": false, "autoWidth": false
+        // ,        "buttons": ["copy", "csv", "excel", "pdf", "print"]
+      }).buttons().container().appendTo('#example1_wrapper .col-md-6:eq(0)');
+
+      $("#table_implantados").DataTable({
+        "responsive": true, "lengthChange": false, "autoWidth": false
+        // ,        "buttons": ["copy", "csv", "excel", "pdf", "print"]
+      }).buttons().container().appendTo('#implantados_wrapper .col-md-6:eq(0)');
+
+      $("#table_manutencao").DataTable({
+        "responsive": true, "lengthChange": false, "autoWidth": false
+        // ,        "buttons": ["copy", "csv", "excel", "pdf", "print"]
+      }).buttons().container().appendTo('#manutencao_wrapper .col-md-6:eq(0)');
+
+
+      $('#example2').DataTable({
+        "paging": true,
+        "lengthChange": false,
+        "searching": false,
+        "ordering": true,
+        "info": true,
+        "autoWidth": false,
+        "responsive": true,
+      });
+    });
+  </script>
 
 <script>
   $(document).ready(function() {
@@ -622,7 +698,7 @@
           body: 'Lorem ipsum dolor sit amet, consetetur sadipscing elitr.',
           title: 'Toast Title',
           subtitle: 'Subtitle',
-          icon: 'fas fa-envelope fa-lg',
+          icon: 'fas fa-envelope',
         })
       });
       $('.toastsDefaultFullImage').click(function() {
