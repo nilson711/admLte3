@@ -142,7 +142,7 @@ class PctController extends Controller
         $clientes = DB::SELECT("SELECT * FROM clientes");
 
         $equipsPct = new Equipamento();
-        $equipsPct = DB::SELECT("SELECT * FROM equipamentos WHERE pct_equip = $id");
+        $equipsPct = DB::SELECT("SELECT * FROM equipamentos AS E  WHERE E.pct_equip = $id AND E.status_equip = 0 ");
         $equipsCount = Count($equipsPct);
 
         $equipsEstoque = DB::SELECT("SELECT name_equip FROM equipamentos WHERE pct_equip = 0 GROUP BY name_equip ORDER BY name_equip");
@@ -156,7 +156,7 @@ class PctController extends Controller
         $fornecedores = DB::SELECT("SELECT id, name_fornec FROM fornecedors");
 
         $solicitacoes = new Solicitacao();
-        $solicitacoes = DB::SELECT("SELECT equips_solicit, obs_solicit FROM solicitacaos WHERE pct_solicit = $id AND status_solicit=0");
+        $solicitacoes = DB::SELECT("SELECT id, status_solicit, equips_solicit, obs_solicit FROM solicitacaos WHERE pct_solicit = $id AND status_solicit < 2");
 
         $pctSel = Pct::find($id);
 

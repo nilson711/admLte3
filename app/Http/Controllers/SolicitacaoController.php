@@ -14,6 +14,8 @@ use SebastianBergmann\Environment\Console;
 use App\Models\Cidade;
 use App\Models\Cliente;
 
+use Image;
+
 
 class SolicitacaoController extends Controller
 {
@@ -63,6 +65,7 @@ public function iniciar_solicit(Request $request, $id){
         break;
         case '1':
             //SE O VALUE DO SBMITBUTTON FOR 1 (RETORNA STATUS PARA 1 - EM ATENDIMENTO)
+            // echo('entrou aqui');
             $status1 = $request->input('status');
             //SALVA
             $solicit = Solicitacao::find($id);
@@ -77,11 +80,15 @@ public function iniciar_solicit(Request $request, $id){
             //SE O VALUE DO SBMITBUTTON FOR 2 (RETORNA STATUS PARA 2 - FINALIZADA)
             $status1 = $request->input('status');
             $obs_atend = $request->input('obs_atend');
-            $nameFile = $request->id . '.' . $request->guia->extension() ;
-            // $guia = $request->file('guia')->storeAs('guias', $nameFile); // busca no input 'guia' o arquivo e armazena na pasta 'guias'
-            $guia = $request->file('guia')->resize(300, 200)->storeAs('guias', $nameFile); // busca no input 'guia' o arquivo e armazena na pasta 'guias'
 
+            // $image = $request->file;
+            $nameFile = $request->id . '.' . $request->guia->extension();
+
+            $guia = $request->file('guia')->storeAs('guias', $nameFile); // busca no input 'guia' o arquivo e armazena na pasta 'guias'
+            $image_resize = $request->file('guia')->storeAs('guias', $nameFile); // busca no input 'guia' o arquivo e armazena na pasta 'guias'
             
+            Equipamento::where('solicit_equip', $id)
+                    ->update(['status_equip' => 0 ]);
 
             //SALVA
             $solicit = Solicitacao::find($id);
@@ -99,6 +106,7 @@ public function iniciar_solicit(Request $request, $id){
             //SE O VALUE DO SBMITBUTTON FOR 3 (RETORNA STATUS PARA 3 - CANCELADA)
             $status1 = $request->input('status');
             $txtCancel = $request->input('txtCancel');
+
             //SALVA
             $solicit = Solicitacao::find($id);
             $solicit->status_solicit = 3;
@@ -128,9 +136,11 @@ public function add_equip_pct(Request $request){
         if (empty($equip)) {
             //se for nulo não faz nada
         } else {
-            $regEquipSelecionado = Equipamento::find($equip);   //busca no Bd o id do equipamento
+            $regEquipSelecionado = Equipamento::find($equip);       //busca no Bd o id do equipamento
             $regEquipSelecionado->pct_equip =  $pctForEquip;
-            $regEquipSelecionado->solicit_equip = $solicitForEquip;     //atribui o id da solicitação ao equipamento
+            $regEquipSelecionado->solicit_equip = $solicitForEquip;  //atribui o id da solicitação ao equipamento
+            $regEquipSelecionado->status_equip = 2;                 //status do equipamento para 2 = solicitado
+            
             $regEquipSelecionado->save();
         }
         
@@ -149,8 +159,19 @@ public function add_equip_pct(Request $request){
     // echo($pctForEquip);
     // echo($regEquipSelecionado);
 }
-
 ///========================================================================================================================
+ //EXCLUI TODOS OS EQUIPAMENTOS DA SOLICITAÇÃO
+ public function cancelAllEquipsSolicit(Request $request, $s_equip){
+
+        Equipamento::where('solicit_equip', $s_equip)
+                    ->update(['pct_equip' => 0, 'solicit_equip' => 0, 'status_equip' => 0 ]);
+    
+        return back()->withInput();
+}
+ 
+
+
+//========================================================================================================================
 public function atualizarEstoque($input)
 {
 
@@ -179,7 +200,8 @@ $resultado = [];
                         INNER JOIN pcts AS P ON S.pct_solicit = P.id
                         INNER JOIN clientes AS C ON C.id = P.id_hc
                         WHERE s.status_solicit= 0 OR s.status_solicit= 1
-                        ORDER BY S.priority DESC, P.bairro ASC
+                        ORDER BY S.priority DESC, S.id ASC
+                        -- ORDER BY S.priority DESC, P.bairro ASC
                         ");
 
         $equips = new Equipamento();

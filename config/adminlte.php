@@ -138,7 +138,7 @@ return [
     | Sidebar
     |--------------------------------------------------------------------------
     |
-    | Here we can modify the sidebar of the admin panel.
+    | Here we can modify the sidebar of the admin panel.cl
     |
     | For detailed instructions you can look the sidebar section here:
     | https://github.com/jeroennoten/Laravel-AdminLTE/wiki/Layout-and-Styling-Configuration

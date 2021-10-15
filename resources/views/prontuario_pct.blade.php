@@ -30,16 +30,23 @@
             <div class="col-md-12">
                 <div class="card card-primary card-outline card-outline-tabs">
                     <div class="card-header p-2">
-                  <label class="float-sm-right">{{$pctSel->name_pct}}</label>
+                  <label>PCT: {{$pctSel->name_pct}}</label>
+                  <div class="card-tools float-right">
+                    <button type="button" class="btn btn-block btn-danger btn-sm">
+                        <a href="{{ route('listaPcs') }}">
+                            <i class="fas fa-times" style="color: white" data-toggle="tooltip" title="Fechar"></i>
+                        </a>
+                    </button>
+                </div>
                 <ul class="nav nav-tabs">
-                  <li class="nav-item"><a class="nav-link active" href="#tabDadosPct" data-toggle="tab">Dados</a></li>
-                  <li class="nav-item"><a class="nav-link" href="#tabEquipamentosPct" data-toggle="tab">Equipamentos</a></li>
+                  <li class="nav-item"><a class="nav-link" href="#tabDadosPct" data-toggle="tab">Dados</a></li>
+                  <li class="nav-item"><a class="nav-link active" href="#tabEquipamentosPct" data-toggle="tab">Equipamentos</a></li>
                   <li class="nav-item"><a class="nav-link" href="#settings" data-toggle="tab">Histórico</a></li>
                 </ul>
               </div><!-- /.card-header -->
               <div class="card-body">
                 <div class="tab-content">
-                  <div class="active tab-pane" id="tabDadosPct">
+                  <div class="tab-pane" id="tabDadosPct">
 <!---------------------------------------------------- FORMUÁRIO DADOS DO PACIENTE ------------------------------------------------>
                     <form action="{{route('edit_Pct_submit', $pctSel->id)}}" method="post" >
 
@@ -179,7 +186,7 @@
                             <div class=" float-right" >
                                 {{-- <button type="button" class="btn btn-success swalDefaultSuccess">Launch Success Toast</button> --}}
                                 {{-- Retornar para página anterior --}}
-                                <a href="javascript:history.back()"><button type="button" class="btn btn-outline-secondary " data-dismiss="modal">Cancelar</button></a>
+                                {{-- <a href="javascript:history.back()"><button type="button" class="btn btn-outline-secondary " data-dismiss="modal">Cancelar</button></a> --}}
                             <button type="submit" class="btn btn-outline-primary swalDefaultSuccess">Salvar</button>
                             </div>
                         </div>
@@ -188,7 +195,7 @@
 <!---------------------------------------------------- EQUIPAMENTOS DO PACIENTE ------------------------------------------------>
                 </div>
                   <!-- /.tab-pane -->
-                  <div class="tab-pane" id="tabEquipamentosPct">
+                  <div class="active tab-pane" id="tabEquipamentosPct">
                     <!-- The tabEquipamentosPct -->
                     <div>
                         <div>
@@ -302,10 +309,20 @@
                         </div>
                     </div>
                     <hr>
-                    <div class="row">
-                        Solicitações pendentes:<br>
+                   <label for="">Solicitações pendentes:</label>
+                    <div >
                         @foreach ($solicitacoes as $solicitacao )
-                        - {{$solicitacao->equips_solicit}} ({{$solicitacao->obs_solicit}})<br>
+                        <ul>
+                          <li class="toastsDefaultSuccess" id="list_solicit_pend">
+                            {{$solicitacao->id}} - {{$solicitacao->equips_solicit}} ({{$solicitacao->obs_solicit}})
+                              @if ($solicitacao->status_solicit == 1)
+                                  <i class="fas fa-ambulance" id="ambulancia" data-toggle="tooltip" title="Em atendimento" style="display: inline; color: rgb(255, 0, 55)"></i><br>
+                              @else
+                                  <i class="fas fa-ambulance" id="ambulancia" style="display: none"></i><br>
+                              @endif
+                          </li>
+                        </ul>
+                            
                         @endforeach
 
                     </div>
@@ -432,10 +449,8 @@
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-outline-secondary" data-dismiss="modal">Cancelar</button>
-                    <button type="submit" class="btn btn-outline-primary">Solicitar</button>
-                    <button type="button" class="btn btn-danger toastsDefaultDanger">
-                        Launch Danger Toast
-                      </button>
+                    <button type="submit" class="btn btn-outline-primary ">Solicitar</button>
+                    
             </div>
         </form>
       </div>
@@ -499,6 +514,13 @@
 <script src= {{asset('js/select2.full.min.js')}}></script>
 <script src= {{asset('js/bootstrap.bundle.min.js')}}></script>
 <script src= {{asset('js/functions-equips.js')}} defer></script>
+
+<script>
+  $(document).ready(function() {
+                document.getElementById('list_solicit_pend').click;
+
+        });
+</script>
 
 <script>
     $(function() {
@@ -615,9 +637,9 @@
       $('.toastsDefaultSuccess').click(function() {
         $(document).Toasts('create', {
           class: 'bg-success',
-          title: 'Toast Title',
-          subtitle: 'Subtitle',
-          body: 'Lorem ipsum dolor sit amet, consetetur sadipscing elitr.'
+          title: 'Solicitação',
+          subtitle: 'Implantação',
+          body: 'Sua solicitação foi encaminhada com sucesso!.'
         })
       });
       $('.toastsDefaultInfo').click(function() {

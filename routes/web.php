@@ -48,6 +48,7 @@ Route::post('/iniciar_solicit/{id}', [App\Http\Controllers\SolicitacaoController
 Route::post('/cancelar_solicit/{id}', [App\Http\Controllers\SolicitacaoController::class, 'cancelar_solicit'])->name('cancelar_solicit');
 Route::post('/add_equip_pct', [App\Http\Controllers\SolicitacaoController::class, 'add_equip_pct'])->name('add_equip_pct');
 Route::get('/edit_solicit/{id}', [App\Http\Controllers\SolicitacaoController::class, 'edit_solicit'])->name('edit_solicit');
+Route::post('/cancelAllEquipsSolicit/{solicit_equip}', [App\Http\Controllers\SolicitacaoController::class, 'cancelAllEquipsSolicit'])->name('cancelAllEquipsSolicit');
 
 //Rota de Fallback
 Route::fallback(function(){
