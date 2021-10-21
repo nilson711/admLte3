@@ -331,7 +331,7 @@
                   <!-- /.HISTÓRICO -->
 
                   <div class="tab-pane" id="tabHistorico">
-                      
+
                       <table id="example1" class="table table-sm  table-striped dataTable dtr-inline" role="grid" aria-describedby="example1_info">
                           <thead>
                               <tr role="row">
@@ -391,7 +391,13 @@
                                     <td>{{date('d/m/Y', strtotime($solicFim->date_solicit))}}</td>
                                     <td>{{$solicFim->equips_solicit}}</td>
                                     <td>{{$solicFim->obs_solicit}}</td>
-                                    <td>Guia</td>
+                                    <td>
+                                        <div class="filtr-item col-sm-2" data-category="1" data-sort="white sample" style="opacity: 1; transform: scale(1) translate3d(0px, 0px, 0px); backface-visibility: hidden; perspective: 1000px; transform-style: preserve-3d; position: absolute; width: 123.5px; transition: all 0.5s ease-out 0ms, width 1ms ease 0s;">
+                                            <a href="{{asset('storage/guias/'.$solicFim->id.'.jpg')}}" target="_blank" data-toggle="lightbox" data-title="sample 1 - white">
+                                                <i class="far fa-file" data-toggle="tooltip" title="Guia"></i>
+                                            </a>
+                                          </div>
+                                    </td>
                                 </tr>
                             @endforeach
                         </tbody>
@@ -480,8 +486,84 @@
     </div>
   </div>
 
-
 <!--//////////////////////////////////////////////////// FIM MODAL SOLICITAÇÃO ////////////////////////////////////////////////-->
+
+<!--//////////////////////////////////////////////////// Modal RECOLHIMENTO  /////////////////////////////////////////////-->
+
+<div class="modal fade bd-example-modal-lg" id="modalSolicit" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="exampleModalLabel">Recolher Equipamento(s) - Paciente: {{$pctSel->name_pct}}</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+            <form action="{{route('new_solicita')}}" method="POST">
+                @csrf
+                <div class="form-group">
+                    <div class="row form-group">
+                        <div class="col-sm-6">
+                            <div class="card-body table-responsive p-0" style="height: 300px;">
+                                <table class="table table-sm table-striped table-head-fixed text-nowrap" id= "tableEquips">
+                                <thead>
+                                    <tr>
+                                    <th></th>
+                                    <th>Equipamentos disponíveis</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach ( $allEquipsEstoque as $equipEstoque)
+                                    <tr class="tr-row" style="vertical-align: middle; line-height: 100%">
+                                    <td>
+                                                <div style="margin-left: -40px" id="checkSelEquip" class="checkSelEquip form-check col-sm-6" onclick="ContarSelecionados()">
+                                                    {{-- <input class="qtdDoItem" type="number" min="0" value="0" onchange="qtdSolicitada(this.value)" style="width: 50px"> --}}
+                                                    {{-- <input type="number" onchange="cadastraNotaImportada(this.value)" class="form-control disciplina" name="" value="0"> --}}
+                                                    <input class="checkbox" type="checkbox" id= " {{$equipEstoque->name_equip}}" name=" {{$equipEstoque->name_equip}}" onclick="coletaDados()" style="margin-left: 7px; transform: scale(1.2)">
+                                                </div>
+                                        </td>
+                                        <td id="nomeEquip" class="nomeEquip">
+                                            {{$equipEstoque->name_equip}}
+                                            ({{$equipEstoque->qtdName}})
+                                        </td>
+                                    </tr>
+                                    @endforeach
+                                </tbody>
+                                </table>
+                            </div>
+                        </div>
+                        <div class="class col-sm-6">
+                            <p>Solicito a implantação dos equipamentos abaixo:</p>
+                            <input type="number" name="idPct" id="idPct" value="{{$pctSel->id}}" style="display: none">
+                            <div id="foo"></div>
+                            <textarea name="textEquips" id="textEquips" style="display: none"></textarea>
+                            <hr style="margin-top: 3px; margin-botton: 0px">
+                            <p id="QtdequipsSelecionados" style="margin-top: -10px"></p>
+                                    <div class="row form-group">
+                                        <div class="col-md-12">
+                                            <label for="obsSolicitacao">Observações:</label>
+                                            {{-- <input type="text" class="form-control" name="obsSolicitacao" id="obsSolicitacao" placeholder="Observações sobre a solicitação" maxlength="100"> --}}
+                                            <textarea class="form-control" name="obsSolicitacao" id="obsSolicitacao" rows="3" placeholder="Observações sobre a solicitação" maxlength="150"></textarea>
+                                        </div>
+                                    </div>
+                                    <div class="custom-control custom-checkbox">
+                                        <input class="custom-control-input custom-control-input-danger" data-toggle="tooltip" title="Só marque se for realmente Urgente!" type="checkbox" id="checkUrgente" name="checkUrgente" value="1" onclick="urgente()">
+                                        <label for="checkUrgente" class="custom-control-label" data-toggle="tooltip" title="Só marque se for realmente Urgente!">Urgente!</label>
+                                      </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-outline-secondary" data-dismiss="modal">Cancelar</button>
+                    <button type="submit" class="btn btn-outline-primary ">Solicitar</button>
+
+            </div>
+        </form>
+      </div>
+    </div>
+  </div>
                 <!-- /.tab-content -->
               </div><!-- /.card-body -->
             </div>

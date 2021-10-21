@@ -11,6 +11,9 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use SebastianBergmann\Environment\Console;
 
+use App\Mail\EmailFimSolicit;
+use Illuminate\Support\Facades\Mail;
+
 use App\Models\Cidade;
 use App\Models\Cliente;
 
@@ -84,9 +87,9 @@ public function iniciar_solicit(Request $request, $id){
             // $image = $request->file;
             $nameFile = $request->id . '.' . $request->guia->extension();
 
-            $guia = $request->file('guia')->storeAs('guias', $nameFile); // busca no input 'guia' o arquivo e armazena na pasta 'guias'
-            $image_resize = $request->file('guia')->storeAs('guias', $nameFile); // busca no input 'guia' o arquivo e armazena na pasta 'guias'
-            
+            $guia = $request->file('guia')->storeAs('public/guias', $nameFile); // busca no input 'guia' o arquivo e armazena na pasta 'guias'
+            $image_resize = $request->file('guia')->storeAs('public/guias', $nameFile); // busca no input 'guia' o arquivo e armazena na pasta 'guias'
+
             Equipamento::where('solicit_equip', $id)
                     ->update(['status_equip' => 0 ]);
 
@@ -94,13 +97,29 @@ public function iniciar_solicit(Request $request, $id){
             $solicit = Solicitacao::find($id);
             $solicit->status_solicit = 2;
             $solicit->obs_atend = $obs_atend;
-        
             $solicit->save();
-            
-             
-            
+
+            $PctAtual = new Pct;
+            $PctAtual = Pct::where('id', $solicit->pct_solicit)->pluck('name_pct')->toArray();
+
+
+            // $PctAtual = DB::SELECT("SELECT name_pct FROM pcts WHERE id = 22");
+
+            $pctSolFim = $PctAtual;
+            $idsolfim = $id;
+            $obsAtendfim = $solicit->obs_atend;
+
+            // Mail::to('nilson711@hotmail.com')->send(new EmailFimSolicit($nome));
+            Mail::to('nilson711@hotmail.com')->send(new EmailFimSolicit($idsolfim, $obsAtendfim, $pctSolFim));
+
+            // echo 'email enviado';
+
             // return back()->withInput();
+            // return redirect()->to('/fim_solicitacao');
             return redirect()->to('/solicitacoes');
+            // return view('emails.emailFimSolicit', ['solicit'=>$solicit]);
+
+
         break;
         case '3':
             //SE O VALUE DO SBMITBUTTON FOR 3 (RETORNA STATUS PARA 3 - CANCELADA)
@@ -125,7 +144,7 @@ public function iniciar_solicit(Request $request, $id){
 ///========================================================================================================================
 
 public function add_equip_pct(Request $request){
-    
+
     //BUSCA OS DADOS OS INPUTS
     $enviarEquip = $request->input('enviarEquip');  //Este input contém o array separado por vírgula
     $pctForEquip = $request->input('pctForEquip');  //Este input busca o id do paciente
@@ -140,20 +159,20 @@ public function add_equip_pct(Request $request){
             $regEquipSelecionado->pct_equip =  $pctForEquip;
             $regEquipSelecionado->solicit_equip = $solicitForEquip;  //atribui o id da solicitação ao equipamento
             $regEquipSelecionado->status_equip = 2;                 //status do equipamento para 2 = solicitado
-            
+
             $regEquipSelecionado->save();
         }
-        
-        
+
+
         // (isset($pctForEquip))? 0 : $pctForEquip;
              //atribui o id do pct ao equipamento
-        
-    
-        // echo '<pre>'; 
+
+
+        // echo '<pre>';
         // print_r($regEquipSelecionado);
     }
     // echo("Equipamentos implantados com sucesso!");
-   
+
     return back()->withInput();
 
     // echo($pctForEquip);
@@ -165,10 +184,10 @@ public function add_equip_pct(Request $request){
 
         Equipamento::where('solicit_equip', $s_equip)
                     ->update(['pct_equip' => 0, 'solicit_equip' => 0, 'status_equip' => 0 ]);
-    
+
         return back()->withInput();
 }
- 
+
 
 
 //========================================================================================================================
@@ -177,7 +196,7 @@ public function atualizarEstoque($input)
 
 $resultado = [];
         foreach ($input as $result) {
-            $resultado = $result;  
+            $resultado = $result;
             //dd($resultado['id']);
             $teste = $this->produto
                 ->where([['id', $resultado['id']]])
@@ -214,36 +233,36 @@ $resultado = [];
 
     public function edit_solicit($id)
     {
-        
+
 
         $pct_sel = new Pct;
-        
+
         $allCities = new Cidade;
         $allCities = DB::SELECT("SELECT * from cidades ORDER BY nome");
 
         $clientes = new Cliente;
         $clientes = DB::SELECT("SELECT * FROM clientes");
 
-        $allEquipsEstoque = DB::SELECT("SELECT name_equip, count(*) AS qtdName 
-                                        FROM equipamentos 
-                                        WHERE pct_equip = 0 
-                                        GROUP BY name_equip 
+        $allEquipsEstoque = DB::SELECT("SELECT name_equip, count(*) AS qtdName
+                                        FROM equipamentos
+                                        WHERE pct_equip = 0
+                                        GROUP BY name_equip
                                         ORDER BY name_equip");
         //O count(*) faz a contagem em cada tipo de equipamento pelo group e atribui a qtdName e este pode ser buscado na view
         $allEquipsEstoqueCount = Count($allEquipsEstoque);
 
         $equips = new Equipamento();
         $equips = DB::SELECT("SELECT * FROM equipamentos WHERE pct_equip = 0");
-        
-        
+
+
         $fornecedores =  new Fornecedor();
         $fornecedores = DB::SELECT("SELECT id, name_fornec FROM fornecedors");
-        
+
         $solicitacoes = new Solicitacao();
         $solicitacoes = DB::SELECT("SELECT equips_solicit, obs_solicit FROM solicitacaos WHERE pct_solicit = $id AND status_solicit=0");
-        
+
         $solicitSel = Solicitacao::find($id);
-        
+
         $solicitAtual = DB::SELECT("SELECT S.id AS SolicitId, S.priority, S.status_solicit, S.pct_solicit, P.name_pct, P.id, P.id_hc, S.type_solicit, S.user_atend, S.date_solicit, C.cliente, P.rua, P.nr, P.bairro, P.compl, S.equips_solicit, S.obs_solicit
                         FROM solicitacaos AS S
                         INNER JOIN pcts AS P ON S.pct_solicit = P.id
@@ -255,14 +274,14 @@ $resultado = [];
         //Seleciona o id do paciente da solicitação atual
         $pctSel = DB::SELECT("SELECT pct_solicit FROM solicitacaos WHERE id = $id");
 
-        //Converte o Array $pctSel em String 
+        //Converte o Array $pctSel em String
         $collection = collect($pctSel);
         $idPctSel = $collection->implode('pct_solicit', ',');
 
         //Seleciona o nº de patrimônio e nome do equipamento selecionado da solicitação atual
         $equipsSel = DB::SELECT("SELECT patr, name_equip FROM equipamentos WHERE pct_equip = $idPctSel AND solicit_equip = $id;
 
-                        
+
                         -- INNER JOIN pcts AS PCT ON SOLICIT.pct_solicit = PCT.id
                         -- INNER JOIN equipamentos AS E ON E.id = PCT.id
                         -- WHERE SOLICIT.id = $id

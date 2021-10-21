@@ -34,6 +34,17 @@ return [
     */
 
     'mailers' => [
+        // 'smtp' => [
+        //     'transport' => config('constants.MAIL_TRANSPORT'),
+        //     'host' => config('constants.MAIL_HOST'),
+        //     'port' => config('constants.MAIL_PORT'),
+        //     'encryption' => config('constants.MAIL_ENCRYPTION'),
+        //     'username' => config('constants.MAIL_USERNAME'),
+        //     'password' => config('constants.MAIL_PASSWORD'),
+        //     'timeout' => null,
+        //     'auth_mode' => null,
+        // ],
+
         'smtp' => [
             'transport' => 'smtp',
             'host' => env('MAIL_HOST', 'smtp.mailgun.org'),
@@ -45,31 +56,31 @@ return [
             'auth_mode' => null,
         ],
 
-        'ses' => [
-            'transport' => 'ses',
-        ],
+        // 'ses' => [
+        //     'transport' => 'ses',
+        // ],
 
-        'mailgun' => [
-            'transport' => 'mailgun',
-        ],
+        // 'mailgun' => [
+        //     'transport' => 'mailgun',
+        // ],
 
-        'postmark' => [
-            'transport' => 'postmark',
-        ],
+        // 'postmark' => [
+        //     'transport' => 'postmark',
+        // ],
 
-        'sendmail' => [
-            'transport' => 'sendmail',
-            'path' => '/usr/sbin/sendmail -bs',
-        ],
+        // 'sendmail' => [
+        //     'transport' => 'sendmail',
+        //     'path' => '/usr/sbin/sendmail -bs',
+        // ],
 
-        'log' => [
-            'transport' => 'log',
-            'channel' => env('MAIL_LOG_CHANNEL'),
-        ],
+        // 'log' => [
+        //     'transport' => 'log',
+        //     'channel' => env('MAIL_LOG_CHANNEL'),
+        // ],
 
-        'array' => [
-            'transport' => 'array',
-        ],
+        // 'array' => [
+        //     'transport' => 'array',
+        // ],
     ],
 
     /*
@@ -84,8 +95,8 @@ return [
     */
 
     'from' => [
-        'address' => env('MAIL_FROM_ADDRESS', 'hello@example.com'),
-        'name' => env('MAIL_FROM_NAME', 'Example'),
+        'address' => config('constants.MAIL_FROM'),
+        'name' => config('constants.MAIL_FROM_NAME'),
     ],
 
     /*

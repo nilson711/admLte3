@@ -1,5 +1,7 @@
 <?php
 
+use App\Mail\EmailFimSolicit;
+use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -49,6 +51,15 @@ Route::post('/cancelar_solicit/{id}', [App\Http\Controllers\SolicitacaoControlle
 Route::post('/add_equip_pct', [App\Http\Controllers\SolicitacaoController::class, 'add_equip_pct'])->name('add_equip_pct');
 Route::get('/edit_solicit/{id}', [App\Http\Controllers\SolicitacaoController::class, 'edit_solicit'])->name('edit_solicit');
 Route::post('/cancelAllEquipsSolicit/{solicit_equip}', [App\Http\Controllers\SolicitacaoController::class, 'cancelAllEquipsSolicit'])->name('cancelAllEquipsSolicit');
+Route::get('/fim_solicitacao', [App\Http\Controllers\SolicitacaoController::class, 'iniciar_solicit'])->name('fim_solicitacao');
+
+// Route::get('/fim_solicitacao', function(){
+
+//     $nome = 'Antonio 45';
+
+//     Mail::to('nilson711@hotmail.com')->send(new EmailFimSolicit($nome));
+//     echo 'email enviado';
+// });
 
 //Rota de Fallback
 Route::fallback(function(){
