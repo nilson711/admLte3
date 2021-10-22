@@ -9,16 +9,27 @@
 </head>
 <body>
     <h3>Solicitação nº {{$idsolfimEmail}} Concluída</h3>
-    <h3>PCT:
+
+    <p>Informamos que na data de hoje foi realizado IMPLANTAÇÃO do(s) seguinte(s) equipamento(s)<br>
+        para o(a) paciente
         @foreach ($pctSolFimEmail as $pct)
-            {{$pct}}
+            <strong>
+                {{$pct}},
+            </strong>
         @endforeach
-    </h3>
-    <p>Informamos que na data de hoje foi realizado IMPLANTAÇÃO do(s) seguinte(s) equipamento(s):<br>
+            conforme guia em anexo.<br>
+            {{-- {{$equipsSolicFimEmail}} --}}
+            @foreach ($equipsSolicFimEmail as $equip)
+                <li>
+                    {{$equip}}
+                </li>
+
+            @endforeach
 
     </p>
-    <p>Obs: {{$obsAtendfimEmail}}</p><br>
-    <p>conforme guia em anexo.</p><br>
+    @if ($obsAtendfimEmail != null)
+        <i>Obs: {{$obsAtendfimEmail}}</i>
+    @endif
     <p>Att.</p>
     <p>MH Suprimentos</p>
 </body>

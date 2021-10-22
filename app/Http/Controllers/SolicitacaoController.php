@@ -18,7 +18,7 @@ use App\Models\Cidade;
 use App\Models\Cliente;
 
 use Image;
-
+use stdClass;
 
 class SolicitacaoController extends Controller
 {
@@ -101,16 +101,23 @@ public function iniciar_solicit(Request $request, $id){
 
             $PctAtual = new Pct;
             $PctAtual = Pct::where('id', $solicit->pct_solicit)->pluck('name_pct')->toArray();
-
+            $hcPctAtual = Pct::where('id', $solicit->pct_solicit)->pluck('id_hc');
 
             // $PctAtual = DB::SELECT("SELECT name_pct FROM pcts WHERE id = 22");
 
             $pctSolFim = $PctAtual;
             $idsolfim = $id;
             $obsAtendfim = $solicit->obs_atend;
+            $equipsSolicFim = Equipamento::where('solicit_equip', $id)->pluck('name_equip', 'patr')->toArray();
+            $emailDestino = Cliente::where('id',  $hcPctAtual)->pluck('email');
+
+
+            $idForGuia = $id;
+
 
             // Mail::to('nilson711@hotmail.com')->send(new EmailFimSolicit($nome));
-            Mail::to('nilson711@hotmail.com')->send(new EmailFimSolicit($idsolfim, $obsAtendfim, $pctSolFim));
+            Mail::to($emailDestino)->send(new EmailFimSolicit($idsolfim, $obsAtendfim, $pctSolFim, $equipsSolicFim, $idForGuia));
+
 
             // echo 'email enviado';
 

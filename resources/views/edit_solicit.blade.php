@@ -243,18 +243,18 @@
                                                                         method="post" enctype="multipart/form-data">
                                                                         @csrf
                                                                         @if ($atual->status_solicit == 1)
+                                                                        <div class="row">
                                                                             <li class="nav-item">
                                                                                 <a id="linkBtnFinalizar" data-toggle="modal"
                                                                                     data-target='#modalFinalizar'
                                                                                     onclick="coletaProdutoSelecionado()">
                                                                                     <button id="btnFinalizar"
                                                                                         class="btn btn-app"
-                                                                                        style="color: green">
+                                                                                        style="color: rgb(40, 184, 40)">
                                                                                         <i class="far fa-check-square"></i>
                                                                                         Finalizar
                                                                                     </button>
                                                                                 </a>
-
                                                                             </li>
 
                                                                             <li class="nav-item">
@@ -269,7 +269,7 @@
                                                                                     </button>
                                                                                 </a>
                                                                             </li>
-
+                                                                        </div>
                                                                         @endif
                                                                 </ul>
                                                             @endif
@@ -356,12 +356,12 @@
                                             <div class="form-group">
                                                 <label for="exampleFormControlFile1">Anexar Guia:</label>
                                                 <input type="file" class="form-control-file" name="guia" id="guia">
-                                                <input id="imageFile" name="imageFile" type="file" class="imageFile"
+                                                {{-- <input id="imageFile" name="imageFile" type="file" class="imageFile"
                                                     accept="image/*" />
                                                 <input type="button" value="Resize Image" onclick="ResizeImage()" />
                                                 <br>
                                                 <img src="" id="preview">
-                                                <img src="" id="output">
+                                                <img src="" id="output"> --}}
                                             </div>
 
                                             <label for="obs_atend">Observações:</label><br>
