@@ -116,7 +116,9 @@ public function iniciar_solicit(Request $request, $id){
 
 
             // Mail::to('nilson711@hotmail.com')->send(new EmailFimSolicit($nome));
-            Mail::to($emailDestino)->send(new EmailFimSolicit($idsolfim, $obsAtendfim, $pctSolFim, $equipsSolicFim, $idForGuia));
+            Mail::to($emailDestino)->cc('nilson711@gmail.com')
+                    ->send(new EmailFimSolicit($idsolfim, $obsAtendfim, $pctSolFim, $equipsSolicFim, $idForGuia))
+            ;
 
 
             // echo 'email enviado';

@@ -7,11 +7,12 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Mail\Mailable;
 use Illuminate\Queue\SerializesModels;
 
+
 class EmailFimSolicit extends Mailable
 {
     use Queueable, SerializesModels;
 
-    public $idsolfimEmail, $obsAtendfimEmail, $pctSolFimEmail, $equipsSolicFimEmail;
+    public $user, $idsolfimEmail, $obsAtendfimEmail, $pctSolFimEmail, $equipsSolicFimEmail;
 
 
     public function __construct($idsolfim, $obsAtendfim, $pctSolFim, $equipsSolicFim)
@@ -26,17 +27,9 @@ class EmailFimSolicit extends Mailable
     public function build()
     {
 
-        // return $this->view('view.name');
-        // return $this->view('emailFimSolicit');
         return $this->subject('Solicitação Concluída')
                     ->view('emails.emailFimSolicit')
-                    // ->attach('storage/guias/'.$solicFim->id.'.jpg');
-                    ->attach('storage/guias/48.jpg');
-
-
-
-
-
+                    ->attach('storage/guias/'.$this->idsolfimEmail.'.jpg');
 
     }
 }
