@@ -15,7 +15,7 @@
     <div>
 
         @foreach ($solicitacoes as $solicitacao )
-           
+
             @if ($solicitacao->priority == 0)
             <div class="col-12">
                 <div class="info-box">
@@ -28,8 +28,34 @@
                         @break
                         @case(2)
                             <i class="fas fa-minus-circle fa-lg" data-toggle="tooltip"
-                                title=" Recolhimento"
-                                style="color: black"></i>
+                            title="Recolhimento -
+                            @switch($solicitacao->motivo)
+                                @case(1)
+                                    Alta
+                                @break
+                                @case(2)
+                                    Óbito
+                                @break
+                                @case(3)
+                                    Internado
+                                @break
+                                @case(4)
+                                    Sem uso
+                                @break
+                                @case(5)
+                                    Não atende a necessidade
+                                @break
+                                @case(6)
+                                    Troca de Home Care
+                                @break
+                                @case(7)
+                                    Outro
+                                @break
+                            @default
+
+                            @endswitch
+
+                            " style="color: rgb(255, 255, 255)"></i>
                         @break
                         @case(3)
                             <i class="fas fa-tools fa-lg" data-toggle="tooltip"
@@ -54,9 +80,9 @@
                         @default
                             <i class="fas fa-plus-circle" data-toggle="tooltip" title="nenhum"></i>
                     @endswitch
-                                     
+
                   </span>
-                  
+
                   <div class="info-box-content">
                         <span class="info-box-number">
                           <small>
@@ -76,11 +102,11 @@
                             <small >{{ $solicitacao->bairro }}</small>
                         {{-- <i class="fas fa-map-marker-alt" data-toggle="tooltip" title="{{ $solicitacao->bairro }}"></i> --}}
                   </div>
-                  
+
                   <!-- /.info-box-content -->
                 </div>
                 <!-- /.info-box -->
-                
+
                       <!-- Modal -->
                       <div class="modal fade" id="modalFinalizar" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
                           <div class="modal-dialog modal-dialog-centered" role="document">
@@ -119,7 +145,7 @@
                                 @case(2)
                                     <i class="fas fa-minus-circle fa-lg" data-toggle="tooltip"
                                         title=" Recolhimento"
-                                        style="color: black"></i>
+                                        style="color: rgb(255, 0, 0)"></i>
                                 @break
                                 @case(3)
                                     <i class="fas fa-tools fa-lg" data-toggle="tooltip"

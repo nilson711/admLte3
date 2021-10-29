@@ -20,8 +20,9 @@ class PctController extends Controller
 
     public function listaPcs()
     {
-        $allPcts = new Pct;
-        $allPcts = DB::SELECT("SELECT * FROM pcts ORDER BY name_pct");
+        // $allPcts = new Pct;
+        // $allPcts = DB::SELECT("SELECT * FROM pcts  id DESC");
+        $allPcts = Pct::all()->reverse();
 
         $allCities = new Cidade;
         $allCities = DB::SELECT("SELECT * from cidades ORDER BY nome");
@@ -144,7 +145,7 @@ class PctController extends Controller
         $clientes = DB::SELECT("SELECT * FROM clientes");
 
         $equipsPct = new Equipamento();
-        $equipsPct = DB::SELECT("SELECT * FROM equipamentos AS E  WHERE E.pct_equip = $id AND E.status_equip = 0 ");
+        $equipsPct = DB::SELECT("SELECT * FROM equipamentos AS E  WHERE E.pct_equip = $id ");
         $equipsCount = Count($equipsPct);
 
         $equipsEstoque = DB::SELECT("SELECT name_equip FROM equipamentos WHERE pct_equip = 0 GROUP BY name_equip ORDER BY name_equip");
@@ -158,12 +159,12 @@ class PctController extends Controller
         $fornecedores = DB::SELECT("SELECT id, name_fornec FROM fornecedors");
 
         $solicitacoes = new Solicitacao();
-        $solicitacoes = DB::SELECT("SELECT id, status_solicit, equips_solicit, obs_solicit FROM solicitacaos WHERE pct_solicit = $id AND status_solicit < 2");
-        $solicitacoesFim = DB::SELECT("SELECT id, status_solicit, type_solicit, date_solicit, equips_solicit, obs_solicit FROM solicitacaos WHERE pct_solicit = $id AND status_solicit > 1");
+        $solicitacoes = DB::SELECT("SELECT id, status_solicit, motivo, equips_solicit, type_solicit, obs_solicit FROM solicitacaos WHERE pct_solicit = $id AND status_solicit < 2");
+        $solicitacoesFim = DB::SELECT("SELECT id, status_solicit, type_solicit, date_solicit, equips_solicit, obs_solicit, obs_atend FROM solicitacaos WHERE pct_solicit = $id AND status_solicit > 1");
 
         $pctSel = Pct::find($id);
 
-        
+
 
         // return view('edit_pct', ['pctSel'=>$pctSel] + ['allPcts'=>$allPcts] + ['allCities'=>$allCities] + ['clientes'=>$clientes]);
         return view('prontuario_pct', ['pctSel'=>$pctSel] + ['solicitacoes'=>$solicitacoes] + ['solicitacoesFim'=>$solicitacoesFim] + ['allEquipsEstoqueCount'=>$allEquipsEstoqueCount] + ['allEquipsEstoque'=>$allEquipsEstoque] + ['equipsEstoque'=>$equipsEstoque] + ['equipsEstoqueCount'=>$equipsEstoqueCount] + ['allPcts'=>$allPcts] + ['allCities'=>$allCities] + ['clientes'=>$clientes] + ['equipsPct'=>$equipsPct] + ['fornecedores'=>$fornecedores] + ['equipsCount'=>$equipsCount]);

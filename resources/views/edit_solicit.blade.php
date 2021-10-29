@@ -100,13 +100,17 @@
                                                 <!-- your steps content here -->
                                                 <div id="select-equips">
                                                     <div >
-                                                        <label for="exampleInputEmail1">Solicitados</label>
+                                                        @if ($solicitSel->type_solicit == 1)
+                                                            <label for="exampleInputEmail1">Solicitados</label>
+                                                        @endif
                                                         <div>
                                                             @foreach (explode(',', $atual->equips_solicit) as $itemEquip)
                                                                 {{-- Separa os itens por vírgula e joga numa lista --}}
                                                                 <div class="form-group">
                                                                     <div>
-                                                                        <li class="li_itens">{{ $itemEquip }}</li>
+                                                                        @if ($solicitSel->type_solicit == 1)
+                                                                            <li class="li_itens">{{ $itemEquip }}</li>
+                                                                        @endif
                                                                         {{-- <i class="fas fa-plus"></i> --}}
                                                                         <form action="{{ route('add_equip_pct') }}"
                                                                             method="post">
@@ -173,21 +177,21 @@
                                                                                                 para selecionar.
                                                                                             </h5>
                                                                                             <h5>Deseja continuar?</h5>
-                                                                                            <label
+                                                                                            {{-- <label
                                                                                                 for="obs_atend">Observações:</label><br>
                                                                                             <textarea name="obs_atend"
                                                                                                 id="obs_atend" cols="38"
-                                                                                                rows="4"></textarea>
+                                                                                                rows="4"></textarea> --}}
                                                                                         </div>
                                                                                         <div class="modal-footer">
                                                                                             <button type="button"
                                                                                                 class="btn btn-secondary"
-                                                                                                data-dismiss="modal">Cancelar</button>
+                                                                                                data-dismiss="modal">Não</button>
                                                                                             <button
                                                                                                 class="btn btn-primary swalDefaultAddEquip"
                                                                                                 name="submitbutton"
                                                                                                 value="2"
-                                                                                                type="submit">Confirmar</button>
+                                                                                                type="submit">Sim</button>
                                                                                         </div>
                                                                                     </div>
                                                                                 </div>
@@ -196,83 +200,140 @@
                                                                     </div>
                                                                 </div>
                                                             @endforeach
+                                                            <div class="col-md-12">
+                                                                @if ($equipsSel != null)
+                                                                    <label for="">Selecionados {{$solicitSel->type_solicit == 2 ? "para recolhimento" : ""}}</label><br>
+                                                                    @foreach ($equipsSel as $itemSel)
+                                                                        <form action="{{ route('cancelOneEquipSolicit', $itemSel->id) }}"
+                                                                            method="post">
+                                                                            @csrf
+                                                                                <li style="color: blue">{{ $itemSel->patr }} -
+                                                                                    {{ $itemSel->name_equip }}
+                                                                                        @if ($solicitSel->type_solicit == 1)
+                                                                                            <button class="btn" type="submit" data-toggle="tooltip" title="Retirar este equipamento"
+                                                                                                style="color: red">
+                                                                                                <i class="fas fa-trash"></i>
+                                                                                            </button>
 
-                                                            @if ($equipsSel != null)
-                                                                <label for="">Selecionados</label><br>
-                                                                @foreach ($equipsSel as $itemSel)
-                                                                    <li style="color: blue">{{ $itemSel->patr }} -
-                                                                        {{ $itemSel->name_equip }}</li>
-                                                                @endforeach
+                                                                                        @endif
 
-                                                                <form
-                                                                    action="{{ route('cancelAllEquipsSolicit', $atual->SolicitId) }}"
-                                                                    method="post">
-                                                                    @csrf
-                                                                    <button class="btn btn-app" type="submit"
-                                                                        style="color: red" onclick="txtCancelRequired()">
-                                                                        <i class="fas fa-window-close"></i>
-                                                                        Excluir Selecionados
-                                                                    </button>
-                                                                </form>
+                                                                                        <!-- Modal Confirma Exclusão Equip -->
+                                                                            <div class="modal fade" id="modalConfirmaExclusão"
+                                                                                    tabindex="-1" role="dialog"
+                                                                                    aria-labelledby="exampleModalLabel"
+                                                                                    aria-hidden="true">
+                                                                                <div class="modal-dialog modal-dialog-centered"
+                                                                                    role="document">
+                                                                                    <div class="modal-content">
+                                                                                        <div class="modal-header">
+                                                                                            <h5 class="modal-title"
+                                                                                                id="exampleModalLabel">
+                                                                                                Excluir Equipamento
+                                                                                            </h5>
+                                                                                            <button type="button"
+                                                                                                class="close"
+                                                                                                data-dismiss="modal"
+                                                                                                aria-label="Close">
+                                                                                                <span
+                                                                                                    aria-hidden="true">&times;</span>
+                                                                                            </button>
+                                                                                        </div>
+                                                                                        <div class="modal-body">
 
-                                                                <ul class="nav nav-pills ml-auto p-2">
+                                                                                            <h5>Deseja continuar?</h5>
+                                                                                            {{-- <label
+                                                                                                for="obs_atend">Observações:</label><br>
+                                                                                            <textarea name="obs_atend"
+                                                                                                id="obs_atend" cols="38"
+                                                                                                rows="4"></textarea> --}}
+                                                                                        </div>
+                                                                                        <div class="modal-footer">
+                                                                                            <button type="button"
+                                                                                                class="btn btn-secondary"
+                                                                                                data-dismiss="modal">Não</button>
+                                                                                            <button
+                                                                                                class="btn btn-primary swalDefaultCancelEquip"
+                                                                                                name="submitbutton"
+                                                                                                value="2"
+                                                                                                type="submit">Sim</button>
+                                                                                        </div>
+                                                                                    </div>
+                                                                                </div>
+                                                                            </div>
+                                                                                </li>
+                                                                        </form>
+                                                                        @endforeach
 
-                                                                    <form
-                                                                        action="{{ route('iniciar_solicit', $atual->SolicitId) }}"
+                                                                    {{-- <form
+                                                                        action="{{ route('cancelAllEquipsSolicit', $atual->SolicitId) }}"
                                                                         method="post">
                                                                         @csrf
+                                                                        <button class="btn btn-app" type="submit"
+                                                                            style="color: red" onclick="txtCancelRequired()">
+                                                                            <i class="fas fa-window-close"></i>
+                                                                            Excluir Selecionados dddd
+                                                                        </button>
+                                                                    </form> --}}
 
-                                                                        @if ($atual->status_solicit == 0)
-                                                                            <li class="nav-item">
-                                                                                <a id="btnIniciar">
-                                                                                    <button class="btn btn-app "
-                                                                                        onclick="txtCancelNoRequired()"
-                                                                                        name="submitbutton" value="1"
-                                                                                        type="submit"
-                                                                                        style="color: green; visibility: visible">
-                                                                                        <i class="fas fa-play"></i>
-                                                                                        Iniciar
-                                                                                    </button>
-                                                                                </a>
-                                                                            </li>
-                                                                        @endif
-                                                                    </form>
+                                                                    <ul class="nav nav-pills ml-auto p-2">
 
-                                                                    <form
-                                                                        action="{{ route('iniciar_solicit', $atual->SolicitId) }}"
-                                                                        method="post" enctype="multipart/form-data">
-                                                                        @csrf
-                                                                        @if ($atual->status_solicit == 1)
-                                                                        <div class="row">
-                                                                            <li class="nav-item">
-                                                                                <a id="linkBtnFinalizar" data-toggle="modal"
-                                                                                    data-target='#modalFinalizar'
-                                                                                    onclick="coletaProdutoSelecionado()">
-                                                                                    <button id="btnFinalizar"
-                                                                                        class="btn btn-app"
-                                                                                        style="color: rgb(40, 184, 40)">
-                                                                                        <i class="far fa-check-square"></i>
-                                                                                        Finalizar
-                                                                                    </button>
-                                                                                </a>
-                                                                            </li>
+                                                                        <form
+                                                                            action="{{ route('iniciar_solicit', $atual->SolicitId) }}"
+                                                                            method="post">
+                                                                            @csrf
 
-                                                                            <li class="nav-item">
-                                                                                <a>
-                                                                                    <button
-                                                                                        class="btn btn-app swalDefaultInfo"
-                                                                                        name="submitbutton" value="0"
-                                                                                        type="submit"
-                                                                                        style="color: rgb(0, 0, 0)">
-                                                                                        <i class="fas fa-undo"></i>
-                                                                                        Retornar
-                                                                                    </button>
-                                                                                </a>
-                                                                            </li>
-                                                                        </div>
-                                                                        @endif
-                                                                </ul>
-                                                            @endif
+                                                                            @if ($atual->status_solicit == 0)
+                                                                                <li class="nav-item">
+                                                                                    <a id="btnIniciar">
+                                                                                        <button class="btn btn-app "
+                                                                                            onclick="txtCancelNoRequired()"
+                                                                                            name="submitbutton" value="1"
+                                                                                            type="submit"
+                                                                                            style="color: green; visibility: visible">
+                                                                                            <i class="fas fa-play"></i>
+                                                                                            Iniciar
+                                                                                        </button>
+                                                                                    </a>
+                                                                                </li>
+                                                                            @endif
+                                                                        </form>
+
+                                                                        <form
+                                                                            action="{{ route('iniciar_solicit', $atual->SolicitId) }}"
+                                                                            method="post" enctype="multipart/form-data">
+                                                                            @csrf
+                                                                            @if ($atual->status_solicit == 1)
+                                                                            <div class="row">
+                                                                                <li class="nav-item">
+                                                                                    <a id="linkBtnFinalizar" data-toggle="modal"
+                                                                                        data-target='#modalFinalizar'
+                                                                                        onclick="coletaProdutoSelecionado()">
+                                                                                        <button id="btnFinalizar"
+                                                                                            class="btn btn-app"
+                                                                                            style="color: rgb(40, 184, 40)">
+                                                                                            <i class="far fa-check-square"></i>
+                                                                                            Finalizar
+                                                                                        </button>
+                                                                                    </a>
+                                                                                </li>
+
+                                                                                <li class="nav-item">
+                                                                                    <a>
+                                                                                        <button
+                                                                                            class="btn btn-app swalDefaultInfo"
+                                                                                            name="submitbutton" value="0"
+                                                                                            type="submit"
+                                                                                            style="color: rgb(0, 0, 0)">
+                                                                                            <i class="fas fa-undo"></i>
+                                                                                            Retornar
+                                                                                        </button>
+                                                                                    </a>
+                                                                                </li>
+                                                                            </div>
+                                                                            @endif
+                                                                    </ul>
+                                                                @endif
+                                                            </div>
                                                             @if ($equipsSel == null)
                                                                 <a id="btnConferido" style="visibility: hidden">
                                                                     <button class="btn btn-app" type="button"
@@ -759,6 +820,12 @@
                     Toast.fire({
                         icon: 'success',
                         title: 'Equipamentos selecionados com sucesso!'
+                    })
+                });
+                $('.swalDefaultCancelEquip').click(function() {
+                    Toast.fire({
+                        icon: 'success',
+                        title: 'Equipamento retirado com sucesso!'
                     })
                 });
                 $('.swalDefaultInfo').click(function() {

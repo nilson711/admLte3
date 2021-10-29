@@ -106,6 +106,30 @@ function locacaoSelecionada() {
     //mostra a quantidade de checkboxes selecionados no elemento Html na página.
     QtdequipsSelecionados.innerHTML = "Total: " + selecionados + " equipamento(s) selecionado(s)";
 }
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/**Conta a quantidade de itens selecionados para recolhimento */
+function ContarSelecionadosRecolhe(){
+    var checkBoxes = document.querySelectorAll(".checkbox");                        //Seleciona todos os objetos da classe "checkbox"
+    var QtdequipsSelecionadosRecolhe = document.getElementById("QtdequipsSelecionadosRecolhe");   //Seleciona o elemento pelo id
+    var selecionados = 0;                                                           //cria uma variâvel chamada "selecionados" e atribui o valor 0 a ela
+
+    //soma a quantidade de checkbox selecionados
+    checkBoxes.forEach(function(el){                    //faz um forEach por todos os checkboxes da tabela
+        if (el.checked) {                               //verifica que o checkbox está marcado
+        selecionados++;                                 //se estiver marcado adiciona um incremento a variável
+        }
+    });
+    //mostra a quantidade de checkboxes selecionados no elemento Html na página.
+    QtdequipsSelecionadosRecolhe.innerHTML = "Total: " + selecionados + " equipamento(s) selecionado(s)";
+
+    //torna visível o campo motivo
+    if (selecionados > 0) {
+        document.getElementById('selectMotivo').style.visibility = "visible";
+    } else {
+        document.getElementById('selectMotivo').style.visibility = "hidden";
+    }
+
+}
 
 /*********************************************************************************************************************************
  * Função coletaProdutoSelecionado busca na tabela o id dos itens selecionados
@@ -168,8 +192,58 @@ function locacaoSelecionada() {
 }
 
 
+/*********************************************************************************************************************************
+ * Função BUSCA OS EQUIPAMENTOS DO PACIENTES QUE ESTÃO SELECIONADOS
+ */
+ function coletaDadosRecolhe(){
+    var ids = document.getElementsByClassName('checkbox');  //Seleciona todos os objetos da classe "checkbox"
+    var patrs = document.getElementsByClassName('checkbox');  //Seleciona todos os objetos da classe "checkbox"
+    coletaIDsRecolhe(ids);
+    coletaPatrRecolhe(patrs);
+ }
+ function coletaPatrRecolhe(dados){
+    var array_dadosPatr = dados;                            //cria variável com os dados do array
+    var newArrayPatr = [];                                  //cria o array
+    for(var x = 0; x <= array_dadosPatr.length; x++){
+         if(typeof array_dadosPatr[x] == 'object'){         //typeof retorna o tipo de operando. verifica de o array_dados é um objeto
+           if(array_dadosPatr[x].checked){                  //verifica no array_dados se estão marcados
+            newArrayPatr.push(array_dadosPatr[x].id)      //o push adiciona o dado (id) selecionado ao array
+            }
+        }
+    }
+    console.log(newArrayPatr);
 
+    let sum = newArrayPatr;
+    const codeHTML = sum.reduce((html, item) => {
+        return html + "<li>" + item + "</li>";
+            }, "");
 
+    // var e = document.querySelector("#equipSelecionados").innerHTML = sum;
+    document.querySelector("#enviarEquip").value = sum;
+
+ }
+
+ //////////////////////////////////////////////////////////////////////
+ function coletaIDsRecolhe(dados){
+    var array_dados = dados;                            //cria variável com os dados do array
+    var newArray = [];                                  //cria o array
+    for(var x = 0; x <= array_dados.length; x++){
+         if(typeof array_dados[x] == 'object'){         //typeof retorna o tipo de operando. verifica de o array_dados é um objeto
+           if(array_dados[x].checked){                  //verifica no array_dados se estão marcados
+                newArray.push(array_dados[x].name)      //o push adiciona o dado selecionado ao array
+            }
+        }
+    }
+    console.log(newArray);
+    // NomeEquipsSelecionados.innerHTML = newArray;    //exibe na página os elementos do array (nomes dos equipamentos)
+    //CRIA UMA LISTA A PARTIR DO ARRAY ///////////////////////////////////////////////////////////////////////////////////////////
+    let sum = newArray;
+    const codeHTML = sum.reduce((html, item) => {
+        return html + "<li>" + item + "</li>";
+            }, "");
+    document.querySelector("#fooRecolhe").innerHTML = codeHTML;
+    document.querySelector("#textEquipsRecolhe").innerHTML = sum;
+ }
 
 /*********************************************************************************************************************************
  * Função coletaDados busca na tabela o nome dos itens selecionados
@@ -275,17 +349,27 @@ function txtCancelNoRequired(){
 /*********************************************************************************************************************************
  * Função Deixa o botão FINALIZAR visivel somente se houver algum equipamento selecionado
  */
-
 function habilitarBtnFinalizar(){
-
     if (document.getElementById('linkBtnFinalizar').style.visibility = "hidden") {
         document.getElementById('linkBtnFinalizar').style.visibility = "visible";
-
     } else {
         document.getElementById('linkBtnFinalizar').style.visibility = "hidden";
-
     }
+}
 
+/*********************************************************************************************************************************
+ * Função Deixa o botão SOLICITAR visivel se houver algum equipamento selecionado E o motivo da solicitação
+ */
+function habilitarBtnSolicitar(){
+    if (document.getElementById('motivo').value > 0) {
+        if (document.getElementById('motivo').value == 7) {
+            alert('Especifique o motivo nas Observações');
+            document.getElementById('obsSolicitacaoRecolhe').focus();
+        }
+        document.getElementById('submitbuttonSolicit').style.visibility = "visible";
+    } else {
+        document.getElementById('submitbuttonSolicit').style.visibility = "hidden";
+    }
 }
 
 /*********************************************************************************************************************************

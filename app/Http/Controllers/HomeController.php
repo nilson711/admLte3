@@ -5,6 +5,9 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use App\Models\Solicitacao;
+use App\Models\Pct;
+use App\Models\Equipamento;
+use App\Models\Cliente;
 
 class HomeController extends Controller
 {
@@ -25,15 +28,15 @@ class HomeController extends Controller
      */
     public function index()
     {
-        $tasks = DB::SELECT("SELECT * FROM tarefas WHERE visible = 1 ");
 
-        $solicitacoes = new Solicitacao();
-        $solicitacoes = DB::SELECT("SELECT S.id, P.name_pct, P.id_hc, S.type_solicit, C.cliente
-                        FROM solicitacaos AS S
-                        INNER JOIN pcts AS P ON S.pct_solicit = P.id
-                        INNER JOIN clientes AS C ON C.id = P.id_hc
-                        WHERE s.status_solicit=0 OR s.status_solicit=1");
+        $solicitacoes = Solicitacao::wherein('status_solicit', [0, 1])->get();
 
-        return view('home', ['tasks'=> $tasks] + ['solicitacoes'=>$solicitacoes]);
+        $allPcts = Pct::all();
+
+        $equips = Equipamento::where('pct_equip', '0')->get();
+
+        $hc = Cliente::all();
+        
+        return view('home', ['solicitacoes'=>$solicitacoes] + ['allPcts'=> $allPcts] + ['equips'=> $equips] + ['hc' => $hc]);
     }
 }

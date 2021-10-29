@@ -26,27 +26,63 @@ class SolicitacaoController extends Controller
     //ADICIONA NOVA SOLICITAÇÃO
 
     public function new_solicita(Request $request){
-        //BUSCA OS DADOS OS INPUTS
-        $listEquipSel = $request->input('textEquips');
-        $obsSolicitacao = $request->input('obsSolicitacao');
-        $idPct = $request->input('idPct');
-        $checkUrgente = $request->input('checkUrgente');
+        switch ($request->submitbuttonSolicit) {
+            case '1': //// 1 = implantação
 
-        //SALVA DOS DADOS DOS INPUTS NO BANCO DE DADOS
-        $solicitacao = new Solicitacao();
-        $solicitacao->pct_solicit =  $idPct;
-        $solicitacao->type_solicit =  1;                // 1 = implantação
-        $solicitacao->equips_solicit =  $listEquipSel;
-        $solicitacao->obs_solicit =  $obsSolicitacao;
-        $solicitacao->priority =  (isset($checkUrgente))? 1 : 0; //verifica se o check está  marcado. se tiver retorna 1, se não retorna 0
+                //BUSCA OS DADOS OS INPUTS
+                $listEquipSel = $request->input('textEquips');
+                $obsSolicitacao = $request->input('obsSolicitacao');
+                $idPct = $request->input('idPct');
+                $checkUrgente = $request->input('checkUrgente');
 
-        $solicitacao->save();
+                //SALVA DOS DADOS DOS INPUTS NO BANCO DE DADOS
+                $solicitacao = new Solicitacao();
+                $solicitacao->pct_solicit =  $idPct;
+                $solicitacao->type_solicit =  1;                // 1 = implantação
+                $solicitacao->equips_solicit =  $listEquipSel;
+                $solicitacao->obs_solicit =  $obsSolicitacao;
+                $solicitacao->priority =  (isset($checkUrgente))? 1 : 0; //verifica se o check está  marcado. se tiver retorna 1, se não retorna 0
+                $solicitacao->save();
+                return back()->withInput();
+            break;
+            case '2': //// 2 = recolhimento
+                $listEquipSel = $request->input('textEquipsRecolhe');
+                $obsSolicitacao = $request->input('obsSolicitacaoRecolhe');
+                $idPct = $request->input('idPct');
+                $motivo = $request->input('motivo');
+
+                //SALVA DOS DADOS DOS INPUTS NO BANCO DE DADOS
+                $solicitacao = new Solicitacao();
+                $solicitacao->pct_solicit =  $idPct;
+                $solicitacao->motivo = $motivo;
+                $solicitacao->type_solicit =  2;    // 2 = recolhimento
+                $solicitacao->equips_solicit =  $listEquipSel;
+                $solicitacao->obs_solicit =  $obsSolicitacao;
+                $solicitacao->save();
+
+                $solicitacao->where('pct_solicit', $idPct)->get();  //Busca no BD a Solicitação deste paciente
+
+                //BUSCA OS DADOS OS INPUTS
+                $enviarEquip = $request->input('enviarEquip');  //Este input contém o array separado por vírgula
+
+                //SELECIONA OS EQUIPAMENTOS E ATRIBUI STATUS COMO RECOLHER
+                foreach (explode(',', $enviarEquip) as $equip){                 //separa o o conteúdo do input por vírgula
+                    if (empty($equip)) {
+                        //se for nulo não faz nada
+                    } else {
+                            $recolheEquipSelecionado = Equipamento::find($equip);       //busca no Bd o id do equipamento
+                            // $recolheEquipSelecionado->pct_equip =  $pctForEquip;
+                            $recolheEquipSelecionado->solicit_equip = $solicitacao->id;  //atribui o id da solicitação ao equipamento
+                            $recolheEquipSelecionado->status_equip = 3;                 //status do equipamento para 3 = recolher
+
+                            $recolheEquipSelecionado->save();
+                            }
+                    }
 
 
-        return back()->withInput();
-        // return redirect()->route('editPct');
-        // echo($listEquipSel);
-
+                return back()->withInput();
+            break;
+        }
     }
 
 ///========================================================================================================================
@@ -103,31 +139,23 @@ public function iniciar_solicit(Request $request, $id){
             $PctAtual = Pct::where('id', $solicit->pct_solicit)->pluck('name_pct')->toArray();
             $hcPctAtual = Pct::where('id', $solicit->pct_solicit)->pluck('id_hc');
 
-            // $PctAtual = DB::SELECT("SELECT name_pct FROM pcts WHERE id = 22");
-
             $pctSolFim = $PctAtual;
             $idsolfim = $id;
             $obsAtendfim = $solicit->obs_atend;
+            $typeSolicitFim = $solicit->type_solicit;
             $equipsSolicFim = Equipamento::where('solicit_equip', $id)->pluck('name_equip', 'patr')->toArray();
             $emailDestino = Cliente::where('id',  $hcPctAtual)->pluck('email');
-
+            $emailDestino2 = Cliente::where('id',  $hcPctAtual)->pluck('email2');
 
             $idForGuia = $id;
 
+            Equipamento::where('solicit_equip', $id)
+                    ->update(['pct_equip' => 0, 'solicit_equip' => 0, 'status_equip' => 0 ]);
 
-            // Mail::to('nilson711@hotmail.com')->send(new EmailFimSolicit($nome));
-            Mail::to($emailDestino)->cc('nilson711@gmail.com')
-                    ->send(new EmailFimSolicit($idsolfim, $obsAtendfim, $pctSolFim, $equipsSolicFim, $idForGuia))
-            ;
+            Mail::to($emailDestino)->cc($emailDestino2)
+                    ->send(new EmailFimSolicit($idsolfim, $typeSolicitFim, $obsAtendfim, $pctSolFim, $equipsSolicFim, $idForGuia));
 
-
-            // echo 'email enviado';
-
-            // return back()->withInput();
-            // return redirect()->to('/fim_solicitacao');
             return redirect()->to('/solicitacoes');
-            // return view('emails.emailFimSolicit', ['solicit'=>$solicit]);
-
 
         break;
         case '3':
@@ -160,7 +188,7 @@ public function add_equip_pct(Request $request){
     $solicitForEquip = $request->input('solicitForEquip');  //Este input busca o id da solicitação
 
     //SELECIONA O EQUIPAMENTO E ATRIBUI O PACIENTE ATUAL A ELE
-    foreach (explode(',', $enviarEquip) as $equip){     //separa o o conteúdo do input por vírgula
+    foreach (explode(',', $enviarEquip) as $equip){                 //separa o o conteúdo do input por vírgula
         if (empty($equip)) {
             //se for nulo não faz nada
         } else {
@@ -197,6 +225,15 @@ public function add_equip_pct(Request $request){
         return back()->withInput();
 }
 
+///========================================================================================================================
+ //EXCLUI APENAS O EQUIPAMENTO ATUAL DA SOLICITAÇÃO
+public function cancelOneEquipSolicit (Request $request, $idEquip){
+    // echo 'cancelar apenas este' . $idEquip ;
+    Equipamento::where('id', $idEquip)
+                ->update(['pct_equip' => 0, 'solicit_equip' => 0, 'status_equip' => 0 ]);
+                return back()->withInput();
+}
+
 
 
 //========================================================================================================================
@@ -223,7 +260,7 @@ $resultado = [];
     public function solicitacoes()
     {
         $solicitacoes = new Solicitacao();
-        $solicitacoes = DB::SELECT("SELECT S.id, S.priority, S.status_solicit, P.name_pct, P.id_hc, S.user_atend, S.type_solicit, S.date_solicit, C.cliente, P.rua, P.nr, P.bairro, P.compl, S.equips_solicit, S.obs_solicit
+        $solicitacoes = DB::SELECT("SELECT S.id, S.priority, S.status_solicit, S.motivo, P.name_pct, P.id_hc, S.user_atend, S.type_solicit, S.date_solicit, C.cliente, P.rua, P.nr, P.bairro, P.compl, S.equips_solicit, S.obs_solicit
                         FROM solicitacaos AS S
                         INNER JOIN pcts AS P ON S.pct_solicit = P.id
                         INNER JOIN clientes AS C ON C.id = P.id_hc
@@ -288,7 +325,7 @@ $resultado = [];
         $idPctSel = $collection->implode('pct_solicit', ',');
 
         //Seleciona o nº de patrimônio e nome do equipamento selecionado da solicitação atual
-        $equipsSel = DB::SELECT("SELECT patr, name_equip FROM equipamentos WHERE pct_equip = $idPctSel AND solicit_equip = $id;
+        $equipsSel = DB::SELECT("SELECT id, patr, name_equip FROM equipamentos WHERE pct_equip = $idPctSel AND solicit_equip = $id;
 
 
                         -- INNER JOIN pcts AS PCT ON SOLICIT.pct_solicit = PCT.id

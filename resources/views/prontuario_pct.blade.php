@@ -222,9 +222,11 @@
                                                             <i class="fas fa-plus"></i>
                                                         </button>
                                                     </span>
-                                                    <button data-toggle="tooltip" title="Recolhimento Total" type="button" class="btn btn-sm btn-outline-primary float-left" style="color: red; margin-right: 10px">
-                                                        <i class="fas fa-sort-amount-down"></i>
-                                                    </button>
+                                                    <span data-toggle="modal" data-target="#modalRecolhimento">
+                                                        <button data-toggle="tooltip" title="Recolhimento" type="button" class="btn btn-sm btn-outline-primary float-left" style="color: red; margin-right: 10px">
+                                                            <i class="fas fa-times"></i>
+                                                        </button>
+                                                    </span>
                                                     <button data-toggle="tooltip" title="Pausa nos Esquipamentos" type="button" class="btn btn-sm btn-outline-primary float-left" style="color: rgb(14, 121, 0)">
                                                         <i class="far fa-pause-circle"></i>
                                                     </button>
@@ -312,9 +314,71 @@
                    <label for="">Solicitações pendentes:</label>
                     <div >
                         @foreach ($solicitacoes as $solicitacao )
+
                         <ul>
-                          <li class="toastsDefaultSuccess" id="list_solicit_pend">
-                            {{$solicitacao->id}} - {{$solicitacao->equips_solicit}} ({{$solicitacao->obs_solicit}})
+                          <li id="list_solicit_pend">
+                            @switch($solicitacao->type_solicit)
+                                @case(1)
+                                    <i class="fas fa-plus-circle" data-toggle="tooltip"
+                                        title="Implantação"
+                                        style="color: rgb(12, 146, 0)"></i>
+                                @break
+                                @case(2)
+                                    <i class="fas fa-minus-circle" data-toggle="tooltip"
+                                        title="Recolhimento -
+                                        @switch($solicitacao->motivo)
+                                            @case(1)
+                                                Alta
+                                            @break
+                                            @case(2)
+                                                Óbito
+                                            @break
+                                            @case(3)
+                                                Internado
+                                            @break
+                                            @case(4)
+                                                Sem uso
+                                            @break
+                                            @case(5)
+                                                Não atende a necessidade
+                                            @break
+                                            @case(6)
+                                                Troca de Home Care
+                                            @break
+                                            @case(7)
+                                                Outro
+                                            @break
+                                        @default
+
+                                        @endswitch
+
+                                        " style="color: rgb(255, 0, 0)"></i>
+                                @break
+                                @case(3)
+                                    <i class="fas fa-tools" data-toggle="tooltip"
+                                        title="Troca/Manutenção"
+                                        style="color: rgb(233, 191, 6)"></i>
+                                @break
+                                @case(4)
+                                    <i class="fas fa-dolly" data-toggle="tooltip"
+                                        title="Mudança"></i>
+                                @break
+                                @case(5)
+                                    <i class="fas fa-times-circle" data-toggle="tooltip"
+                                        title="Recolhimento Total"
+                                        style="color: rgb(255, 0, 0)"></i>
+                                @break
+                                @case(6)
+                                    <i class="fas fa-battery-full" data-toggle="tooltip"
+                                        title="Cilindro O2"
+                                        style="color: rgb(252, 252, 252); transform: rotate(-90deg)"></i>
+                                @break
+
+                                @default
+                                    <i class="fas fa-plus-circle" data-toggle="tooltip" title="nenhum"></i>
+                            @endswitch
+
+                             {{$solicitacao->id}} - {{$solicitacao->equips_solicit}} ({{$solicitacao->obs_solicit}})
                               @if ($solicitacao->status_solicit == 1)
                                   <i class="fas fa-ambulance" id="ambulancia" data-toggle="tooltip" title="Em atendimento" style="display: inline; color: rgb(255, 0, 55)"></i><br>
                               @else
@@ -340,7 +404,6 @@
                                 {{-- <th class="sorting col-sm-4" tabindex="0" aria-controls="example1" rowspan="1" colspan="1">Endereço</th> --}}
                                 <th class="sorting" tabindex="0" aria-controls="example1" rowspan="1" colspan="1">Data</th>
                                 <th class="sorting" tabindex="0" aria-controls="example1" rowspan="1" colspan="1">Solicitado</th>
-                                <th class="sorting" tabindex="0" aria-controls="example1" rowspan="1" colspan="1">Obs</th>
                                 <th class="sorting" tabindex="0" aria-controls="example1" rowspan="1" colspan="1">Guia</th>
                             </tr>
                         </thead>
@@ -389,10 +452,25 @@
                                     {{-- <td>{{}}</td> --}}
                                     {{-- <td>{{\Carbon\Carbon::createFromFormat('d/m/y', now())}}</td> --}}
                                     <td>{{date('d/m/Y', strtotime($solicFim->date_solicit))}}</td>
-                                    <td>{{$solicFim->equips_solicit}}</td>
-                                    <td>{{$solicFim->obs_solicit}}</td>
                                     <td>
-                                        <div class="filtr-item col-sm-2" data-category="1" data-sort="white sample" style="opacity: 1; transform: scale(1) translate3d(0px, 0px, 0px); backface-visibility: hidden; perspective: 1000px; transform-style: preserve-3d; position: absolute; width: 123.5px; transition: all 0.5s ease-out 0ms, width 1ms ease 0s;">
+                                        {{$solicFim->equips_solicit}}
+
+                                        <div style="display: inline-block">
+                                            @if ($solicFim->obs_solicit != null)
+                                                <i class="fas fa-exclamation-circle" style="color: rgb(233, 166, 22)" data-toggle="tooltip" title='{{$solicFim->obs_solicit}}'>
+                                                </i>
+                                            @endif
+                                        </div>
+                                    </td>
+
+                                    <td>
+                                        <div style="display: inline-block">
+                                            @if ($solicFim->obs_atend != null)
+                                                <i class="fas fa-info" style="color: rgb(12, 63, 139)" data-toggle="tooltip" title='{{$solicFim->obs_atend}}'>
+                                                </i>
+                                            @endif
+                                        </div>&nbsp;&nbsp;&nbsp;
+                                        <div style="display: inline-block">
                                             <a href="{{asset('storage/guias/'.$solicFim->id.'.jpg')}}" target="_blank" data-toggle="lightbox" data-title="sample 1 - white">
                                                 <i class="far fa-file" data-toggle="tooltip" title="Guia"></i>
                                             </a>
@@ -427,11 +505,12 @@
                     <div class="row form-group">
                         <div class="col-sm-6">
                             <div class="card-body table-responsive p-0" style="height: 300px;">
-                                <table class="table table-sm table-striped table-head-fixed text-nowrap" id= "tableEquips">
+                                <table class="table table-sm table-striped table-head-fixed text-nowrap dataTable dtr-inline" id= "tableEquips">
+
                                 <thead>
                                     <tr>
                                     <th></th>
-                                    <th>Equipamentos disponíveis</th>
+                                    <th>Equipamentos disponíveis <i class="fas fa-search" data-toggle="tooltip" title="Dica: Ctrl+F para pesquisar" style="color: green"></i></th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -468,17 +547,18 @@
                                             <textarea class="form-control" name="obsSolicitacao" id="obsSolicitacao" rows="3" placeholder="Observações sobre a solicitação" maxlength="150"></textarea>
                                         </div>
                                     </div>
-                                    <div class="custom-control custom-checkbox">
+                                    {{-- <div class="custom-control custom-checkbox">
                                         <input class="custom-control-input custom-control-input-danger" data-toggle="tooltip" title="Só marque se for realmente Urgente!" type="checkbox" id="checkUrgente" name="checkUrgente" value="1" onclick="urgente()">
                                         <label for="checkUrgente" class="custom-control-label" data-toggle="tooltip" title="Só marque se for realmente Urgente!">Urgente!</label>
-                                      </div>
+                                      </div> --}}
                         </div>
                     </div>
                 </div>
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-outline-secondary" data-dismiss="modal">Cancelar</button>
-                    <button type="submit" class="btn btn-outline-primary ">Solicitar</button>
+                    <button type="submit" name="submitbuttonSolicit" value="1" class="btn btn-outline-primary swalSolicitSuccess">Solicitar</button>
+
 
             </div>
         </form>
@@ -490,7 +570,7 @@
 
 <!--//////////////////////////////////////////////////// Modal RECOLHIMENTO  /////////////////////////////////////////////-->
 
-<div class="modal fade bd-example-modal-lg" id="modalSolicit" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+<div class="modal fade bd-example-modal-lg" id="modalRecolhimento" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-lg" role="document">
       <div class="modal-content">
         <div class="modal-header">
@@ -506,26 +586,27 @@
                     <div class="row form-group">
                         <div class="col-sm-6">
                             <div class="card-body table-responsive p-0" style="height: 300px;">
-                                <table class="table table-sm table-striped table-head-fixed text-nowrap" id= "tableEquips">
+                                <table class="table table-sm table-striped table-head-fixed text-nowrap" id= "tableEquipsRecolhe">
                                 <thead>
                                     <tr>
                                     <th></th>
-                                    <th>Equipamentos disponíveis</th>
+                                    <th>Patr / Equipamento</th>
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    @foreach ( $allEquipsEstoque as $equipEstoque)
+
+                                    @foreach ( $equipsPct as $equipImplant)
                                     <tr class="tr-row" style="vertical-align: middle; line-height: 100%">
                                     <td>
-                                                <div style="margin-left: -40px" id="checkSelEquip" class="checkSelEquip form-check col-sm-6" onclick="ContarSelecionados()">
+                                                <div style="margin-left: -40px" id="checkSelEquipRecolhe" class="checkSelEquipRecolhe form-check col-sm-6" onclick="ContarSelecionadosRecolhe()">
                                                     {{-- <input class="qtdDoItem" type="number" min="0" value="0" onchange="qtdSolicitada(this.value)" style="width: 50px"> --}}
                                                     {{-- <input type="number" onchange="cadastraNotaImportada(this.value)" class="form-control disciplina" name="" value="0"> --}}
-                                                    <input class="checkbox" type="checkbox" id= " {{$equipEstoque->name_equip}}" name=" {{$equipEstoque->name_equip}}" onclick="coletaDados()" style="margin-left: 7px; transform: scale(1.2)">
+                                                    <input class="checkbox" type="checkbox" id= " {{$equipImplant->id}}" name=" {{$equipImplant->name_equip}}" onclick="coletaDadosRecolhe()" style="margin-left: 7px; transform: scale(1.2)">
                                                 </div>
                                         </td>
-                                        <td id="nomeEquip" class="nomeEquip">
-                                            {{$equipEstoque->name_equip}}
-                                            ({{$equipEstoque->qtdName}})
+                                        <td id="nomeEquipRecolhe" class="nomeEquipRecolhe">
+                                            {{$equipImplant->patr}}-
+                                            {{$equipImplant->name_equip}}
                                         </td>
                                     </tr>
                                     @endforeach
@@ -534,30 +615,51 @@
                             </div>
                         </div>
                         <div class="class col-sm-6">
-                            <p>Solicito a implantação dos equipamentos abaixo:</p>
+                            <p>Solicito recolhimento dos equipamentos abaixo:</p>
                             <input type="number" name="idPct" id="idPct" value="{{$pctSel->id}}" style="display: none">
-                            <div id="foo"></div>
-                            <textarea name="textEquips" id="textEquips" style="display: none"></textarea>
+                            <div id="fooRecolhe"></div>
+                            <textarea name="textEquipsRecolhe" id="textEquipsRecolhe" style="display: none"></textarea>
                             <hr style="margin-top: 3px; margin-botton: 0px">
-                            <p id="QtdequipsSelecionados" style="margin-top: -10px"></p>
+                            <p id="QtdequipsSelecionadosRecolhe" style="margin-top: -10px"></p>
                                     <div class="row form-group">
+                                        <hr>
                                         <div class="col-md-12">
-                                            <label for="obsSolicitacao">Observações:</label>
+                                            <div id="selectMotivo" style="visibility: hidden">
+                                                <label for="motivo">Motivo do Recolhimento:</label>
+                                                <select name="motivo" id="motivo" class="form-control select" style="width: 100%;" aria-hidden="true" required onchange="habilitarBtnSolicitar()">]
+                                                    <option value = "0" selected>Selecione uma opção</option>
+                                                    <option value = "1" title="Paciente recebeu alta">Alta</option>
+                                                    <option value = "2" title="Paciente foi a óbito">Óbito</option>
+                                                    <option value = "3" title="Paciente internado sem previsão de alta">Internado</option>
+                                                    <option value = "4" title="Paciente não necessita mais do equipamento">Sem uso</option>
+                                                    <option value = "5" title="Equipamento não atende a necessidade do paciente">Não atende a necessidade</option>
+                                                    <option value = "6" title="Paciente migrou para outro home care">Troca de home care</option>
+                                                    <option value = "7">outro</option>
+                                                </select>
+                                            </div>
+                                            <br>
+                                            <label for="obsSolicitacaoRecolhe">Observações:</label>
                                             {{-- <input type="text" class="form-control" name="obsSolicitacao" id="obsSolicitacao" placeholder="Observações sobre a solicitação" maxlength="100"> --}}
-                                            <textarea class="form-control" name="obsSolicitacao" id="obsSolicitacao" rows="3" placeholder="Observações sobre a solicitação" maxlength="150"></textarea>
+                                            <textarea class="form-control" name="obsSolicitacaoRecolhe" id="obsSolicitacaoRecolhe" rows="3" placeholder="Observações sobre a solicitação" maxlength="150"></textarea>
+                                            <input type="text" name="enviarEquip" id="enviarEquip">
                                         </div>
                                     </div>
-                                    <div class="custom-control custom-checkbox">
+                                    {{-- <div class="custom-control custom-checkbox">
                                         <input class="custom-control-input custom-control-input-danger" data-toggle="tooltip" title="Só marque se for realmente Urgente!" type="checkbox" id="checkUrgente" name="checkUrgente" value="1" onclick="urgente()">
                                         <label for="checkUrgente" class="custom-control-label" data-toggle="tooltip" title="Só marque se for realmente Urgente!">Urgente!</label>
-                                      </div>
+                                      </div> --}}
                         </div>
                     </div>
                 </div>
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-outline-secondary" data-dismiss="modal">Cancelar</button>
-                    <button type="submit" class="btn btn-outline-primary ">Solicitar</button>
+                <button type="submit"
+                        name="submitbuttonSolicit"
+                        id="submitbuttonSolicit"
+                        value="2"
+                        class="btn btn-outline-primary swalSolicitSuccess"
+                        style="visibility: hidden">Solicitar</button>
 
             </div>
         </form>
@@ -593,6 +695,9 @@
 
 @section('css')
 <link rel="stylesheet" href="{{asset('css/dataTables.bootstrap4.min.css')}}">
+
+<!-- SweetAlert2 -->
+<link rel="stylesheet" href={{ asset('css/bootstrap-4.min.css') }}>
 
 <link rel="stylesheet" href="{{asset('css/select2.min.css')}}">
 <link rel="stylesheet" href="{{asset('css/select2-bootstrap4.min.css')}}">
@@ -642,11 +747,18 @@
 <script src= {{asset('js/buttons.print.min.js')}}></script>
 <script src= {{asset('js/buttons.colVis.min.js')}}></script>
 
+<script>
+    function findString() {
+        window.find();
+      }
 
+</script>
 <script>
     $(function () {
       $("#example1").DataTable({
-        "responsive": true, "lengthChange": false, "autoWidth": false
+        "responsive": true,
+        "lengthChange": false,
+        "autoWidth": false
         // ,        "buttons": ["copy", "csv", "excel", "pdf", "print"]
       }).buttons().container().appendTo('#example1_wrapper .col-md-6:eq(0)');
 
@@ -659,6 +771,7 @@
         "responsive": true, "lengthChange": false, "autoWidth": false
         // ,        "buttons": ["copy", "csv", "excel", "pdf", "print"]
       }).buttons().container().appendTo('#manutencao_wrapper .col-md-6:eq(0)');
+
 
 
       $('#example2').DataTable({
@@ -683,8 +796,8 @@
 <script>
     $(function() {
       var Toast = Swal.mixin({
-        toast: true,
-        position: 'top-end',
+        toast: false,
+        position: 'center',
         showConfirmButton: false,
         timer: 3000
       });
@@ -692,7 +805,13 @@
       $('.swalDefaultSuccess').click(function() {
         Toast.fire({
           icon: 'success',
-          title: 'Lorem ipsum dolor sit amet, consetetur sadipscing elitr.'
+          title: 'Salvo com sucesso!'
+        })
+      });
+      $('.swalSolicitSuccess').click(function() {
+        Toast.fire({
+          icon: 'success',
+          title: 'Solicitação enviada com sucesso!'
         })
       });
       $('.swalDefaultInfo').click(function() {

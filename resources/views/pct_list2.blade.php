@@ -39,8 +39,8 @@
 
                         <thead>
                             <tr role="row">
-                                <th class="col-sm-1" style="text-align: center">#</th>
-                                <th class="sorting sorting_asc col-sm-3" tabindex="0" aria-controls="example1" rowspan="1" colspan="1" aria-sort="ascending" title="Classificar crescente / decrescente">Nome</th>
+                                <th class="col-sm-1" style="text-align: center" >#</th>
+                                <th class="sorting col-sm-3" tabindex="0" aria-controls="example1" rowspan="1" colspan="1"  title="Classificar crescente / decrescente">Nome</th>
                                 <th class="sorting col-sm-5" tabindex="0" aria-controls="example1" rowspan="1" colspan="1">Local</th>
                                 {{-- <th class="sorting col-sm-1" tabindex="0" aria-controls="example1" rowspan="1" colspan="1">Bairro</th> --}}
 
@@ -61,7 +61,10 @@
                                     <td style="text-align: center">
                                         <div >{{$Pct->id}}</div>
                                     </td>
-                                    <td id="namePct">{{$Pct->name_pct}}</td>
+                                    <td id="namePct">
+                                        <a href="{{route('editPct', $Pct->id)}}" id="btnEditar" >
+                                            {{$Pct->name_pct}}</td>
+                                        </a>
                                     <td>
                                     {{$Pct->bairro}} -
                                     @foreach ( $allCities as $City)
@@ -78,9 +81,9 @@
                                             <span data-toggle="tooltip" title="Informações do Pacientes" style="text-align: center">
                                                 <a href="#" data-toggle="modal" data-target="#ModalInfoPct" title="Info" style="margin-right: 10px" data-whatever="{{$Pct->id}}" data-whatever-name_pct="{{$Pct->name_pct}}" data-whatever-peso="{{$Pct->peso}}" data-whatever-altura="{{$Pct->altura}}" data-whatever-id_hc="{{$Pct->id_hc}}" data-whatever-resp="{{$Pct->resp}}" data-whatever-tel_resp="{{$Pct->tel_resp}}" data-whatever-resp2="{{$Pct->resp2}}" data-whatever-tel_resp2="{{$Pct->tel_resp2}}" data-whatever-cep_pct="{{$Pct->cep}}" data-whatever-rua="{{$Pct->rua}}" data-whatever-nr="{{$Pct->nr}}" data-whatever-compl="{{$Pct->compl}}" data-whatever-bairro="{{$Pct->bairro}}" data-whatever-city="{{$Pct->city}}" data-whatever-obs="{{$Pct->obs}}"><i class="fas fa-info-circle"></i></a>
                                             </span>
-                                            <span data-toggle="tooltip" title="Prontuário do Paciente">
-                                                <a href="{{route('editPct', $Pct->id)}}" id="btnEditar" ><i class="fas fa-edit"></i></a>
-                                            </span>
+                                            {{-- <span data-toggle="tooltip" title="Prontuário do Paciente">
+                                                <a href="{{route('editPct', $Pct->id)}}" id="btnEditar" ><i class="fas fa-clipboard-list"></i></a>
+                                            </span> --}}
                                         </div>
                                     </td>
                                     {{-- <td>{{$Pct->tel1_pct}}</td> --}}
@@ -533,7 +536,10 @@
 <script>
   $(function () {
     $("#example1").DataTable({
-      "responsive": true, "lengthChange": false, "autoWidth": false
+      "responsive": true,
+      "lengthChange": false,
+      "autoWidth": false,
+      "ordering": false
     //   ,      "buttons": ["copy", "csv", "excel", "pdf", "print"]
     }).buttons().container().appendTo('#example1_wrapper .col-md-6:eq(0)');
 
@@ -541,7 +547,7 @@
       "paging": true,
       "lengthChange": false,
       "searching": false,
-      "ordering": true,
+      "ordering": false,
       "info": true,
       "autoWidth": false,
       "responsive": true,

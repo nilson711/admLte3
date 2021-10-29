@@ -10,7 +10,36 @@
 <body>
     <h3>Solicitação nº {{$idsolfimEmail}} Concluída</h3>
 
-    <p>Informamos que na data de hoje foi realizado IMPLANTAÇÃO do(s) seguinte(s) equipamento(s)<br>
+    <p>Informamos que na data de hoje foi realizado
+        {{-- @switch($typeSolicitFim)
+            @case(1)
+              <b> IMPLANTAÇÃO </b>
+            @break
+            @case(2)
+               <b> RECOLHIMENTO </b>
+            @break
+            @case(3)
+               <b> TROCA / MANUTENÇÃO </b>
+            @break
+            @case(4)
+              <b> MUDANÇA DE LOCALIDADE </b>
+            @break
+            @case(5)
+              <b> RECOLHIMENTO TOTAL </b>
+            @break
+            @case(6)
+                <b> CILINDRO DE O2 </b>
+            @break
+
+            @default
+
+        @endswitch --}}
+
+        <b>
+            {{$typeSolicitFim}}
+        </b>
+
+        do(s) seguinte(s) equipamento(s)<br>
         para o(a) paciente
         @foreach ($pctSolFimEmail as $pct)
             <strong>

@@ -3,7 +3,7 @@
 @section('title', 'Control Service')
 
 @section('content_header')
-    <h1>Dashboard</h1>
+    <h1>Dashboard MH</h1>
 @stop
 
 @section('content')
@@ -28,14 +28,13 @@
           <!-- small box -->
           <div class="small-box bg-success">
             <div class="inner">
-              <h3>3<sup style="font-size: 20px"></sup></h3>
-
-              <p>Oxigênio</p>
+              <h3>{{count($equips)}}<sup style="font-size: 20px"></sup></h3>
+              <p>Equipamentos</p>
             </div>
             <div class="icon">
-              <i class="ion ion-stats-bars"></i>
+                <i class="fas fa-stethoscope"></i>
             </div>
-            <a href="#" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
+            <a href="{{route('listaEquips')}}" class="small-box-footer">Acessar <i class="fas fa-arrow-circle-right"></i></a>
           </div>
         </div>
         <!-- ./col -->
@@ -43,14 +42,13 @@
           <!-- small box -->
           <div class="small-box bg-info">
             <div class="inner">
-              <h3>5</h3>
-
-              <p>Tarefas</p>
+              <h3>{{count($allPcts)}}</h3>
+              <p>Pacientes</p>
             </div>
             <div class="icon">
-              <i class="ion ion-person-add"></i>
+                <i class="fas fa-procedures"></i>
             </div>
-            <a href="#" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
+            <a href="{{route('listaPcs')}}" class="small-box-footer">Lista prontuários <i class="fas fa-arrow-circle-right"></i></a>
           </div>
         </div>
         <!-- ./col -->
@@ -58,14 +56,13 @@
           <!-- small box -->
           <div class="small-box bg-danger">
             <div class="inner">
-              <h3>4</h3>
-
-              <p>Pausas</p>
+              <h3>{{count($hc)}}</h3>
+              <p>Home Cares</p>
             </div>
             <div class="icon">
-              <i class="ion ion-pie-graph"></i>
+                <i class="fas fa-hospital-user"></i>
             </div>
-            <a href="#" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
+            <a href="{{route('clientes')}}" class="small-box-footer">Lista clientes <i class="fas fa-arrow-circle-right"></i></a>
           </div>
         </div>
         <!-- ./col -->

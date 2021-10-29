@@ -12,10 +12,10 @@ class EmailFimSolicit extends Mailable
 {
     use Queueable, SerializesModels;
 
-    public $user, $idsolfimEmail, $obsAtendfimEmail, $pctSolFimEmail, $equipsSolicFimEmail;
+    public $user, $idsolfimEmail, $typeSolicitFim, $obsAtendfimEmail, $pctSolFimEmail, $equipsSolicFimEmail;
 
 
-    public function __construct($idsolfim, $obsAtendfim, $pctSolFim, $equipsSolicFim)
+    public function __construct($idsolfim, $typeSolicitFim, $obsAtendfim, $pctSolFim, $equipsSolicFim)
     {
         $this->idsolfimEmail = $idsolfim;
         $this->obsAtendfimEmail = $obsAtendfim;
