@@ -83,12 +83,17 @@
 
                   </span>
 
-                  <div class="info-box-content">
-                        <span class="info-box-number">
+                  <div class="info-box-content ">
+                        <span class="info-box-number ">
                           <small>
                             Nº: {{$solicitacao->id}} ({{ $solicitacao->cliente }})
                           </small>
                             @if ($solicitacao->status_solicit == 1)
+                            <div class="spinner-grow spinner-grow-sm text-warning" role="status">
+                              <span class="sr-only">
+                              
+                              </span>
+                            </div>
                             <i class="fas fa-ambulance" id="ambulancia" data-toggle="tooltip" title={{$solicitacao->user_atend}} style="display: inline; color:rgb(255, 81, 0)"></i><br>
                             @else
                             <i class="fas fa-ambulance" id="ambulancia" style="display: none"></i><br>

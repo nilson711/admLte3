@@ -12,15 +12,17 @@ class EmailFimSolicit extends Mailable
 {
     use Queueable, SerializesModels;
 
-    public $user, $idsolfimEmail, $typeSolicitFim, $obsAtendfimEmail, $pctSolFimEmail, $equipsSolicFimEmail;
+    public $user, $idsolfimEmail, $typeSolicitFimEmail, $obsAtendfimEmail, $pctSolFimEmail, $equipsSolicFimEmail;
 
 
     public function __construct($idsolfim, $typeSolicitFim, $obsAtendfim, $pctSolFim, $equipsSolicFim)
     {
+
         $this->idsolfimEmail = $idsolfim;
         $this->obsAtendfimEmail = $obsAtendfim;
         $this->pctSolFimEmail = $pctSolFim;
         $this->equipsSolicFimEmail = $equipsSolicFim;
+        $this->typeSolicitFimEmail = $typeSolicitFim;
     }
 
 
@@ -30,6 +32,7 @@ class EmailFimSolicit extends Mailable
         return $this->subject('Solicitação Concluída')
                     ->view('emails.emailFimSolicit')
                     ->attach('storage/guias/'.$this->idsolfimEmail.'.jpg');
+                    
 
     }
 }

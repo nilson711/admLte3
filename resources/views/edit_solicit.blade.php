@@ -204,18 +204,18 @@
                                                                 @if ($equipsSel != null)
                                                                     <label for="">Selecionados {{$solicitSel->type_solicit == 2 ? "para recolhimento" : ""}}</label><br>
                                                                     @foreach ($equipsSel as $itemSel)
-                                                                        <form action="{{ route('cancelOneEquipSolicit', $itemSel->id) }}"
+                                                                        <form action="{{ route('cancelOneEquipSolicit', [$itemSel->id, $itemSel->solicit_equip]) }}"
                                                                             method="post">
                                                                             @csrf
                                                                                 <li style="color: blue">{{ $itemSel->patr }} -
                                                                                     {{ $itemSel->name_equip }}
-                                                                                        @if ($solicitSel->type_solicit == 1)
+                                                                                        {{-- @if ($solicitSel->type_solicit == 1) --}}
                                                                                             <button class="btn" type="submit" data-toggle="tooltip" title="Retirar este equipamento"
                                                                                                 style="color: red">
                                                                                                 <i class="fas fa-trash"></i>
                                                                                             </button>
 
-                                                                                        @endif
+                                                                                        {{-- @endif --}}
 
                                                                                         <!-- Modal Confirma Exclusão Equip -->
                                                                             <div class="modal fade" id="modalConfirmaExclusão"
@@ -404,10 +404,10 @@
                                         <div class="modal-header">
                                             <h5 class="modal-title" id="exampleModalLabel">Concluir Solicitação</h5>
 
-                                            <button type="button" class="close" data-dismiss="modal"
+                                            {{-- <button type="button" class="close" data-dismiss="modal"
                                                 aria-label="Close">
                                                 <span aria-hidden="true">&times;</span>
-                                            </button>
+                                            </button> --}}
                                         </div>
                                         <div class="modal-body">
                                             <h5 id="txtAvisoQtd" style="color: red; display:none">Atenção - A quantidade de
@@ -430,10 +430,24 @@
                                         </div>
                                         <div class="modal-footer">
                                             <button type="button" class="btn btn-secondary"
-                                                data-dismiss="modal">Cancelar</button>
-                                            <button class="btn btn-primary swalDefaultFinalized" name="submitbutton"
-                                                id="btnConclui" style="visibility: hidden" value="2"
-                                                type="submit">Concluir</button>
+                                                id="btnCancelarEnvio"
+                                                data-dismiss="modal">Cancelar
+                                            </button>
+                                            <button class="btn btn-primary " 
+                                                    name="submitbutton"
+                                                    id="btnConclui" style="visibility: hidden" 
+                                                    value="2"
+                                                    type="submit">
+                                                    Concluir
+                                            </button>
+                                            <button type="button" class="btn btn-success" style="visibility: hidden" id="spinnerFinalizando">
+                                                <span class="spinner-border spinner-border-sm"></span>
+                                                Finalizando...
+                                            </button>
+                                            
+
+                                            
+
                                         </div>
                                     </div>
                                 </div>
@@ -1034,7 +1048,15 @@
                 // alert(this.files[0].name);
                 document.getElementById('btnConclui').style.visibility = "visible";
             });
+            $("#btnConclui").on('click', function() {
+                // alert(this.files[0].name);
+                document.getElementById('spinnerFinalizando').style.visibility = "visible";
+                document.getElementById('btnConclui').style.visibility = "hidden";
+                document.getElementById('btnCancelarEnvio').style.visibility = "hidden";
+                document.getElementById('guia').disabled = true;
+            });
         </script>
+        
 
     @stop
 

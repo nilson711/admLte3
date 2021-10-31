@@ -373,6 +373,18 @@ function habilitarBtnSolicitar(){
 }
 
 /*********************************************************************************************************************************
+ * Função MOSTRA O SPINNER rodando enquanto o email é enviado
+ */
+
+function habilitaSpinner(){
+    document.getElementById('spinnerFinalizando').style.visibility = "visible";
+    // document.getElementById('btnConclui').style.visibility = "hidden";
+    // alert("mostrar o spinner");
+}
+
+
+
+/*********************************************************************************************************************************
  * Habilitar botão conferido
  */
 function btnConferido(){

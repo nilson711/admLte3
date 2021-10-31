@@ -123,6 +123,7 @@ public function iniciar_solicit(Request $request, $id){
             // $image = $request->file;
             $nameFile = $request->id . '.' . $request->guia->extension();
 
+
             $guia = $request->file('guia')->storeAs('public/guias', $nameFile); // busca no input 'guia' o arquivo e armazena na pasta 'guias'
             $image_resize = $request->file('guia')->storeAs('public/guias', $nameFile); // busca no input 'guia' o arquivo e armazena na pasta 'guias'
 
@@ -142,15 +143,42 @@ public function iniciar_solicit(Request $request, $id){
             $pctSolFim = $PctAtual;
             $idsolfim = $id;
             $obsAtendfim = $solicit->obs_atend;
-            $typeSolicitFim = $solicit->type_solicit;
+            
             $equipsSolicFim = Equipamento::where('solicit_equip', $id)->pluck('name_equip', 'patr')->toArray();
             $emailDestino = Cliente::where('id',  $hcPctAtual)->pluck('email');
             $emailDestino2 = Cliente::where('id',  $hcPctAtual)->pluck('email2');
 
             $idForGuia = $id;
 
-            Equipamento::where('solicit_equip', $id)
+            switch ( $solicit->type_solicit) {
+                case 1:
+                   $typeSolicitFim = "IMPLANTAÇÃO";
+                    break;
+                case 2:
+                   $typeSolicitFim = "RECOLHIMENTO";
+                   Equipamento::where('solicit_equip', $id)
                     ->update(['pct_equip' => 0, 'solicit_equip' => 0, 'status_equip' => 0 ]);
+                    break;
+                case 3:
+                   $typeSolicitFim = "TROCA / MANUTENÇÃO";
+                    break;
+                case 4:
+                   $typeSolicitFim = "MUDANÇA DE LOCALIDADE";
+                    break;
+                case 5:
+                    $typeSolicitFim = "RECOLHIMENTO TOTAL";
+                    break;
+                case 6:
+                    $typeSolicitFim = "CILINDRO DE O2";
+                    break;
+                
+                default:
+                    # code...
+                    break;
+            }
+
+           sleep(5);
+
 
             Mail::to($emailDestino)->cc($emailDestino2)
                     ->send(new EmailFimSolicit($idsolfim, $typeSolicitFim, $obsAtendfim, $pctSolFim, $equipsSolicFim, $idForGuia));
@@ -227,11 +255,29 @@ public function add_equip_pct(Request $request){
 
 ///========================================================================================================================
  //EXCLUI APENAS O EQUIPAMENTO ATUAL DA SOLICITAÇÃO
-public function cancelOneEquipSolicit (Request $request, $idEquip){
+public function cancelOneEquipSolicit (Request $request, $idEquip, $solicit_equip){
     // echo 'cancelar apenas este' . $idEquip ;
-    Equipamento::where('id', $idEquip)
-                ->update(['pct_equip' => 0, 'solicit_equip' => 0, 'status_equip' => 0 ]);
-                return back()->withInput();
+   
+    $solicitAtual = Solicitacao::find($solicit_equip);
+
+    switch ($solicitAtual->type_solicit) {
+        case '1':     // se for IMPLANTAÇÃO retira o equipamento do paciente e da solicitação e retorna ele para o estoque
+                Equipamento::where('id', $idEquip)
+                        ->update(['pct_equip' => 0, 'solicit_equip' => 0, 'status_equip' => 0 ]);
+                        return back()->withInput();
+            break;
+        case '2':     //se for RECOLHIMENTO retira o equipamento da solicitação e ele continua no paciente
+            Equipamento::where('id', $idEquip)              
+                        ->update(['solicit_equip' => 0 ]);
+                        return back()->withInput();
+            break;
+        
+        default:
+            # code...
+            break;
+    }
+
+                
 }
 
 
@@ -325,7 +371,7 @@ $resultado = [];
         $idPctSel = $collection->implode('pct_solicit', ',');
 
         //Seleciona o nº de patrimônio e nome do equipamento selecionado da solicitação atual
-        $equipsSel = DB::SELECT("SELECT id, patr, name_equip FROM equipamentos WHERE pct_equip = $idPctSel AND solicit_equip = $id;
+        $equipsSel = DB::SELECT("SELECT id, patr, name_equip, solicit_equip FROM equipamentos WHERE pct_equip = $idPctSel AND solicit_equip = $id;
 
 
                         -- INNER JOIN pcts AS PCT ON SOLICIT.pct_solicit = PCT.id
