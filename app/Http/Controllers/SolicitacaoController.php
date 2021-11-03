@@ -122,6 +122,7 @@ public function iniciar_solicit(Request $request, $id){
 
             // $image = $request->file;
             $nameFile = $request->id . '.' . $request->guia->extension();
+            // $nameFile = "nomeArquivo";
 
 
             $guia = $request->file('guia')->storeAs('public/guias', $nameFile); // busca no input 'guia' o arquivo e armazena na pasta 'guias'

@@ -265,9 +265,8 @@
                                                 <td style="text-align: left">
                                                     {{-- <div data-toggle="modal" data-target="#ModalEditPct" data-whatever="$Pct->id"> --}}
                                                     {{-- <div data-toggle="modal" data-target="#ModalEditPct" data-whatever="{{$Pct->id}}" data-whatever-name_pct="{{$Pct->name_pct}}" data-whatever-peso="{{$Pct->peso}}" data-whatever-altura="{{$Pct->altura}}" data-whatever-id_hc="{{$Pct->id_hc}}" data-whatever-resp="{{$Pct->resp}}" data-whatever-tel_resp="{{$Pct->tel_resp}}" data-whatever-resp2="{{$Pct->resp2}}" data-whatever-tel_resp2="{{$Pct->tel_resp2}}" data-whatever-cep_pct="{{$Pct->cep}}" data-whatever-rua="{{$Pct->rua}}" data-whatever-nr="{{$Pct->nr}}" data-whatever-compl="{{$Pct->compl}}" data-whatever-bairro="{{$Pct->bairro}}" data-whatever-city="{{$Pct->city}}" data-whatever-obs="{{$Pct->obs}}"> --}}
-                                                    <div>
+                                                    {{-- <div>
                                                         <span data-toggle="tooltip" title="Selecione o tipo de solicitação para este ítem.">
-                                                            {{-- <a href="#" id="btnEditar" style="margin-right: 10px" ><i class="fas fa-exchange-alt"></i></a> --}}
                                                             <select name="solicita" id="solicita" class=" form-control form-control-sm select" aria-hidden="true">
                                                                 <option value="0" >Selecione</option>
                                                                 <option value="1"{{ $equipPct->status_equip == "1" ? 'selected' : ''}}>Manutenção/Troca</option>
@@ -275,10 +274,10 @@
                                                                 <option value="3"{{ $equipPct->status_equip == "3" ? 'selected' : ''}}>Recarga</option>
                                                             </select>
                                                         </span>
-                                                    </div>
+                                                    </div> --}}
                                                 </td>
                                                 <td>
-                                                    <input type="text" class=" form-control form-control-sm" data-toggle="tooltip" title="Descrição da solicitação" maxlength="100">
+                                                    {{-- <input type="text" class=" form-control form-control-sm" data-toggle="tooltip" title="Descrição da solicitação" maxlength="100"> --}}
                                                 </td>
                                                 <td>
                                                     <span data-toggle="tooltip" title="Solicitação Pendente" style="text-align: center">
@@ -641,7 +640,7 @@
                                             <label for="obsSolicitacaoRecolhe">Observações:</label>
                                             {{-- <input type="text" class="form-control" name="obsSolicitacao" id="obsSolicitacao" placeholder="Observações sobre a solicitação" maxlength="100"> --}}
                                             <textarea class="form-control" name="obsSolicitacaoRecolhe" id="obsSolicitacaoRecolhe" rows="3" placeholder="Observações sobre a solicitação" maxlength="150"></textarea>
-                                            <input type="text" name="enviarEquip" id="enviarEquip">
+                                            <input type="text" name="enviarEquip" id="enviarEquip" style="visibility: hidden">
                                         </div>
                                     </div>
                                     {{-- <div class="custom-control custom-checkbox">

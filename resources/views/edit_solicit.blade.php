@@ -435,12 +435,12 @@
                                             </button>
                                             <button class="btn btn-primary " 
                                                     name="submitbutton"
-                                                    id="btnConclui" style="visibility: hidden" 
+                                                    id="btnConclui" style="display: none" 
                                                     value="2"
                                                     type="submit">
                                                     Concluir
                                             </button>
-                                            <button type="button" class="btn btn-success" style="visibility: hidden" id="spinnerFinalizando">
+                                            <button type="button" class="btn btn-success" style="display: none" id="spinnerFinalizando">
                                                 <span class="spinner-border spinner-border-sm"></span>
                                                 Finalizando...
                                             </button>
@@ -1046,14 +1046,14 @@
         <script>
             $("input[type=file]").on('change', function() {
                 // alert(this.files[0].name);
-                document.getElementById('btnConclui').style.visibility = "visible";
+                document.getElementById('btnConclui').style.display = "block";
             });
             $("#btnConclui").on('click', function() {
                 // alert(this.files[0].name);
-                document.getElementById('spinnerFinalizando').style.visibility = "visible";
-                document.getElementById('btnConclui').style.visibility = "hidden";
-                document.getElementById('btnCancelarEnvio').style.visibility = "hidden";
-                document.getElementById('guia').disabled = true;
+                document.getElementById('spinnerFinalizando').style.display = "block";
+                document.getElementById('btnConclui').style.display = "none";
+                document.getElementById('btnCancelarEnvio').style.display = "none";
+                // document.getElementById('guia').readonly = true;
             });
         </script>
         
