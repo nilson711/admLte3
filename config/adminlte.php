@@ -14,7 +14,7 @@ return [
     |
     */
 
-    'title' => 'Request',
+    'title' => 'RequestCare',
     'title_prefix' => '',
     'title_postfix' => '',
 
@@ -46,7 +46,7 @@ return [
     */
 
     // 'logo' => '<b>Admin</b>LTE',
-    'logo' => '<b>Request</b>',
+    'logo' => '<b>Request</b>Care',
     // 'logo_img' => 'vendor/adminlte/dist/img/AdminLTELogo.png',
     'logo_img' => 'vendor/adminlte/dist/img/R_logo.png',
     'logo_img_class' => 'brand-image img-circle elevation-3',

@@ -403,7 +403,9 @@
                                 {{-- <th class="sorting col-sm-4" tabindex="0" aria-controls="example1" rowspan="1" colspan="1">Endereço</th> --}}
                                 <th class="sorting" tabindex="0" aria-controls="example1" rowspan="1" colspan="1">Data</th>
                                 <th class="sorting" tabindex="0" aria-controls="example1" rowspan="1" colspan="1">Solicitado</th>
+                                <th class="sorting" tabindex="0" aria-controls="example1" rowspan="1" colspan="1">Obs</th>
                                 <th class="sorting" tabindex="0" aria-controls="example1" rowspan="1" colspan="1">Guia</th>
+                                <th class="sorting" tabindex="0" aria-controls="example1" rowspan="1" colspan="1">Atendimento</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -454,26 +456,32 @@
                                     <td>
                                         {{$solicFim->equips_solicit}}
 
-                                        <div style="display: inline-block">
-                                            @if ($solicFim->obs_solicit != null)
+                                        {{-- <div style="display: inline-block"> --}}
+                                            {{-- @if ($solicFim->obs_solicit != null)
                                                 <i class="fas fa-exclamation-circle" style="color: rgb(233, 166, 22)" data-toggle="tooltip" title='{{$solicFim->obs_solicit}}'>
                                                 </i>
-                                            @endif
-                                        </div>
+                                            @endif --}}
+                                        {{-- </div> --}}
+                                    </td>
+                                    <td>
+                                        {{$solicFim->obs_solicit}}
                                     </td>
 
                                     <td>
                                         <div style="display: inline-block">
-                                            @if ($solicFim->obs_atend != null)
+                                            {{-- @if ($solicFim->obs_atend != null)
                                                 <i class="fas fa-info" style="color: rgb(12, 63, 139)" data-toggle="tooltip" title='{{$solicFim->obs_atend}}'>
                                                 </i>
-                                            @endif
+                                            @endif --}}
                                         </div>&nbsp;&nbsp;&nbsp;
                                         <div style="display: inline-block">
                                             <a href="{{asset('storage/guias/'.$solicFim->id.'.jpg')}}" target="_blank" data-toggle="lightbox" data-title="sample 1 - white">
                                                 <i class="far fa-file" data-toggle="tooltip" title="Guia"></i>
                                             </a>
                                           </div>
+                                    </td>
+                                    <td>
+                                        {{$solicFim->obs_atend}}
                                     </td>
                                 </tr>
                             @endforeach

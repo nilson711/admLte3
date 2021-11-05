@@ -1,6 +1,6 @@
 @extends('adminlte::page')
 
-@section('title', 'Control Service')
+@section('title', 'RequestCare')
 
 @section('content_header')
     <h1>Dashboard MH</h1>
