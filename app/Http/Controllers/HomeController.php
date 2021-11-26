@@ -28,7 +28,6 @@ class HomeController extends Controller
      */
     public function index()
     {
-
         $solicitacoes = Solicitacao::wherein('status_solicit', [0, 1])->get();
 
         $allPcts = Pct::all();
@@ -36,7 +35,7 @@ class HomeController extends Controller
         $equips = Equipamento::where('pct_equip', '0')->get();
 
         $hc = Cliente::all();
-        
+
         return view('home', ['solicitacoes'=>$solicitacoes] + ['allPcts'=> $allPcts] + ['equips'=> $equips] + ['hc' => $hc]);
     }
 }

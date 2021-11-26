@@ -1,17 +1,19 @@
+
 @extends('adminlte::page')
 
-@section('title', 'Clientes')
+@section('title', 'Solicitações')
 
 @section('content_header')
-
+    <h1>Clientes</h1>
 @stop
+
 
 @section('content')
 
     <div class="card">
-        <div class="card-header">
-          <h3 class="card-title">Clientes</h3>
-        </div>
+        {{-- <div class="card-header">
+          <h3 class="card-title">Clientessss</h3>
+        </div> --}}
         <!-- /.card-header -->
         <div class="card-body">
           <div id="example1_wrapper" class="dataTables_wrapper dt-bootstrap4">
@@ -132,245 +134,283 @@
         <!-- /.card-body -->
         </div>
 
-</section>
+
 @stop
 
 @section('css')
-    {{-- <link rel="stylesheet" href="css/admin_custom.css"> --}}
-    <!-- Google Font: Source Sans Pro -->
-    {{-- <link rel="stylesheet" href="css/css"> --}}
+{{-- <link rel="stylesheet" href="/css/admin_custom.css"> --}}
+{{-- <script src= {{asset('css/bootstrap-4.min.css')}}></script> --}}
+{{-- <script src= {{asset('css/toastr.css')}}></script> --}}
+  <!-- Google Font: Source Sans Pro -->
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
 
-    <!-- Font Awesome -->
-    {{-- <link rel="stylesheet" href="css/all.min.css"> --}}
+  <!-- SweetAlert2 -->
+  <link rel="stylesheet" href="{{asset('css/bootstrap-4.min.css')}}">
+  <!-- Toastr -->
+  <link rel="stylesheet" href="{{asset('css/toastr.css')}}">
 
-    <!-- DataTables -->
-    <link rel="stylesheet" href="{{asset('css/dataTables.bootstrap4.min.css')}}">
-    <link rel="stylesheet" href="{{asset('css/responsive.bootstrap4.min.css')}}">
-    <link rel="stylesheet" href="{{asset('css/buttons.bootstrap4.min.css')}}">
-    <!-- Theme style -->
-    <link rel="stylesheet" href="{{asset('css/adminlte.min.css')}}">
+<!-- Select2 -->
+<link rel="stylesheet" href="{{asset('css/select2.min.css')}}">
+<link rel="stylesheet" href="{{asset('css/select2-bootstrap4.min.css')}}">
+
+<!-- DataTables -->
+<link rel="stylesheet" href="css/dataTables.bootstrap4.min.css">
+<link rel="stylesheet" href="css/responsive.bootstrap4.min.css">
+<link rel="stylesheet" href="css/buttons.bootstrap4.min.css">
+
 @stop
 
 @section('js')
-    {{-- <script> console.log('Hi!'); </script> --}}
-    <!-- jQuery -->
-<script src= {{asset('js/jquery.min.js')}}></script>
-<!-- Bootstrap 4 -->
-<script src="{{asset('js/bootstrap.bundle.min.js')}}"></script>
-<script src= {{asset('')}}></script>
-<!-- DataTables  & Plugins -->
-<script src= {{asset('js/jquery.dataTables.min.js')}}></script>
-<script src= {{asset('js/dataTables.bootstrap4.min.js')}}></script>
-<script src= {{asset('js/dataTables.responsive.min.js')}}></script>
-<script src= {{asset('js/responsive.bootstrap4.min.js')}}></script>
-<script src= {{asset('js/dataTables.buttons.min.js')}}></script>
-<script src= {{asset('js/buttons.bootstrap4.min.js')}}></script>
-<script src= {{asset('js/jszip.min.js')}}></script>
-<script src= {{asset('js/pdfmake.min.js')}}></script>
-<script src= {{asset('js/vfs_fonts.js')}}></script>
-<script src= {{asset('js/buttons.html5.min.js')}}></script>
-<script src= {{asset('js/buttons.print.min.js')}}></script>
-<script src= {{asset('js/buttons.colVis.min.js')}}></script>
-<script src= {{asset('js/adminlte.min.js')}}></script>
-<script src= {{asset('js/demo.js')}}></script>
-<script src= {{asset('js/select2.full.min.js')}}></script>
-<script src= {{asset('js/jquery.bootstrap-duallistbox.min.js')}}></script>
-<script src= {{asset('js/moment.min.js')}}></script>
-<script src= {{asset('js/jquery.inputmask.min.js')}}></script>
-<script src= {{asset('js/daterangepicker.js')}}></script>
-<script src= {{asset('js/tempusdominus-bootstrap-4.min.js')}}></script>
-<script src= {{asset('js/bootstrap-switch.min.js')}}></script>
-<script src= {{asset('js/bs-stepper.min.js')}}></script>
-<script src= {{asset('js/dropzone.min.js')}}></script>
+
 <script src= {{asset('js/functions-equips.js')}}></script>
+{{-- <script src= {{asset('js/jquery.min.js')}}></script> --}}
+<script src= {{asset('js/toastr.min.js')}}></script>
+<script src= {{asset('js/sweetalert2.min.js')}}></script>
+<!-- Select2 -->
+<script src= {{asset('js/select2.full.min.js')}}></script>
 
-<!-- Page specific script -->
-<script>
-  $(function () {
-    $("#example1").DataTable({
-      "responsive": true, "lengthChange": false, "autoWidth": false
-    //   ,      "buttons": ["copy", "csv", "excel", "pdf", "print"]
-    }).buttons().container().appendTo('#example1_wrapper .col-md-6:eq(0)');
-
-    $('#example2').DataTable({
-      "paging": true,
-      "lengthChange": false,
-      "searching": false,
-      "ordering": true,
-      "info": true,
-      "autoWidth": false,
-      "responsive": true,
-    });
-  });
-</script>
-
-
+<!-- DataTables  & Plugins -->
+<script src="js/jquery.dataTables.min.js"></script>
+<script src="js/dataTables.bootstrap4.min.js"></script>
+<script src="js/dataTables.responsive.min.js"></script>
+<script src="js/responsive.bootstrap4.min.js"></script>
+<script src="js/dataTables.buttons.min.js"></script>
+<script src="js/buttons.bootstrap4.min.js"></script>
+<script src="js/jszip.min.js"></script>
+<script src="js/pdfmake.min.js"></script>
+<script src="js/vfs_fonts.js"></script>
+<script src="js/buttons.html5.min.js"></script>
+<script src="js/buttons.print.min.js"></script>
+<script src="js/buttons.colVis.min.js"></script>
 
 <script>
     $(function () {
       //Initialize Select2 Elements
-      $('.select2').select2()
+      $('.select2').select2();
 
-      //Initialize Select2 Elements
+    //Initialize Select2 Elements
       $('.select2bs4').select2({
         theme: 'bootstrap4'
-      })
+      });
+      $("#example1").DataTable({
+        "responsive": true, "lengthChange": false, "autoWidth": false
+        // ,        "buttons": ["copy", "csv", "excel", "pdf", "print"]
+      }).buttons().container().appendTo('#example1_wrapper .col-md-6:eq(0)');
 
-      //Datemask dd/mm/yyyy
-      $('#datemask').inputmask('dd/mm/yyyy', { 'placeholder': 'dd/mm/yyyy' })
-      //Datemask2 mm/dd/yyyy
-      $('#datemask2').inputmask('mm/dd/yyyy', { 'placeholder': 'mm/dd/yyyy' })
-      //Money Euro
-      $('[data-mask]').inputmask()
+      $("#table_implantados").DataTable({
+        "responsive": true, "lengthChange": false, "autoWidth": false
+        // ,        "buttons": ["copy", "csv", "excel", "pdf", "print"]
+      }).buttons().container().appendTo('#implantados_wrapper .col-md-6:eq(0)');
 
-      //Date picker
-      $('#reservationdate').datetimepicker({
-          format: 'L'
+      $("#table_manutencao").DataTable({
+        "responsive": true, "lengthChange": false, "autoWidth": false
+        // ,        "buttons": ["copy", "csv", "excel", "pdf", "print"]
+      }).buttons().container().appendTo('#manutencao_wrapper .col-md-6:eq(0)');
+
+
+      $('#example2').DataTable({
+        "paging": true,
+        "lengthChange": false,
+        "searching": false,
+        "ordering": true,
+        "info": true,
+        "autoWidth": false,
+        "responsive": true,
+      });
+    });
+  </script>
+
+<script>
+    console.log('Hi!');
+</script>
+
+<script>
+    $(function() {
+        $('[data-toggle="tooltip"]').tooltip()
+    })
+</script>
+
+<script>
+    // var dateStr = document.getElementById('data_solicit').split('-');
+    // var dataBr = dateStr.val(dateStr[2]) + '/'
+    // dateStr[1] + '/' + dateStr[0]);
+    // console.log(dataBr);
+</script>
+
+<script>
+function iniciarAtendimento() {
+  var txt;
+  var r = confirm("Deseja iniciar esta solicitação?");
+  if (r == true) {
+    txt = "You pressed OK!";
+    document.getElementById("ambulancia").style="display: inline";
+    visibility = "visible"
+    // style.display = "block"
+  } else {
+    txt = "You pressed Cancel!";
+  }
+//   document.getElementById("demo").innerHTML = txt;
+}
+</script>
+<script>
+    $(function() {
+      var Toast = Swal.mixin({
+        toast: false,
+        position: 'center',
+        showConfirmButton: false,
+        timer: 3000
       });
 
-      //Date and time picker
-      $('#reservationdatetime').datetimepicker({ icons: { time: 'far fa-clock' } });
+      $('.swalDefaultSuccess').click(function() {
+        Toast.fire({
+          icon: 'success',
+          title: 'Solicitação iniciada com sucesso!'
+        })
+      });
+      $('.swalDefaultFinalized').click(function() {
+        Toast.fire({
+          icon: 'success',
+          title: 'Solicitação Finalizada!'
+        })
+      });
+      $('.swalDefaultInfo').click(function() {
+        Toast.fire({
+          icon: 'info',
+          title: 'Solicitação retornada!'
+        })
+      });
+      $('.swalDefaultError').click(function() {
+        Toast.fire({
+          icon: 'error',
+          title: 'Solicitação Cancelada!'
+        })
+      });
+      $('.swalDefaultWarning').click(function() {
+        Toast.fire({
+          icon: 'warning',
+          title: 'Lorem ipsum dolor sit amet, consetetur sadipscing elitr.'
+        })
+      });
+      $('.swalDefaultQuestion').click(function() {
+        Toast.fire({
+          icon: 'question',
+          title: 'Lorem ipsum dolor sit amet, consetetur sadipscing elitr.'
+        })
+      });
 
-      //Date range picker
-      $('#reservation').daterangepicker()
-      //Date range picker with time picker
-      $('#reservationtime').daterangepicker({
-        timePicker: true,
-        timePickerIncrement: 30,
-        locale: {
-          format: 'DD/MM/YYYY hh:mm A'
-        }
-      })
-      //Date range as a button
-      $('#daterange-btn').daterangepicker(
-        {
-          ranges   : {
-            'Today'       : [moment(), moment()],
-            'Yesterday'   : [moment().subtract(1, 'days'), moment().subtract(1, 'days')],
-            'Last 7 Days' : [moment().subtract(6, 'days'), moment()],
-            'Last 30 Days': [moment().subtract(29, 'days'), moment()],
-            'This Month'  : [moment().startOf('month'), moment().endOf('month')],
-            'Last Month'  : [moment().subtract(1, 'month').startOf('month'), moment().subtract(1, 'month').endOf('month')]
-          },
-          startDate: moment().subtract(29, 'days'),
-          endDate  : moment()
-        },
-        function (start, end) {
-          $('#reportrange span').html(start.format('MMMM D, YYYY') + ' - ' + end.format('MMMM D, YYYY'))
-        }
-      )
+      $('.toastrDefaultSuccess').click(function() {
+        toastr.success('Lorem ipsum dolor sit amet, consetetur sadipscing elitr.')
+      });
+      $('.toastrDefaultInfo').click(function() {
+        toastr.info('Lorem ipsum dolor sit amet, consetetur sadipscing elitr.')
+      });
+      $('.toastrDefaultError').click(function() {
+        toastr.error('Lorem ipsum dolor sit amet, consetetur sadipscing elitr.')
+      });
+      $('.toastrDefaultWarning').click(function() {
+        toastr.warning('Lorem ipsum dolor sit amet, consetetur sadipscing elitr.')
+      });
 
-      //Timepicker
-      $('#timepicker').datetimepicker({
-        format: 'LT'
-      })
-
-      //Bootstrap Duallistbox
-      $('.duallistbox').bootstrapDualListbox()
-
-      $("input[data-bootstrap-switch]").each(function(){
-        $(this).bootstrapSwitch('state', $(this).prop('checked'));
-      })
-
-    })
+      $('.toastsDefaultDefault').click(function() {
+        $(document).Toasts('create', {
+          title: 'Toast Title',
+          body: 'Lorem ipsum dolor sit amet, consetetur sadipscing elitr.'
+        })
+      });
+      $('.toastsDefaultTopLeft').click(function() {
+        $(document).Toasts('create', {
+          title: 'Toast Title',
+          position: 'topLeft',
+          body: 'Lorem ipsum dolor sit amet, consetetur sadipscing elitr.'
+        })
+      });
+      $('.toastsDefaultBottomRight').click(function() {
+        $(document).Toasts('create', {
+          title: 'Toast Title',
+          position: 'bottomRight',
+          body: 'Lorem ipsum dolor sit amet, consetetur sadipscing elitr.'
+        })
+      });
+      $('.toastsDefaultBottomLeft').click(function() {
+        $(document).Toasts('create', {
+          title: 'Toast Title',
+          position: 'bottomLeft',
+          body: 'Lorem ipsum dolor sit amet, consetetur sadipscing elitr.'
+        })
+      });
+      $('.toastsDefaultAutohide').click(function() {
+        $(document).Toasts('create', {
+          title: 'Toast Title',
+          autohide: true,
+          delay: 750,
+          body: 'Lorem ipsum dolor sit amet, consetetur sadipscing elitr.'
+        })
+      });
+      $('.toastsDefaultNotFixed').click(function() {
+        $(document).Toasts('create', {
+          title: 'Toast Title',
+          fixed: false,
+          body: 'Lorem ipsum dolor sit amet, consetetur sadipscing elitr.'
+        })
+      });
+      $('.toastsDefaultFull').click(function() {
+        $(document).Toasts('create', {
+          body: 'Lorem ipsum dolor sit amet, consetetur sadipscing elitr.',
+          title: 'Toast Title',
+          subtitle: 'Subtitle',
+          icon: 'fas fa-envelope fa-lg',
+        })
+      });
+      $('.toastsDefaultFullImage').click(function() {
+        $(document).Toasts('create', {
+          body: 'Lorem ipsum dolor sit amet, consetetur sadipscing elitr.',
+          title: 'Toast Title',
+          subtitle: 'Subtitle',
+          image: '../../dist/img/user3-128x128.jpg',
+          imageAlt: 'User Picture',
+        })
+      });
+      $('.toastsDefaultSuccess').click(function() {
+        $(document).Toasts('create', {
+          class: 'bg-success',
+          title: 'Toast Title',
+          subtitle: 'Subtitle',
+          body: 'Lorem ipsum dolor sit amet, consetetur sadipscing elitr.'
+        })
+      });
+      $('.toastsDefaultInfo').click(function() {
+        $(document).Toasts('create', {
+          class: 'bg-info',
+          title: 'Toast Title',
+          subtitle: 'Subtitle',
+          body: 'Lorem ipsum dolor sit amet, consetetur sadipscing elitr.'
+        })
+      });
+      $('.toastsDefaultWarning').click(function() {
+        $(document).Toasts('create', {
+          class: 'bg-warning',
+          title: 'Toast Title',
+          subtitle: 'Subtitle',
+          body: 'Lorem ipsum dolor sit amet, consetetur sadipscing elitr.'
+        })
+      });
+      $('.toastsDefaultDanger').click(function() {
+        $(document).Toasts('create', {
+          class: 'bg-danger',
+          title: 'Toast Title',
+          subtitle: 'Subtitle',
+          body: 'Lorem ipsum dolor sit amet, consetetur sadipscing elitr.'
+        })
+      });
+      $('.toastsDefaultMaroon').click(function() {
+        $(document).Toasts('create', {
+          class: 'bg-maroon',
+          title: 'Toast Title',
+          subtitle: 'Subtitle',
+          body: 'Lorem ipsum dolor sit amet, consetetur sadipscing elitr.'
+        })
+      });
+    });
   </script>
-<script>
-  $(function () {
-  $('#datetimepicker5').datetimepicker({
-    locale: 'pt-br'
-  });
-});
-</script>
-<script>
-  $(function () {
-  $('[data-toggle="tooltip"]').tooltip()
-})
-</script>
-
-<script>
-    function numberToReal(numero) {
-    var numero = numero.toFixed(2).split('.');
-    numero[0] = "R$ " + numero[0].split(/(?=(?:...)*$)/).join('.');
-    return numero.join(',');
-    }
-
-    function mascara(o,f){
-        v_obj=o
-        v_fun=f
-        setTimeout("execmascara()",1)
-    }
-    function execmascara(){
-        v_obj.value=v_fun(v_obj.value)
-    }
-    function leech(v){
-        v=v.replace(/o/gi,"0")
-        v=v.replace(/i/gi,"1")
-        v=v.replace(/z/gi,"2")
-        v=v.replace(/e/gi,"3")
-        v=v.replace(/a/gi,"4")
-        v=v.replace(/s/gi,"5")
-        v=v.replace(/t/gi,"7")
-        return v
-    }
-    function soNumeros(v){
-        return v.replace(/\D/g,"")
-    }
-    function telefone(v){
-        v=v.replace(/\D/g,"")                 //Remove tudo o que não é dígito
-        v=v.replace(/^(\d\d)(\d)/g,"($1) $2") //Coloca parênteses em volta dos dois primeiros dígitos
-        //v=v.replace(/(\d)(\d{3})/,"$1 $2")    //Coloca um espaço no primeiro dígito do telefone
-        //v=v.replace(/(\d{4})(\d)/,"$1-$2")    //Coloca hífen entre o quarto e o quinto dígitos
-        v=v.replace(/(\d{4})(\d)/,"$1-$2")    //Coloca hífen entre o terceiro e o quarto dígitos
-        return v
-    }
-    function celularMasc(v){
-        v=v.replace(/\D/g,"")                 //Remove tudo o que não é dígito
-        v=v.replace(/^(\d\d)(\d)/g,"($1) $2") //Coloca parênteses em volta dos dois primeiros dígitos
-        v=v.replace(/(\d)(\d{3})/,"$1 $2")    //Coloca um espaço no primeiro dígito do telefone
-        v=v.replace(/(\d{4})(\d)/,"$1-$2")    //Coloca hífen entre o terceiro e o quarto dígitos
-        return v
-    }
-    function cpf(v){
-        v=v.replace(/\D/g,"")                    //Remove tudo o que não é dígito
-        v=v.replace(/(\d{2})(\d)/,"$1.$2")       //Coloca um ponto entre o terceiro e o quarto dígitos
-        v=v.replace(/(\d{3})(\d)/,"$1.$2")       //Coloca um ponto entre o terceiro e o quarto dígitos
-                                                //de novo (para o segundo bloco de números)
-        v=v.replace(/(\d{3})(\d{1,2})$/,"$1-$2") //Coloca um hífen entre o terceiro e o quarto dígitos
-        return v
-    }
-    function cep(v){
-        // v=v.replace(/D/g,"")                //Remove tudo o que não é dígito
-        // v=v.replace(/\D/g,"")                    //Remove tudo o que não é dígito
-        v=v.replace(/^(\d{5})(\d)/,"$1-$2") //Esse é tão fácil que não merece explicações
-        return v
-    }
-    function soNumeros(v){
-        return v.replace(/\D/g,"")
-    }
-
-    function cpf(v){
-        v=v.replace(/\D/g,"")                    //Remove tudo o que não é dígito
-        v=v.replace(/(\d{3})(\d)/,"$1.$2")       //Coloca um ponto entre o terceiro e o quarto dígitos
-        v=v.replace(/(\d{3})(\d)/,"$1.$2")       //Coloca um ponto entre o terceiro e o quarto dígitos
-                                                //de novo (para o segundo bloco de números)
-        v=v.replace(/(\d{3})(\d{1,2})$/,"$1-$2") //Coloca um hífen entre o terceiro e o quarto dígitos
-        return v
-    }
-    function mdata(v){
-        v=v.replace(/\D/g,"");
-        v=v.replace(/(\d{2})(\d)/,"$1/$2");
-        v=v.replace(/(\d{2})(\d)/,"$1/$2");
-
-        v=v.replace(/(\d{2})(\d{2})$/,"$1$2");
-        return v;
-    }
-    function mcc(v){
-        v=v.replace(/\D/g,"");
-        v=v.replace(/^(\d{4})(\d)/g,"$1 $2");
-        v=v.replace(/^(\d{4})\s(\d{4})(\d)/g,"$1 $2 $3");
-        v=v.replace(/^(\d{4})\s(\d{4})\s(\d{4})(\d)/g,"$1 $2 $3 $4");
-        return v;
-    }
-</script>
-
 @stop
+

@@ -3,7 +3,7 @@
 @section('title', 'Equipamentos')
 
 @section('content_header')
-
+<h1>Equipamentos</h1>
 @stop
 
 @section('content')
@@ -771,7 +771,7 @@
         showConfirmButton: false,
         timer: 3000
       });
-  
+
       $('.swalDefaultSuccess').click(function() {
         Toast.fire({
           icon: 'success',
@@ -802,7 +802,7 @@
           title: 'Lorem ipsum dolor sit amet, consetetur sadipscing elitr.'
         })
       });
-  
+
       $('.toastrDefaultSuccess').click(function() {
         toastr.success('Lorem ipsum dolor sit amet, consetetur sadipscing elitr.')
       });
@@ -815,7 +815,7 @@
       $('.toastrDefaultWarning').click(function() {
         toastr.warning('Lorem ipsum dolor sit amet, consetetur sadipscing elitr.')
       });
-  
+
       $('.toastsDefaultDefault').click(function() {
         $(document).Toasts('create', {
           title: 'Toast Title',
@@ -917,5 +917,5 @@
       });
     });
   </script>
-  
+
 @stop

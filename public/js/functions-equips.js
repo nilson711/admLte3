@@ -276,6 +276,14 @@ function coletaDados(){
 
     document.querySelector("#textEquips").innerHTML = sum;
 
+    // console.log(sum.length);
+
+    if (sum.length > 0) {
+        document.getElementById("btnSolicita").style.display = "block";
+    } else {
+        document.getElementById("btnSolicita").style.display = "none";
+    }
+
  }
 
  /*********************************************************************************************************************************
@@ -361,11 +369,34 @@ function habilitarBtnFinalizar(){
  * Função Deixa o botão SOLICITAR visivel se houver algum equipamento selecionado E o motivo da solicitação
  */
 function habilitarBtnSolicitar(){
-    if (document.getElementById('motivo').value > 0) {
-        if (document.getElementById('motivo').value == 7) {
-            alert('Especifique o motivo nas Observações');
+    switch (document.getElementById('motivo').value) {
+        case '3':
+            alert('Pacientes internados.\nEm vez de fazer o recolhimento, você pode solicitar uma pausa de 10 dias nas cobranças.\n');
             document.getElementById('obsSolicitacaoRecolhe').focus();
-        }
+            break;
+        case '5':
+            alert('No campo "Observações" especifique o problema apresenta no equipamento para justificar a retirada.');
+            document.getElementById('obsSolicitacaoRecolhe').focus();
+            break;
+        case '6':
+            alert('No campo "Observações" informe para qual Home Care o paciente será migrado.');
+            document.getElementById('obsSolicitacaoRecolhe').focus();
+            break;
+        case '7':
+            alert('No campo "Observações" especifique o problema apresentado no equipamento para justificar a troca.');
+            document.getElementById('obsSolicitacaoRecolhe').focus();
+            break;
+        case '8':
+            alert('No campo "Observações" informe uma justificativa para retirada do equipamento.');
+            document.getElementById('obsSolicitacaoRecolhe').focus();
+            break;
+
+        default:
+            break;
+    }
+
+    if (document.getElementById('motivo').value > 0) {
+
         document.getElementById('submitbuttonSolicit').style.visibility = "visible";
     } else {
         document.getElementById('submitbuttonSolicit').style.visibility = "hidden";

@@ -3,7 +3,7 @@
 @section('title', 'Pacientes')
 
 @section('content_header')
-
+<h1>Pacientes</h1>
 @stop
 
 @section('content')
@@ -14,9 +14,9 @@
 
 
     <div class="card">
-        <div class="card-header" >
+        {{-- <div class="card-header" >
           <h3 class="card-title">Pacientes</h3>
-        </div>
+        </div> --}}
         <!-- /.card-header -->
         <div class="card-body">
           <div id="example1_wrapper" class="dataTables_wrapper dt-bootstrap4">

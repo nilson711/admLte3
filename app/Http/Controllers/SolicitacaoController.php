@@ -12,6 +12,8 @@ use Illuminate\Support\Facades\DB;
 use SebastianBergmann\Environment\Console;
 
 use App\Mail\EmailFimSolicit;
+use App\Mail\EmailRecebidoSolicit;
+
 use Illuminate\Support\Facades\Mail;
 
 use App\Models\Cidade;
@@ -43,7 +45,73 @@ class SolicitacaoController extends Controller
                 $solicitacao->obs_solicit =  $obsSolicitacao;
                 $solicitacao->priority =  (isset($checkUrgente))? 1 : 0; //verifica se o check está  marcado. se tiver retorna 1, se não retorna 0
                 $solicitacao->save();
+                // return back()->withInput();
+
+
+                //ENVIA EMAIL DE RECEBIDO PARA O HOME CARE
+                $hcPctAtual = Pct::where('id', $idPct)->pluck('id_hc');
+                $emailDestino = Cliente::find($hcPctAtual)->pluck('email')->toArray();
+                $emailDestino2 = Cliente::find($hcPctAtual)->pluck('email2')->toArray();
+
+                $namePct = Pct::where('id', $idPct)->pluck('name_pct')->get(0);
+                $idSolicit = Solicitacao::where('pct_solicit', $idPct)->pluck('id')->last();
+                $itensSolicit = Solicitacao::where('pct_solicit', $idPct)->pluck('equips_solicit')->last();
+                $obsSolicit = Solicitacao::where('pct_solicit', $idPct)->pluck('obs_solicit')->last();
+
+                // echo '<pre>';
+                // print_r ($namePct);
+                // print_r ($emailDestino);
+                // print_r ($idSolicit);
+                // echo '</pre>';
+
+                switch ( $solicitacao->type_solicit) {
+                    case 1:
+                       $typeSolicitFim = "Implantação";
+                        break;
+                    case 2:
+                       $typeSolicitFim = "Recolhimento ";
+                       Equipamento::where('solicit_equip', $idSolicit)
+                        ->update(['pct_equip' => 0, 'solicit_equip' => 0, 'status_equip' => 0 ]);
+                        break;
+                    case 3:
+                       $typeSolicitFim = "Troca / Manutenção";
+                        break;
+                    case 4:
+                       $typeSolicitFim = "Mudança de Localidade";
+                        break;
+                    case 5:
+                        $typeSolicitFim = "Recolhimento Total";
+                        break;
+                    case 6:
+                        $typeSolicitFim = "Cilindro de O2";
+                        break;
+
+                    default:
+                        # code...
+                        break;
+                }
+
+                Mail::send('emails.emailRecebidoSolicit',
+                ['emailDestino' => $emailDestino,
+                'emailDestino2' => $emailDestino2,
+                'namePct' => $namePct,
+                'typeSolicitFim' => $typeSolicitFim,
+                'idSolicit' => $idSolicit,
+                'itensSolicit'=> $itensSolicit,
+                'obsSolicit' =>  $obsSolicit
+                ],
+                function ($message)
+                use ($emailDestino, $emailDestino2, $namePct, $typeSolicitFim, $idSolicit, $itensSolicit,  $obsSolicit ) {
+                    $message->from('nilson711@gmail.com', 'Atendimento');
+                    $message->to($emailDestino, 'Email do Home Care');
+                    $message->cc($emailDestino2, 'Email do Home Care');
+                    // $message->subject('Nova Solicitação');
+                    $message->subject($typeSolicitFim . ' nº: '.$idSolicit. ' - PCT: '. $namePct);
+                });
+
+
                 return back()->withInput();
+
             break;
             case '2': //// 2 = recolhimento
                 $listEquipSel = $request->input('textEquipsRecolhe');
@@ -79,10 +147,12 @@ class SolicitacaoController extends Controller
                             }
                     }
 
-
-                return back()->withInput();
+                    return redirect()->to('/feedback_startSolicit');
+                // return back()->withInput();
             break;
+
         }
+
     }
 
 ///========================================================================================================================
@@ -110,9 +180,75 @@ public function iniciar_solicit(Request $request, $id){
             $solicit = Solicitacao::find($id);
             $solicit->status_solicit = 1;
             $solicit->user_atend = auth()->user()->name;
+            $idPct = $solicit->pct_solicit;
             $solicit->save();
             // return back()->withInput();
             // return view('solicitacoes');
+
+            //ENVIA EMAIL INFORMANDO O INICIO DO ATENDIMENTO
+
+            //ENVIA EMAIL DE RECEBIDO PARA O HOME CARE
+            $hcPctAtual = Pct::where('id', $idPct)->pluck('id_hc');
+            $emailDestino = Cliente::find($hcPctAtual)->pluck('email')->toArray();
+            $emailDestino2 = Cliente::find($hcPctAtual)->pluck('email2')->toArray();
+
+            $namePct = Pct::where('id', $idPct)->pluck('name_pct')->get(0);
+            $idSolicit = Solicitacao::where('pct_solicit', $idPct)->pluck('id')->last();
+            $itensSolicit = Solicitacao::where('pct_solicit', $idPct)->pluck('equips_solicit')->last();
+            $obsSolicit = Solicitacao::where('pct_solicit', $idPct)->pluck('obs_solicit')->last();
+
+            // echo '<pre>';
+            // print_r ($namePct);
+            // print_r ($emailDestino);
+            // print_r ($idSolicit);
+            // echo '</pre>';
+
+            switch ( $solicit->type_solicit) {
+                case 1:
+                   $typeSolicitFim = "Implantação";
+                    break;
+                case 2:
+                   $typeSolicitFim = "Recolhimento ";
+                   Equipamento::where('solicit_equip', $idSolicit)
+                    ->update(['pct_equip' => 0, 'solicit_equip' => 0, 'status_equip' => 0 ]);
+                    break;
+                case 3:
+                   $typeSolicitFim = "Troca / Manutenção";
+                    break;
+                case 4:
+                   $typeSolicitFim = "Mudança de Localidade";
+                    break;
+                case 5:
+                    $typeSolicitFim = "Recolhimento Total";
+                    break;
+                case 6:
+                    $typeSolicitFim = "Cilindro de O2";
+                    break;
+
+                default:
+                    # code...
+                    break;
+            }
+
+            Mail::send('emails.emailEmAtendimentoSolicit',
+            ['emailDestino' => $emailDestino,
+            'emailDestino2' => $emailDestino2,
+            'namePct' => $namePct,
+            'typeSolicitFim' => $typeSolicitFim,
+            'idSolicit' => $idSolicit,
+            'itensSolicit'=> $itensSolicit,
+            'obsSolicit' =>  $obsSolicit
+            ],
+            function ($message)
+            use ($emailDestino, $emailDestino2, $namePct, $typeSolicitFim, $idSolicit, $itensSolicit,  $obsSolicit ) {
+                $message->from('nilson711@gmail.com', 'Atendimento');
+                $message->to($emailDestino, 'Email do Home Care');
+                $message->cc($emailDestino2, 'Email do Home Care');
+                // $message->subject('Nova Solicitação');
+                $message->subject('Sua solicitação está a caminho - PCT: '. $namePct);
+            });
+
+
             return redirect()->to('/solicitacoes');
         break;
         case '2':
@@ -138,13 +274,13 @@ public function iniciar_solicit(Request $request, $id){
             $solicit->save();
 
             $PctAtual = new Pct;
-            $PctAtual = Pct::where('id', $solicit->pct_solicit)->pluck('name_pct')->toArray();
+            $PctAtual = Pct::where('id', $solicit->pct_solicit)->pluck('name_pct')->get(0);
             $hcPctAtual = Pct::where('id', $solicit->pct_solicit)->pluck('id_hc');
 
             $pctSolFim = $PctAtual;
             $idsolfim = $id;
             $obsAtendfim = $solicit->obs_atend;
-            
+
             $equipsSolicFim = Equipamento::where('solicit_equip', $id)->pluck('name_equip', 'patr')->toArray();
             $emailDestino = Cliente::where('id',  $hcPctAtual)->pluck('email');
             $emailDestino2 = Cliente::where('id',  $hcPctAtual)->pluck('email2');
@@ -153,26 +289,26 @@ public function iniciar_solicit(Request $request, $id){
 
             switch ( $solicit->type_solicit) {
                 case 1:
-                   $typeSolicitFim = "IMPLANTAÇÃO";
+                   $typeSolicitFim = "Implantação";
                     break;
                 case 2:
-                   $typeSolicitFim = "RECOLHIMENTO";
+                   $typeSolicitFim = "Recolhimento";
                    Equipamento::where('solicit_equip', $id)
                     ->update(['pct_equip' => 0, 'solicit_equip' => 0, 'status_equip' => 0 ]);
                     break;
                 case 3:
-                   $typeSolicitFim = "TROCA / MANUTENÇÃO";
+                   $typeSolicitFim = "Troca / Manutenção";
                     break;
                 case 4:
-                   $typeSolicitFim = "MUDANÇA DE LOCALIDADE";
+                   $typeSolicitFim = "Mudança de Localidade";
                     break;
                 case 5:
-                    $typeSolicitFim = "RECOLHIMENTO TOTAL";
+                    $typeSolicitFim = "Recolhimento Total";
                     break;
                 case 6:
-                    $typeSolicitFim = "CILINDRO DE O2";
+                    $typeSolicitFim = "Cilindro de O2";
                     break;
-                
+
                 default:
                     # code...
                     break;
@@ -258,7 +394,7 @@ public function add_equip_pct(Request $request){
  //EXCLUI APENAS O EQUIPAMENTO ATUAL DA SOLICITAÇÃO
 public function cancelOneEquipSolicit (Request $request, $idEquip, $solicit_equip){
     // echo 'cancelar apenas este' . $idEquip ;
-   
+
     $solicitAtual = Solicitacao::find($solicit_equip);
 
     switch ($solicitAtual->type_solicit) {
@@ -268,17 +404,17 @@ public function cancelOneEquipSolicit (Request $request, $idEquip, $solicit_equi
                         return back()->withInput();
             break;
         case '2':     //se for RECOLHIMENTO retira o equipamento da solicitação e ele continua no paciente
-            Equipamento::where('id', $idEquip)              
+            Equipamento::where('id', $idEquip)
                         ->update(['solicit_equip' => 0 ]);
                         return back()->withInput();
             break;
-        
+
         default:
             # code...
             break;
     }
 
-                
+
 }
 
 

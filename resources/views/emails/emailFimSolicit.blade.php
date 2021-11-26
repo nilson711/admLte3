@@ -12,11 +12,12 @@
 
     <p>Informamos que na data de hoje foi realizado <b> {{$typeSolicitFimEmail}} </b> do(s) seguinte(s) equipamento(s)<br>
         para o(a) paciente
-        @foreach ($pctSolFimEmail as $pct)
+        {{$pctSolFimEmail}}
+        {{-- @foreach ($pctSolFimEmail as $pct)
             <strong>
                 {{$pct}},
             </strong>
-        @endforeach
+        @endforeach --}}
             conforme guia em anexo.<br>
             {{-- {{$equipsSolicFimEmail}} --}}
             @foreach ($equipsSolicFimEmail as $equip)

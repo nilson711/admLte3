@@ -29,10 +29,10 @@ class EmailFimSolicit extends Mailable
     public function build()
     {
 
-        return $this->subject('Solicitação Concluída')
+        return $this->subject('Solicitação Concluída - nº: '.$this->idsolfimEmail. ' - PCT: '.$this->pctSolFimEmail)
                     ->view('emails.emailFimSolicit')
                     ->attach('storage/guias/'.$this->idsolfimEmail.'.jpg');
-                    
+
 
     }
 }

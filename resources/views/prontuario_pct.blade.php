@@ -3,7 +3,7 @@
 @section('title', 'Prontuário do Paciente')
 
 @section('content_header')
-
+   <h1>PCT: {{$pctSel->name_pct}}</h1>
 @stop
 
 @section('content')
@@ -30,7 +30,7 @@
             <div class="col-md-12">
                 <div class="card card-primary card-outline card-outline-tabs">
                     <div class="card-header p-2">
-                  <label>PCT: {{$pctSel->name_pct}}</label>
+                  <label></label>
                   <div class="card-tools float-right">
                     <button type="button" class="btn btn-block btn-danger btn-sm">
                         <a href="{{ route('listaPcs') }}">
@@ -211,28 +211,28 @@
                                     <table id="table_implantados" class="table table-sm table-striped dataTable dtr-inline" role="grid" aria-describedby="table_implantados_info">
 
                                     <thead>
+                                        <div class="float-right">
+                                            <span data-toggle="modal" data-target="#modalSolicit">
+                                                <button data-toggle="tooltip" title="Solicitar Implantação" type="button" class="btn btn-sm btn-outline-primary float-left" style="margin-right: 10px" >
+                                                    <i class="fas fa-plus"></i>
+                                                </button>
+                                            </span>
+                                            <span data-toggle="modal" data-target="#modalRecolhimento">
+                                                <button data-toggle="tooltip" title="Solicitar Recolhimento" type="button" class="btn btn-sm btn-outline-primary float-left" style="color: red; margin-right: 10px">
+                                                    <i class="fas fa-times"></i>
+                                                </button>
+                                            </span>
+                                            <button data-toggle="tooltip" title="Pausa nos Esquipamentos" type="button" class="btn btn-sm btn-outline-primary float-left" style="color: rgb(14, 121, 0)">
+                                                <i class="far fa-pause-circle"></i>
+                                            </button>
+                                        </div>
                                         <tr role="row">
                                             {{-- <th>PCT</th> --}}
-                                            <th style="text-align: center" class="sorting sorting_asc col-sm-1" tabindex="0" aria-controls="table_implantados" rowspan="1" colspan="1" aria-sort="ascending" title="Classificar crescente / decrescente">Patr</th>
-                                            <th class="sorting col-sm-3" tabindex="0" aria-controls="table_implantados" rowspan="1" colspan="1">Equipamento</th>
-                                            <th class="sorting col-sm-2" tabindex="0" aria-controls="table_implantados" rowspan="1" colspan="1">
-                                                <div>
-                                                    <span data-toggle="modal" data-target="#modalSolicit">
-                                                        <button data-toggle="tooltip" title="Adicionar novo Equipamento" type="button" class="btn btn-sm btn-outline-primary float-left" style="margin-right: 10px" >
-                                                            <i class="fas fa-plus"></i>
-                                                        </button>
-                                                    </span>
-                                                    <span data-toggle="modal" data-target="#modalRecolhimento">
-                                                        <button data-toggle="tooltip" title="Recolhimento" type="button" class="btn btn-sm btn-outline-primary float-left" style="color: red; margin-right: 10px">
-                                                            <i class="fas fa-times"></i>
-                                                        </button>
-                                                    </span>
-                                                    <button data-toggle="tooltip" title="Pausa nos Esquipamentos" type="button" class="btn btn-sm btn-outline-primary float-left" style="color: rgb(14, 121, 0)">
-                                                        <i class="far fa-pause-circle"></i>
-                                                    </button>
-                                                </div>
-                                            </th>
-                                            <th class="sorting col-sm-6" tabindex="0" aria-controls="table_implantados" rowspan="1" colspan="1">Observações</th>
+                                            <th style="text-align: center" class="col-sm-1" tabindex="0" aria-controls="table_implantados" rowspan="1" colspan="1" aria-sort="ascending" title="Classificar crescente / decrescente">Patr</th>
+                                            <th class="col-sm-3" tabindex="0" aria-controls="table_implantados" rowspan="1" colspan="1">Equipamento</th>
+                                            <th class="col-sm-1" style="text-align: left" tabindex="0" aria-controls="table_implantados" rowspan="1" colspan="1">Implantação</th>
+                                            <th style="text-align: center" class="col-sm-2" tabindex="0" aria-controls="table_implantados" rowspan="1" colspan="1">Modelo</th>
+                                            <th style="text-align: center" class="col-sm-2" tabindex="0" aria-controls="table_implantados" rowspan="1" colspan="1">Marca</th>
                                         </tr>
                                     </thead>
                                     <tbody>
@@ -262,24 +262,17 @@
                                                     </div>
                                                 </td>
                                                 <td style="text-align: left; vertical-align: middle">{{$equipPct->name_equip}}</td>
-                                                <td style="text-align: left">
-                                                    {{-- <div data-toggle="modal" data-target="#ModalEditPct" data-whatever="$Pct->id"> --}}
-                                                    {{-- <div data-toggle="modal" data-target="#ModalEditPct" data-whatever="{{$Pct->id}}" data-whatever-name_pct="{{$Pct->name_pct}}" data-whatever-peso="{{$Pct->peso}}" data-whatever-altura="{{$Pct->altura}}" data-whatever-id_hc="{{$Pct->id_hc}}" data-whatever-resp="{{$Pct->resp}}" data-whatever-tel_resp="{{$Pct->tel_resp}}" data-whatever-resp2="{{$Pct->resp2}}" data-whatever-tel_resp2="{{$Pct->tel_resp2}}" data-whatever-cep_pct="{{$Pct->cep}}" data-whatever-rua="{{$Pct->rua}}" data-whatever-nr="{{$Pct->nr}}" data-whatever-compl="{{$Pct->compl}}" data-whatever-bairro="{{$Pct->bairro}}" data-whatever-city="{{$Pct->city}}" data-whatever-obs="{{$Pct->obs}}"> --}}
-                                                    {{-- <div>
-                                                        <span data-toggle="tooltip" title="Selecione o tipo de solicitação para este ítem.">
-                                                            <select name="solicita" id="solicita" class=" form-control form-control-sm select" aria-hidden="true">
-                                                                <option value="0" >Selecione</option>
-                                                                <option value="1"{{ $equipPct->status_equip == "1" ? 'selected' : ''}}>Manutenção/Troca</option>
-                                                                <option value="2"{{ $equipPct->status_equip == "2" ? 'selected' : ''}}>Recolhimento</option>
-                                                                <option value="3"{{ $equipPct->status_equip == "3" ? 'selected' : ''}}>Recarga</option>
-                                                            </select>
-                                                        </span>
-                                                    </div> --}}
+
+                                                <td style="text-align: center">
+                                                    {{date('d/m/Y', strtotime($equipPct->updated_at))}}
                                                 </td>
                                                 <td>
-                                                    {{-- <input type="text" class=" form-control form-control-sm" data-toggle="tooltip" title="Descrição da solicitação" maxlength="100"> --}}
+                                                    {{$equipPct->modelo_equip}}
                                                 </td>
                                                 <td>
+                                                    {{$equipPct->marca_equip}}
+                                                </td>
+                                                {{-- <td>
                                                     <span data-toggle="tooltip" title="Solicitação Pendente" style="text-align: center">
                                                         @if ($equipPct->status_equip > 0)
                                                         <a href="#" data-toggle="modal" style="color: rgb(200, 200, 0)"><i class="fas fa-exclamation-triangle"></i></a>
@@ -288,8 +281,8 @@
 
                                                         @endif
                                                     </span>
-                                                </td>
-                                                </td>
+                                                </td> --}}
+
                                             </tr>
                                         @endforeach
 
@@ -563,8 +556,12 @@
                 </div>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-outline-secondary" data-dismiss="modal">Cancelar</button>
-                    <button type="submit" name="submitbuttonSolicit" value="1" class="btn btn-outline-primary swalSolicitSuccess">Solicitar</button>
+                <button type="button" class="btn btn-outline-secondary" data-dismiss="modal" id="btnCancela">Cancelar</button>
+                <button type="submit" name="submitbuttonSolicit" value="1" class="btn btn-outline-primary swalSolicitSuccess" id="btnSolicita" style="display: none">Solicitar</button>
+                <button type="button" class="btn btn-success" style="display: none" id="spinnerFinalizando">
+                    <span class="spinner-border spinner-border-sm"></span>
+                    Enviando...
+                </button>
 
 
             </div>
@@ -637,11 +634,12 @@
                                                     <option value = "0" selected>Selecione uma opção</option>
                                                     <option value = "1" title="Paciente recebeu alta">Alta</option>
                                                     <option value = "2" title="Paciente foi a óbito">Óbito</option>
-                                                    <option value = "3" title="Paciente internado sem previsão de alta">Internado</option>
+                                                    <option value = "3" title="Paciente internado sem previsão de alta">Paciente Internado</option>
                                                     <option value = "4" title="Paciente não necessita mais do equipamento">Sem uso</option>
                                                     <option value = "5" title="Equipamento não atende a necessidade do paciente">Não atende a necessidade</option>
                                                     <option value = "6" title="Paciente migrou para outro home care">Troca de home care</option>
-                                                    <option value = "7">outro</option>
+                                                    <option value = "7" title="Equipamento apresenta mau funcionamento">Trocar Equipamento</option>
+                                                    <option value = "8">outro</option>
                                                 </select>
                                             </div>
                                             <br>
@@ -651,10 +649,6 @@
                                             <input type="text" name="enviarEquip" id="enviarEquip" style="visibility: hidden">
                                         </div>
                                     </div>
-                                    {{-- <div class="custom-control custom-checkbox">
-                                        <input class="custom-control-input custom-control-input-danger" data-toggle="tooltip" title="Só marque se for realmente Urgente!" type="checkbox" id="checkUrgente" name="checkUrgente" value="1" onclick="urgente()">
-                                        <label for="checkUrgente" class="custom-control-label" data-toggle="tooltip" title="Só marque se for realmente Urgente!">Urgente!</label>
-                                      </div> --}}
                         </div>
                     </div>
                 </div>
@@ -818,7 +812,7 @@
       $('.swalSolicitSuccess').click(function() {
         Toast.fire({
           icon: 'success',
-          title: 'Solicitação enviada com sucesso!'
+          title: 'Solicitação gravada com sucesso!'
         })
       });
       $('.swalDefaultInfo').click(function() {
@@ -1124,5 +1118,15 @@ function mcc(v){
 $('#data_rent').inputmask('dd/mm/yyyy', { 'placeholder': 'dd/mm/yyyy' })
 </script>
 
+<script>
+
+    $("#btnSolicita").on('click', function() {
+        // alert(this.files[0].name);
+        document.getElementById('spinnerFinalizando').style.display = "block";
+        document.getElementById('btnCancela').style.display = "none";
+        document.getElementById('btnSolicita').style.display = "none";
+        document.getElementById('tableEquips').style.visibility = "hidden";
+    });
+</script>
 
 @stop

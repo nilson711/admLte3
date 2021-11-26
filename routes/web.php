@@ -3,6 +3,7 @@
 use App\Mail\EmailFimSolicit;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Route;
+use Illuminate\Support\Facades\Auth;
 
 /*
 |--------------------------------------------------------------------------
@@ -47,6 +48,17 @@ Route::post('/edit_Pct_submit/{id}', [App\Http\Controllers\PctController::class,
 
 //Rotas das Solicitações
 Route::post('/new_solicita', [App\Http\Controllers\SolicitacaoController::class, 'new_solicita'])->name('new_solicita');
+
+//Rota para envio de feedback para solicitação recebida
+Route::get('/feedback_startSolicit', function (){
+    Mail::send('emails.emailRecebidoSolicit', $namePct [], function ($message) {
+        $message->from('nilson711@gmail.com', 'Nilson Campos enviando...');
+        $message->to('nilson711@hotmail.com', 'Hotmail recebendo...');
+        $message->subject('Nova Solicitação');
+    });
+    return back()->withInput();
+});
+
 Route::get('/solicitacoes', [App\Http\Controllers\SolicitacaoController::class, 'solicitacoes'])->name('solicitacoes');
 Route::post('/iniciar_solicit/{id}', [App\Http\Controllers\SolicitacaoController::class, 'iniciar_solicit'])->name('iniciar_solicit');
 Route::post('/cancelar_solicit/{id}', [App\Http\Controllers\SolicitacaoController::class, 'cancelar_solicit'])->name('cancelar_solicit');
@@ -70,3 +82,7 @@ Route::get('/fim_solicitacao', [App\Http\Controllers\SolicitacaoController::clas
 Route::fallback(function(){
     echo 'O caminho acessado não existe. <a href="/home">clique a aqui</a> para ir para a página inicial.';
 });
+
+Auth::routes();
+
+Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
