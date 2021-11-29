@@ -193,7 +193,7 @@ public function iniciar_solicit(Request $request, $id){
             $emailDestino2 = Cliente::find($hcPctAtual)->pluck('email2')->toArray();
 
             $namePct = Pct::where('id', $idPct)->pluck('name_pct')->get(0);
-            $idSolicit = Solicitacao::where('pct_solicit', $idPct)->pluck('id')->last();
+            $idSolicit = Solicitacao::where('id', $id)->pluck('id')->get(0);
             $itensSolicit = Solicitacao::where('pct_solicit', $idPct)->pluck('equips_solicit')->last();
             $obsSolicit = Solicitacao::where('pct_solicit', $idPct)->pluck('obs_solicit')->last();
 
@@ -272,6 +272,7 @@ public function iniciar_solicit(Request $request, $id){
             $solicit->status_solicit = 2;
             $solicit->obs_atend = $obs_atend;
             $solicit->save();
+            $idPct = $solicit->pct_solicit;
 
             $PctAtual = new Pct;
             $PctAtual = Pct::where('id', $solicit->pct_solicit)->pluck('name_pct')->get(0);
@@ -286,6 +287,16 @@ public function iniciar_solicit(Request $request, $id){
             $emailDestino2 = Cliente::where('id',  $hcPctAtual)->pluck('email2');
 
             $idForGuia = $id;
+
+            $hcPctAtual = Pct::where('id', $idPct)->pluck('id_hc');
+            $emailDestino = Cliente::find($hcPctAtual)->pluck('email')->toArray();
+            $emailDestino2 = Cliente::find($hcPctAtual)->pluck('email2')->toArray();
+
+            $namePct = Pct::where('id', $idPct)->pluck('name_pct')->get(0);
+            $idSolicit = Solicitacao::where('id', $id)->pluck('id')->get(0);
+            $itensSolicit = Solicitacao::where('pct_solicit', $idPct)->pluck('equips_solicit')->last();
+            $obsSolicit = Solicitacao::where('pct_solicit', $idPct)->pluck('obs_solicit')->last();
+
 
             switch ( $solicit->type_solicit) {
                 case 1:
@@ -316,11 +327,43 @@ public function iniciar_solicit(Request $request, $id){
 
            sleep(5);
 
+            // Mail::to($emailDestino)->cc($emailDestino2)
+            //         ->send(new EmailFimSolicit($idsolfim, $typeSolicitFim, $obsAtendfim, $pctSolFim, $equipsSolicFim, $idForGuia));
 
-            Mail::to($emailDestino)->cc($emailDestino2)
-                    ->send(new EmailFimSolicit($idsolfim, $typeSolicitFim, $obsAtendfim, $pctSolFim, $equipsSolicFim, $idForGuia));
+
+            Mail::send('emails.EmailFimSolicit',
+            ['emailDestino' => $emailDestino,
+            'emailDestino2' => $emailDestino2,
+            'namePct' => $namePct,
+            'typeSolicitFim' => $typeSolicitFim,
+            'idSolicit' => $idSolicit,
+            'equipsSolicFim'=> $equipsSolicFim,
+            'obsSolicit' =>  $obsSolicit,
+            'obsAtendfim' => $obsAtendfim
+            ],
+            function ($message)
+            use ($emailDestino, $emailDestino2, $namePct, $typeSolicitFim, $idSolicit, $equipsSolicFim,  $obsSolicit, $obsAtendfim ) {
+                $message->from('nilson711@gmail.com', 'Atendimento');
+                $message->to($emailDestino, 'Email do Home Care');
+                $message->cc($emailDestino2, 'Email do Home Care');
+                $message->subject('Solicitação Concluída - nº: '.$idSolicit. ' - PCT: ' . $namePct);
+                // $message->attach('pathToFile');
+                $message->attach('storage/guias/'.$idSolicit.'.jpg');
+            });
 
             return redirect()->to('/solicitacoes');
+
+            Mail::send('Html.view', $data, function ($message) {
+                $message->from('john@johndoe.com', 'John Doe');
+                $message->sender('john@johndoe.com', 'John Doe');
+                $message->to('john@johndoe.com', 'John Doe');
+                $message->cc('john@johndoe.com', 'John Doe');
+                $message->bcc('john@johndoe.com', 'John Doe');
+                $message->replyTo('john@johndoe.com', 'John Doe');
+                $message->subject('Subject');
+                $message->priority(3);
+
+            });
 
         break;
         case '3':

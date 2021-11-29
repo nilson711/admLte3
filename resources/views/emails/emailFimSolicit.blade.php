@@ -8,28 +8,20 @@
     <title>Document</title>
 </head>
 <body>
-    <h3>Solicitação nº {{$idsolfimEmail}} Concluída</h3>
+    <h3>Solicitação nº {{$idSolicit}} Concluída</h3>
 
-    <p>Informamos que na data de hoje foi realizado <b> {{$typeSolicitFimEmail}} </b> do(s) seguinte(s) equipamento(s)<br>
-        para o(a) paciente
-        {{$pctSolFimEmail}}
-        {{-- @foreach ($pctSolFimEmail as $pct)
-            <strong>
-                {{$pct}},
-            </strong>
-        @endforeach --}}
-            conforme guia em anexo.<br>
+    <p>Informamos que na data de hoje foi realizado <b> {{$typeSolicitFim}} </b> do(s) seguinte(s) equipamento(s)<br>
+        para o(a) paciente {{$namePct}} conforme guia em anexo.<br>
             {{-- {{$equipsSolicFimEmail}} --}}
-            @foreach ($equipsSolicFimEmail as $equip)
+            @foreach ($equipsSolicFim as $equip)
                 <li>
                     {{$equip}}
                 </li>
-
             @endforeach
 
     </p>
-    @if ($obsAtendfimEmail != null)
-        <i>Obs: {{$obsAtendfimEmail}}</i>
+    @if ($obsAtendfim != null)
+        <i>Obs: {{$obsAtendfim}}</i>
     @endif
     <p>Att.</p>
     <p>MH Suprimentos</p>
