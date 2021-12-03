@@ -11,59 +11,75 @@
     <div class="row">
         <div class="col-lg-3 col-6">
           <!-- small box -->
-          <div class="small-box bg-warning">
-            <div class="inner">
-              <h3>{{count($solicitacoes)}}</h3>
+            <a href="/solicitacoes">
+                <div class="small-box bg-warning">
+                    <div class="inner">
+                        <h3>{{count($solicitacoes)}}</h3>
 
-              <p>Solicitações</p>
-            </div>
-            <div class="icon">
-                <i class="fas fa-exclamation-triangle"></i>
-            </div>
-            <a href="/solicitacoes" class="small-box-footer">Acessar <i class="fas fa-arrow-circle-right"></i></a>
-          </div>
+                        <p>Solicitações</p>
+                    </div>
+                    <div class="icon">
+                        <i class="fas fa-exclamation-triangle"></i>
+                    </div>
+                    <div class="small-box-footer">
+                        Acessar <i class="fas fa-arrow-circle-right"></i>
+                    </div>
+                </div>
+            </a>
         </div>
         <!-- ./col -->
         <div class="col-lg-3 col-6">
           <!-- small box -->
-          <div class="small-box bg-success">
-            <div class="inner">
-              <h3>{{count($equips)}}<sup style="font-size: 20px"></sup></h3>
-              <p>Equipamentos</p>
-            </div>
-            <div class="icon">
-                <i class="fas fa-stethoscope"></i>
-            </div>
-            <a href="{{route('listaEquips')}}" class="small-box-footer">Acessar <i class="fas fa-arrow-circle-right"></i></a>
-          </div>
+            <a href="{{route('listaEquips')}}">
+                <div class="small-box bg-success">
+                    <div class="inner">
+                        <h3>{{count($equips)}}<sup style="font-size: 20px"></sup></h3>
+                        <p>Equipamentos</p>
+                    </div>
+                    <div class="icon">
+                        <i class="fas fa-stethoscope"></i>
+                    </div>
+                    <div class="small-box-footer">
+                        Estoque <i class="fas fa-arrow-circle-right"></i>
+                    </div>
+                </div>
+            </a>
         </div>
         <!-- ./col -->
         <div class="col-lg-3 col-6">
           <!-- small box -->
-          <div class="small-box bg-info">
-            <div class="inner">
-              <h3>{{count($allPcts)}}</h3>
-              <p>Pacientes</p>
-            </div>
-            <div class="icon">
-                <i class="fas fa-procedures"></i>
-            </div>
-            <a href="{{route('listaPcs')}}" class="small-box-footer">Lista prontuários <i class="fas fa-arrow-circle-right"></i></a>
-          </div>
+            <a href="{{route('listaPcs')}}">
+                <div class="small-box bg-info">
+                    <div class="inner">
+                        <h3>{{count($allPcts)}}</h3>
+                        <p>Pacientes</p>
+                    </div>
+                    <div class="icon">
+                        <i class="fas fa-procedures"></i>
+                    </div>
+                    <div class="small-box-footer">
+                        Prontuários <i class="fas fa-arrow-circle-right"></i>
+                    </div>
+                </div>
+            </a>
         </div>
         <!-- ./col -->
         <div class="col-lg-3 col-6">
           <!-- small box -->
-          <div class="small-box bg-danger">
-            <div class="inner">
-              <h3>{{count($hc)}}</h3>
-              <p>Home Cares</p>
-            </div>
-            <div class="icon">
-                <i class="fas fa-hospital-user"></i>
-            </div>
-            <a href="{{route('clientes')}}" class="small-box-footer">Lista clientes <i class="fas fa-arrow-circle-right"></i></a>
-          </div>
+            <a href="{{route('clientes')}}">
+                <div class="small-box bg-danger">
+                    <div class="inner">
+                        <h3>{{count($hc)}}</h3>
+                        <p>Home Cares</p>
+                    </div>
+                    <div class="icon">
+                        <i class="fas fa-hospital-user"></i>
+                    </div>
+                    <div class="small-box-footer">
+                        Clientes <i class="fas fa-arrow-circle-right"></i>
+                    </div>
+                </div>
+            </a>
         </div>
         <!-- ./col -->
       </div>

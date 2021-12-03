@@ -617,6 +617,26 @@
                                 </tbody>
                                 </table>
                             </div>
+                            <br>
+                            <div class="row form-group">
+                                <hr>
+                                <div class="col-md-12">
+                                    <div id="selectMotivo" style="visibility: hidden">
+                                        <label for="motivo">Motivo do Recolhimento:</label>
+                                        <select name="motivo" id="motivo" class="form-control select" style="width: 100%;" aria-hidden="true" required onchange="habilitarBtnSolicitar()">]
+                                            <option value = "0" selected>Selecione uma opção</option>
+                                            <option value = "1" title="Paciente recebeu alta">Alta</option>
+                                            <option value = "2" title="Paciente foi a óbito">Óbito</option>
+                                            <option value = "3" title="Paciente internado sem previsão de alta">Paciente Internado</option>
+                                            <option value = "4" title="Paciente não necessita mais do equipamento">Sem uso</option>
+                                            <option value = "5" title="Equipamento não atende a necessidade do paciente">Não atende a necessidade</option>
+                                            <option value = "6" title="Paciente migrou para outro home care">Troca de home care</option>
+                                            <option value = "7" title="Equipamento apresenta mau funcionamento">Trocar Equipamento</option>
+                                            <option value = "8">outro</option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
                         <div class="class col-sm-6">
                             <p>Solicito recolhimento dos equipamentos abaixo:</p>
@@ -625,35 +645,18 @@
                             <textarea name="textEquipsRecolhe" id="textEquipsRecolhe" style="display: none"></textarea>
                             <hr style="margin-top: 3px; margin-botton: 0px">
                             <p id="QtdequipsSelecionadosRecolhe" style="margin-top: -10px"></p>
-                                    <div class="row form-group">
-                                        <hr>
-                                        <div class="col-md-12">
-                                            <div id="selectMotivo" style="visibility: hidden">
-                                                <label for="motivo">Motivo do Recolhimento:</label>
-                                                <select name="motivo" id="motivo" class="form-control select" style="width: 100%;" aria-hidden="true" required onchange="habilitarBtnSolicitar()">]
-                                                    <option value = "0" selected>Selecione uma opção</option>
-                                                    <option value = "1" title="Paciente recebeu alta">Alta</option>
-                                                    <option value = "2" title="Paciente foi a óbito">Óbito</option>
-                                                    <option value = "3" title="Paciente internado sem previsão de alta">Paciente Internado</option>
-                                                    <option value = "4" title="Paciente não necessita mais do equipamento">Sem uso</option>
-                                                    <option value = "5" title="Equipamento não atende a necessidade do paciente">Não atende a necessidade</option>
-                                                    <option value = "6" title="Paciente migrou para outro home care">Troca de home care</option>
-                                                    <option value = "7" title="Equipamento apresenta mau funcionamento">Trocar Equipamento</option>
-                                                    <option value = "8">outro</option>
-                                                </select>
-                                            </div>
-                                            <br>
-                                            <label for="obsSolicitacaoRecolhe">Observações:</label>
-                                            {{-- <input type="text" class="form-control" name="obsSolicitacao" id="obsSolicitacao" placeholder="Observações sobre a solicitação" maxlength="100"> --}}
-                                            <textarea class="form-control" name="obsSolicitacaoRecolhe" id="obsSolicitacaoRecolhe" rows="3" placeholder="Observações sobre a solicitação" maxlength="150"></textarea>
-                                            <input type="text" name="enviarEquip" id="enviarEquip" style="visibility: hidden">
-                                        </div>
-                                    </div>
+
+                            <label for="obsSolicitacaoRecolhe">Observações:</label>
+                            {{-- <input type="text" class="form-control" name="obsSolicitacao" id="obsSolicitacao" placeholder="Observações sobre a solicitação" maxlength="100"> --}}
+                            <textarea class="form-control" name="obsSolicitacaoRecolhe" id="obsSolicitacaoRecolhe" rows="3" placeholder="Observações sobre a solicitação" maxlength="150"></textarea>
+
                         </div>
                     </div>
                 </div>
-            </div>
-            <div class="modal-footer">
+
+        </div>
+            <div class="modal-footer" style="margin-top: -10px">
+                <input type="text" name="enviarEquip" id="enviarEquip" style="visibility: hidden">
                 <button type="button" class="btn btn-outline-secondary" data-dismiss="modal">Cancelar</button>
                 <button type="submit"
                         name="submitbuttonSolicit"

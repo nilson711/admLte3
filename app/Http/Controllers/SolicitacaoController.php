@@ -26,6 +26,11 @@ class SolicitacaoController extends Controller
 {
 
     //ADICIONA NOVA SOLICITAÇÃO
+    // echo '<pre>';
+    // print_r ($namePct);
+    // print_r ($emailDestino);
+    // print_r ($idSolicit);
+    // echo '</pre>';
 
     public function new_solicita(Request $request){
         switch ($request->submitbuttonSolicit) {
@@ -45,10 +50,8 @@ class SolicitacaoController extends Controller
                 $solicitacao->obs_solicit =  $obsSolicitacao;
                 $solicitacao->priority =  (isset($checkUrgente))? 1 : 0; //verifica se o check está  marcado. se tiver retorna 1, se não retorna 0
                 $solicitacao->save();
-                // return back()->withInput();
 
-
-                //ENVIA EMAIL DE RECEBIDO PARA O HOME CARE
+                //BUSCA NO BD AS INFORMAÇÕES REFERENTE A SOLICITAÇÃO
                 $hcPctAtual = Pct::where('id', $idPct)->pluck('id_hc');
                 $emailDestino = Cliente::find($hcPctAtual)->pluck('email')->toArray();
                 $emailDestino2 = Cliente::find($hcPctAtual)->pluck('email2')->toArray();
@@ -57,12 +60,6 @@ class SolicitacaoController extends Controller
                 $idSolicit = Solicitacao::where('pct_solicit', $idPct)->pluck('id')->last();
                 $itensSolicit = Solicitacao::where('pct_solicit', $idPct)->pluck('equips_solicit')->last();
                 $obsSolicit = Solicitacao::where('pct_solicit', $idPct)->pluck('obs_solicit')->last();
-
-                // echo '<pre>';
-                // print_r ($namePct);
-                // print_r ($emailDestino);
-                // print_r ($idSolicit);
-                // echo '</pre>';
 
                 switch ( $solicitacao->type_solicit) {
                     case 1:
@@ -85,12 +82,12 @@ class SolicitacaoController extends Controller
                     case 6:
                         $typeSolicitFim = "Cilindro de O2";
                         break;
-
                     default:
                         # code...
                         break;
                 }
 
+                //ENVIA EMAIL DE RECEBIDO PARA O HOME CARE
                 Mail::send('emails.emailRecebidoSolicit',
                 ['emailDestino' => $emailDestino,
                 'emailDestino2' => $emailDestino2,
@@ -108,7 +105,6 @@ class SolicitacaoController extends Controller
                     // $message->subject('Nova Solicitação');
                     $message->subject($typeSolicitFim . ' nº: '.$idSolicit. ' - PCT: '. $namePct);
                 });
-
 
                 return back()->withInput();
 
@@ -194,8 +190,8 @@ public function iniciar_solicit(Request $request, $id){
 
             $namePct = Pct::where('id', $idPct)->pluck('name_pct')->get(0);
             $idSolicit = Solicitacao::where('id', $id)->pluck('id')->get(0);
-            $itensSolicit = Solicitacao::where('pct_solicit', $idPct)->pluck('equips_solicit')->last();
-            $obsSolicit = Solicitacao::where('pct_solicit', $idPct)->pluck('obs_solicit')->last();
+            $itensSolicit = Solicitacao::where('id', $id)->pluck('equips_solicit')->get(0);
+            $obsSolicit = Solicitacao::where('id', $id)->pluck('obs_solicit')->get(0);
 
             // echo '<pre>';
             // print_r ($namePct);
@@ -282,7 +278,8 @@ public function iniciar_solicit(Request $request, $id){
             $idsolfim = $id;
             $obsAtendfim = $solicit->obs_atend;
 
-            $equipsSolicFim = Equipamento::where('solicit_equip', $id)->pluck('name_equip', 'patr')->toArray();
+            $equipsSolicFim = Equipamento::get(['patr', 'name_equip', 'solicit_equip'])->where('solicit_equip', $id);
+
             $emailDestino = Cliente::where('id',  $hcPctAtual)->pluck('email');
             $emailDestino2 = Cliente::where('id',  $hcPctAtual)->pluck('email2');
 
@@ -294,8 +291,10 @@ public function iniciar_solicit(Request $request, $id){
 
             $namePct = Pct::where('id', $idPct)->pluck('name_pct')->get(0);
             $idSolicit = Solicitacao::where('id', $id)->pluck('id')->get(0);
-            $itensSolicit = Solicitacao::where('pct_solicit', $idPct)->pluck('equips_solicit')->last();
-            $obsSolicit = Solicitacao::where('pct_solicit', $idPct)->pluck('obs_solicit')->last();
+            // $itensSolicit = Solicitacao::where('pct_solicit', $idPct)->pluck('equips_solicit')->last();
+            // $obsSolicit = Solicitacao::where('pct_solicit', $idPct)->pluck('obs_solicit')->last();
+            $itensSolicit = Solicitacao::where('id', $id)->pluck('equips_solicit')->get(0);
+            $obsSolicit = Solicitacao::where('id', $id)->pluck('obs_solicit')->get(0);
 
 
             switch ( $solicit->type_solicit) {
@@ -353,17 +352,7 @@ public function iniciar_solicit(Request $request, $id){
 
             return redirect()->to('/solicitacoes');
 
-            Mail::send('Html.view', $data, function ($message) {
-                $message->from('john@johndoe.com', 'John Doe');
-                $message->sender('john@johndoe.com', 'John Doe');
-                $message->to('john@johndoe.com', 'John Doe');
-                $message->cc('john@johndoe.com', 'John Doe');
-                $message->bcc('john@johndoe.com', 'John Doe');
-                $message->replyTo('john@johndoe.com', 'John Doe');
-                $message->subject('Subject');
-                $message->priority(3);
 
-            });
 
         break;
         case '3':

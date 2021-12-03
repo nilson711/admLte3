@@ -13,10 +13,10 @@
 <div >
 
     <div>
-
         @foreach ($solicitacoes as $solicitacao )
+        <a href="{{route('edit_solicit', $solicitacao->id)}}">
 
-            @if ($solicitacao->priority == 0)
+        @if ($solicitacao->priority == 0)
             <div class="col-12">
                 <div class="info-box">
                   <span class="info-box-icon bg-info">
@@ -91,7 +91,7 @@
                             @if ($solicitacao->status_solicit == 1)
                             <div class="spinner-grow spinner-grow-sm text-warning" role="status">
                               <span class="sr-only">
-                              
+
                               </span>
                             </div>
                             <i class="fas fa-ambulance" id="ambulancia" data-toggle="tooltip" title={{$solicitacao->user_atend}} style="display: inline; color:rgb(255, 81, 0)"></i><br>
@@ -99,11 +99,15 @@
                             <i class="fas fa-ambulance" id="ambulancia" style="display: none"></i><br>
                             @endif
                           </span>
-                        <a href="{{route('edit_solicit', $solicitacao->id)}}">
+
                               <span class="info-box-text">
                                 {{ $solicitacao->name_pct }}
+                                <hr>
                               </span>
-                            </a>
+                              <p style="text-transform:lowercase">
+                                  {{$solicitacao->equips_solicit}}
+                              </p>
+
                             <small >{{ $solicitacao->bairro }}</small>
                         {{-- <i class="fas fa-map-marker-alt" data-toggle="tooltip" title="{{ $solicitacao->bairro }}"></i> --}}
                   </div>
@@ -196,6 +200,7 @@
               </div>
             @endif
         @endforeach
+        </a>
     </div>
 
 @stop

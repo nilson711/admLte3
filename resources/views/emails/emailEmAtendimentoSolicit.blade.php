@@ -39,7 +39,7 @@
                         <i>Obs: {{$obsSolicit}}</i>
                         @endif
                     </p>
-                    <a href="https://www.requestcare.online" class="card-link">Acesse</a>
+                    {{-- <a href="https://www.requestcare.online" class="card-link">Acesse</a> --}}
                 </td>
             </tr>
         </table>

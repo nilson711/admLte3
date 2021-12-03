@@ -12,12 +12,20 @@
 
     <p>Informamos que na data de hoje foi realizado <b> {{$typeSolicitFim}} </b> do(s) seguinte(s) equipamento(s)<br>
         para o(a) paciente {{$namePct}} conforme guia em anexo.<br>
-            {{-- {{$equipsSolicFimEmail}} --}}
-            @foreach ($equipsSolicFim as $equip)
-                <li>
-                    {{$equip}}
-                </li>
-            @endforeach
+
+    <table border="1" style="border-collapse: collapse">
+        <tr>
+            <th>Patr nº</th>
+            <th>Equipamento</th>
+        </tr>
+        @foreach ($equipsSolicFim as $equip)
+        <tr>
+            <td>{{$equip->patr}}</td>
+            <td>{{$equip->name_equip}}</td>
+        </tr>
+        @endforeach
+
+    </table>
 
     </p>
     @if ($obsAtendfim != null)
