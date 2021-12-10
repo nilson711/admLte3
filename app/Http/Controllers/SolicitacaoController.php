@@ -61,31 +61,7 @@ class SolicitacaoController extends Controller
                 $itensSolicit = Solicitacao::where('pct_solicit', $idPct)->pluck('equips_solicit')->last();
                 $obsSolicit = Solicitacao::where('pct_solicit', $idPct)->pluck('obs_solicit')->last();
 
-                switch ( $solicitacao->type_solicit) {
-                    case 1:
-                       $typeSolicitFim = "Implantação";
-                        break;
-                    case 2:
-                       $typeSolicitFim = "Recolhimento ";
-                       Equipamento::where('solicit_equip', $idSolicit)
-                        ->update(['pct_equip' => 0, 'solicit_equip' => 0, 'status_equip' => 0 ]);
-                        break;
-                    case 3:
-                       $typeSolicitFim = "Troca / Manutenção";
-                        break;
-                    case 4:
-                       $typeSolicitFim = "Mudança de Localidade";
-                        break;
-                    case 5:
-                        $typeSolicitFim = "Recolhimento Total";
-                        break;
-                    case 6:
-                        $typeSolicitFim = "Cilindro de O2";
-                        break;
-                    default:
-                        # code...
-                        break;
-                }
+                $typeSolicitFim = "Implantação";
 
                 //ENVIA EMAIL DE RECEBIDO PARA O HOME CARE
                 Mail::send('emails.emailRecebidoSolicit',
@@ -124,10 +100,20 @@ class SolicitacaoController extends Controller
                 $solicitacao->obs_solicit =  $obsSolicitacao;
                 $solicitacao->save();
 
+                //BUSCA NO BD AS INFORMAÇÕES REFERENTE A SOLICITAÇÃO
+                $hcPctAtual = Pct::where('id', $idPct)->pluck('id_hc');
+                $emailDestino = Cliente::find($hcPctAtual)->pluck('email')->toArray();
+                $emailDestino2 = Cliente::find($hcPctAtual)->pluck('email2')->toArray();
+
+                $namePct = Pct::where('id', $idPct)->pluck('name_pct')->get(0);
+                $idSolicit = Solicitacao::where('pct_solicit', $idPct)->pluck('id')->last();
+                $itensSolicit = Solicitacao::where('pct_solicit', $idPct)->pluck('equips_solicit')->last();
+                $obsSolicit = Solicitacao::where('pct_solicit', $idPct)->pluck('obs_solicit')->last();
+
                 $solicitacao->where('pct_solicit', $idPct)->get();  //Busca no BD a Solicitação deste paciente
 
                 //BUSCA OS DADOS OS INPUTS
-                $enviarEquip = $request->input('enviarEquip');  //Este input contém o array separado por vírgula
+                $enviarEquip = $request->input('enviarEquipRecolhe');  //Este input contém o array separado por vírgula
 
                 //SELECIONA OS EQUIPAMENTOS E ATRIBUI STATUS COMO RECOLHER
                 foreach (explode(',', $enviarEquip) as $equip){                 //separa o o conteúdo do input por vírgula
@@ -138,13 +124,36 @@ class SolicitacaoController extends Controller
                             // $recolheEquipSelecionado->pct_equip =  $pctForEquip;
                             $recolheEquipSelecionado->solicit_equip = $solicitacao->id;  //atribui o id da solicitação ao equipamento
                             $recolheEquipSelecionado->status_equip = 3;                 //status do equipamento para 3 = recolher
-
                             $recolheEquipSelecionado->save();
                             }
                     }
 
-                    return redirect()->to('/feedback_startSolicit');
-                // return back()->withInput();
+                    $typeSolicitFim = "Recolhimento";
+                    $solicitante = auth()->user()->name;
+                    // $itensSolicit = Equipamento::where('solicit_equip', $solicitacao->id)->pluck('equips_solicit');
+
+                    //ENVIA EMAIL DE RECEBIDO PARA O HOME CARE
+                Mail::send('emails.emailRecebidoSolicit',
+                ['emailDestino' => $emailDestino,
+                'emailDestino2' => $emailDestino2,
+                'namePct' => $namePct,
+                'typeSolicitFim' => $typeSolicitFim,
+                'idSolicit' => $idSolicit,
+                'itensSolicit'=> $itensSolicit,
+                'obsSolicit' =>  $obsSolicit,
+                'solicitante' => $solicitante
+                ],
+                function ($message)
+                use ($emailDestino, $emailDestino2, $namePct, $typeSolicitFim, $idSolicit, $itensSolicit,  $obsSolicit, $solicitante ) {
+                    $message->from('nilson711@gmail.com', 'Atendimento');
+                    $message->to($emailDestino, 'Email do Home Care');
+                    $message->cc($emailDestino2, 'Email do Home Care');
+                    // $message->subject('Nova Solicitação');
+                    $message->subject($typeSolicitFim . ' nº: '.$idSolicit. ' - PCT: '. $namePct);
+                });
+
+                return back()->withInput();
+
             break;
 
         }
@@ -199,50 +208,50 @@ public function iniciar_solicit(Request $request, $id){
             // print_r ($idSolicit);
             // echo '</pre>';
 
-            switch ( $solicit->type_solicit) {
-                case 1:
-                   $typeSolicitFim = "Implantação";
-                    break;
-                case 2:
-                   $typeSolicitFim = "Recolhimento ";
-                   Equipamento::where('solicit_equip', $idSolicit)
-                    ->update(['pct_equip' => 0, 'solicit_equip' => 0, 'status_equip' => 0 ]);
-                    break;
-                case 3:
-                   $typeSolicitFim = "Troca / Manutenção";
-                    break;
-                case 4:
-                   $typeSolicitFim = "Mudança de Localidade";
-                    break;
-                case 5:
-                    $typeSolicitFim = "Recolhimento Total";
-                    break;
-                case 6:
-                    $typeSolicitFim = "Cilindro de O2";
-                    break;
+            // switch ( $solicit->type_solicit) {
+            //     case 1:
+            //        $typeSolicitFim = "Implantação";
+            //         break;
+            //     case 2:
+            //        $typeSolicitFim = "Recolhimento ";
+            //        Equipamento::where('solicit_equip', $idSolicit)
+            //         ->update(['pct_equip' => 0, 'solicit_equip' => 0, 'status_equip' => 0 ]);
+            //         break;
+            //     case 3:
+            //        $typeSolicitFim = "Troca / Manutenção";
+            //         break;
+            //     case 4:
+            //        $typeSolicitFim = "Mudança de Localidade";
+            //         break;
+            //     case 5:
+            //         $typeSolicitFim = "Recolhimento Total";
+            //         break;
+            //     case 6:
+            //         $typeSolicitFim = "Cilindro de O2";
+            //         break;
 
-                default:
-                    # code...
-                    break;
-            }
+            //     default:
+            //         # code...
+            //         break;
+            // }
 
-            Mail::send('emails.emailEmAtendimentoSolicit',
-            ['emailDestino' => $emailDestino,
-            'emailDestino2' => $emailDestino2,
-            'namePct' => $namePct,
-            'typeSolicitFim' => $typeSolicitFim,
-            'idSolicit' => $idSolicit,
-            'itensSolicit'=> $itensSolicit,
-            'obsSolicit' =>  $obsSolicit
-            ],
-            function ($message)
-            use ($emailDestino, $emailDestino2, $namePct, $typeSolicitFim, $idSolicit, $itensSolicit,  $obsSolicit ) {
-                $message->from('nilson711@gmail.com', 'Atendimento');
-                $message->to($emailDestino, 'Email do Home Care');
-                $message->cc($emailDestino2, 'Email do Home Care');
-                // $message->subject('Nova Solicitação');
-                $message->subject('Sua solicitação está a caminho - PCT: '. $namePct);
-            });
+            // Mail::send('emails.emailEmAtendimentoSolicit',
+            // ['emailDestino' => $emailDestino,
+            // 'emailDestino2' => $emailDestino2,
+            // 'namePct' => $namePct,
+            // 'typeSolicitFim' => $typeSolicitFim,
+            // 'idSolicit' => $idSolicit,
+            // 'itensSolicit'=> $itensSolicit,
+            // 'obsSolicit' =>  $obsSolicit
+            // ],
+            // function ($message)
+            // use ($emailDestino, $emailDestino2, $namePct, $typeSolicitFim, $idSolicit, $itensSolicit,  $obsSolicit ) {
+            //     $message->from('nilson711@gmail.com', 'Atendimento');
+            //     $message->to($emailDestino, 'Email do Home Care');
+            //     $message->cc($emailDestino2, 'Email do Home Care');
+            //     // $message->subject('Nova Solicitação');
+            //     $message->subject('Sua solicitação está a caminho - PCT: '. $namePct);
+            // });
 
 
             return redirect()->to('/solicitacoes');

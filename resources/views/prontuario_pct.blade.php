@@ -493,7 +493,9 @@
     <div class="modal-dialog modal-lg" role="document">
       <div class="modal-content">
         <div class="modal-header">
-          <h5 class="modal-title" id="exampleModalLabel">Solicitação de Equipamento(s) - Paciente: {{$pctSel->name_pct}}</h5>
+            <ion-icon size="large" style="color: #0069d9"  name="add-circle-outline"></ion-icon>
+            <h5 class="modal-title" id="exampleModalLabel"><span style="color: #0069d9"> Solicitar Equipamento</span><br>
+            Paciente: {{$pctSel->name_pct}}</h5>
           <button type="button" class="close" data-dismiss="modal" aria-label="Close">
             <span aria-hidden="true">&times;</span>
           </button>
@@ -556,6 +558,7 @@
                 </div>
             </div>
             <div class="modal-footer">
+                <input type="text" name="enviarEquip" id="enviarEquip" style="visibility: hidden">
                 <button type="button" class="btn btn-outline-secondary" data-dismiss="modal" id="btnCancela">Cancelar</button>
                 <button type="submit" name="submitbuttonSolicit" value="1" class="btn btn-outline-primary swalSolicitSuccess" id="btnSolicita" style="display: none">Solicitar</button>
                 <button type="button" class="btn btn-success" style="display: none" id="spinnerFinalizando">
@@ -572,13 +575,16 @@
 
 <!--//////////////////////////////////////////////////// FIM MODAL SOLICITAÇÃO ////////////////////////////////////////////////-->
 
-<!--//////////////////////////////////////////////////// Modal RECOLHIMENTO  /////////////////////////////////////////////-->
+
+<!--////////////////////////////////////////////////////  MODAL RECOLHIMENTO  ////////////////////////////////////////////////-->
 
 <div class="modal fade bd-example-modal-lg" id="modalRecolhimento" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-lg" role="document">
       <div class="modal-content">
         <div class="modal-header">
-          <h5 class="modal-title" id="exampleModalLabel">Recolher Equipamento(s) - Paciente: {{$pctSel->name_pct}}</h5>
+          <ion-icon size="large" style="color: red"  name="remove-circle-outline"></ion-icon>
+            <h5 class="modal-title" id="exampleModalLabel"><span style="color: red"> Recolher Equipamento</span><br>
+            Paciente: {{$pctSel->name_pct}}</h5>
           <button type="button" class="close" data-dismiss="modal" aria-label="Close">
             <span aria-hidden="true">&times;</span>
           </button>
@@ -586,11 +592,11 @@
         <div class="modal-body">
             <form action="{{route('new_solicita')}}" method="POST">
                 @csrf
-                <div class="form-group">
-                    <div class="row form-group">
-                        <div class="col-sm-6">
-                            <div class="card-body table-responsive p-0" style="height: 300px;">
-                                <table class="table table-sm table-striped table-head-fixed text-nowrap" id= "tableEquipsRecolhe">
+                <div class="row form-group">
+                    <input type="number" name="idPct" id="idPct" value="{{$pctSel->id}}" style="display: none">
+                    <div class="form-group col-sm-8">
+                        <div class="card-body table-responsive p-0" >
+                            <table class="table table-sm table-striped table-head-fixed text-nowrap" id= "tableEquipsRecolhe">
                                 <thead>
                                     <tr>
                                     <th></th>
@@ -598,15 +604,14 @@
                                     </tr>
                                 </thead>
                                 <tbody>
-
                                     @foreach ( $equipsPct as $equipImplant)
                                     <tr class="tr-row" style="vertical-align: middle; line-height: 100%">
-                                    <td>
-                                                <div style="margin-left: -40px" id="checkSelEquipRecolhe" class="checkSelEquipRecolhe form-check col-sm-6" onclick="ContarSelecionadosRecolhe()">
-                                                    {{-- <input class="qtdDoItem" type="number" min="0" value="0" onchange="qtdSolicitada(this.value)" style="width: 50px"> --}}
-                                                    {{-- <input type="number" onchange="cadastraNotaImportada(this.value)" class="form-control disciplina" name="" value="0"> --}}
-                                                    <input class="checkbox" type="checkbox" id= " {{$equipImplant->id}}" name=" {{$equipImplant->name_equip}}" onclick="coletaDadosRecolhe()" style="margin-left: 7px; transform: scale(1.2)">
-                                                </div>
+                                        <td>
+                                            <div style="margin-left: -40px" id="checkSelEquipRecolhe" class="checkSelEquipRecolhe form-check col-sm-6" onclick="ContarSelecionadosRecolhe()">
+                                                {{-- <input class="qtdDoItem" type="number" min="0" value="0" onchange="qtdSolicitada(this.value)" style="width: 50px"> --}}
+                                                {{-- <input type="number" onchange="cadastraNotaImportada(this.value)" class="form-control disciplina" name="" value="0"> --}}
+                                                <input class="checkbox" type="checkbox" id= " {{$equipImplant->id}}" name=" {{$equipImplant->name_equip}}" onclick="coletaDadosRecolhe()" style="margin-left: 7px; transform: scale(1.2)">
+                                            </div>
                                         </td>
                                         <td id="nomeEquipRecolhe" class="nomeEquipRecolhe">
                                             {{$equipImplant->patr}}-
@@ -615,64 +620,56 @@
                                     </tr>
                                     @endforeach
                                 </tbody>
-                                </table>
-                            </div>
-                            <br>
-                            <div class="row form-group">
-                                <hr>
-                                <div class="col-md-12">
-                                    <div id="selectMotivo" style="visibility: hidden">
-                                        <label for="motivo">Motivo do Recolhimento:</label>
-                                        <select name="motivo" id="motivo" class="form-control select" style="width: 100%;" aria-hidden="true" required onchange="habilitarBtnSolicitar()">]
-                                            <option value = "0" selected>Selecione uma opção</option>
-                                            <option value = "1" title="Paciente recebeu alta">Alta</option>
-                                            <option value = "2" title="Paciente foi a óbito">Óbito</option>
-                                            <option value = "3" title="Paciente internado sem previsão de alta">Paciente Internado</option>
-                                            <option value = "4" title="Paciente não necessita mais do equipamento">Sem uso</option>
-                                            <option value = "5" title="Equipamento não atende a necessidade do paciente">Não atende a necessidade</option>
-                                            <option value = "6" title="Paciente migrou para outro home care">Troca de home care</option>
-                                            <option value = "7" title="Equipamento apresenta mau funcionamento">Trocar Equipamento</option>
-                                            <option value = "8">outro</option>
-                                        </select>
-                                    </div>
-                                </div>
-                            </div>
+                            </table>
                         </div>
-                        <div class="class col-sm-6">
-                            <p>Solicito recolhimento dos equipamentos abaixo:</p>
-                            <input type="number" name="idPct" id="idPct" value="{{$pctSel->id}}" style="display: none">
-                            <div id="fooRecolhe"></div>
-                            <textarea name="textEquipsRecolhe" id="textEquipsRecolhe" style="display: none"></textarea>
-                            <hr style="margin-top: 3px; margin-botton: 0px">
-                            <p id="QtdequipsSelecionadosRecolhe" style="margin-top: -10px"></p>
-
-                            <label for="obsSolicitacaoRecolhe">Observações:</label>
-                            {{-- <input type="text" class="form-control" name="obsSolicitacao" id="obsSolicitacao" placeholder="Observações sobre a solicitação" maxlength="100"> --}}
-                            <textarea class="form-control" name="obsSolicitacaoRecolhe" id="obsSolicitacaoRecolhe" rows="3" placeholder="Observações sobre a solicitação" maxlength="150"></textarea>
-
+                        <p id="QtdequipsSelecionadosRecolhe" style="margin-left: 10px"></p>
+                    </div>
+                    <div class="input-group col-sm-4">
+                        <div id="selectMotivo">
+                            <label for="motivo">Motivo do Recolhimento:</label>
+                            <select name="motivo" id="motivo" class="form-control select" style="width: 100%;" aria-hidden="true" required onchange="habilitarBtnSolicitar()">]
+                                <option value = "9" selected>Selecione uma opção</option>
+                                <option value = "1" title="Paciente recebeu alta">Alta</option>
+                                <option value = "2" title="Paciente foi a óbito">Óbito</option>
+                                <option value = "3" title="Paciente não necessita mais do equipamento">Sem uso</option>
+                                <option value = "4" title="Paciente internado sem previsão de alta">Paciente Internado</option>
+                                <option value = "5" title="Equipamento não atende a necessidade do paciente">Não atende a necessidade</option>
+                                <option value = "6" title="Paciente migrou para outro home care">Troca de home care</option>
+                                <option value = "7" title="Equipamento não está funcionamento corretamente">Trocar Equipamento</option>
+                                <option value = "8">Outro</option>
+                            </select>
                         </div>
                     </div>
                 </div>
+                <div class="form-group">
+                    <textarea name="textEquipsRecolhe" id="textEquipsRecolhe" style="display: none"></textarea>
+                    {{-- <textarea name="textEquipsRecolhe" id="textEquipsRecolhe"></textarea> --}}
+                    <input type="text" name="enviarEquipRecolhe" id="enviarEquipRecolhe" >
+                    {{-- <div id="fooRecolhe"></div> --}}
+                    <label for="obsSolicitacaoRecolhe">Observações:</label>
+                    {{-- <input type="text" class="form-control" name="obsSolicitacao" id="obsSolicitacao" placeholder="Observações sobre a solicitação" maxlength="100"> --}}
+                    <textarea class="form-control" name="obsSolicitacaoRecolhe" id="obsSolicitacaoRecolhe" onkeyup="obsNotNull()" rows="2" placeholder="Observações sobre a solicitação" maxlength="150"></textarea>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-outline-secondary" data-dismiss="modal" id="btnCancela">Cancelar</button>
+                <button type="submit" name="submitbuttonSolicit" value="2" class="btn btn-outline-primary swalSolicitSuccess" id="btnSolicitaRecolhe" style="visibility: hidden">Solicitar</button>
+                <button type="button" class="btn btn-success" style="display: none" id="spinnerFinalizando">
+                    <span class="spinner-border spinner-border-sm"></span>
+                    Enviando...
+                </button>
 
-        </div>
-            <div class="modal-footer" style="margin-top: -10px">
-                <input type="text" name="enviarEquip" id="enviarEquip" style="visibility: hidden">
-                <button type="button" class="btn btn-outline-secondary" data-dismiss="modal">Cancelar</button>
-                <button type="submit"
-                        name="submitbuttonSolicit"
-                        id="submitbuttonSolicit"
-                        value="2"
-                        class="btn btn-outline-primary swalSolicitSuccess"
-                        style="visibility: hidden">Solicitar</button>
 
             </div>
         </form>
       </div>
     </div>
   </div>
-                <!-- /.tab-content -->
-              </div><!-- /.card-body -->
-            </div>
+
+<!--/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////-->
+
+
+</div>
             <!-- /.card -->
           </div>
           <!-- /.col -->
@@ -713,14 +710,18 @@
 <link rel="stylesheet" href="{{asset('css/responsive.bootstrap4.min.css')}}">
 <link rel="stylesheet" href="{{asset('css/buttons.bootstrap4.min.css')}}">
 <!-- Theme style -->
-<link rel="stylesheet" href="{{asset('css/adminlte.min.css')}}">
+{{-- <link rel="stylesheet" href="{{asset('css/adminlte.min.css')}}"> --}}
+
+<!-- BS Stepper -->
+<link rel="stylesheet" href="{{asset('css/bs-stepper.min.css')}}">
+
 
 @stop
 
 @section('js')
 
 <!-- jQuery -->
-<script src= {{asset('js/jquery.min.js')}}></script>
+{{-- <script src= {{asset('js/jquery.min.js')}}></script> --}}
 <!-- Bootstrap 4 -->
 <script src= {{asset('js/bootstrap.bundle.min.js')}}></script>
 <!-- SweetAlert2 -->
@@ -751,6 +752,15 @@
 <script src= {{asset('js/buttons.print.min.js')}}></script>
 <script src= {{asset('js/buttons.colVis.min.js')}}></script>
 
+<!-- BS-Stepper -->
+<script src= {{asset('js/bs-stepper.min.js')}}></script>
+
+<script>
+      // BS-Stepper Init
+  document.addEventListener('DOMContentLoaded', function () {
+    window.stepper = new Stepper(document.querySelector('.bs-stepper'))
+  })
+</script>
 <script>
     function findString() {
         window.find();
@@ -1131,5 +1141,9 @@ $('#data_rent').inputmask('dd/mm/yyyy', { 'placeholder': 'dd/mm/yyyy' })
         document.getElementById('tableEquips').style.visibility = "hidden";
     });
 </script>
+
+{{-- ICONES IONICONS --}}
+<script type="module" src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.esm.js"></script>
+<script nomodule src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.js"></script>
 
 @stop

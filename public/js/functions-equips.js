@@ -125,10 +125,11 @@ function ContarSelecionadosRecolhe(){
     //torna visível o campo motivo
     if (selecionados > 0) {
         document.getElementById('selectMotivo').style.visibility = "visible";
+        // document.getElementById('btnAvancar').style.visibility = "visible";
     } else {
         document.getElementById('selectMotivo').style.visibility = "hidden";
+        // document.getElementById('btnAvancar').style.visibility = "hidden";
     }
-
 }
 
 /*********************************************************************************************************************************
@@ -219,7 +220,8 @@ function ContarSelecionadosRecolhe(){
             }, "");
 
     // var e = document.querySelector("#equipSelecionados").innerHTML = sum;
-    document.querySelector("#enviarEquip").value = sum;
+    document.querySelector("#enviarEquipRecolhe").value = sum;
+    // document.querySelector("#enviarEquipRecolhe").innerHTML = sum;
 
  }
 
@@ -234,14 +236,14 @@ function ContarSelecionadosRecolhe(){
             }
         }
     }
-    console.log(newArray);
+    // console.log(newArray);
     // NomeEquipsSelecionados.innerHTML = newArray;    //exibe na página os elementos do array (nomes dos equipamentos)
     //CRIA UMA LISTA A PARTIR DO ARRAY ///////////////////////////////////////////////////////////////////////////////////////////
     let sum = newArray;
     const codeHTML = sum.reduce((html, item) => {
         return html + "<li>" + item + "</li>";
             }, "");
-    document.querySelector("#fooRecolhe").innerHTML = codeHTML;
+    // document.querySelector("#fooRecolhe").innerHTML = codeHTML;
     document.querySelector("#textEquipsRecolhe").innerHTML = sum;
  }
 
@@ -370,9 +372,18 @@ function habilitarBtnFinalizar(){
  */
 function habilitarBtnSolicitar(){
     switch (document.getElementById('motivo').value) {
-        case '3':
-            alert('Pacientes internados.\nEm vez de fazer o recolhimento, você pode solicitar uma pausa de 10 dias nas cobranças.\n');
-            document.getElementById('obsSolicitacaoRecolhe').focus();
+        case '4':
+                var resultado = confirm('PACIENTE INTERNADO. \nEm vez de fazer o recolhimento, você pode solicitar uma Pausa de 10 dias nas cobranças.\n \u2611 Clique em "OK" se você quer fazer a Pausa.\n \u274C Clique em "Cancelar" para continuar com o recolhimento.');
+
+                    if (resultado == true) {
+                        alert("Você Escolheu fazer a Pausa. \n Clique no botão \u23F8 Pausa no canto direito da tela.\n Você será redirecionado para a tela de pausa.");
+                        location.reload();
+                    }
+                    else{
+                        alert("Você quer continuar com o recolhimento.\n ");
+                        document.getElementById('obsSolicitacaoRecolhe').focus();
+                        // document.getElementById('btnAvancar2').style.visibility = "visible";
+                    }
             break;
         case '5':
             alert('No campo "Observações" especifique o problema apresenta no equipamento para justificar a retirada.');
@@ -390,18 +401,31 @@ function habilitarBtnSolicitar(){
             alert('No campo "Observações" informe uma justificativa para retirada do equipamento.');
             document.getElementById('obsSolicitacaoRecolhe').focus();
             break;
-
-        default:
-            break;
     }
 
-    if (document.getElementById('motivo').value > 0) {
-
-        document.getElementById('submitbuttonSolicit').style.visibility = "visible";
+    if (document.getElementById('motivo').value < 5) {
+        // document.getElementById('submitbuttonSolicit').style.visibility = "visible";
+        document.getElementById('btnSolicitaRecolhe').style.visibility = "visible";
     } else {
-        document.getElementById('submitbuttonSolicit').style.visibility = "hidden";
+        // document.getElementById('submitbuttonSolicit').style.visibility = "hidden";
+        document.getElementById('btnSolicitaRecolhe').style.visibility = "hidden";
     }
 }
+
+function obsNotNull(){
+    if (document.getElementById('motivo').value > 3) {
+
+        document.getElementById('btnSolicitaRecolhe').style.visibility = "visible";
+    }
+}
+
+function obsForNull(){
+    if (document.getElementById('obsSolicitacaoRecolhe') = null) {
+        document.getElementById('btnSolicitaRecolhe').style.visibility = "hidden";
+    }
+}
+
+
 
 /*********************************************************************************************************************************
  * Função MOSTRA O SPINNER rodando enquanto o email é enviado

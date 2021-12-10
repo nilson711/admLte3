@@ -37,10 +37,10 @@
                                     Óbito
                                 @break
                                 @case(3)
-                                    Internado
+                                   Sem uso
                                 @break
                                 @case(4)
-                                    Sem uso
+                                    Internado
                                 @break
                                 @case(5)
                                     Não atende a necessidade
@@ -49,6 +49,9 @@
                                     Troca de Home Care
                                 @break
                                 @case(7)
+                                    Troca de Equipamento
+                                @break
+                                @case(8)
                                     Outro
                                 @break
                             @default

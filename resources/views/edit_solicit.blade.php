@@ -289,7 +289,7 @@
                                                                                             onclick="txtCancelNoRequired()"
                                                                                             name="submitbutton" value="1"
                                                                                             type="submit"
-                                                                                            style="color: green; visibility: visible">
+                                                                                            style="color: rgb(34, 41, 34); visibility: visible">
                                                                                             <i class="fas fa-play"></i>
                                                                                             Iniciar
                                                                                         </button>
@@ -302,35 +302,35 @@
                                                                             action="{{ route('iniciar_solicit', $atual->SolicitId) }}"
                                                                             method="post" enctype="multipart/form-data">
                                                                             @csrf
-                                                                            @if ($atual->status_solicit == 1)
-                                                                            <div class="row">
-                                                                                <li class="nav-item">
-                                                                                    <a id="linkBtnFinalizar" data-toggle="modal"
-                                                                                        data-target='#modalFinalizar'
-                                                                                        onclick="coletaProdutoSelecionado()">
-                                                                                        <button id="btnFinalizar"
-                                                                                            class="btn btn-app"
-                                                                                            style="color: rgb(40, 184, 40)">
-                                                                                            <i class="far fa-check-square"></i>
-                                                                                            Finalizar
-                                                                                        </button>
-                                                                                    </a>
-                                                                                </li>
+                                                                            {{-- @if ($atual->status_solicit == 1) --}}
+                                                                                <div class="row">
+                                                                                    <li class="nav-item">
+                                                                                        <a id="linkBtnFinalizar" data-toggle="modal"
+                                                                                            data-target='#modalFinalizar'
+                                                                                            onclick="coletaProdutoSelecionado()">
+                                                                                            <button id="btnFinalizar"
+                                                                                                class="btn btn-app"
+                                                                                                style="color: rgb(40, 184, 40)">
+                                                                                                <i class="far fa-check-square"></i>
+                                                                                                Finalizar
+                                                                                            </button>
+                                                                                        </a>
+                                                                                    </li>
 
-                                                                                <li class="nav-item">
-                                                                                    <a>
-                                                                                        <button
-                                                                                            class="btn btn-app swalDefaultInfo"
-                                                                                            name="submitbutton" value="0"
-                                                                                            type="submit"
-                                                                                            style="color: rgb(0, 0, 0)">
-                                                                                            <i class="fas fa-undo"></i>
-                                                                                            Retornar
-                                                                                        </button>
-                                                                                    </a>
-                                                                                </li>
-                                                                            </div>
-                                                                            @endif
+                                                                                    <li class="nav-item">
+                                                                                        <a>
+                                                                                            <button
+                                                                                                class="btn btn-app swalDefaultInfo"
+                                                                                                name="submitbutton" value="0"
+                                                                                                type="submit"
+                                                                                                style="color: rgb(0, 0, 0)">
+                                                                                                <i class="fas fa-undo"></i>
+                                                                                                Retornar
+                                                                                            </button>
+                                                                                        </a>
+                                                                                    </li>
+                                                                                </div>
+                                                                            {{-- @endif --}}
                                                                     </ul>
                                                                 @endif
                                                             </div>
@@ -433,9 +433,9 @@
                                                 id="btnCancelarEnvio"
                                                 data-dismiss="modal">Cancelar
                                             </button>
-                                            <button class="btn btn-primary " 
+                                            <button class="btn btn-primary "
                                                     name="submitbutton"
-                                                    id="btnConclui" style="display: none" 
+                                                    id="btnConclui" style="display: none"
                                                     value="2"
                                                     type="submit">
                                                     Concluir
@@ -444,9 +444,9 @@
                                                 <span class="spinner-border spinner-border-sm"></span>
                                                 Finalizando...
                                             </button>
-                                            
 
-                                            
+
+
 
                                         </div>
                                     </div>
@@ -1056,7 +1056,7 @@
                 // document.getElementById('guia').readonly = true;
             });
         </script>
-        
+
 
     @stop
 
