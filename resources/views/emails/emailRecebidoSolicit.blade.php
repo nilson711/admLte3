@@ -12,7 +12,8 @@
 <body>
     {{-- <h3>Solicitação nº {{$idSolicitEmail}}</h3> --}}
     <h3>Nova Solicitação!</h3>
-    <p>Olá <b>{{$solicitante}}!</b></p>
+    {{-- <p>Olá <b>{{$solicitante}}!</b></p> --}}
+    <p>Olá tudo bem!</p>
 
     <p>
         {{-- Solicitação de <b> {{$typeSolicitFimEmail}} </b> para o PCT {{$namePctEmail}} recebida,<br> --}}

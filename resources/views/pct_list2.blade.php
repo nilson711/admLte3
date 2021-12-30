@@ -154,23 +154,23 @@
                                 <div class="row form-group">
                                     <div class="col-sm-4">
                                         <label for="responsavel">Responsável:<span style="color: red">*</span></label>
-                                        <input type="text" class="form-control form-control-sm" data-toggle="tooltip" title="Responsável pelo paciente. Ex: Maria da Silva (Esposa)" name="responsavel" id="responsavel" placeholder="Ex: Maria da Silva (Esposa)" maxlength="30" required>
+                                        <input type="text" class="form-control form-control-sm" title="Responsável pelo paciente. Ex: Maria da Silva (Esposa)" name="responsavel" id="responsavel" placeholder="Ex: Maria da Silva (Esposa)" maxlength="30" required>
                                     </div>
                                     <div class="col-sm-2">
                                         <label for="tel_resp" style="color: white">.</label>
                                         <input type="text" class="form-control form-control-sm"
-                                        data-toggle="tooltip" title="Celular Ex: (61) 9 9234-5678"
+                                         title="Celular Ex: (61) 9 9234-5678"
                                         style="font-size: 90%" name="tel_resp" id="tel_resp"
                                         onkeypress="mascara(this, telefone)" maxlength="16" placeholder="(__) _____-____" required>
                                     </div>
 
                                     <div class="col-sm-4">
                                         <label for="resp2" style="color: white">.</label>
-                                        <input type="text" data-toggle="tooltip" title="Contato adicional. Ex: Tiago da Silva (Filho)" class="form-control form-control-sm" name="resp2" id="resp2" placeholder="Ex: Tiago da Silva (Filho)" maxlength="30">
+                                        <input type="text"  title="Contato adicional. Ex: Tiago da Silva (Filho)" class="form-control form-control-sm" name="resp2" id="resp2" placeholder="Ex: Tiago da Silva (Filho)" maxlength="30">
                                     </div>
                                     <div class="col-sm-2">
                                         <label for="tel_resp2" style="color: white">.</label>
-                                        <input type="text" class="form-control form-control-sm" data-toggle="tooltip" title="Celular Ex: (61) 9 9234-5678" name="tel_resp2" id="tel_resp2" onkeypress="mascara(this, telefone)" maxlength="16" placeholder="(__) _____-____" inputmode="text">
+                                        <input type="text" class="form-control form-control-sm" title="Celular Ex: (61) 9 9234-5678" name="tel_resp2" id="tel_resp2" onkeypress="mascara(this, telefone)" maxlength="16" placeholder="(__) _____-____" inputmode="text">
                                     </div>
                                 </div>
 
@@ -180,7 +180,7 @@
                                           <div class="col-sm-2">
                                               <label for="cep">Cep:</label>
                                               <div class="input-group input-group-sm">
-                                                  <input type="text" class="form-control" data-toggle="tooltip" title="Digite o CEP para preencher o endereço automaticamente." name="cep" id="cep" size="10" maxlength="9" onblur="pesquisacep(this.value);">
+                                                  <input type="text" class="form-control" title="Digite o CEP para preencher o endereço automaticamente." name="cep" id="cep" size="10" maxlength="9" onblur="pesquisacep(this.value);">
                                                   <div class="input-group-append">
                                                       <span class="input-group-text"><a href="https://buscacepinter.correios.com.br/app/endereco/index.php" target="_blank" data-toggle="tooltip" title="Consultar Cep"><i class="far fa-question-circle"></i></a></i></span>
                                                     </div>
@@ -189,16 +189,16 @@
 
                                     <div class="col-sm-9">
                                         <label for="logradouro">Endereço:<span style="color: red">*</span></label>
-                                        <input type="text" class="form-control form-control-sm" data-toggle="tooltip" title="Rua, Rodovia, Avenida, Quadra, Conjunto"  name="rua" id="rua" placeholder="Logradouro" maxlength="50" required>
+                                        <input type="text" class="form-control form-control-sm" title="Rua, Rodovia, Avenida, Quadra, Conjunto"  name="rua" id="rua" placeholder="Logradouro" maxlength="50" required>
                                     </div>
                                     <div class="col-sm-1">
                                         <label for="nr">Nº:<span style="color: red">*</span></label>
-                                        <input type="text" class="form-control form-control-sm" data-toggle="tooltip" title="Número da Casa, Lote, Apt, Sala" name="nr" id="nr" maxlength="10"required>
+                                        <input type="text" class="form-control form-control-sm" title="Número da Casa, Lote, Apt, Sala" name="nr" id="nr" maxlength="10"required>
                                     </div>
                                 </div>
                                 <div class="row form-group">
                                     <div class="col-sm-4">
-                                        <input type="text" class="form-control form-control-sm" name="compl" id="compl" placeholder="Complemento"  data-toggle="tooltip" title="Complemento ou Ponto de referência" maxlength="30">
+                                        <input type="text" class="form-control form-control-sm" name="compl" id="compl" placeholder="Complemento"  title="Complemento ou Ponto de referência" maxlength="30">
                                     </div>
                                     <div class="col-sm-4">
                                         <input type="text" class="form-control form-control-sm" name="bairro" id="bairro" placeholder="Bairro" required>

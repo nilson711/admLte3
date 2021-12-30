@@ -8,6 +8,9 @@
 @stop
 
 @section('content')
+
+{{-- atualiza a página a cada 60 segundos --}}
+<meta http-equiv="refresh" content="60">
 {{-- <p>Painel de Informações</p> --}}
 
 <div >

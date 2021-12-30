@@ -25,6 +25,12 @@ use stdClass;
 class SolicitacaoController extends Controller
 {
 
+    // Acesso as rotas de Solicitação retrito a usuários autenticados.
+    public function __construct()
+    {
+        $this->middleware('auth');
+    }
+
     //ADICIONA NOVA SOLICITAÇÃO
     // echo '<pre>';
     // print_r ($namePct);
@@ -62,6 +68,7 @@ class SolicitacaoController extends Controller
                 $obsSolicit = Solicitacao::where('pct_solicit', $idPct)->pluck('obs_solicit')->last();
 
                 $typeSolicitFim = "Implantação";
+                $solicitante = auth()->user()->name;
 
                 //ENVIA EMAIL DE RECEBIDO PARA O HOME CARE
                 Mail::send('emails.emailRecebidoSolicit',
@@ -71,10 +78,11 @@ class SolicitacaoController extends Controller
                 'typeSolicitFim' => $typeSolicitFim,
                 'idSolicit' => $idSolicit,
                 'itensSolicit'=> $itensSolicit,
-                'obsSolicit' =>  $obsSolicit
+                'obsSolicit' =>  $obsSolicit,
+                'solicitante' => $solicitante
                 ],
                 function ($message)
-                use ($emailDestino, $emailDestino2, $namePct, $typeSolicitFim, $idSolicit, $itensSolicit,  $obsSolicit ) {
+                use ($emailDestino, $emailDestino2, $namePct, $typeSolicitFim, $idSolicit, $itensSolicit,  $obsSolicit, $solicitante ) {
                     $message->from('nilson711@gmail.com', 'Atendimento');
                     $message->to($emailDestino, 'Email do Home Care');
                     $message->cc($emailDestino2, 'Email do Home Care');
@@ -95,7 +103,13 @@ class SolicitacaoController extends Controller
                 $solicitacao = new Solicitacao();
                 $solicitacao->pct_solicit =  $idPct;
                 $solicitacao->motivo = $motivo;
-                $solicitacao->type_solicit =  2;    // 2 = recolhimento
+
+                if ($motivo == 7 ) {
+                    $solicitacao->type_solicit =  3;    // 3 = troca de equipamento
+                } else {
+                    $solicitacao->type_solicit =  2;    // 2 = recolhimento
+                }
+
                 $solicitacao->equips_solicit =  $listEquipSel;
                 $solicitacao->obs_solicit =  $obsSolicitacao;
                 $solicitacao->save();
@@ -128,7 +142,11 @@ class SolicitacaoController extends Controller
                             }
                     }
 
-                    $typeSolicitFim = "Recolhimento";
+                    if ($motivo == 7 ) {
+                        $typeSolicitFim = "Troca / Manutenção";
+                    } else {
+                        $typeSolicitFim = "Recolhimento";
+                    }
                     $solicitante = auth()->user()->name;
                     // $itensSolicit = Equipamento::where('solicit_equip', $solicitacao->id)->pluck('equips_solicit');
 
@@ -187,12 +205,7 @@ public function iniciar_solicit(Request $request, $id){
             $solicit->user_atend = auth()->user()->name;
             $idPct = $solicit->pct_solicit;
             $solicit->save();
-            // return back()->withInput();
-            // return view('solicitacoes');
 
-            //ENVIA EMAIL INFORMANDO O INICIO DO ATENDIMENTO
-
-            //ENVIA EMAIL DE RECEBIDO PARA O HOME CARE
             $hcPctAtual = Pct::where('id', $idPct)->pluck('id_hc');
             $emailDestino = Cliente::find($hcPctAtual)->pluck('email')->toArray();
             $emailDestino2 = Cliente::find($hcPctAtual)->pluck('email2')->toArray();
@@ -201,58 +214,6 @@ public function iniciar_solicit(Request $request, $id){
             $idSolicit = Solicitacao::where('id', $id)->pluck('id')->get(0);
             $itensSolicit = Solicitacao::where('id', $id)->pluck('equips_solicit')->get(0);
             $obsSolicit = Solicitacao::where('id', $id)->pluck('obs_solicit')->get(0);
-
-            // echo '<pre>';
-            // print_r ($namePct);
-            // print_r ($emailDestino);
-            // print_r ($idSolicit);
-            // echo '</pre>';
-
-            // switch ( $solicit->type_solicit) {
-            //     case 1:
-            //        $typeSolicitFim = "Implantação";
-            //         break;
-            //     case 2:
-            //        $typeSolicitFim = "Recolhimento ";
-            //        Equipamento::where('solicit_equip', $idSolicit)
-            //         ->update(['pct_equip' => 0, 'solicit_equip' => 0, 'status_equip' => 0 ]);
-            //         break;
-            //     case 3:
-            //        $typeSolicitFim = "Troca / Manutenção";
-            //         break;
-            //     case 4:
-            //        $typeSolicitFim = "Mudança de Localidade";
-            //         break;
-            //     case 5:
-            //         $typeSolicitFim = "Recolhimento Total";
-            //         break;
-            //     case 6:
-            //         $typeSolicitFim = "Cilindro de O2";
-            //         break;
-
-            //     default:
-            //         # code...
-            //         break;
-            // }
-
-            // Mail::send('emails.emailEmAtendimentoSolicit',
-            // ['emailDestino' => $emailDestino,
-            // 'emailDestino2' => $emailDestino2,
-            // 'namePct' => $namePct,
-            // 'typeSolicitFim' => $typeSolicitFim,
-            // 'idSolicit' => $idSolicit,
-            // 'itensSolicit'=> $itensSolicit,
-            // 'obsSolicit' =>  $obsSolicit
-            // ],
-            // function ($message)
-            // use ($emailDestino, $emailDestino2, $namePct, $typeSolicitFim, $idSolicit, $itensSolicit,  $obsSolicit ) {
-            //     $message->from('nilson711@gmail.com', 'Atendimento');
-            //     $message->to($emailDestino, 'Email do Home Care');
-            //     $message->cc($emailDestino2, 'Email do Home Care');
-            //     // $message->subject('Nova Solicitação');
-            //     $message->subject('Sua solicitação está a caminho - PCT: '. $namePct);
-            // });
-
 
             return redirect()->to('/solicitacoes');
         break;
@@ -271,6 +232,7 @@ public function iniciar_solicit(Request $request, $id){
 
             Equipamento::where('solicit_equip', $id)
                     ->update(['status_equip' => 0 ]);
+
 
             //SALVA
             $solicit = Solicitacao::find($id);
@@ -317,6 +279,28 @@ public function iniciar_solicit(Request $request, $id){
                     break;
                 case 3:
                    $typeSolicitFim = "Troca / Manutenção";
+                   Equipamento::where('solicit_equip', $id)
+                    ->update(['pct_equip' => 0, 'solicit_equip' => 0, 'status_equip' => 0 ]);
+
+                    //BUSCA OS DADOS OS INPUTS
+                    $enviarEquip = $request->input('enviarEquip');  //Este input contém o array separado por vírgula
+                    $pctForEquip = $idPct;  //Este input busca o id do paciente
+                    $solicitForEquip = $id;  //Este input busca o id da solicitação
+
+                    //SELECIONA O EQUIPAMENTO E ATRIBUI O PACIENTE ATUAL A ELE
+                    foreach (explode(',', $enviarEquip) as $equip){                 //separa o o conteúdo do input por vírgula
+                        if (empty($equip)) {
+                            //se for nulo não faz nada
+                        } else {
+                            $regEquipSelecionado = Equipamento::find($equip);       //busca no Bd o id do equipamento
+                            $regEquipSelecionado->pct_equip =  $pctForEquip;        //atribui o id do pctatual ao equipamento
+                            $regEquipSelecionado->solicit_equip = $solicitForEquip;  //atribui o id da solicitação ao equipamento
+                            $regEquipSelecionado->status_equip = 2;                 //status do equipamento para 2 = solicitado
+
+                            $regEquipSelecionado->save();
+                        }
+                    }
+
                     break;
                 case 4:
                    $typeSolicitFim = "Mudança de Localidade";
@@ -405,16 +389,7 @@ public function add_equip_pct(Request $request){
 
             $regEquipSelecionado->save();
         }
-
-
-        // (isset($pctForEquip))? 0 : $pctForEquip;
-             //atribui o id do pct ao equipamento
-
-
-        // echo '<pre>';
-        // print_r($regEquipSelecionado);
     }
-    // echo("Equipamentos implantados com sucesso!");
 
     return back()->withInput();
 
@@ -504,7 +479,6 @@ $resultado = [];
     public function edit_solicit($id)
     {
 
-
         $pct_sel = new Pct;
 
         $allCities = new Cidade;
@@ -533,7 +507,7 @@ $resultado = [];
 
         $solicitSel = Solicitacao::find($id);
 
-        $solicitAtual = DB::SELECT("SELECT S.id AS SolicitId, S.priority, S.status_solicit, S.pct_solicit, P.name_pct, P.id, P.id_hc, S.type_solicit, S.user_atend, S.date_solicit, C.cliente, P.rua, P.nr, P.bairro, P.compl, S.equips_solicit, S.obs_solicit
+        $solicitAtual = DB::SELECT("SELECT S.id AS SolicitId, S.priority, S.status_solicit, S.pct_solicit, P.name_pct, P.id, P.id_hc, S.type_solicit, S.user_atend, S.date_solicit, C.cliente, P.rua, P.nr, P.bairro, P.city, P.compl, S.equips_solicit, S.obs_solicit
                         FROM solicitacaos AS S
                         INNER JOIN pcts AS P ON S.pct_solicit = P.id
                         INNER JOIN clientes AS C ON C.id = P.id_hc
@@ -548,6 +522,11 @@ $resultado = [];
         $collection = collect($pctSel);
         $idPctSel = $collection->implode('pct_solicit', ',');
 
+        //Busca o nome da cidade do paciente
+        $nrCity = Pct::where('id', $idPctSel)->pluck('city')->get(0);
+        $cityPct = Cidade::where('id', $nrCity)->pluck('nome')->get(0);
+
+
         //Seleciona o nº de patrimônio e nome do equipamento selecionado da solicitação atual
         $equipsSel = DB::SELECT("SELECT id, patr, name_equip, solicit_equip FROM equipamentos WHERE pct_equip = $idPctSel AND solicit_equip = $id;
 
@@ -557,7 +536,9 @@ $resultado = [];
                         -- WHERE SOLICIT.id = $id
                         ");
 
-        return view('edit_solicit', ['solicitSel'=>$solicitSel] + ['idPctSel'=>$idPctSel] + ['equipsSel'=>$equipsSel] + ['equips'=>$equips] +  compact('solicitAtual'));
+
+
+        return view('edit_solicit', ['solicitSel'=>$solicitSel] + ['cityPct'=>$cityPct] + ['idPctSel'=>$idPctSel] + ['equipsSel'=>$equipsSel] + ['equips'=>$equips] +  compact('solicitAtual'));
 
     }
 

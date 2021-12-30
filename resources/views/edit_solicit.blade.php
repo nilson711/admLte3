@@ -1,6 +1,6 @@
 @extends('adminlte::page')
 
-@section('title', 'Editar Pct')
+@section('title', 'Editar Solicitação')
 
 @section('content_header')
 
@@ -9,19 +9,17 @@
 @section('content')
 
     <body>
-
         <div class="col-md-12">
             <div class="row">
                 <div class="col-sm-6">
                     {{-- <p>Detalhes da Solicitação</p> --}}
                 </div>
-
             </div>
-
             @foreach ($solicitAtual as $atual)
-                <div class="card card-primary">
-                    <div class="card-header">
-                        <h3 class="card-title">
+            <div class="card card-primary">
+                <div class="card-header">
+                    <h3 class="card-title">
+                            <input type="number" name="type_solicit" id="type_solicit" value="{{$atual->type_solicit}}">
                             @switch($solicitSel->type_solicit)
                                 @case(1)
                                     <i class="fas fa-plus-circle fa-lg" data-toggle="tooltip" title="Implantação"
@@ -71,18 +69,14 @@
                     </div>
                     <!-- /.card-header -->
 
-
-
-
                     <div class="card-body">
                         <label>
                             PCT: {{ $atual->name_pct }}
                             {{-- PCT: {{ $atual->id }} --}}
-
                         </label> <br>
                         <i class="fas fa-map-marker-alt"></i>
                         {{ $atual->rua }} - nº {{ $atual->nr }}<br>
-                        {{ $atual->compl }} - {{ $atual->bairro }}<br>
+                        {{ $atual->compl }} - {{ $atual->bairro }} - {{$cityPct}}<br>
                         <i class="fas fa-hand-point-right"></i>
                         {{ $atual->obs_solicit }}
                         {{-- <hr> --}}
@@ -118,8 +112,8 @@
                                                                             <input type="text" name="solicitForEquip"
                                                                                 value="{{ $solicitSel->id }}"
                                                                                 style="display: none">
-                                                                            @if ($equipsSel == null)
-                                                                                @if ($atual->status_solicit == 0)
+                                                                            @if ($solicitSel->type_solicit == 1 or $solicitSel->type_solicit == 3)
+                                                                                @if ($atual->status_solicit < 2)
                                                                                     <div class="input-group input-group-sm">
                                                                                         <select name="selectEquip"
                                                                                             class="selectEquip form-control select2 select2-hidden-accessible"
@@ -146,7 +140,7 @@
                                                                             <div id="equipSelecionados"
                                                                                 style="display: none"></div>
                                                                             <input type="text" name="enviarEquip"
-                                                                                id="enviarEquip" style="display: none">
+                                                                                id="enviarEquip" >
 
                                                                             <!-- Modal Conferir -->
                                                                             <div class="modal fade" id="modalConferir"
@@ -302,8 +296,10 @@
                                                                             action="{{ route('iniciar_solicit', $atual->SolicitId) }}"
                                                                             method="post" enctype="multipart/form-data">
                                                                             @csrf
-                                                                            {{-- @if ($atual->status_solicit == 1) --}}
+                                                                            @if ($atual->status_solicit == 1)
                                                                                 <div class="row">
+
+
                                                                                     <li class="nav-item">
                                                                                         <a id="linkBtnFinalizar" data-toggle="modal"
                                                                                             data-target='#modalFinalizar'
@@ -330,7 +326,7 @@
                                                                                         </a>
                                                                                     </li>
                                                                                 </div>
-                                                                            {{-- @endif --}}
+                                                                            @endif
                                                                     </ul>
                                                                 @endif
                                                             </div>

@@ -104,19 +104,19 @@
                             <div class="row form-group">
                                 <div class="col-sm-4">
                                     <label for="responsavel">Responsável:<span style="color: red">*</span></label>
-                                    <input type="text" class="form-control" data-toggle="tooltip" title="Responsável pelo paciente. Ex: Maria da Silva (Esposa)" name="responsavel" id="responsavel" placeholder="Ex: Maria da Silva (Esposa)" maxlength="30" required value = "{{$pctSel->resp}}">
+                                    <input type="text" class="form-control"  title="Responsável pelo paciente. Ex: Maria da Silva (Esposa)" name="responsavel" id="responsavel" placeholder="Ex: Maria da Silva (Esposa)" maxlength="30" required value = "{{$pctSel->resp}}">
                                 </div>
                                 <div class="col-sm-2">
                                     <label for="tel_resp" style="color: white">.</label>
-                                    <input type="text" class="form-control" data-toggle="tooltip" title="Celular Ex: (61) 99234-5678" name="tel_resp" id="tel_resp" onkeypress="mascara(this, telefone)" maxlength="16" placeholder="(__) _____-____" required value = "{{$pctSel->tel_resp}}">
+                                    <input type="text" class="form-control"  title="Celular Ex: (61) 99234-5678" name="tel_resp" id="tel_resp" onkeypress="mascara(this, telefone)" maxlength="16" placeholder="(__) _____-____" required value = "{{$pctSel->tel_resp}}">
                                 </div>
                                 <div class="col-sm-4">
                                     <label for="resp2" style="color: white">.</label>
-                                    <input type="text" data-toggle="tooltip" title="Contato adicional. Ex: Tiago da Silva (Filho)" class="form-control" name="resp2" id="resp2" placeholder="Ex: Tiago da Silva (Filho)" maxlength="30" value="{{$pctSel->resp2}}">
+                                    <input type="text"  title="Contato adicional. Ex: Tiago da Silva (Filho)" class="form-control" name="resp2" id="resp2" placeholder="Ex: Tiago da Silva (Filho)" maxlength="30" value="{{$pctSel->resp2}}">
                                 </div>
                                 <div class="col-sm-2">
                                     <label for="tel_resp2" style="color: white">.</label>
-                                    <input type="text" class="form-control" data-toggle="tooltip" title="Celular Ex: (61) 99234-5678" name="tel_resp2" id="tel_resp2" onkeypress="mascara(this, telefone)" maxlength="16" placeholder="(__) _____-____" inputmode="text" value="{{$pctSel->tel_resp2}}">
+                                    <input type="text" class="form-control" title="Celular Ex: (61) 99234-5678" name="tel_resp2" id="tel_resp2" onkeypress="mascara(this, telefone)" maxlength="16" placeholder="(__) _____-____" inputmode="text" value="{{$pctSel->tel_resp2}}">
                                 </div>
                             </div>
 
@@ -126,7 +126,7 @@
                                       <div class="col-sm-2">
                                           <label for="cep">Cep:</label>
                                           <div class="input-group input-group-sm">
-                                              <input type="text" class="form-control" data-toggle="tooltip" title="Digite o CEP para preencher o endereço automaticamente." name="cep" id="cep" size="10" maxlength="9" onkeypress="mascara(this, cep)" onblur="pesquisacep(this.value);" value="{{$pctSel->cep}}">
+                                              <input type="text" class="form-control"  title="Digite o CEP para preencher o endereço automaticamente." name="cep" id="cep" size="10" maxlength="9" onkeypress="mascara(this, cep)" onblur="pesquisacep(this.value);" value="{{$pctSel->cep}}">
                                               <div class="input-group-append">
                                                   <span class="input-group-text"><a href="https://buscacepinter.correios.com.br/app/endereco/index.php" target="blank" data-toggle="tooltip" title="Consultar Cep"><i class="far fa-question-circle"></i></a></i></span>
                                                 </div>
@@ -135,16 +135,16 @@
 
                                 <div class="col-sm-9">
                                     <label for="logradouro">Endereço:<span style="color: red">*</span></label>
-                                    <input type="text" class="form-control" data-toggle="tooltip" title="Rua, Rodovia, Avenida, Quadra, Conjunto"  name="rua" id="rua" placeholder="Logradouro" maxlength="50" required value="{{$pctSel->rua}}">
+                                    <input type="text" class="form-control"  title="Rua, Rodovia, Avenida, Quadra, Conjunto"  name="rua" id="rua" placeholder="Logradouro" maxlength="50" required value="{{$pctSel->rua}}">
                                 </div>
                                 <div class="col-sm-1">
                                     <label for="nr">Nº:<span style="color: red">*</span></label>
-                                    <input type="text" class="form-control" data-toggle="tooltip" title="Número da Casa, Lote, Apt, Sala" name="nr" id="nr" maxlength="10"required value="{{$pctSel->nr}}">
+                                    <input type="text" class="form-control" title="Número da Casa, Lote, Apt, Sala" name="nr" id="nr" maxlength="10"required value="{{$pctSel->nr}}">
                                 </div>
                             </div>
                             <div class="row form-group">
                                 <div class="col-sm-4">
-                                    <input type="text" class="form-control" name="compl" id="compl" placeholder="Complemento"  data-toggle="tooltip" title="Complemento ou Ponto de referência" maxlength="30" value="{{$pctSel->compl}}">
+                                    <input type="text" class="form-control" name="compl" id="compl" placeholder="Complemento"  title="Complemento ou Ponto de referência" maxlength="30" value="{{$pctSel->compl}}">
                                 </div>
                                 <div class="col-sm-4">
                                     <input type="text" class="form-control" name="bairro" id="bairro" placeholder="Bairro" required value="{{$pctSel->bairro}}">
@@ -152,7 +152,7 @@
 
                                 <input type="text" class="form-control" name="cidade" id="cidade" style="display: none">
                                 <div class="col-sm-3">
-                                    <select name="city" id="city" class="form-control select" aria-hidden="true" required>
+                                    <select name="city" id="city" class="form-control select" title="Selecione a cidade " aria-hidden="true" required>
 
                                 {{-- Seleciona dentro do Foreach a cidade com  o id correspondente --}}
                                         @foreach ( $allCities as $city)

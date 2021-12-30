@@ -1,6 +1,7 @@
 <?php
 
 use App\Mail\EmailFimSolicit;
+use App\Mail\MensagemRecuperaSenha;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Auth;
@@ -76,3 +77,9 @@ Route::fallback(function(){
 Auth::routes();
 
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
+
+Route::get('/msg-recupera-email', function(){
+    return new MensagemRecuperaSenha();
+    // Mail::to('nilson711@gmail.com')->send(new MensagemRecuperaSenha());
+    // return 'Emai enviado com sucesso!';
+});

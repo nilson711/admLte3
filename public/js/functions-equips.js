@@ -176,13 +176,32 @@ function ContarSelecionadosRecolhe(){
             document.getElementById('txtAvisoQtd').style.display = "none";
         }
 
+    //Testa o tipo de solicitação
+    var tipo = document.getElementById('type_solicit').value;
+    switch (tipo) {
+        case '1':
+            // alert ("Esta solicitação é uma IMPLANTAÇÃO!");
+            document.getElementById('btnConferido').style.visibility = "visible";
+            break;
+        case '3':
+            alert ("Esta solicitação é um troca!");
+            break;
 
-    //Torna visível o Botão Conferido
-    if (document.getElementById('btnConferido').style.visibility = "hidden") {
-        document.getElementById('btnConferido').style.visibility = "visible";
-    } else {
-        document.getElementById('btnConferido').style.visibility = "hidden";
+        default:
+            break;
     }
+        // if (document.getElementById('type_solicit').value >= 3) {
+            // alert ("Esta solicitação é um troca!");
+        // };
+    //Torna visível o Botão Conferido
+    // if (document.getElementById('type_solicit').value == 1) {
+
+        // if (document.getElementById('btnConferido').style.visibility = "hidden") {
+        //     document.getElementById('btnConferido').style.visibility = "visible";
+        // } else {
+        //     document.getElementById('btnConferido').style.visibility = "hidden";
+        // }
+    // };
 
     //Torna visível o Botão Iniciar
     // if (document.getElementById('btnIniciar').style.visibility = "hidden") {

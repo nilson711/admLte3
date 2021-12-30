@@ -21,6 +21,8 @@ class HomeController extends Controller
         $this->middleware('auth');
     }
 
+
+
     /**
      * Show the application dashboard.
      *
@@ -28,6 +30,14 @@ class HomeController extends Controller
      */
     public function index()
     {
+
+        // verifica se o usuário está logado e busca as informações dele
+        if(auth()->check()) {
+            $idUser = auth()->user()->id;
+            $nameUser = auth()->user()->name;
+            $emailUser = auth()->user()->email;
+        }
+
         $solicitacoes = Solicitacao::wherein('status_solicit', [0, 1])->get();
 
         $allPcts = Pct::all();
@@ -36,6 +46,6 @@ class HomeController extends Controller
 
         $hc = Cliente::all();
 
-        return view('home', ['solicitacoes'=>$solicitacoes] + ['allPcts'=> $allPcts] + ['equips'=> $equips] + ['hc' => $hc]);
+        return view('home', ['solicitacoes'=>$solicitacoes] + ['allPcts'=> $allPcts] + ['equips'=> $equips] + ['hc' => $hc] + ['idUser' => $idUser] + ['nameUser'=> $nameUser] + ['emailUser'=>$emailUser]);
     }
 }

@@ -18,6 +18,11 @@ use PHPUnit\Framework\Constraint\Count;
 class PctController extends Controller
 {
 
+    public function __construct()
+    {
+        $this->middleware('auth');
+    }
+
     public function listaPcs()
     {
         // $allPcts = new Pct;

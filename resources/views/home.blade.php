@@ -4,6 +4,7 @@
 
 @section('content_header')
     <h1>Dashboard MH</h1>
+    Olá {{$nameUser}}, Seja Bem Vindo!
 @stop
 
 @section('content')
