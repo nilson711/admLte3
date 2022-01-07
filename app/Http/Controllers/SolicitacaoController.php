@@ -98,11 +98,15 @@ class SolicitacaoController extends Controller
                 $obsSolicitacao = $request->input('obsSolicitacaoRecolhe');
                 $idPct = $request->input('idPct');
                 $motivo = $request->input('motivo');
+                $dtAgendamento = $request->input('dtAgendamento');
+                $horarios = $request->input('horarios');
 
                 //SALVA DOS DADOS DOS INPUTS NO BANCO DE DADOS
                 $solicitacao = new Solicitacao();
                 $solicitacao->pct_solicit =  $idPct;
                 $solicitacao->motivo = $motivo;
+                $solicitacao->date_agenda = $dtAgendamento;
+                $solicitacao->hour_agenda = $horarios;
 
                 if ($motivo == 7 ) {
                     $solicitacao->type_solicit =  3;    // 3 = troca de equipamento
@@ -151,27 +155,27 @@ class SolicitacaoController extends Controller
                     // $itensSolicit = Equipamento::where('solicit_equip', $solicitacao->id)->pluck('equips_solicit');
 
                     //ENVIA EMAIL DE RECEBIDO PARA O HOME CARE
-                Mail::send('emails.emailRecebidoSolicit',
-                ['emailDestino' => $emailDestino,
-                'emailDestino2' => $emailDestino2,
-                'namePct' => $namePct,
-                'typeSolicitFim' => $typeSolicitFim,
-                'idSolicit' => $idSolicit,
-                'itensSolicit'=> $itensSolicit,
-                'obsSolicit' =>  $obsSolicit,
-                'solicitante' => $solicitante
-                ],
-                function ($message)
-                use ($emailDestino, $emailDestino2, $namePct, $typeSolicitFim, $idSolicit, $itensSolicit,  $obsSolicit, $solicitante ) {
-                    $message->from('nilson711@gmail.com', 'Atendimento');
-                    $message->to($emailDestino, 'Email do Home Care');
-                    $message->cc($emailDestino2, 'Email do Home Care');
-                    // $message->subject('Nova Solicitação');
-                    $message->subject($typeSolicitFim . ' nº: '.$idSolicit. ' - PCT: '. $namePct);
-                });
+                // Mail::send('emails.emailRecebidoSolicit',
+                // ['emailDestino' => $emailDestino,
+                // 'emailDestino2' => $emailDestino2,
+                // 'namePct' => $namePct,
+                // 'typeSolicitFim' => $typeSolicitFim,
+                // 'idSolicit' => $idSolicit,
+                // 'itensSolicit'=> $itensSolicit,
+                // 'obsSolicit' =>  $obsSolicit,
+                // 'solicitante' => $solicitante
+                // ],
+                // function ($message)
+                // use ($emailDestino, $emailDestino2, $namePct, $typeSolicitFim, $idSolicit, $itensSolicit,  $obsSolicit, $solicitante ) {
+                //     $message->from('nilson711@gmail.com', 'Atendimento');
+                //     $message->to($emailDestino, 'Email do Home Care');
+                //     $message->cc($emailDestino2, 'Email do Home Care');
+                //     $message->subject($typeSolicitFim . ' nº: '.$idSolicit. ' - PCT: '. $namePct);
+                // });
 
                 return back()->withInput();
 
+                // dd($request->all());
             break;
 
         }
@@ -222,24 +226,25 @@ public function iniciar_solicit(Request $request, $id){
             $status1 = $request->input('status');
             $obs_atend = $request->input('obs_atend');
 
-            // $image = $request->file;
-            $nameFile = $request->id . '.' . $request->guia->extension();
-            // $nameFile = "nomeArquivo";
+            // se a solicitação for diferente de troca ele habilita o input para inserir a guia
 
-
-            $guia = $request->file('guia')->storeAs('public/guias', $nameFile); // busca no input 'guia' o arquivo e armazena na pasta 'guias'
-            $image_resize = $request->file('guia')->storeAs('public/guias', $nameFile); // busca no input 'guia' o arquivo e armazena na pasta 'guias'
 
             Equipamento::where('solicit_equip', $id)
                     ->update(['status_equip' => 0 ]);
 
-
             //SALVA
             $solicit = Solicitacao::find($id);
-            $solicit->status_solicit = 2;
+            // $solicit->status_solicit = 2;
+            if ($solicit->type_solicit != 3) {
+                $nameFile = $request->id . '.' . $request->guia->extension();
+                $guia = $request->file('guia')->storeAs('public/guias', $nameFile); // busca no input 'guia' o arquivo e armazena na pasta 'guias'
+                $image_resize = $request->file('guia')->storeAs('public/guias', $nameFile); // busca no input 'guia' o arquivo e armazena na pasta 'guias'
+            }
+
             $solicit->obs_atend = $obs_atend;
             $solicit->save();
             $idPct = $solicit->pct_solicit;
+
 
             $PctAtual = new Pct;
             $PctAtual = Pct::where('id', $solicit->pct_solicit)->pluck('name_pct')->get(0);
@@ -281,6 +286,9 @@ public function iniciar_solicit(Request $request, $id){
                    $typeSolicitFim = "Troca / Manutenção";
                    Equipamento::where('solicit_equip', $id)
                     ->update(['pct_equip' => 0, 'solicit_equip' => 0, 'status_equip' => 0 ]);
+                    $solicit->type_solicit = 1;
+                    $solicit->save();
+                    return back()->withInput();
 
                     //BUSCA OS DADOS OS INPUTS
                     $enviarEquip = $request->input('enviarEquip');  //Este input contém o array separado por vírgula
@@ -343,6 +351,8 @@ public function iniciar_solicit(Request $request, $id){
                 $message->attach('storage/guias/'.$idSolicit.'.jpg');
             });
 
+            $solicit->status_solicit = 2;
+            $solicit->save();
             return redirect()->to('/solicitacoes');
 
 
@@ -459,18 +469,22 @@ $resultado = [];
     public function solicitacoes()
     {
         $solicitacoes = new Solicitacao();
-        $solicitacoes = DB::SELECT("SELECT S.id, S.priority, S.status_solicit, S.motivo, P.name_pct, P.id_hc, S.user_atend, S.type_solicit, S.date_solicit, C.cliente, P.rua, P.nr, P.bairro, P.compl, S.equips_solicit, S.obs_solicit
+        $solicitacoes = DB::SELECT("SELECT S.id, Y.nome, S.priority, S.status_solicit, S.motivo, P.name_pct, P.id_hc, S.user_atend, S.type_solicit, S.date_solicit, C.cliente, P.rua, P.nr, P.bairro, P.city, P.compl, S.equips_solicit, S.obs_solicit
                         FROM solicitacaos AS S
                         INNER JOIN pcts AS P ON S.pct_solicit = P.id
                         INNER JOIN clientes AS C ON C.id = P.id_hc
+                        INNER JOIN cidades AS Y ON Y.id = P.city
                         WHERE s.status_solicit= 0 OR s.status_solicit= 1
                         ORDER BY S.priority DESC, S.id ASC
                         -- ORDER BY S.priority DESC, P.bairro ASC
                         ");
 
+
+
         $equips = new Equipamento();
         $equips = DB::SELECT("SELECT * FROM equipamentos WHERE pct_equip = 0");
 
+        // dd($nrCityStr);
         return view('solicitacoes', ['solicitacoes'=>$solicitacoes] + ['equips'=>$equips]);
     }
 

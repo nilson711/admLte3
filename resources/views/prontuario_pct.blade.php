@@ -594,7 +594,7 @@
                 @csrf
                 <div class="row form-group">
                     <input type="number" name="idPct" id="idPct" value="{{$pctSel->id}}" style="display: none">
-                    <div class="form-group col-sm-8">
+                    <div class="form-group col-sm-7">
                         <div class="card-body table-responsive p-0" >
                             <table class="table table-sm table-striped table-head-fixed text-nowrap" id= "tableEquipsRecolhe">
                                 <thead>
@@ -624,9 +624,9 @@
                         </div>
                         <p id="QtdequipsSelecionadosRecolhe" style="margin-left: 10px"></p>
                     </div>
-                    <div class="input-group col-sm-4">
-                        <div id="selectMotivo">
-                            <label for="motivo">Motivo do Recolhimento:</label>
+                    <div class="input-group col-sm-5">
+                        <div id="selectMotivo" style="visibility: hidden">
+                            <label for="motivo">Motivo:</label>
                             <select name="motivo" id="motivo" class="form-control select" style="width: 100%;" aria-hidden="true" required onchange="habilitarBtnSolicitar()">]
                                 <option value = "9" selected>Selecione uma opção</option>
                                 <option value = "1" title="Paciente recebeu alta">Alta</option>
@@ -639,16 +639,50 @@
                                 <option value = "8">Outro</option>
                             </select>
                         </div>
-                    </div>
+                        {{-- <div class="form-group">
+                            <div class="custom-control custom-checkbox">
+                              <input class="custom-control-input" type="checkbox" id="customCheckbox1" value="option1">
+                              <label for="customCheckbox1" class="custom-control-label" title="Marque esta opção se a solicitação tem dia e horário agendados com familiares.">Agendado</label>
+                            </div>
+                        </div> --}}
+                        <div class="col-sm-12" id="dataAgendamento" style="visibility: hidden">
+                          <label>Agendamento:</label>
+                          {{-- <button type="button" class="btn btn-sm btn-outline-primary float-left" style="margin-right: 10px" > --}}
+                            <i class="fas fa-info-circle" style="color: blue" data-toggle="tooltip" title="Agende com os familiares o horário."></i>
+                        {{-- </button> --}}
+                            <div class="input-group date" >
+                              <input type="date" class="col-sm-7" id="dtAgendamento" name="dtAgendamento" class="form-control datetimepicker-input" required onchange="selHora()">
+                              {{-- <select class="select select2" id="hours" data-toggle="tooltip" title="Hora aproximada da solicitação." onchange="msgHora()"></select> --}}
+                              <select class="select select2" style="width: 40%" id="horarios" name="horarios" onchange="msgHora()" required>
+                                <option value="0" selected>Selecione</option>
+                                <option value="1" title="Qualquer horário do dia.">Dia todo*</option>
+                                <option value="2" title="De 09hs a 12hs">Manhã</option>
+                                <option value="3" title="De 13hs a 18hs">Tarde</option>
+                                <option value="4">09-10hs</option>
+                                <option value="5">10-11hs</option>
+                                <option value="6">11-12hs</option>
+                                <option value="7">13-14hs</option>
+                                <option value="8">14-15hs</option>
+                                <option value="9">15-16hs</option>
+                                <option value="10">16-17hs</option>
+                                <option value="11">17-18hs</option>
+                                <option value="12" title="Plantão">+18hs*</option>
+                            </select>
+                            {{-- <div class="input-group-append" data-target="#horarios" data-toggle="tooltip" title="Hora aproximada da solicitação.">
+                                <div class="input-group-text"><i class="far fa-clock"></i></div>
+                            </div> --}}
+                            </div>
+                        </div>
+                      </div>
                 </div>
                 <div class="form-group">
                     <textarea name="textEquipsRecolhe" id="textEquipsRecolhe" style="display: none"></textarea>
                     {{-- <textarea name="textEquipsRecolhe" id="textEquipsRecolhe"></textarea> --}}
-                    <input type="text" name="enviarEquipRecolhe" id="enviarEquipRecolhe" >
+                    <input type="text" name="enviarEquipRecolhe" id="enviarEquipRecolhe" style="display: none">
                     {{-- <div id="fooRecolhe"></div> --}}
                     <label for="obsSolicitacaoRecolhe">Observações:</label>
                     {{-- <input type="text" class="form-control" name="obsSolicitacao" id="obsSolicitacao" placeholder="Observações sobre a solicitação" maxlength="100"> --}}
-                    <textarea class="form-control" name="obsSolicitacaoRecolhe" id="obsSolicitacaoRecolhe" onkeyup="obsNotNull()" rows="2" placeholder="Observações sobre a solicitação" maxlength="150"></textarea>
+                    <textarea class="form-control" style="visibility: hidden" name="obsSolicitacaoRecolhe" id="obsSolicitacaoRecolhe" onkeyup="obsNotNull()" rows="2" placeholder="Observações sobre a solicitação" maxlength="150"></textarea>
                 </div>
             </div>
             <div class="modal-footer">
@@ -1145,5 +1179,26 @@ $('#data_rent').inputmask('dd/mm/yyyy', { 'placeholder': 'dd/mm/yyyy' })
 {{-- ICONES IONICONS --}}
 <script type="module" src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.esm.js"></script>
 <script nomodule src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.js"></script>
+
+<script>
+
+// implementa o select com as horas e minutos
+       function createOption(value, text) {
+              var option = document.createElement('option');
+              option.text = text + ' hs';
+              option.value = value;
+              return option;
+       }
+
+       var hourSelect = document.getElementById('hours');
+       for(var i = 10; i <= 18; i++){
+              hourSelect.add(createOption(i, i));
+       }
+
+       var minutesSelect = document.getElementById('minutes');
+       for(var i = 0; i < 60; i += 15) {
+              minutesSelect.add(createOption(i, i));
+       }
+</script>
 
 @stop

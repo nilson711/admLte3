@@ -114,7 +114,8 @@
                                   {{$solicitacao->equips_solicit}}
                               </p>
 
-                            <small >{{ $solicitacao->bairro }}</small>
+                            <small >{{ $solicitacao->bairro }} - {{ $solicitacao->nome }}</small>
+
                         {{-- <i class="fas fa-map-marker-alt" data-toggle="tooltip" title="{{ $solicitacao->bairro }}"></i> --}}
                   </div>
 

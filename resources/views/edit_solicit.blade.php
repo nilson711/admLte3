@@ -112,7 +112,8 @@
                                                                             <input type="text" name="solicitForEquip"
                                                                                 value="{{ $solicitSel->id }}"
                                                                                 style="display: none">
-                                                                            @if ($solicitSel->type_solicit == 1 or $solicitSel->type_solicit == 3)
+                                                                            {{-- @if ($solicitSel->type_solicit == 1 or $solicitSel->type_solicit == 3) --}}
+                                                                            @if ($solicitSel->type_solicit == 1)
                                                                                 @if ($atual->status_solicit < 2)
                                                                                     <div class="input-group input-group-sm">
                                                                                         <select name="selectEquip"
@@ -140,7 +141,7 @@
                                                                             <div id="equipSelecionados"
                                                                                 style="display: none"></div>
                                                                             <input type="text" name="enviarEquip"
-                                                                                id="enviarEquip" >
+                                                                                id="enviarEquip" style="display: none">
 
                                                                             <!-- Modal Conferir -->
                                                                             <div class="modal fade" id="modalConferir"
@@ -245,11 +246,11 @@
                                                                                             <button type="button"
                                                                                                 class="btn btn-secondary"
                                                                                                 data-dismiss="modal">Não</button>
-                                                                                            <button
-                                                                                                class="btn btn-primary swalDefaultCancelEquip"
+                                                                                            <button class="btn btn-primary swalDefaultCancelEquip"
                                                                                                 name="submitbutton"
                                                                                                 value="2"
-                                                                                                type="submit">Sim</button>
+                                                                                                type="submit">Sim
+                                                                                            </button>
                                                                                         </div>
                                                                                     </div>
                                                                                 </div>
@@ -271,8 +272,7 @@
 
                                                                     <ul class="nav nav-pills ml-auto p-2">
 
-                                                                        <form
-                                                                            action="{{ route('iniciar_solicit', $atual->SolicitId) }}"
+                                                                        <form action="{{ route('iniciar_solicit', $atual->SolicitId) }}"
                                                                             method="post">
                                                                             @csrf
 
@@ -292,25 +292,25 @@
                                                                             @endif
                                                                         </form>
 
-                                                                        <form
-                                                                            action="{{ route('iniciar_solicit', $atual->SolicitId) }}"
+                                                                        <form action="{{ route('iniciar_solicit', $atual->SolicitId) }}"
                                                                             method="post" enctype="multipart/form-data">
                                                                             @csrf
                                                                             @if ($atual->status_solicit == 1)
                                                                                 <div class="row">
-
-
                                                                                     <li class="nav-item">
-                                                                                        <a id="linkBtnFinalizar" data-toggle="modal"
-                                                                                            data-target='#modalFinalizar'
-                                                                                            onclick="coletaProdutoSelecionado()">
-                                                                                            <button id="btnFinalizar"
-                                                                                                class="btn btn-app"
-                                                                                                style="color: rgb(40, 184, 40)">
+                                                                                        @if ($atual->type_solicit == 3)
+                                                                                            <button id="btnConfirmaRetiradaTroca" class="btn btn-app" style="color: rgb(40, 184, 40)" name="submitbutton" value="2" type="submit">
+                                                                                                <i class="far fa-check-square"></i>
+                                                                                                Confirma
+                                                                                            </button>
+                                                                                        @else
+                                                                                        <a id="linkBtnFinalizar" data-toggle="modal" data-target='#modalFinalizar' onclick="coletaProdutoSelecionado()">
+                                                                                            <button id="btnFinalizar" class="btn btn-app" style="color: rgb(40, 184, 40)">
                                                                                                 <i class="far fa-check-square"></i>
                                                                                                 Finalizar
                                                                                             </button>
                                                                                         </a>
+                                                                                        @endif
                                                                                     </li>
 
                                                                                     <li class="nav-item">

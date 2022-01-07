@@ -390,7 +390,14 @@ function habilitarBtnFinalizar(){
  * Função Deixa o botão SOLICITAR visivel se houver algum equipamento selecionado E o motivo da solicitação
  */
 function habilitarBtnSolicitar(){
-    switch (document.getElementById('motivo').value) {
+    let motivo = document.getElementById('motivo').value;
+    switch (motivo) {
+        case '1': case '2': case '3':
+            // document.getElementById('btnSolicitaRecolhe').style.visibility = "visible";
+            document.getElementById('dataAgendamento').style.visibility = 'visible';
+            document.getElementById('dtAgendamento').focus();
+            // document.getElementById('obsSolicitacaoRecolhe').style.visibility = 'visible';
+            break;
         case '4':
                 var resultado = confirm('PACIENTE INTERNADO. \nEm vez de fazer o recolhimento, você pode solicitar uma Pausa de 10 dias nas cobranças.\n \u2611 Clique em "OK" se você quer fazer a Pausa.\n \u274C Clique em "Cancelar" para continuar com o recolhimento.');
 
@@ -400,41 +407,57 @@ function habilitarBtnSolicitar(){
                     }
                     else{
                         alert("Você quer continuar com o recolhimento.\n ");
-                        document.getElementById('obsSolicitacaoRecolhe').focus();
-                        // document.getElementById('btnAvancar2').style.visibility = "visible";
+                        // document.getElementById('obsSolicitacaoRecolhe').style.visibility = 'visible';
+                        document.getElementById('dataAgendamento').style.visibility = 'visible';
+                        document.getElementById('dtAgendamento').focus();
+                        // document.getElementById('obsSolicitacaoRecolhe').focus();
+
                     }
             break;
         case '5':
-            alert('No campo "Observações" especifique o problema apresenta no equipamento para justificar a retirada.');
-            document.getElementById('obsSolicitacaoRecolhe').focus();
+            // alert('No campo "Observações" especifique o problema apresentado no equipamento para justificar a retirada.');
+            document.getElementById('dataAgendamento').style.visibility = 'visible';
+            document.getElementById('dtAgendamento').focus();
             break;
         case '6':
-            alert('No campo "Observações" informe para qual Home Care o paciente será migrado.');
-            document.getElementById('obsSolicitacaoRecolhe').focus();
+            // alert('No campo "Observações" informe para qual Home Care o paciente será migrado.');
+            document.getElementById('dataAgendamento').style.visibility = 'visible';
+            document.getElementById('dtAgendamento').focus();
             break;
         case '7':
-            alert('No campo "Observações" especifique o problema apresentado no equipamento para justificar a troca.');
-            document.getElementById('obsSolicitacaoRecolhe').focus();
+            // alert('No campo "Observações" especifique o problema apresentado no equipamento para justificar a troca.');
+            document.getElementById('dataAgendamento').style.visibility = 'visible';
+            document.getElementById('dtAgendamento').focus();
             break;
         case '8':
-            alert('No campo "Observações" informe uma justificativa para retirada do equipamento.');
-            document.getElementById('obsSolicitacaoRecolhe').focus();
+            // alert('No campo "Observações" informe uma justificativa para retirada do equipamento.');
+            document.getElementById('dataAgendamento').style.visibility = 'visible';
+            document.getElementById('dtAgendamento').focus();
+            break;
+        case '9':
+            document.getElementById('btnSolicitaRecolhe').style.visibility = "hidden";
+            document.getElementById('obsSolicitacaoRecolhe').style.visibility = 'hidden';
+            document.getElementById('dataAgendamento').style.visibility = 'hidden';
+
             break;
     }
 
-    if (document.getElementById('motivo').value < 5) {
+    // if (document.getElementById('motivo').value < 5) {
+    // if (document.getElementById('enviarEquipRecolhe') = null) {
         // document.getElementById('submitbuttonSolicit').style.visibility = "visible";
-        document.getElementById('btnSolicitaRecolhe').style.visibility = "visible";
-    } else {
+        // document.getElementById('btnSolicitaRecolhe').style.visibility = "visible";
+    // } else {
         // document.getElementById('submitbuttonSolicit').style.visibility = "hidden";
-        document.getElementById('btnSolicitaRecolhe').style.visibility = "hidden";
-    }
+        // document.getElementById('btnSolicitaRecolhe').style.visibility = "hidden";
+    // }
 }
 
 function obsNotNull(){
-    if (document.getElementById('motivo').value > 3) {
+    if (document.getElementById('motivo').value != 9) {
+               document.getElementById('btnSolicitaRecolhe').style.visibility = "visible";
+    } else {
+        document.getElementById('btnSolicitaRecolhe').style.visibility = "hidden";
 
-        document.getElementById('btnSolicitaRecolhe').style.visibility = "visible";
     }
 }
 
@@ -479,4 +502,41 @@ function upperCaseF(a){
 }
 
 
+function msgHora(){
+    var hora =  document.getElementById('horarios').value;
+    let motivo = document.getElementById('motivo').value;
 
+    if (hora > 3) {
+        alert('ATENÇÃO!\nAvise os familiares\nPoderá ocorrer atrasos devido ao trânsito, excesso de demanda e outros imprevistos!');
+    }
+    if (motivo < 5) {
+        document.getElementById('btnSolicitaRecolhe').style.visibility = "visible";
+    }
+    document.getElementById('obsSolicitacaoRecolhe').style.visibility = 'visible';
+    document.getElementById('obsSolicitacaoRecolhe').focus();
+
+
+    switch (motivo) {
+        case '5':
+            alert('No campo "Observações" especifique o problema apresentado no equipamento para justificar a retirada.');
+            document.getElementById('obsSolicitacaoRecolhe').focus();
+            break;
+        case '6':
+            alert('No campo "Observações" informe para qual Home Care o paciente será migrado.');
+            document.getElementById('obsSolicitacaoRecolhe').focus();
+            break;
+        case '7':
+            alert('No campo "Observações" especifique o problema apresentado no equipamento para justificar a troca.');
+            document.getElementById('obsSolicitacaoRecolhe').focus();
+            break;
+        case '8':
+            alert('No campo "Observações" informe uma justificativa para retirada do equipamento.');
+            document.getElementById('obsSolicitacaoRecolhe').focus();
+            break;
+    }
+}
+
+function selHora(){
+    // alert('Selecione o horário previsto para solicitação.');
+    document.getElementById('horarios').focus();
+}
