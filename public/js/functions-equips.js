@@ -501,6 +501,25 @@ function upperCaseF(a){
     }, 1);
 }
 
+function verificaHora(){
+    var hora_sel =  document.getElementById('horarios').value;
+    var dt_atual = new Date();
+    var hr_atual = dt_atual.getHours();
+
+    // console.log('entreou verificaHOra');
+
+    // console.log (hr_atual);
+
+            
+            var horarios = document.getElementById("horarios");
+            for(var i = 0; i < horarios.length; i++) {
+                if(horarios[i].value >= hr_atual) {
+                    this.
+                   console.log (horarios[i].value);
+                   
+                };
+            } 
+}
 
 function msgHora(){
     var hora_sel =  document.getElementById('horarios').value;
@@ -509,14 +528,14 @@ function msgHora(){
     var dt_atual = new Date();
     var hr_atual = dt_atual.getHours();
 
-    if (hora_sel > 3) {
-        if (hora_sel < hr_atual) {
-            alert('O horário selecionado é anterior a hora atual!\nSelecione um horário válido.');
+    // if (hora_sel > 3) {
+    //     if (hora_sel < hr_atual) {
+    //         alert('O horário selecionado é anterior a hora atual!\nSelecione um horário válido.');
             
-        } else {
-            alert('ATENÇÃO!\nAvise os familiares\nPoderá ocorrer atrasos devido ao trânsito, excesso de demanda e outros imprevistos!');
-        }
-    }
+    //     } else {
+    //         alert('ATENÇÃO!\nAvise os familiares\nPoderá ocorrer atrasos devido ao trânsito, excesso de demanda e outros imprevistos!');
+    //     }
+    // }
     // if (motivo < 5) {
     //     document.getElementById('btnSolicitaRecolhe').style.visibility = "visible";
     // }
@@ -529,9 +548,9 @@ function msgHora(){
         document.getElementById('btnSolicitaRecolhe').style.visibility = "visible";
         document.getElementById('obsSolicitacaoRecolhe').focus();
     }
-    console.log (hora_sel);
+    // console.log (hora_sel);
     // alert('teste');
-    console.log (hr_atual);
+    // console.log (hr_atual);
     // console.log (index);
 
     switch (motivo) {

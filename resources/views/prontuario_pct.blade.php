@@ -657,7 +657,7 @@
                               <input type="date" class="col-sm-7" id="dtAgendamento" name="dtAgendamento" class="form-control datetimepicker-input" required onchange="selHora()">
                               <!-- {{-- <select class="select select2" id="hours" data-toggle="tooltip" title="Hora aproximada da solicitação." onchange="msgHora()"></select> --}} -->
                               <div id="selhorarios" style= "visibility: hidden; width: 40%" >
-                                <select class="select select2" id="horarios" name="horarios" required onchange="msgHora()" onload="">
+                                <select class="select select2" id="horarios" name="horarios" required onchange="msgHora()" onfocus="verificaHora()">
                                   <option id="select0" value="0" selected>Selecione</option>
                                   <option value="1" title="Qualquer horário do dia.">Dia todo</option>
                                   <option value="2" title="De 09hs a 12hs">Manhã</option>
