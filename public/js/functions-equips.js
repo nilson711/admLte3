@@ -503,18 +503,36 @@ function upperCaseF(a){
 
 
 function msgHora(){
-    var hora =  document.getElementById('horarios').value;
-    let motivo = document.getElementById('motivo').value;
+    var hora_sel =  document.getElementById('horarios').value;
+    var motivo = document.getElementById('motivo').value;
 
-    if (hora > 3) {
-        alert('ATENÇÃO!\nAvise os familiares\nPoderá ocorrer atrasos devido ao trânsito, excesso de demanda e outros imprevistos!');
+    var dt_atual = new Date();
+    var hr_atual = dt_atual.getHours();
+
+    if (hora_sel > 3) {
+        if (hora_sel < hr_atual) {
+            alert('O horário selecionado é anterior a hora atual!\nSelecione um horário válido.');
+            
+        } else {
+            alert('ATENÇÃO!\nAvise os familiares\nPoderá ocorrer atrasos devido ao trânsito, excesso de demanda e outros imprevistos!');
+        }
     }
-    if (motivo < 5) {
+    // if (motivo < 5) {
+    //     document.getElementById('btnSolicitaRecolhe').style.visibility = "visible";
+    // }
+    
+    if (hora_sel < '1') {
+        document.getElementById('btnSolicitaRecolhe').style.visibility = "hidden";
+        document.getElementById('obsSolicitacaoRecolhe').style.visibility = 'hidden';
+    }else{
+        document.getElementById('obsSolicitacaoRecolhe').style.visibility = 'visible';
         document.getElementById('btnSolicitaRecolhe').style.visibility = "visible";
+        document.getElementById('obsSolicitacaoRecolhe').focus();
     }
-    document.getElementById('obsSolicitacaoRecolhe').style.visibility = 'visible';
-    document.getElementById('obsSolicitacaoRecolhe').focus();
-
+    console.log (hora_sel);
+    // alert('teste');
+    console.log (hr_atual);
+    // console.log (index);
 
     switch (motivo) {
         case '5':
@@ -535,8 +553,59 @@ function msgHora(){
             break;
     }
 }
+// document.getElementById('horarios').focus();
+// alert('Selecione o horário previsto para solicitação.');
 
 function selHora(){
-    // alert('Selecione o horário previsto para solicitação.');
-    document.getElementById('horarios').focus();
+    //dtAgendamento é o input que pega a data selecionada
+    var sel_data = new Date( document.getElementById('dtAgendamento').value);
+    var sel_dia = sel_data.getUTCDate();
+    var sel_mes = sel_data.getUTCMonth();
+    var sel_ano = sel_data.getUTCFullYear();
+
+    var hoje = new Date();
+    var atual_dia = hoje.getUTCDate();
+    var atual_mes = hoje.getUTCMonth();
+    var atual_ano = hoje.getUTCFullYear();
+
+    // console.log('nr '  + sel_data.getUTCDay());   //número do dia da semana (0=dom, 1=seg, 2=ter, 3=qua, 4=qui, 5=sex, 6=sab)
+    // console.log('dia ' + sel_dia);                //retorna o dia do mês (1 a 31)
+    // console.log('dia atual ' + atual_dia);         //retorna o dia de hoje (1 a 31)
+    // console.log('mes ' + sel_mes);                //retorna o mês (0=jan, 1=fev, 2=mar, 3=abr, 4=mai, 5=jun, 6=jul, 7=ago, 8=set, 9=out, 10=nov, 11=dez)
+    // console.log('mes atual ' + atual_mes);        //retorna o mês atual (0=jan, 1=fev, 2=mar, 3=abr, 4=mai, 5=jun, 6=jul, 7=ago, 8=set, 9=out, 10=nov, 11=dez)
+    // console.log('ano ' + sel_ano);                //retorna o ano
+    // console.log('ano atual ' + atual_ano);        //retorna o ano atual
+
+    if (sel_ano >= atual_ano) {
+        if (sel_mes >= atual_mes) {
+            if (sel_dia >= atual_dia) {
+                // alert('Selecione um horário!');
+                document.getElementById('selhorarios').style.visibility = "visible";
+                document.getElementById('horarios').focus();
+            }else{
+                if (sel_mes > atual_mes) {
+                    alert('O dia é menor mas o mês é maior!');
+                    document.getElementById('selhorarios').style.visibility = "visible";
+                    document.getElementById('horarios').focus();
+                }else{
+                    alert('A data selecionada é anterior a data atual!');
+                    document.getElementById('dtAgendamento').value = null;
+                    document.getElementById('selhorarios').style.visibility = "hidden";
+                    document.getElementById('btnSolicitaRecolhe').style.visibility = "hidden";
+                    document.getElementById('obsSolicitacaoRecolhe').style.visibility = 'hidden';
+                }
+            }
+        }else{
+            alert('A data selecionada é anterior a data atual!');
+            document.getElementById('dtAgendamento').value = null;
+            document.getElementById('btnSolicitaRecolhe').style.visibility = "hidden";
+            document.getElementById('obsSolicitacaoRecolhe').style.visibility = 'hidden';
+        }
+    }else{
+        alert('A data selecionada é anterior a data atual!');
+        document.getElementById('dtAgendamento').value = null;
+        document.getElementById('btnSolicitaRecolhe').style.visibility = "hidden";
+        document.getElementById('obsSolicitacaoRecolhe').style.visibility = 'hidden';
+    }
+
 }

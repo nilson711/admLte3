@@ -648,26 +648,31 @@
                         <div class="col-sm-12" id="dataAgendamento" style="visibility: hidden">
                           <label>Agendamento:</label>
                           {{-- <button type="button" class="btn btn-sm btn-outline-primary float-left" style="margin-right: 10px" > --}}
-                            <i class="fas fa-info-circle" style="color: blue" data-toggle="tooltip" title="Agende com os familiares o horário."></i>
-                        {{-- </button> --}}
+                            <i class="fas fa-info-circle" style="color: blue" data-toggle="tooltip" title="Agende com os familiares dia e horario aproximado"></i>
+                            {{-- </button> --}}
+                            <label class="float-right">Horário:
+                            <i class="fas fa-clock" style="color: blue" data-toggle="tooltip" title="Horário aproximado"></i>
+                            </label>
                             <div class="input-group date" >
                               <input type="date" class="col-sm-7" id="dtAgendamento" name="dtAgendamento" class="form-control datetimepicker-input" required onchange="selHora()">
-                              {{-- <select class="select select2" id="hours" data-toggle="tooltip" title="Hora aproximada da solicitação." onchange="msgHora()"></select> --}}
-                              <select class="select select2" style="width: 40%" id="horarios" name="horarios" onchange="msgHora()" required>
-                                <option value="0" selected>Selecione</option>
-                                <option value="1" title="Qualquer horário do dia.">Dia todo*</option>
-                                <option value="2" title="De 09hs a 12hs">Manhã</option>
-                                <option value="3" title="De 13hs a 18hs">Tarde</option>
-                                <option value="4">09-10hs</option>
-                                <option value="5">10-11hs</option>
-                                <option value="6">11-12hs</option>
-                                <option value="7">13-14hs</option>
-                                <option value="8">14-15hs</option>
-                                <option value="9">15-16hs</option>
-                                <option value="10">16-17hs</option>
-                                <option value="11">17-18hs</option>
-                                <option value="12" title="Plantão">+18hs*</option>
-                            </select>
+                              <!-- {{-- <select class="select select2" id="hours" data-toggle="tooltip" title="Hora aproximada da solicitação." onchange="msgHora()"></select> --}} -->
+                              <div id="selhorarios" style= "visibility: hidden; width: 40%" >
+                                <select class="select select2" id="horarios" name="horarios" required onchange="msgHora()" onload="">
+                                  <option id="select0" value="0" selected>Selecione</option>
+                                  <option value="1" title="Qualquer horário do dia.">Dia todo</option>
+                                  <option value="2" title="De 09hs a 12hs">Manhã</option>
+                                  <option value="3" title="De 13hs a 18hs">Tarde</option>
+                                  <option value="9" disabled>09-10hs</option>
+                                  <option value="10">10-11hs</option>
+                                  <option value="11">11-12hs</option>
+                                  <option value="13">13-14hs</option>
+                                  <option value="14">14-15hs</option>
+                                  <option value="15">15-16hs</option>
+                                  <option value="16">16-17hs</option>
+                                  <option value="17">17-18hs</option>
+                                  <option value="18" title="Plantão">+18hs*</option>
+                              </select>
+                              </div>
                             {{-- <div class="input-group-append" data-target="#horarios" data-toggle="tooltip" title="Hora aproximada da solicitação.">
                                 <div class="input-group-text"><i class="far fa-clock"></i></div>
                             </div> --}}
@@ -1036,12 +1041,12 @@
       $('[data-mask]').inputmask()
 
       //Date picker
-    //   $('#reservationdate').datetimepicker({
-    //       format: 'L'
-    //   });
+      $('#reservationdate').datetimepicker({
+          format: 'L'
+      });
 
       //Date and time picker
-    //   $('#reservationdatetime').datetimepicker({ icons: { time: 'far fa-clock' } });
+      $('#reservationdatetime').datetimepicker({ icons: { time: 'far fa-clock' } });
 
       //Date range picker
     //   $('#reservation').daterangepicker()
@@ -1073,9 +1078,9 @@
     //   )
 
       //Timepicker
-    //   $('#timepicker').datetimepicker({
-    //     format: 'LT'
-    //   })
+      $('#timepicker').datetimepicker({
+        format: 'LT'
+      })
 
       //Bootstrap Duallistbox
     //   $('.duallistbox').bootstrapDualListbox()
