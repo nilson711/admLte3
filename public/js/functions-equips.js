@@ -550,7 +550,7 @@ function msgHora(){
     }
     // console.log (hora_sel);
     // alert('teste');
-    // console.log (hr_atual);
+    console.log (hr_atual);
     // console.log (index);
 
     switch (motivo) {
