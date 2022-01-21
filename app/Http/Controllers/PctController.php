@@ -165,6 +165,12 @@ class PctController extends Controller
 
         $solicitacoes = new Solicitacao();
         $solicitacoes = DB::SELECT("SELECT id, status_solicit, motivo, equips_solicit, type_solicit, obs_solicit FROM solicitacaos WHERE pct_solicit = $id AND status_solicit < 2");
+        $solicitacoesPend = DB::SELECT("SELECT S.id, S.pct_solicit, S.status_solicit, S.motivo, S.equips_solicit, S.type_solicit, S.obs_solicit, S.date_agenda, S.hour_agenda, P.bairro, P.city, Y.nome
+                                        FROM solicitacaos AS S
+                                        INNER JOIN pcts AS P ON S.pct_solicit = P.id
+                                        INNER JOIN cidades AS Y ON Y.id = P.city
+                                        WHERE status_solicit < 2 
+                                        ORDER BY date_agenda ,  hour_agenda");
         $solicitacoesFim = DB::SELECT("SELECT id, status_solicit, type_solicit, date_solicit, equips_solicit, obs_solicit, obs_atend FROM solicitacaos WHERE pct_solicit = $id AND status_solicit > 1");
 
         $pctSel = Pct::find($id);
@@ -172,7 +178,7 @@ class PctController extends Controller
 
 
         // return view('edit_pct', ['pctSel'=>$pctSel] + ['allPcts'=>$allPcts] + ['allCities'=>$allCities] + ['clientes'=>$clientes]);
-        return view('prontuario_pct', ['pctSel'=>$pctSel] + ['solicitacoes'=>$solicitacoes] + ['solicitacoesFim'=>$solicitacoesFim] + ['allEquipsEstoqueCount'=>$allEquipsEstoqueCount] + ['allEquipsEstoque'=>$allEquipsEstoque] + ['equipsEstoque'=>$equipsEstoque] + ['equipsEstoqueCount'=>$equipsEstoqueCount] + ['allPcts'=>$allPcts] + ['allCities'=>$allCities] + ['clientes'=>$clientes] + ['equipsPct'=>$equipsPct] + ['fornecedores'=>$fornecedores] + ['equipsCount'=>$equipsCount]);
+        return view('prontuario_pct', ['pctSel'=>$pctSel] + ['solicitacoesPend'=>$solicitacoesPend] + ['solicitacoes'=>$solicitacoes] + ['solicitacoesFim'=>$solicitacoesFim] + ['allEquipsEstoqueCount'=>$allEquipsEstoqueCount] + ['allEquipsEstoque'=>$allEquipsEstoque] + ['equipsEstoque'=>$equipsEstoque] + ['equipsEstoqueCount'=>$equipsEstoqueCount] + ['allPcts'=>$allPcts] + ['allCities'=>$allCities] + ['clientes'=>$clientes] + ['equipsPct'=>$equipsPct] + ['fornecedores'=>$fornecedores] + ['equipsCount'=>$equipsCount]);
         // return view('edit_pct', compact('pctSel'));
 
     }

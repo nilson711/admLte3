@@ -122,13 +122,15 @@ function ContarSelecionadosRecolhe(){
     //mostra a quantidade de checkboxes selecionados no elemento Html na página.
     QtdequipsSelecionadosRecolhe.innerHTML = "Total: " + selecionados + " equipamento(s) selecionado(s)";
 
-    //torna visível o campo motivo
+    //torna visível o botão avançar
+
+    
     if (selecionados > 0) {
-        document.getElementById('selectMotivo').style.visibility = "visible";
-        // document.getElementById('btnAvancar').style.visibility = "visible";
+        document.getElementById('btnAvancar').style.visibility = "visible";
+        // document.getElementById('selectMotivo').style.visibility = "visible";
     } else {
-        document.getElementById('selectMotivo').style.visibility = "hidden";
-        // document.getElementById('btnAvancar').style.visibility = "hidden";
+        // document.getElementById('selectMotivo').style.visibility = "hidden";
+        document.getElementById('btnAvancar').style.visibility = "hidden";
     }
 }
 
@@ -241,7 +243,8 @@ function ContarSelecionadosRecolhe(){
     // var e = document.querySelector("#equipSelecionados").innerHTML = sum;
     document.querySelector("#enviarEquipRecolhe").value = sum;
     // document.querySelector("#enviarEquipRecolhe").innerHTML = sum;
-
+    
+  
  }
 
  //////////////////////////////////////////////////////////////////////
@@ -386,77 +389,101 @@ function habilitarBtnFinalizar(){
     }
 }
 
+/********************************************************************************************************************************
+ * Função Adiciona / Seleciona todos os equipamentos 
+ */
+function addTodosEquips(){
+    document.getElementById('tableEquipsRecolhe').style.visibility = 'visible';
+    var checkbox_recolhe = document.querySelectorAll(".checkbox-recolhe");                        //Seleciona todos os objetos da classe "checkbox-recolhe"
+    var QtdequipsSelecionadosRecolhe = document.getElementById("QtdequipsSelecionadosRecolhe");   //Seleciona o elemento pelo id
+    var selecionados = 0;  
+    document.getElementById('obsSolicitacaoRecolhe').focus();
+
+    //soma a quantidade de checkbox selecionados
+    checkbox_recolhe.forEach(function(el){                    //faz um forEach por todos os checkboxes da tabela
+            if (!el.checked) {                               //verifica que o checkbox não está marcado
+            selecionados++;                                 //se não estiver estiver marcado adiciona um incremento a variável
+            el.checked = true;                              //marca o checkbox como true (selecionado)
+        }
+        QtdequipsSelecionadosRecolhe.innerHTML = "Total: " + selecionados + " equipamento(s) selecionado(s)";
+        document.getElementById('btnAvancar').style.visibility = "visible";
+        document.getElementById('fotoEquip').style.visibility = "hidden";
+        });
+}
+
+/********************************************************************************************************************************
+ * Função Remove / Desmarca todos os equipamentos 
+ */
+function removeTodosEquips(){
+    document.getElementById('tableEquipsRecolhe').style.visibility = 'visible';
+    var checkbox_recolhe = document.querySelectorAll(".checkbox-recolhe");                        //Seleciona todos os objetos da classe "checkbox-recolhe"
+    var QtdequipsSelecionadosRecolhe = document.getElementById("QtdequipsSelecionadosRecolhe");   //Seleciona o elemento pelo id
+    var selecionados = 0;  
+
+    //soma a quantidade de checkbox selecionados
+    checkbox_recolhe.forEach(function(el){                    //faz um forEach por todos os checkboxes da tabela
+        if (el.checked) {                               //verifica que o checkbox está marcado
+            selecionados = 0;                                 //se não estiver estiver marcado tira um incremento a variável
+            el.checked = false;                              //desmarca o checkbox como true (selecionado)
+        }
+        QtdequipsSelecionadosRecolhe.innerHTML = "Total: " + selecionados + " equipamento(s) selecionado(s)";
+        document.getElementById('btnAvancar').style.visibility = "hidden";
+    });
+}
+
 /*********************************************************************************************************************************
  * Função Deixa o botão SOLICITAR visivel se houver algum equipamento selecionado E o motivo da solicitação
  */
 function habilitarBtnSolicitar(){
     let motivo = document.getElementById('motivo').value;
     switch (motivo) {
-        case '1': case '2': case '3':
-            // document.getElementById('btnSolicitaRecolhe').style.visibility = "visible";
-            document.getElementById('dataAgendamento').style.visibility = 'visible';
-            document.getElementById('dtAgendamento').focus();
-            // document.getElementById('obsSolicitacaoRecolhe').style.visibility = 'visible';
+        case '1': case '2': 
+            addTodosEquips();
+            coletaDadosRecolhe();
+            break;
+        case '3':
+            removeTodosEquips();
+            coletaDadosRecolhe();
             break;
         case '4':
-                var resultado = confirm('PACIENTE INTERNADO. \nEm vez de fazer o recolhimento, você pode solicitar uma Pausa de 10 dias nas cobranças.\n \u2611 Clique em "OK" se você quer fazer a Pausa.\n \u274C Clique em "Cancelar" para continuar com o recolhimento.');
-
-                    if (resultado == true) {
-                        alert("Você Escolheu fazer a Pausa. \n Clique no botão \u23F8 Pausa no canto direito da tela.\n Você será redirecionado para a tela de pausa.");
-                        location.reload();
-                    }
-                    else{
-                        alert("Você quer continuar com o recolhimento.\n ");
-                        // document.getElementById('obsSolicitacaoRecolhe').style.visibility = 'visible';
-                        document.getElementById('dataAgendamento').style.visibility = 'visible';
-                        document.getElementById('dtAgendamento').focus();
-                        // document.getElementById('obsSolicitacaoRecolhe').focus();
-
-                    }
+            var resultado = confirm('PACIENTE INTERNADO. \n\nEm vez de fazer o recolhimento, você pode solicitar uma \n\nPAUSA de 10 dias nas cobranças.\n\n \u2611 Clique em "OK" se você quer fazer a PAUSA.\n \u274C Clique em "Cancelar" para continuar com o Recolhimento.\n');
+                if (resultado == true) {
+                    alert("OK! \n\nPAUSA aplicada na data de hoje!");
+                    location.reload();     //recarrega a página atual
+                }
+                else{
+                    alert("OK! \n\nVocê quer continuar com o Recolhimento.\n ");
+                    addTodosEquips();
+                    coletaDadosRecolhe();
+                }
             break;
-        case '5':
-            // alert('No campo "Observações" especifique o problema apresentado no equipamento para justificar a retirada.');
-            document.getElementById('dataAgendamento').style.visibility = 'visible';
-            document.getElementById('dtAgendamento').focus();
+        case '5': case '7': case '9':
+            if (motivo == 5) {
+                alert('No campo "Observações" especifique o problema apresentado no equipamento para justificar a retirada.');
+            }else if(motivo == 7){
+                alert('No campo "Observações" especifique o problema apresentado no equipamento para justificar a troca.\nÉ recomendável enviar uma foto ou vídeo apresentando o problema.');
+                document.getElementById('fotoEquip').style.visibility = "visible";
+            }
+                removeTodosEquips();
+                coletaDadosRecolhe();
+                document.getElementById('obsSolicitacaoRecolhe').focus();
             break;
         case '6':
-            // alert('No campo "Observações" informe para qual Home Care o paciente será migrado.');
-            document.getElementById('dataAgendamento').style.visibility = 'visible';
-            document.getElementById('dtAgendamento').focus();
-            break;
-        case '7':
-            // alert('No campo "Observações" especifique o problema apresentado no equipamento para justificar a troca.');
-            document.getElementById('dataAgendamento').style.visibility = 'visible';
-            document.getElementById('dtAgendamento').focus();
-            break;
-        case '8':
-            // alert('No campo "Observações" informe uma justificativa para retirada do equipamento.');
-            document.getElementById('dataAgendamento').style.visibility = 'visible';
-            document.getElementById('dtAgendamento').focus();
-            break;
-        case '9':
-            document.getElementById('btnSolicitaRecolhe').style.visibility = "hidden";
-            document.getElementById('obsSolicitacaoRecolhe').style.visibility = 'hidden';
-            document.getElementById('dataAgendamento').style.visibility = 'hidden';
-
+                alert('No campo "Observações" informe para qual Home Care o paciente será migrado.');
+                addTodosEquips();
+                coletaDadosRecolhe();
             break;
     }
 
-    // if (document.getElementById('motivo').value < 5) {
-    // if (document.getElementById('enviarEquipRecolhe') = null) {
-        // document.getElementById('submitbuttonSolicit').style.visibility = "visible";
-        // document.getElementById('btnSolicitaRecolhe').style.visibility = "visible";
-    // } else {
-        // document.getElementById('submitbuttonSolicit').style.visibility = "hidden";
-        // document.getElementById('btnSolicitaRecolhe').style.visibility = "hidden";
-    // }
 }
 
 function obsNotNull(){
     if (document.getElementById('motivo').value != 9) {
-               document.getElementById('btnSolicitaRecolhe').style.visibility = "visible";
+            //    document.getElementById('btnSolicitaRecolhe').style.visibility = "visible";
+            document.getElementById('tableEquipsRecolhe').style.visibility = 'visible';
     } else {
-        document.getElementById('btnSolicitaRecolhe').style.visibility = "hidden";
+        // document.getElementById('btnSolicitaRecolhe').style.visibility = "hidden";
+        document.getElementById('tableEquipsRecolhe').style.visibility = 'visible';
 
     }
 }
@@ -513,9 +540,8 @@ function verificaHora(){
             
             var horarios = document.getElementById("horarios");
             for(var i = 0; i < horarios.length; i++) {
-                if(horarios[i].value >= hr_atual) {
-                    this.
-                   console.log (horarios[i].value);
+                if(horarios[i].value > hr_atual) {
+                    this.console.log (horarios[i].value);
                    
                 };
             } 
@@ -553,6 +579,10 @@ function msgHora(){
     console.log (hr_atual);
     // console.log (index);
 
+}
+
+function selMotivo(){
+    var motivo = document.getElementById('motivo').value;
     switch (motivo) {
         case '5':
             alert('No campo "Observações" especifique o problema apresentado no equipamento para justificar a retirada.');
@@ -581,6 +611,7 @@ function selHora(){
     var sel_dia = sel_data.getUTCDate();
     var sel_mes = sel_data.getUTCMonth();
     var sel_ano = sel_data.getUTCFullYear();
+    var nr_day = sel_data.getUTCDay();
 
     var hoje = new Date();
     var atual_dia = hoje.getUTCDate();
@@ -588,6 +619,7 @@ function selHora(){
     var atual_ano = hoje.getUTCFullYear();
 
     // console.log('nr '  + sel_data.getUTCDay());   //número do dia da semana (0=dom, 1=seg, 2=ter, 3=qua, 4=qui, 5=sex, 6=sab)
+    // console.log(tem_cama);
     // console.log('dia ' + sel_dia);                //retorna o dia do mês (1 a 31)
     // console.log('dia atual ' + atual_dia);         //retorna o dia de hoje (1 a 31)
     // console.log('mes ' + sel_mes);                //retorna o mês (0=jan, 1=fev, 2=mar, 3=abr, 4=mai, 5=jun, 6=jul, 7=ago, 8=set, 9=out, 10=nov, 11=dez)
@@ -595,36 +627,60 @@ function selHora(){
     // console.log('ano ' + sel_ano);                //retorna o ano
     // console.log('ano atual ' + atual_ano);        //retorna o ano atual
 
-    if (sel_ano >= atual_ano) {
-        if (sel_mes >= atual_mes) {
-            if (sel_dia >= atual_dia) {
-                // alert('Selecione um horário!');
-                document.getElementById('selhorarios').style.visibility = "visible";
-                document.getElementById('horarios').focus();
-            }else{
-                if (sel_mes > atual_mes) {
-                    alert('O dia é menor mas o mês é maior!');
+    //Busca dentro do input dos equipamentos selecionado se tem alguma CAMA
+    var tem_cama = document.getElementById('textEquipsRecolhe').value;
+    var test_cama = tem_cama.indexOf("CAMA");
+    console.log(test_cama);
+
+    //Verifica se o dia da semana é sábado ou domingo
+    if (nr_day == 6 || nr_day == 0) {
+        //Verifica se tem cama na solicitação
+        if (test_cama > 0) {
+            alert('\u274C Não recolhemos ou implantamos camas aos finais de semana!\n\n Em casos de EXTREMA urgência favor entrar em contato \n com o Plantão de Intercorrências.')
+            document.getElementById('dtAgendamento').value = null;
+            document.getElementById('btnAvancar').style.visibility = "hidden";
+        }else{
+            alert('\u274C Não fazermos recolhimentos aos finais de semana! \n\n Em casos de EXTREMA urgência favor entrar em contato \n com o Plantão de Intercorrências.');
+            document.getElementById('dtAgendamento').value = null;
+            document.getElementById('selhorarios').style.visibility = "hidden";
+
+        }
+    }else{
+
+        if (sel_ano >= atual_ano) {
+            if (sel_mes >= atual_mes) {
+                if (sel_dia >= atual_dia) {
+                    // alert('Selecione um horário!');
                     document.getElementById('selhorarios').style.visibility = "visible";
                     document.getElementById('horarios').focus();
                 }else{
-                    alert('A data selecionada é anterior a data atual!');
-                    document.getElementById('dtAgendamento').value = null;
-                    document.getElementById('selhorarios').style.visibility = "hidden";
-                    document.getElementById('btnSolicitaRecolhe').style.visibility = "hidden";
-                    document.getElementById('obsSolicitacaoRecolhe').style.visibility = 'hidden';
+                    if (sel_mes > atual_mes) {
+                        alert('O dia é menor mas o mês é maior!');
+                        document.getElementById('selhorarios').style.visibility = "visible";
+                        document.getElementById('horarios').focus();
+                    }else{
+                        alert('A data selecionada é anterior a data atual!');
+                        document.getElementById('dtAgendamento').value = null;
+                        document.getElementById('selhorarios').style.visibility = "hidden";
+                        document.getElementById('btnSolicitaRecolhe').style.visibility = "hidden";
+                        document.getElementById('obsSolicitacaoRecolhe').style.visibility = 'hidden';
+                    }
                 }
+            }else{
+                alert('A data selecionada é anterior a data atual!');
+                document.getElementById('dtAgendamento').value = null;
+                document.getElementById('btnAvancar').style.visibility = "hidden";
+                document.getElementById('obsSolicitacaoRecolhe').style.visibility = 'hidden';
             }
         }else{
             alert('A data selecionada é anterior a data atual!');
             document.getElementById('dtAgendamento').value = null;
-            document.getElementById('btnSolicitaRecolhe').style.visibility = "hidden";
+            document.getElementById('btnAvancar').style.visibility = "hidden";
             document.getElementById('obsSolicitacaoRecolhe').style.visibility = 'hidden';
         }
-    }else{
-        alert('A data selecionada é anterior a data atual!');
-        document.getElementById('dtAgendamento').value = null;
-        document.getElementById('btnSolicitaRecolhe').style.visibility = "hidden";
-        document.getElementById('obsSolicitacaoRecolhe').style.visibility = 'hidden';
     }
+}
 
+function desativarBtnAvancar(){
+    document.getElementById('btnAvancar').style.visibility = "hidden";
 }

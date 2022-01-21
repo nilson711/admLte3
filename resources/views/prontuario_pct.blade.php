@@ -578,170 +578,292 @@
 
 <!--////////////////////////////////////////////////////  MODAL RECOLHIMENTO  ////////////////////////////////////////////////-->
 
-<div class="modal fade bd-example-modal-xl" id="modalRecolhimento" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-    <div class="modal-dialog modal-xl" role="document">
+<div class="modal fade bd-example-modal-lg" id="modalRecolhimento" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg" role="document">
       <div class="modal-content">
         <div class="modal-header">
           <ion-icon size="large" style="color: red"  name="remove-circle-outline"></ion-icon>
-            <h5 class="modal-title" id="exampleModalLabel"><span style="color: red"> Recolher Equipamento</span><br>
+            <h5 class="modal-title" id="exampleModalLabel"><span style="color: red"> Recolher Equipamento >> </span>
             Paciente: {{$pctSel->name_pct}}</h5>
           <button type="button" class="close" data-dismiss="modal" aria-label="Close">
             <span aria-hidden="true">&times;</span>
           </button>
         </div>
         <div class="modal-body">
+
           <form action="{{route('new_solicita')}}" method="POST">
                 @csrf
 
-                <div class="bs-stepper linear">
-                  <div class="bs-stepper-header" role="tablist">
-                    <!-- your steps here -->
-                    <div class="step active" data-target="#logins-part">
-                      <button type="button" class="step-trigger" role="tab" aria-controls="logins-part" id="logins-part-trigger" aria-selected="true">
-                        <span class="bs-stepper-circle">1</span>
-                        <span class="bs-stepper-label">Logins</span>
-                      </button>
-                    </div>
-                    <div class="line"></div>
-                    <div class="step" data-target="#information-part">
-                      <button type="button" class="step-trigger" role="tab" aria-controls="information-part" id="information-part-trigger" aria-selected="false" disabled="disabled">
-                        <span class="bs-stepper-circle">2</span>
-                        <span class="bs-stepper-label">Various information</span>
-                      </button>
-                    </div>
-                  </div>
-                  <div class="bs-stepper-content">
-                    <!-- your steps content here -->
-                    <div id="logins-part" class="content active dstepper-block" role="tabpanel" aria-labelledby="logins-part-trigger">
-
-                    </div>
-                    <div id="logins-part" class="content active dstepper-block" role="tabpanel" aria-labelledby="logins-part-trigger">
-                      <div class="row form-group">
-                            <div class="form-group col-sm-6">
-                              <div class="card-body table-responsive p-0" >
-                                  <table class="table table-sm table-striped table-head-fixed text-nowrap" id= "tableEquipsRecolhe">
-                                      <thead>
-                                          <tr>
-                                          <th></th>
-                                          <th>Patr / Equipamento</th>
-                                          </tr>
-                                      </thead>
-                                      <tbody>
-                                          @foreach ( $equipsPct as $equipImplant)
-                                          <tr class="tr-row" style="vertical-align: middle; line-height: 100%">
-                                              <td>
-                                                  <div style="margin-left: -40px" id="checkSelEquipRecolhe" class="checkSelEquipRecolhe form-check col-sm-6" onclick="ContarSelecionadosRecolhe()">
-                                                      {{-- <input class="qtdDoItem" type="number" min="0" value="0" onchange="qtdSolicitada(this.value)" style="width: 50px"> --}}
-                                                      {{-- <input type="number" onchange="cadastraNotaImportada(this.value)" class="form-control disciplina" name="" value="0"> --}}
-                                                      <input class="checkbox" type="checkbox" id= " {{$equipImplant->id}}" name=" {{$equipImplant->name_equip}}" onclick="coletaDadosRecolhe()" style="margin-left: 7px; transform: scale(1.2)">
-                                                  </div>
-                                              </td>
-                                              <td id="nomeEquipRecolhe" class="nomeEquipRecolhe">
-                                                  {{$equipImplant->patr}}-
-                                                  {{$equipImplant->name_equip}}
-                                              </td>
-                                          </tr>
-                                          @endforeach
-                                      </tbody>
-                                  </table>
-                              </div>
-                              <p id="QtdequipsSelecionadosRecolhe" style="margin-left: 10px"></p>
-                          </div>
-                          <div class="input-group col-sm-5">
-                      
-                            <div id="selectMotivo" style="visibility: hidden">
-                                <label for="motivo">Motivo:</label>
-                                <select name="motivo" id="motivo" class="form-control select" style="width: 100%;" aria-hidden="true" required onchange="habilitarBtnSolicitar()">]
-                                    <option value = "9" selected>Selecione uma opção</option>
-                                    <option value = "1" title="Paciente recebeu alta">Alta</option>
-                                    <option value = "2" title="Paciente foi a óbito">Óbito</option>
-                                    <option value = "3" title="Paciente não necessita mais do equipamento">Sem uso</option>
-                                    <option value = "4" title="Paciente internado sem previsão de alta">Paciente Internado</option>
-                                    <option value = "5" title="Equipamento não atende a necessidade do paciente">Não atende a necessidade</option>
-                                    <option value = "6" title="Paciente migrou para outro home care">Troca de home care</option>
-                                    <option value = "7" title="Equipamento não está funcionamento corretamente">Trocar Equipamento</option>
-                                    <option value = "8">Outro</option>
-                                </select>
+                <div class="row">
+                  <div class="col-md-12">
+                    <div class="card card-default" style="padding-bottom: 0px">
+                      {{-- <div class="card-header">
+                        <h3 class="card-title">bs-stepper</h3>
+                      </div> --}}
+                      <div class="card-body p-0">
+                        <div class="bs-stepper linear">
+                          <div class="bs-stepper-header" role="tablist">
+                            <!-- your steps here -->
+                            <div class="step active" data-target="#equip-parts">
+                              <button type="button" class="step-trigger" role="tab" aria-controls="equip-parts" id="equip-parts-trigger" aria-selected="true">
+                                <span class="bs-stepper-circle">1</span>
+                                <span class="bs-stepper-label">Equipamentos</span>
+                              </button>
                             </div>
-                            {{-- <div class="form-group">
-                                <div class="custom-control custom-checkbox">
-                                  <input class="custom-control-input" type="checkbox" id="customCheckbox1" value="option1">
-                                  <label for="customCheckbox1" class="custom-control-label" title="Marque esta opção se a solicitação tem dia e horário agendados com familiares.">Agendado</label>
-                                </div>
-                            </div> --}}
+                            <div class="line"></div>
+                            <div class="step" data-target="#agendamento-parts">
+                              <button type="button" class="step-trigger" role="tab" aria-controls="agendamento-parts" id="agendamento-parts-trigger" aria-selected="false" disabled="disabled">
+                                <span class="bs-stepper-circle">2</span>
+                                <span class="bs-stepper-label">Agendamento</span>
+                              </button>
+                            </div>
+                            <div class="line"></div>
+                            <div class="step" data-target="#finalizar-parts">
+                              <button type="button" class="step-trigger" role="tab" aria-controls="finalizar-parts" id="finalizar-parts-trigger" aria-selected="false" disabled="disabled">
+                                <span class="bs-stepper-circle">3</span>
+                                <span class="bs-stepper-label">Finalizar</span>
+                              </button>
+                            </div>
                           </div>
-                        </div>
-                          <div class="form-group">
-                            <textarea name="textEquipsRecolhe" id="textEquipsRecolhe" style="display: none"></textarea>
-                            {{-- <textarea name="textEquipsRecolhe" id="textEquipsRecolhe"></textarea> --}}
-                            <input type="text" name="enviarEquipRecolhe" id="enviarEquipRecolhe" style="display: none">
-                            {{-- <div id="fooRecolhe"></div> --}}
-                            
-                          </div>
-                          <button class="btn btn-primary" onclick="stepper.next()">Next</button>
-                          
-                      </div>
-                        <div id="information-part" class="content" role="tabpanel" aria-labelledby="information-part-trigger">
-                          
-                          <div class=" row form-group">
-                            
-                            <div class="col-sm-4" id="dataAgendamento" style="visibility: hidden">
-                              <label>Agendamento:</label>
-                              {{-- <button type="button" class="btn btn-sm btn-outline-primary float-left" style="margin-right: 10px" > --}}
-                                <i class="fas fa-info-circle" style="color: blue" data-toggle="tooltip" title="Agende com os familiares dia e horario aproximado"></i>
-                                {{-- </button> --}}
-                                <label class="float-right">Horário:
-                                <i class="fas fa-clock" style="color: blue" data-toggle="tooltip" title="Horário aproximado"></i>
-                                </label>
-                                <div class="input-group date" >
-                                  <input type="date" class="col-sm-7" id="dtAgendamento" name="dtAgendamento" class="form-control datetimepicker-input" required onchange="selHora()">
-                                  <!-- {{-- <select class="select select2" id="hours" data-toggle="tooltip" title="Hora aproximada da solicitação." onchange="msgHora()"></select> --}} -->
-                                  <div id="selhorarios" style= "visibility: hidden; width: 40%" >
-                                    <select class="select select2" id="horarios" name="horarios" required onchange="msgHora()" onfocus="verificaHora()">
-                                      <option id="select0" value="0" selected>Selecione</option>
-                                      <option value="1" title="Qualquer horário do dia.">Dia todo</option>
-                                      <option value="2" title="De 09hs a 12hs">Manhã</option>
-                                      <option value="3" title="De 13hs a 18hs">Tarde</option>
-                                      <option value="9" disabled>09-10hs</option>
-                                      <option value="10">10-11hs</option>
-                                      <option value="11">11-12hs</option>
-                                      <option value="13">13-14hs</option>
-                                      <option value="14">14-15hs</option>
-                                      <option value="15">15-16hs</option>
-                                      <option value="16">16-17hs</option>
-                                      <option value="17">17-18hs</option>
-                                      <option value="18" title="Plantão">+18hs*</option>
-                                    </select>
+                          <div class="bs-stepper-content" style="padding-bottom: 0px">
+                            <!-- your steps content here -->
+
+                            <div id="equip-parts" class="content active dstepper-block" role="tabpanel" aria-labelledby="equip-parts-trigger">
+                              <div>
+                                
+                                <div class="row">
+                                    <div class="col-md-5">
+
+                                      <div id="selectMotivo" class="form-group" >
+                                        <label for="motivo">Motivo:</label>
+                                        <select name="motivo" id="motivo" class="form-control select" style="width: 100%;" aria-hidden="true" required onchange="habilitarBtnSolicitar()">]
+                                            <option value = "9" selected>Selecione uma opção</option>
+                                            <option value = "1" title="Paciente recebeu alta">Alta</option>
+                                            <option value = "2" title="Paciente foi a óbito">Óbito</option>
+                                            <option value = "3" title="Paciente não usa o equipamento">Sem uso</option>
+                                            <option value = "4" title="Paciente internado sem previsão de alta">Paciente Internado</option>
+                                            <option value = "5" title="Recolher - Equipamento não atende a necessidade do paciente">Não atende a necessidade</option>
+                                            <option value = "6" title="Paciente migrou para outro home care">Troca de home care</option>
+                                            <option value = "7" title="Equipamento não está funcionamento corretamente">Trocar Equipamento</option>
+                                            {{-- <option value = "8">Outro</option> --}}
+                                        </select>
+                                      </div>
+
+                                      <div class="form-group">
+                                        <label for="obsSolicitacaoRecolhe">Observações:</label>
+                                        <textarea class="form-control" name="obsSolicitacaoRecolhe" id="obsSolicitacaoRecolhe" onkeyup="obsNotNull()" rows="2" placeholder="Observações sobre a solicitação" maxlength="150"></textarea>
+                                      </div>
+
+                                      <div class="form-group" id="fotoEquip" style="visibility: hidden">
+                                        <label for="fotoEquip">Foto / Vídeo: <i class="fas fa-info-circle" style="color: blue" data-toggle="tooltip" title="Videos curtos de 30 segundos aproximadamente."></i></label>
+                                        <input type="file" class="form-control-file" name="file_fotoEquip" id="file_fotoEquip" title="Anexar foto mostrando o defeito do equipamento.">
+                                      </div>
+
+
+                                    </div>
+
+                                    <div class="col-sm-1">
+                                      
+                                    </div>
+
+                                    <div class="form-group col-sm-6">
+                                      <div class="card-body table-responsive p-0" >
+                                          <table class="table table-sm table-striped table-head-fixed text-nowrap" id= "tableEquipsRecolhe" style="visibility: hidden">
+                                              <thead>
+                                                  <tr>
+                                                  <th></th>
+                                                  <th>Patr / Equipamento</th>
+                                                  </tr>
+                                              </thead>
+                                              <tbody>
+                                                  @foreach ( $equipsPct as $equipImplant)
+                                                  <tr class="tr-row" style="vertical-align: middle; line-height: 100%">
+                                                      <td>
+                                                          <div style="margin-left: -40px" id="checkSelEquipRecolhe" class="checkSelEquipRecolhe form-check col-sm-6" onclick="ContarSelecionadosRecolhe()">
+                                                              {{-- <input class="qtdDoItem" type="number" min="0" value="0" onchange="qtdSolicitada(this.value)" style="width: 50px"> --}}
+                                                              {{-- <input type="number" onchange="cadastraNotaImportada(this.value)" class="form-control disciplina" name="" value="0"> --}}
+                                                              <input class="checkbox checkbox-recolhe"  type="checkbox" id= " {{$equipImplant->id}}" name=" {{$equipImplant->name_equip}}" onclick="coletaDadosRecolhe()" style="margin-left: 7px; transform: scale(1.2)">
+                                                          </div>
+                                                      </td>
+                                                      <td id="nomeEquipRecolhe" class="nomeEquipRecolhe">
+                                                          {{$equipImplant->patr}}-
+                                                          {{$equipImplant->name_equip}}
+                                                      </td>
+                                                  </tr>
+                                                  @endforeach
+                                              </tbody>
+                                          </table>
+                                      </div>
+                                      <p id="QtdequipsSelecionadosRecolhe" style="margin-left: 10px"></p>
+                                      <textarea name="textEquipsRecolhe" id="textEquipsRecolhe" style="display: none" ></textarea>
+                                      <input type="text" name="enviarEquipRecolhe" id="enviarEquipRecolhe" style="display: none">
+                                      <p id="txtcama"></p>
                                   </div>
                                 </div>
+                              </div>
+                              
                             </div>
 
-                            <div class="col-sm-8">
-                              <label for="obsSolicitacaoRecolhe">Observações:</label>
-                              <textarea class="form-control" style="visibility: hidden" name="obsSolicitacaoRecolhe" id="obsSolicitacaoRecolhe" onkeyup="obsNotNull()" rows="2" placeholder="Observações sobre a solicitação" maxlength="150"></textarea>
-                            </div>
+                            <div id="agendamento-parts" class="content" role="tabpanel" aria-labelledby="agendamento-parts-trigger">
+                              <div class=" row form-group">
+
+                                <div class="col-sm-6">
+
+                                  <div class="card-body table-responsive p-0" style="height: 200px;">
+                                    <table class="table table-sm table-head-fixed text-nowrap" >
+                                      <thead>
+                                        <tr>
+                                          <th style="width: 10px">Dia</th>
+                                          <th>Hora</th>
+                                          <th>Local</th>
+                                        </tr>
+                                      </thead>
+                                      <tbody>
+                                        <small>
+                                        @foreach ($solicitacoesPend as $item)
+                                        <tr>
+                                          <td>{{date('d/m', strtotime($item->date_agenda))}}</td>
+                                          <td>
+                                            @switch($item->hour_agenda)
+                                                @case(1)
+                                                    Dia todo
+                                                    @break
+                                                @case(2)
+                                                    Manhã
+                                                    @break
+                                                @case(3)
+                                                    Tarde
+                                                    @break
+                                                @case(9)
+                                                    09-10hs
+                                                    @break
+                                                @case(10)
+                                                    10-11hs
+                                                    @break
+                                                @case(11)
+                                                    11-12hs
+                                                    @break
+                                                @case(13)
+                                                    13-14hs
+                                                    @break
+                                                @case(14)
+                                                    14-15hs
+                                                    @break
+                                                @case(15)
+                                                    15-16hs
+                                                    @break
+                                                @case(16)
+                                                    16-17hs
+                                                    @break
+                                                @case(17)
+                                                    17-18hs
+                                                    @break
+                                                @case(18)
+                                                    +18hs
+                                                    @break
+                                                @default
+                                                    
+                                            @endswitch
+                                          </td>
+                                          <td>
+                                            {{$item->bairro}}
+                                            {{$item->nome}}
+                                          </td>
+                                        </tr>
+                                        @endforeach
+                                      </small>
+                                      </tbody>
+                                    </table>
+                                  </div>
+                                  
+                                </div>
+
+                                <div class="form-group">
+                                  
+                                  {{-- <textarea name="textEquipsRecolhe" id="textEquipsRecolhe"></textarea> --}}
+                                  
+                                  {{-- <div id="fooRecolhe"></div> --}}
+                                </div>
+
+                                <div class="col-sm-5" id="dataAgendamento" >
+                                  <label>Agendamento:</label>
+                                  {{-- <button type="button" class="btn btn-sm btn-outline-primary float-left" style="margin-right: 10px" > --}}
+                                    <i class="fas fa-info-circle" style="color: blue" data-toggle="tooltip" title="Agende com os familiares dia e horario aproximado"></i>
+                                    {{-- </button> --}}
+                                    <label class="float-right">Horário:
+                                    <i class="fas fa-clock" style="color: blue" data-toggle="tooltip" title="Horário aproximado"></i>
+                                    </label>
+                                    <div class="input-group date" >
+                                      <input type="date" class="col-sm-7" id="dtAgendamento" name="dtAgendamento" class="form-control datetimepicker-input" required onchange="selHora()">
+                                      <!-- {{-- <select class="select select2" id="hours" data-toggle="tooltip" title="Hora aproximada da solicitação." onchange="msgHora()"></select> --}} -->
+                                      <div id="selhorarios" style= "visibility: hidden; width: 40%" >
+                                        <select class="select select2" id="horarios" name="horarios" required onchange="msgHora()" onfocus="verificaHora()">
+                                          <option id="select0" value="0" selected>Selecione</option>
+                                          <option value="1" title="Qualquer horário do dia.">Dia todo</option>
+                                          <option value="2" title="De 09hs a 12hs">Manhã</option>
+                                          <option value="3" title="De 13hs a 18hs">Tarde</option>
+                                          <option value="9" disabled>09-10hs</option>
+                                          <option value="10">10-11hs</option>
+                                          <option value="11">11-12hs</option>
+                                          <option value="13">13-14hs</option>
+                                          <option value="14">14-15hs</option>
+                                          <option value="15">15-16hs</option>
+                                          <option value="16">16-17hs</option>
+                                          <option value="17">17-18hs</option>
+                                          <option value="18" title="Plantão">+18hs*</option>
+                                        </select>
+                                      </div>
+                                    </div>
+                                </div>
+
+                              </div>
+
+                              
+
                             
+
+                            </div>
+
+                            <div id="finalizar-parts" class="content" role="tabpanel" aria-labelledby="finalizar-parts-trigger">
+                              <div class="form-group">
+                                finalizar
+                                
+                              </div>
+                                  <button type="submit" name="submitbuttonSolicit" value="2" class="btn btn-outline-primary swalSolicitSuccess" id="btnSolicitaRecolhe" style="visibility: hidden">Solicitar</button>
+                                  <button type="button" class="btn btn-success" style="display: none" id="spinnerFinalizando">
+                                      <span class="spinner-border spinner-border-sm"></span>
+                                      Enviando...
+                                  </button>
+                            </div>
                           </div>
-                          <button class="btn btn-primary" onclick="stepper.previous()">Previous</button>
                         </div>
-                      
+                      </div>
+                      <!-- /.card-body -->
+                      {{-- <div class="card-footer">
+                           <small>
+                            Preencha os campos solicitados em cada etapa para finalizar a solicitação.
+                          </small> 
+                      </div> --}}
                     </div>
+                    <!-- /.card -->
                   </div>
                 </div>
+          </form>
+
+        </div>
 
                
-            <div class="modal-footer">
-                <button type="submit" class="btn btn-primary">Submit</button>
-                <button type="button" class="btn btn-outline-secondary" data-dismiss="modal" id="btnCancela">Cancelar</button>
-                <button type="submit" name="submitbuttonSolicit" value="2" class="btn btn-outline-primary swalSolicitSuccess" id="btnSolicitaRecolhe" style="visibility: hidden">Solicitar</button>
-                <button type="button" class="btn btn-success" style="display: none" id="spinnerFinalizando">
-                    <span class="spinner-border spinner-border-sm"></span>
-                    Enviando...
-                </button>
-
-
+            <div class="modal-footer" >
+              <div class="col-sm-10">
+                <button class="btn btn-primary btn-sm" onclick="stepper.previous()"><i class="fas fa-arrow-left"></i> Voltar</button>
+                <button id="btnAvancar" class="btn btn-primary btn-sm" onclick="stepper.next()" style="visibility: hidden" onmouseup="desativarBtnAvancar()">Avançar <i class="fas fa-arrow-right"></i></button>
+              </div>
+              <div class="float-right">
+                <button type="button" class="btn btn-outline-secondary btn-sm" data-dismiss="modal" id="btnCancela">Cancelar</button>
+              </div>
+                
             </div>
-        </form>
+        
       </div>
     </div>
   </div>
