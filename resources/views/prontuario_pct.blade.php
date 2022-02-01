@@ -31,12 +31,12 @@
                 <div class="card card-primary card-outline card-outline-tabs">
                     <div class="card-header p-2">
                   <label></label>
-                  <div class="card-tools float-right">
-                    <button type="button" class="btn btn-block btn-danger btn-sm">
-                        <a href="{{ route('listaPcs') }}">
-                            <i class="fas fa-times" style="color: white" data-toggle="tooltip" title="Fechar"></i>
-                        </a>
-                    </button>
+                  <div class="card-tools float-right" data-toggle="tooltip" title="Fechar">
+                    <a href="{{ route('listaPcs') }}">
+                      <button type="button" class="btn btn-block btn-danger">
+                            <i class="fas fa-times" style="color: white" ></i>
+                      </button>
+                    </a>
                 </div>
                 <ul class="nav nav-tabs">
                   <li class="nav-item"><a class="nav-link" href="#tabDadosPct" data-toggle="tab">Dados</a></li>
@@ -615,6 +615,7 @@
                               <button type="button" class="step-trigger" role="tab" aria-controls="agendamento-parts" id="agendamento-parts-trigger" aria-selected="false" disabled="disabled">
                                 <span class="bs-stepper-circle">2</span>
                                 <span class="bs-stepper-label">Agendamento</span>
+                                <input type="text" name="hsAtual" id="hsAtual" style="display: none">
                               </button>
                             </div>
                             <div class="line"></div>
@@ -636,8 +637,8 @@
 
                                       <div id="selectMotivo" class="form-group" >
                                         <label for="motivo">Motivo:</label>
-                                        <select name="motivo" id="motivo" class="form-control select" style="width: 100%;" aria-hidden="true" required onchange="habilitarBtnSolicitar()">]
-                                            <option value = "9" selected>Selecione uma opção</option>
+                                        <select name="motivo" id="motivo" class="form-control select" style="width: 100%;" aria-hidden="true" required onchange="habilitarBtnSolicitar()">
+                                            <option value = "9" selected>Selecione um motivo</option>
                                             <option value = "1" title="Paciente recebeu alta">Alta</option>
                                             <option value = "2" title="Paciente foi a óbito">Óbito</option>
                                             <option value = "3" title="Paciente não usa o equipamento">Sem uso</option>
@@ -713,9 +714,9 @@
                                     <table class="table table-sm table-head-fixed text-nowrap" >
                                       <thead>
                                         <tr>
-                                          <th style="width: 10px">Dia</th>
-                                          <th>Hora</th>
-                                          <th>Local</th>
+                                          <th style="width: 10px" colspan="3">Solicitações Pendentes</th>
+                                          {{-- <th>Hora</th> --}}
+                                          {{-- <th>Local</th> --}}
                                         </tr>
                                       </thead>
                                       <tbody>
@@ -784,6 +785,7 @@
                                   
                                   {{-- <div id="fooRecolhe"></div> --}}
                                 </div>
+                                
 
                                 <div class="col-sm-5" id="dataAgendamento" >
                                   <label>Agendamento:</label>
@@ -796,21 +798,23 @@
                                     <div class="input-group date" >
                                       <input type="date" class="col-sm-7" id="dtAgendamento" name="dtAgendamento" class="form-control datetimepicker-input" required onchange="selHora()">
                                       <!-- {{-- <select class="select select2" id="hours" data-toggle="tooltip" title="Hora aproximada da solicitação." onchange="msgHora()"></select> --}} -->
+                                      
+
                                       <div id="selhorarios" style= "visibility: hidden; width: 40%" >
-                                        <select class="select select2" id="horarios" name="horarios" required onchange="msgHora()" onfocus="verificaHora()">
-                                          <option id="select0" value="0" selected>Selecione</option>
-                                          <option value="1" title="Qualquer horário do dia.">Dia todo</option>
-                                          <option value="2" title="De 09hs a 12hs">Manhã</option>
-                                          <option value="3" title="De 13hs a 18hs">Tarde</option>
-                                          <option value="9" disabled>09-10hs</option>
-                                          <option value="10">10-11hs</option>
-                                          <option value="11">11-12hs</option>
-                                          <option value="13">13-14hs</option>
-                                          <option value="14">14-15hs</option>
-                                          <option value="15">15-16hs</option>
-                                          <option value="16">16-17hs</option>
-                                          <option value="17">17-18hs</option>
-                                          <option value="18" title="Plantão">+18hs*</option>
+                                        <select id="horarios" class="form-control" name="horarios" required onchange="msgHora()">
+                                          <option id="select_0" value="0" >Selecione</option>
+                                          <option id="select_1" value="1" title="Qualquer horário do dia.">Dia todo</option>
+                                          <option id="select_2" value="2" title="De 09hs às 12hs" disabled>Manhã</option>
+                                          <option id="select_9" value="9" disabled> 09-10hs</option>
+                                          <option id="select_10" value="10" disabled>10-11hs</option>
+                                          <option id="select_11" value="11" disabled>11-12hs</option>
+                                          <option id="select_3" value="3" title="De 13hs às 18hs" disabled>Tarde</option>
+                                          <option id="select_13" value="13" disabled>13-14hs</option>
+                                          <option id="select_14" value="14" disabled>14-15hs</option>
+                                          <option id="select_15" value="15" disabled>15-16hs</option>
+                                          <option id="select_16" value="16" disabled>16-17hs</option>
+                                          <option id="select_17" value="17" disabled>17-18hs</option>
+                                          <option id="select_18" value="18" disabled title="Apenas emergências">+18hs*</option>
                                         </select>
                                       </div>
                                     </div>
@@ -829,11 +833,7 @@
                                 finalizar
                                 
                               </div>
-                                  <button type="submit" name="submitbuttonSolicit" value="2" class="btn btn-outline-primary swalSolicitSuccess" id="btnSolicitaRecolhe" style="visibility: hidden">Solicitar</button>
-                                  <button type="button" class="btn btn-success" style="display: none" id="spinnerFinalizando">
-                                      <span class="spinner-border spinner-border-sm"></span>
-                                      Enviando...
-                                  </button>
+                                  
                             </div>
                           </div>
                         </div>
@@ -857,7 +857,13 @@
               <div class="col-sm-10">
                 <button class="btn btn-primary btn-sm" onclick="stepper.previous()"><i class="fas fa-arrow-left"></i> Voltar</button>
                 <button id="btnAvancar" class="btn btn-primary btn-sm" onclick="stepper.next()" style="visibility: hidden" onmouseup="desativarBtnAvancar()">Avançar <i class="fas fa-arrow-right"></i></button>
+                <button type="button" name="submitbuttonSolicit" value="2" class="btn btn-sm btn-outline-primary swalSolicitSuccess" onclick="viewSpinner()" id="btnSolicitaRecolhe" style="visibility: hidden">Solicitar</button>
+                <button type="button" class="btn btn-success" style="visibility: hidden" id="spinnerFinalizandoRecolhe">
+                    <span class="spinner-border spinner-border-sm"></span>
+                    Enviando...
+                </button>
               </div>
+
               <div class="float-right">
                 <button type="button" class="btn btn-outline-secondary btn-sm" data-dismiss="modal" id="btnCancela">Cancelar</button>
               </div>
@@ -920,15 +926,17 @@
 <!-- BS Stepper -->
 <link rel="stylesheet" href="{{asset('css/bs-stepper.min.css')}}">
 
+<!-- icheck -->
+<link rel="stylesheet" href="{{asset('css/icheck-bootstrap.min.css')}}">
 
 @stop
 
 @section('js')
 
 <!-- jQuery -->
-{{-- <script src= {{asset('js/jquery.min.js')}}></script> --}}
+<script src= {{asset('js/jquery.min.js')}}></script>
 <!-- Bootstrap 4 -->
-<script src= {{asset('js/bootstrap.bundle.min.js')}}></script>
+{{-- <script src= {{asset('js/bootstrap.bundle.min.js')}}></script> --}}
 {{-- <script src= {{asset('js/timeline.js')}}></script> --}}
 <!-- SweetAlert2 -->
 <script src= {{asset('js/sweetalert2.min.js')}}></script>
@@ -942,7 +950,7 @@
 
 <script src= {{asset('js/select2.full.min.js')}}></script>
 <script src= {{asset('js/bootstrap.bundle.min.js')}}></script>
-<script src= {{asset('js/functions-equips.js')}} defer></script>
+<script src= {{asset('js/functions-equips.js')}} ></script>
 
 <!-- DataTables  & Plugins -->
 <script src= {{asset('js/jquery.dataTables.min.js')}}></script>
@@ -1007,10 +1015,10 @@
   </script>
 
 <script>
-  $(document).ready(function() {
-                document.getElementById('list_solicit_pend').click;
+  // $(document).ready(function() {
+  //               document.getElementById('list_solicit_pend').click;
 
-        });
+  //       });
 </script>
 
 <script>
@@ -1208,12 +1216,12 @@
       $('[data-mask]').inputmask()
 
       //Date picker
-      $('#reservationdate').datetimepicker({
-          format: 'L'
-      });
+      // $('#reservationdate').datetimepicker({
+      //     format: 'L'
+      // });
 
       //Date and time picker
-      $('#reservationdatetime').datetimepicker({ icons: { time: 'far fa-clock' } });
+      // $('#reservationdatetime').datetimepicker({ icons: { time: 'far fa-clock' } });
 
       //Date range picker
     //   $('#reservation').daterangepicker()
@@ -1245,9 +1253,9 @@
     //   )
 
       //Timepicker
-      $('#timepicker').datetimepicker({
-        format: 'LT'
-      })
+      // $('#timepicker').datetimepicker({
+      //   format: 'LT'
+      // })
 
       //Bootstrap Duallistbox
     //   $('.duallistbox').bootstrapDualListbox()
@@ -1362,15 +1370,16 @@ $('#data_rent').inputmask('dd/mm/yyyy', { 'placeholder': 'dd/mm/yyyy' })
               return option;
        }
 
-       var hourSelect = document.getElementById('hours');
-       for(var i = 10; i <= 18; i++){
-              hourSelect.add(createOption(i, i));
-       }
+      //  var hourSelect = document.getElementById('hours');
+      //  for(var i = 10; i <= 18; i++){
+      //         hourSelect.add(createOption(i, i));
+      //  }
 
-       var minutesSelect = document.getElementById('minutes');
-       for(var i = 0; i < 60; i += 15) {
-              minutesSelect.add(createOption(i, i));
-       }
+      //  var minutesSelect = document.getElementById('minutes');
+      //  for(var i = 0; i < 60; i += 15) {
+      //         minutesSelect.add(createOption(i, i));
+      //  }
 </script>
+
 
 @stop

@@ -12,6 +12,7 @@ use Carbon\Carbon;
 
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Date;
 use Illuminate\Support\Facades\DB;
 use PHPUnit\Framework\Constraint\Count;
 
@@ -174,6 +175,8 @@ class PctController extends Controller
         $solicitacoesFim = DB::SELECT("SELECT id, status_solicit, type_solicit, date_solicit, equips_solicit, obs_solicit, obs_atend FROM solicitacaos WHERE pct_solicit = $id AND status_solicit > 1");
 
         $pctSel = Pct::find($id);
+
+        
 
 
 

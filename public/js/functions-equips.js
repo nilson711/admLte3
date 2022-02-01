@@ -528,24 +528,123 @@ function upperCaseF(a){
     }, 1);
 }
 
-function verificaHora(){
+  /**********************************************************
+    *Seleciona a primeira opção do select horário
+    O sle que será manipulado deve conter apenas class="form-control"
+    outras classe aplicadas impedem que o código funcione.
+    */
+   function limpa_horas(){
+
+       var text = 'Selecione';
+       var select = document.querySelector('#horarios');
+       for (var i = 0; i < select.options.length; i++) {
+           if (select.options[i].text === text) {
+               select.selectedIndex = i;
+               break;
+            }
+        }
+        // ====================================================
+    }
+
+
+/*********************************************************************************************************************************
+ * Verifica A Data e Hora atuais e habilita ou desabilita horários
+ */
+function horasHoje(){
+    
+    var hora_sel =  document.getElementById('horarios').value;
+    var dt_atual = new Date();
+    var hr_atual = dt_atual.getHours();
+    
+    var hsValidas;
+    var idselect;
+    var horarios = document.querySelector("#horarios");
+    var txtSelected = "Selecione";
+    
+    limpa_horas();
+
+    for(var i = 0; i < horarios.length; i++) {
+        // console.log(horarios.options[i].text);
+        if (horarios[i].value > 1 ) {
+            //Habilita apenas os horários maiores que o atual
+            if(horarios[i].value > hr_atual) {
+                hsValidas = horarios[i].value;
+                // console.log("select_"+hsValidas);
+                idselect = "select_"+hsValidas;
+                document.getElementById(idselect).disabled = false;
+            }else{
+                hsValidas = horarios[i].value;
+                // console.log("select_"+hsValidas);
+                idselect = "select_"+hsValidas;
+                document.getElementById(idselect).disabled = true;
+            }
+        }
+    } 
+
+    //Habilita a opção Manhã
+    if (hr_atual < 11 ) {
+        document.getElementById('select_2').disabled = false;
+    }
+    // Habilita a opção Tarde
+    if (hr_atual < 17 ) {
+        document.getElementById('select_3').disabled = false;
+    }
+    document.getElementById('hsAtual').value = hr_atual;
+}
+
+/*********************************************************************************************************************************
+ * Habilita as todos os horários disponíveis
+ */
+
+function horasAmanha(){
     var hora_sel =  document.getElementById('horarios').value;
     var dt_atual = new Date();
     var hr_atual = dt_atual.getHours();
 
-    // console.log('entreou verificaHOra');
+    var hsValidas;
+    var horarios = document.getElementById("horarios");
 
-    // console.log (hr_atual);
+    limpa_horas();
 
+    for(var i = 0; i < horarios.length; i++) {
+        if(horarios[i].value > 0) {
+            hsValidas = horarios[i].value;
+            // console.log("select_"+hsValidas);
+            var idselect = "select_"+hsValidas;
+            document.getElementById(idselect).disabled = false;
             
-            var horarios = document.getElementById("horarios");
-            for(var i = 0; i < horarios.length; i++) {
-                if(horarios[i].value > hr_atual) {
-                    this.console.log (horarios[i].value);
-                   
-                };
-            } 
+        };
+    } 
 }
+
+/*********************************************************************************************************************************
+ * Desabilita os horários menores que o atual
+ */
+
+function desabilitarHSanteriores(){
+
+    var hora_sel =  document.getElementById('horarios').value;
+    var dt_atual = new Date();
+    var hr_atual = dt_atual.getHours();
+   
+    var hsValidas;
+    var horarios = document.getElementById("horarios");
+   
+    for(var i = 0; i < horarios.length; i++) {
+        // if(horarios[i].value < hr_atual) {
+            hsValidas = horarios[i].value;
+            console.log("select_"+hsValidas);
+            var idselect = "select_"+hsValidas;
+            document.getElementById(idselect).disabled = true;
+            
+            // };
+        } 
+        
+}
+
+/*********************************************************************************************************************************
+ * Mensagem sobre a hora e motivo selecionados
+ */
 
 function msgHora(){
     var hora_sel =  document.getElementById('horarios').value;
@@ -566,19 +665,26 @@ function msgHora(){
     //     document.getElementById('btnSolicitaRecolhe').style.visibility = "visible";
     // }
     
-    if (hora_sel < '1') {
-        document.getElementById('btnSolicitaRecolhe').style.visibility = "hidden";
-        document.getElementById('obsSolicitacaoRecolhe').style.visibility = 'hidden';
-    }else{
-        document.getElementById('obsSolicitacaoRecolhe').style.visibility = 'visible';
-        document.getElementById('btnSolicitaRecolhe').style.visibility = "visible";
-        document.getElementById('obsSolicitacaoRecolhe').focus();
-    }
-    // console.log (hora_sel);
+    // if (hora_sel < '1') {
+    //     document.getElementById('btnSolicitaRecolhe').style.visibility = "hidden";
+    //     document.getElementById('obsSolicitacaoRecolhe').style.visibility = 'hidden';
+    // }else{
+    //     document.getElementById('obsSolicitacaoRecolhe').style.visibility = 'visible';
+    //     document.getElementById('btnSolicitaRecolhe').style.visibility = "visible";
+    //     document.getElementById('obsSolicitacaoRecolhe').focus();
+    // }
+    console.log (hora_sel);
     // alert('teste');
-    console.log (hr_atual);
+    // console.log (hr_atual);
     // console.log (index);
+    // document.getElementById('btnSolicitaRecolhe').style.visibility = "visible";
+    document.getElementById('btnAvancar').style.visibility = "visible";
+    
+}
 
+function viewSpinner(){
+    document.getElementById('btnSolicitaRecolhe').style.visibility = "hidden";
+    document.getElementById('spinnerFinalizandoRecolhe').style.visibility = "visible";
 }
 
 function selMotivo(){
@@ -608,13 +714,14 @@ function selMotivo(){
 function selHora(){
     //dtAgendamento é o input que pega a data selecionada
     var sel_data = new Date( document.getElementById('dtAgendamento').value);
+    // var sel_dia = sel_data.getUTCDate();
     var sel_dia = sel_data.getUTCDate();
     var sel_mes = sel_data.getUTCMonth();
     var sel_ano = sel_data.getUTCFullYear();
     var nr_day = sel_data.getUTCDay();
 
     var hoje = new Date();
-    var atual_dia = hoje.getUTCDate();
+    var atual_dia = hoje.getDate();
     var atual_mes = hoje.getUTCMonth();
     var atual_ano = hoje.getUTCFullYear();
 
@@ -636,11 +743,11 @@ function selHora(){
     if (nr_day == 6 || nr_day == 0) {
         //Verifica se tem cama na solicitação
         if (test_cama > 0) {
-            alert('\u274C Não recolhemos ou implantamos camas aos finais de semana!\n\n Em casos de EXTREMA urgência favor entrar em contato \n com o Plantão de Intercorrências.')
+            alert('\u274C Não recolhemos ou implantamos CAMAS aos finais de semana!\n\n Em casos de EXTREMA urgência favor entrar em contato \n com o Plantão de Intercorrências.')
             document.getElementById('dtAgendamento').value = null;
             document.getElementById('btnAvancar').style.visibility = "hidden";
         }else{
-            alert('\u274C Não fazermos recolhimentos aos finais de semana! \n\n Em casos de EXTREMA urgência favor entrar em contato \n com o Plantão de Intercorrências.');
+            alert('\u274C Não fazermos Recolhimentos aos finais de semana! \n\n Em casos de EXTREMA urgência favor entrar em contato \n com o Plantão de Intercorrências.');
             document.getElementById('dtAgendamento').value = null;
             document.getElementById('selhorarios').style.visibility = "hidden";
 
@@ -653,9 +760,20 @@ function selHora(){
                     // alert('Selecione um horário!');
                     document.getElementById('selhorarios').style.visibility = "visible";
                     document.getElementById('horarios').focus();
+                    
+                    //Habilita os horários de hoje e de amanhã
+                        if (sel_dia == atual_dia) {
+                            horasHoje();
+                        } else {
+                            horasAmanha();
+                        }
+
+                    
+                        
                 }else{
                     if (sel_mes > atual_mes) {
-                        alert('O dia é menor mas o mês é maior!');
+                        // alert('O dia é menor mas o mês é maior!');
+                        horasAmanha();
                         document.getElementById('selhorarios').style.visibility = "visible";
                         document.getElementById('horarios').focus();
                     }else{
