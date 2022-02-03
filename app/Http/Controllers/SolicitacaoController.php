@@ -71,23 +71,23 @@ class SolicitacaoController extends Controller
                 $solicitante = auth()->user()->name;
 
                 //ENVIA EMAIL DE RECEBIDO PARA O HOME CARE
-                // Mail::send('emails.emailRecebidoSolicit',
-                // ['emailDestino' => $emailDestino,
-                // 'emailDestino2' => $emailDestino2,
-                // 'namePct' => $namePct,
-                // 'typeSolicitFim' => $typeSolicitFim,
-                // 'idSolicit' => $idSolicit,
-                // 'itensSolicit'=> $itensSolicit,
-                // 'obsSolicit' =>  $obsSolicit,
-                // 'solicitante' => $solicitante
-                // ],
-                // function ($message)
-                // use ($emailDestino, $emailDestino2, $namePct, $typeSolicitFim, $idSolicit, $itensSolicit,  $obsSolicit, $solicitante ) {
-                //     $message->from('nilson711@gmail.com', 'Atendimento');
-                //     $message->to($emailDestino, 'Email do Home Care');
-                //     $message->cc($emailDestino2, 'Email do Home Care');
-                //     $message->subject($typeSolicitFim . ' nº: '.$idSolicit. ' - PCT: '. $namePct);
-                // });
+                Mail::send('emails.emailRecebidoSolicit',
+                ['emailDestino' => $emailDestino,
+                'emailDestino2' => $emailDestino2,
+                'namePct' => $namePct,
+                'typeSolicitFim' => $typeSolicitFim,
+                'idSolicit' => $idSolicit,
+                'itensSolicit'=> $itensSolicit,
+                'obsSolicit' =>  $obsSolicit,
+                'solicitante' => $solicitante
+                ],
+                function ($message)
+                use ($emailDestino, $emailDestino2, $namePct, $typeSolicitFim, $idSolicit, $itensSolicit,  $obsSolicit, $solicitante ) {
+                    $message->from('nilson711@gmail.com', 'Atendimento');
+                    $message->to($emailDestino, 'Email do Home Care');
+                    $message->cc($emailDestino2, 'Email do Home Care');
+                    $message->subject($typeSolicitFim . ' nº: '.$idSolicit. ' - PCT: '. $namePct);
+                });
 
                 return back()->withInput();
 
@@ -95,7 +95,7 @@ class SolicitacaoController extends Controller
             case '2': //// 2 = recolhimento
                 $listEquipSel = $request->input('textEquipsRecolhe');
                 $obsSolicitacao = $request->input('obsSolicitacaoRecolhe');
-                $idPct = $request->input('idPct');
+                $idPct = $request->input('idPctRecolhe');
                 $motivo = $request->input('motivo');
                 $dtAgendamento = $request->input('dtAgendamento');
                 $horarios = $request->input('horarios');
@@ -153,24 +153,24 @@ class SolicitacaoController extends Controller
                     $solicitante = auth()->user()->name;
                     // $itensSolicit = Equipamento::where('solicit_equip', $solicitacao->id)->pluck('equips_solicit');
 
-                    //ENVIA EMAIL DE RECEBIDO PARA O HOME CARE
-                // Mail::send('emails.emailRecebidoSolicit',
-                // ['emailDestino' => $emailDestino,
-                // 'emailDestino2' => $emailDestino2,
-                // 'namePct' => $namePct,
-                // 'typeSolicitFim' => $typeSolicitFim,
-                // 'idSolicit' => $idSolicit,
-                // 'itensSolicit'=> $itensSolicit,
-                // 'obsSolicit' =>  $obsSolicit,
-                // 'solicitante' => $solicitante
-                // ],
-                // function ($message)
-                // use ($emailDestino, $emailDestino2, $namePct, $typeSolicitFim, $idSolicit, $itensSolicit,  $obsSolicit, $solicitante ) {
-                //     $message->from('nilson711@gmail.com', 'Atendimento');
-                //     $message->to($emailDestino, 'Email do Home Care');
-                //     $message->cc($emailDestino2, 'Email do Home Care');
-                //     $message->subject($typeSolicitFim . ' nº: '.$idSolicit. ' - PCT: '. $namePct);
-                // });
+                    // ENVIA EMAIL DE RECEBIDO PARA O HOME CARE
+                    Mail::send('emails.emailRecebidoSolicit',
+                    ['emailDestino' => $emailDestino,
+                    'emailDestino2' => $emailDestino2,
+                    'namePct' => $namePct,
+                    'typeSolicitFim' => $typeSolicitFim,
+                    'idSolicit' => $idSolicit,
+                    'itensSolicit'=> $itensSolicit,
+                    'obsSolicit' =>  $obsSolicit,
+                    'solicitante' => $solicitante
+                    ],
+                    function ($message)
+                    use ($emailDestino, $emailDestino2, $namePct, $typeSolicitFim, $idSolicit, $itensSolicit,  $obsSolicit, $solicitante ) {
+                        $message->from('nilson711@gmail.com', 'Atendimento');
+                        $message->to($emailDestino, 'Email do Home Care');
+                        $message->cc($emailDestino2, 'Email do Home Care');
+                        $message->subject($typeSolicitFim . ' nº: '.$idSolicit. ' - PCT: '. $namePct);
+                    });
 
                 return back()->withInput();
 

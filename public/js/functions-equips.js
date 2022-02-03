@@ -730,18 +730,7 @@ function msgHora(){
 
 }
 
-function viewBtnSolicita(){
-    document.getElementById('btnSolicitaRecolhe').style.visibility = "visible";
-}
 
-function offBtnSolicita(){
-    document.getElementById('btnSolicitaRecolhe').style.visibility = "hidden";
-}
-
-function viewSpinner(){
-    document.getElementById('btnSolicitaRecolhe').style.visibility = "hidden";
-    document.getElementById('spinnerFinalizandoRecolhe').style.visibility = "visible";
-}
 
 function selMotivo(){
     var motivo = document.getElementById('motivo').value;
@@ -855,20 +844,31 @@ function selHora(){
     }
 }
 
-function ativaBtns2(){
-    document.getElementById('btnVoltar1').style.visibility = "visible";
-    document.getElementById('btnAvancar2').style.visibility = "visible";
-    document.getElementById('btnAvancar').style.visibility = "hidden";
-}
-function ativaBtns3(){
-    document.getElementById('btnVoltar2').style.visibility = "visible";
+function viewBtnSolicita(){
     document.getElementById('btnSolicitaRecolhe').style.visibility = "visible";
 }
+function checkSolicit(){
+    if (document.getElementById('checkSolicitOk').checked) {
+        document.getElementById('btnSolicitaRecolhe').style.visibility = "visible";
+    }else{
+        document.getElementById('btnSolicitaRecolhe').style.visibility = "hidden";
+    }
+    console.log(document.getElementById('checkSolicitOk').value);
+}
 
-function desativaBtns3(){
-    document.getElementById('btnVoltar2').style.visibility = "hidden";
+function offBtnSolicita(){
     document.getElementById('btnSolicitaRecolhe').style.visibility = "hidden";
-    ativaBtns2();
+}
+
+function viewSpinner(){
+    document.getElementById('btnSolicitaRecolhe').style.visibility = "hidden";
+    document.getElementById('spinnerFinalizandoRecolhe').style.visibility = "visible";
+}
+
+
+function desativaBtnSolicitar(){
+    document.getElementById('btnSolicitaRecolhe').style.visibility = "hidden";
+    document.getElementById('btnAvancar').style.visibility = "visible";
 }
 
 

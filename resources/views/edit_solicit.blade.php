@@ -19,7 +19,7 @@
             <div class="card card-primary">
                 <div class="card-header">
                     <h3 class="card-title">
-                            <input type="number" name="type_solicit" id="type_solicit" value="{{$atual->type_solicit}}">
+                            <input type="number" name="type_solicit" id="type_solicit" value="{{$atual->type_solicit}}" style="display: none">
                             @switch($solicitSel->type_solicit)
                                 @case(1)
                                     <i class="fas fa-plus-circle fa-lg" data-toggle="tooltip" title="Implantação"

@@ -218,7 +218,7 @@
                                                 </button>
                                             </span>
                                             <span data-toggle="modal" data-target="#modalRecolhimento">
-                                                <button data-toggle="tooltip" title="Solicitar Recolhimento" type="button" class="btn btn-sm btn-outline-primary float-left" style="color: red; margin-right: 10px">
+                                                <button data-toggle="tooltip" title="Solicitar Recolhimento / Troca" type="button" class="btn btn-sm btn-outline-primary float-left" style="color: red; margin-right: 10px">
                                                     <i class="fas fa-times"></i>
                                                 </button>
                                             </span>
@@ -326,10 +326,10 @@
                                                 Óbito
                                             @break
                                             @case(3)
-                                                Internado
+                                                Sem uso
                                             @break
                                             @case(4)
-                                                Sem uso
+                                              Internado
                                             @break
                                             @case(5)
                                                 Não atende a necessidade
@@ -407,39 +407,39 @@
                                     <td>
                                         @switch($solicFim->type_solicit)
                                             @case(1)
-                                                <i class="fas fa-plus-circle" data-toggle="tooltip" title="Implantação"
+                                                <i class="fas fa-plus-circle"  title="Implantação"
                                                     style="color: rgb(2, 107, 19)"></i>
                                             @break
                                             @case(2)
-                                                <i class="fas fa-minus-circle" data-toggle="tooltip" title=" Recolhimento"
+                                                <i class="fas fa-minus-circle"  title=" Recolhimento"
                                                     style="color: black"></i>
                                             @break
                                             @case(3)
-                                                <i class="fas fa-tools" data-toggle="tooltip" title="Troca/Manutenção"
+                                                <i class="fas fa-tools"  title="Troca/Manutenção"
                                                     style="color: rgb(230, 163, 40)"></i>
                                             @break
                                             @case(4)
-                                                <i class="fas fa-dolly" data-toggle="tooltip" title="Mudança"></i>
+                                                <i class="fas fa-dolly"  title="Mudança"></i>
                                             @break
                                             @case(5)
-                                                <i class="fas fa-times-circle" data-toggle="tooltip" title="Recolhimento Total"
+                                                <i class="fas fa-times-circle"  title="Recolhimento Total"
                                                     style="color: rgb(253, 0, 0)"></i>
                                             @break
                                             @case(6)
-                                                <i class="fas fa-battery-empty" data-toggle="tooltip" title="Recarga de O2"
+                                                <i class="fas fa-battery-empty"  title="Recarga de O2"
                                                     style="color: rgb(80, 104, 240); transform: rotate(-90deg)"></i>
                                             @break
                                             @case(7)
-                                                <i class="fas fa-battery-empty" data-toggle="tooltip" title="Recolher O2"
+                                                <i class="fas fa-battery-empty"  title="Recolher O2"
                                                     style="color: rgb(255, 0, 0); transform: rotate(-90deg)"></i>
                                             @break
                                             @case(8)
-                                                <i class="fas fa-battery-full" data-toggle="tooltip" title="Implantar O2"
+                                                <i class="fas fa-battery-full"  title="Implantar O2"
                                                     style="color: rgb(14, 36, 238); transform: rotate(-90deg)"></i>
                                             @break
 
                                             @default
-                                                <i class="fas fa-plus-circle" data-toggle="tooltip" title="nenhum"></i>
+                                                <i class="fas fa-plus-circle"  title="nenhum"></i>
                                         @endswitch
                                     </td>
                                     <td>{{$solicFim->id}}</td>
@@ -469,7 +469,7 @@
                                         </div>&nbsp;&nbsp;&nbsp;
                                         <div style="display: inline-block">
                                             <a href="{{asset('storage/guias/'.$solicFim->id.'.jpg')}}" target="_blank" data-toggle="lightbox" data-title="sample 1 - white">
-                                                <i class="far fa-file" data-toggle="tooltip" title="Guia"></i>
+                                                <i class="far fa-file" title="Guia"></i>
                                             </a>
                                           </div>
                                     </td>
@@ -593,7 +593,7 @@
 
           <form action="{{route('new_solicita')}}" method="POST">
                 @csrf
-
+                <input type="number" name="idPctRecolhe" id="idPctRecolhe" value="{{$pctSel->id}}" style="display: none">
                 <div class="row">
                   <div class="col-md-12">
                     <div class="card card-default" style="padding-bottom: 0px">
@@ -830,10 +830,17 @@
 
                             <div id="finalizar-parts" class="content" role="tabpanel" aria-labelledby="finalizar-parts-trigger">
                               <div class="form-group">
-                                <label for="resumoSolicit">Para proseguir clique Solicitar. Para alterar clique em Voltar.</label> 
-                                <textarea name="resumoSolicit" id="resumoSolicit" cols="95" rows="7" readonly onfocus="viewBtnSolicita()"></textarea>
+                                <label for="resumoSolicit">Para proseguir Confirme na opção abaixo e clique em Solicitar. Para alterar clique em Voltar.</label> 
+                                <textarea name="resumoSolicit" id="resumoSolicit" cols="95" rows="7" readonly></textarea>
+                               
                                 
+                                  <div class="form-check">
+                                    <input class="form-check-input" name="checkSolicitOk" id="checkSolicitOk" type="checkbox" onclick="checkSolicit()">
+                                    <label class="form-check-label" for="checkSolicitOk">Confirmo a solicitação.</label>
+                                  </div>
+
                                 
+
                               </div>
                                   
                             </div>
@@ -850,29 +857,35 @@
                     <!-- /.card -->
                   </div>
                 </div>
-          </form>
+         
 
         </div>
 
                
             <div class="modal-footer" >
-              <div class="col-sm-10">
-                <button id="btnVoltar" class="btn btn-primary btn-sm" onclick="stepper.previous(); desativarBtnVoltar()" style="visibility: hidden"><i class="fas fa-arrow-left"></i> Voltar</button>
-                <button id="btnVoltar2" class="btn btn-primary btn-sm" onclick="stepper.previous(); desativaBtns3()" style="visibility: hidden"><i class="fas fa-arrow-left"></i> Voltar</button>
+              
+              <div>
+                <button type="submit" name="submitbuttonSolicit" value="2" class="btn btn-sm btn-success swalSolicitSuccess" onclick="viewSpinner()" id="btnSolicitaRecolhe" style="visibility: hidden">Solicitar</button>
+              </div>
+            </form>
+
+              <div class="col-sm-9">
+                <button id="btnVoltar" class="btn btn-outline-primary btn-sm" onclick="stepper.previous(); desativaBtnSolicitar()" style="visibility: hidden"><i class="fas fa-arrow-left"></i> Voltar</button>
+                {{-- <button id="btnVoltar2" class="btn btn-primary btn-sm" onclick="stepper.previous(); desativaBtns3()" style="visibility: hidden"><i class="fas fa-arrow-left"></i> Voltar</button> --}}
                 
-                <button id="btnAvancar" class="btn btn-primary btn-sm" onclick="stepper.next()" style="visibility: hidden" onmouseup="ativaBtns2()">Avançar <i class="fas fa-arrow-right"></i></button>
-                <button id="btnAvancar2" class="btn btn-primary btn-sm" onclick="stepper.next()" style="visibility: hidden" onmouseup="ativaBtns3()">Avançar <i class="fas fa-arrow-right"></i></button>
-                
-                <button type="button" name="submitbuttonSolicit" value="2" class="btn btn-sm btn-outline-primary swalSolicitSuccess" onclick="viewSpinner()" id="btnSolicitaRecolhe" style="visibility: hidden">Solicitar</button>
-                <button type="button" class="btn btn-success" style="visibility: hidden" id="spinnerFinalizandoRecolhe">
+                <button id="btnAvancar" class="btn btn-outline-primary btn-sm" onclick="stepper.next(); desativarBtnAvancar()" style="visibility: hidden">Avançar <i class="fas fa-arrow-right"></i></button>
+                {{-- <button id="btnAvancar2" class="btn btn-primary btn-sm" onclick="stepper.next()" style="visibility: hidden" onmouseup="ativaBtns3()">Avançar <i class="fas fa-arrow-right"></i></button> --}}
+
+                <button type="button" class="btn btn-sm btn-success" style="visibility: hidden" id="spinnerFinalizandoRecolhe">
                     <span class="spinner-border spinner-border-sm"></span>
                     Enviando...
                 </button>
               </div>
-
               <div class="float-right">
                 <button type="button" class="btn btn-outline-secondary btn-sm" data-dismiss="modal" id="btnCancela">Cancelar</button>
               </div>
+              
+              
                 
             </div>
         
