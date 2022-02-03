@@ -440,10 +440,16 @@ function habilitarBtnSolicitar(){
         case '1': case '2': 
             addTodosEquips();
             coletaDadosRecolhe();
+            if (motivo == 1) {
+                document.getElementById('txtMotivo').innerHTML = "Tipo: Recolhimento / Motivo: Alta";
+            }else{
+                document.getElementById('txtMotivo').innerHTML = "Tipo: Recolhimento / Motivo: Óbito";
+            }
             break;
         case '3':
             removeTodosEquips();
             coletaDadosRecolhe();
+            document.getElementById('txtMotivo').innerHTML = "Tipo: Recolhimento / Motivo: Sem uso";
             break;
         case '4':
             var resultado = confirm('PACIENTE INTERNADO. \n\nEm vez de fazer o recolhimento, você pode solicitar uma \n\nPAUSA de 10 dias nas cobranças.\n\n \u2611 Clique em "OK" se você quer fazer a PAUSA.\n \u274C Clique em "Cancelar" para continuar com o Recolhimento.\n');
@@ -455,14 +461,17 @@ function habilitarBtnSolicitar(){
                     alert("OK! \n\nVocê quer continuar com o Recolhimento.\n ");
                     addTodosEquips();
                     coletaDadosRecolhe();
+                    document.getElementById('txtMotivo').innerHTML = "Tipo: Recolhimento / Motivo: Paciente internado";
                 }
             break;
         case '5': case '7': case '9':
             if (motivo == 5) {
                 alert('No campo "Observações" especifique o problema apresentado no equipamento para justificar a retirada.');
+                document.getElementById('txtMotivo').innerHTML = "Tipo: Recolhimento / Motivo: Equipamento não atende a necessidade";
             }else if(motivo == 7){
                 alert('No campo "Observações" especifique o problema apresentado no equipamento para justificar a troca.\nÉ recomendável enviar uma foto ou vídeo apresentando o problema.');
                 document.getElementById('fotoEquip').style.visibility = "visible";
+                document.getElementById('txtMotivo').innerHTML = "Tipo: Recolhimento / Motivo: Troca de Equipamento";
             }
                 removeTodosEquips();
                 coletaDadosRecolhe();
@@ -472,6 +481,7 @@ function habilitarBtnSolicitar(){
                 alert('No campo "Observações" informe para qual Home Care o paciente será migrado.');
                 addTodosEquips();
                 coletaDadosRecolhe();
+                document.getElementById('txtMotivo').innerHTML = "Tipo: Recolhimento / Motivo: Troca de Home Care";
             break;
     }
 
@@ -481,12 +491,15 @@ function obsNotNull(){
     if (document.getElementById('motivo').value != 9) {
             //    document.getElementById('btnSolicitaRecolhe').style.visibility = "visible";
             document.getElementById('tableEquipsRecolhe').style.visibility = 'visible';
+           
     } else {
         // document.getElementById('btnSolicitaRecolhe').style.visibility = "hidden";
         document.getElementById('tableEquipsRecolhe').style.visibility = 'visible';
 
     }
 }
+
+
 
 function obsForNull(){
     if (document.getElementById('obsSolicitacaoRecolhe') = null) {
@@ -674,12 +687,55 @@ function msgHora(){
     //     document.getElementById('obsSolicitacaoRecolhe').focus();
     // }
     console.log (hora_sel);
-    // alert('teste');
-    // console.log (hr_atual);
-    // console.log (index);
-    // document.getElementById('btnSolicitaRecolhe').style.visibility = "visible";
-    document.getElementById('btnAvancar').style.visibility = "visible";
     
+    document.getElementById('btnAvancar').style.visibility = "visible";
+
+    var txtResumo = document.getElementById('txtMotivo').value;
+    var txtEquips = document.getElementById('textEquipsRecolhe').value;
+    var obs = document.getElementById('obsSolicitacaoRecolhe').value;
+    var dtAgenda = document.getElementById('dtAgendamento').value;
+    // var hsAgenda = document.getElementById('horarios').textContent;
+    
+    //Seleciona o texto do item selecionado nos horários
+    var hsAgenda = document.getElementById('horarios');
+    var hsSel = hsAgenda.children[hsAgenda.selectedIndex];
+    var txtHsAgenda = hsSel.textContent;
+
+   
+    console.log(txtHsAgenda);
+
+    /***************************************************************************************************************
+     *Formatar data da agenda para padrão DD/MM/YYYY
+     **************************************************************************************************************/
+    function adicionaZero(numero){
+        if (numero <= 9) 
+            return "0" + numero;
+        else
+            return numero; 
+    }
+
+    let data = new Date(dtAgenda);
+    let dataFormatada = (adicionaZero(data.getUTCDate().toString()) ) + "/" + (adicionaZero(data.getMonth()+1).toString()) + "/" + data.getFullYear(); 
+    
+    /***************************************************************************************************************/
+    // console.log(dataFormatada);
+
+    document.getElementById('resumoSolicit').innerHTML = "Dia: " +  dataFormatada + " - (" + txtHsAgenda + ")" + "\n" + txtResumo + "\n" + "Obs: "+ obs + "\n" + "Equipamento(s): " + txtEquips;
+    // console.log(dtAgenda);
+    
+   
+    // setTimeout(function() {
+    //     document.getElementById('resumoSolicit').focus();
+    // }, 5000);
+
+}
+
+function viewBtnSolicita(){
+    document.getElementById('btnSolicitaRecolhe').style.visibility = "visible";
+}
+
+function offBtnSolicita(){
+    document.getElementById('btnSolicitaRecolhe').style.visibility = "hidden";
 }
 
 function viewSpinner(){
@@ -799,6 +855,30 @@ function selHora(){
     }
 }
 
-function desativarBtnAvancar(){
+function ativaBtns2(){
+    document.getElementById('btnVoltar1').style.visibility = "visible";
+    document.getElementById('btnAvancar2').style.visibility = "visible";
     document.getElementById('btnAvancar').style.visibility = "hidden";
 }
+function ativaBtns3(){
+    document.getElementById('btnVoltar2').style.visibility = "visible";
+    document.getElementById('btnSolicitaRecolhe').style.visibility = "visible";
+}
+
+function desativaBtns3(){
+    document.getElementById('btnVoltar2').style.visibility = "hidden";
+    document.getElementById('btnSolicitaRecolhe').style.visibility = "hidden";
+    ativaBtns2();
+}
+
+
+function desativarBtnAvancar(){
+    document.getElementById('btnVoltar').style.visibility = "visible";
+    document.getElementById('btnAvancar').style.visibility = "hidden";
+}
+
+function desativarBtnVoltar(){
+    document.getElementById('btnVoltar').style.visibility = "hidden";
+    document.getElementById('btnAvancar').style.visibility = "visible";
+}
+

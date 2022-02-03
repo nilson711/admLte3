@@ -649,7 +649,7 @@
                                             {{-- <option value = "8">Outro</option> --}}
                                         </select>
                                       </div>
-
+                                      <textarea name="txtMotivo" id="txtMotivo" cols="30" rows="1" style="display: none"></textarea>
                                       <div class="form-group">
                                         <label for="obsSolicitacaoRecolhe">Observações:</label>
                                         <textarea class="form-control" name="obsSolicitacaoRecolhe" id="obsSolicitacaoRecolhe" onkeyup="obsNotNull()" rows="2" placeholder="Observações sobre a solicitação" maxlength="150"></textarea>
@@ -830,7 +830,9 @@
 
                             <div id="finalizar-parts" class="content" role="tabpanel" aria-labelledby="finalizar-parts-trigger">
                               <div class="form-group">
-                                finalizar
+                                <label for="resumoSolicit">Para proseguir clique Solicitar. Para alterar clique em Voltar.</label> 
+                                <textarea name="resumoSolicit" id="resumoSolicit" cols="95" rows="7" readonly onfocus="viewBtnSolicita()"></textarea>
+                                
                                 
                               </div>
                                   
@@ -855,8 +857,12 @@
                
             <div class="modal-footer" >
               <div class="col-sm-10">
-                <button class="btn btn-primary btn-sm" onclick="stepper.previous()"><i class="fas fa-arrow-left"></i> Voltar</button>
-                <button id="btnAvancar" class="btn btn-primary btn-sm" onclick="stepper.next()" style="visibility: hidden" onmouseup="desativarBtnAvancar()">Avançar <i class="fas fa-arrow-right"></i></button>
+                <button id="btnVoltar" class="btn btn-primary btn-sm" onclick="stepper.previous(); desativarBtnVoltar()" style="visibility: hidden"><i class="fas fa-arrow-left"></i> Voltar</button>
+                <button id="btnVoltar2" class="btn btn-primary btn-sm" onclick="stepper.previous(); desativaBtns3()" style="visibility: hidden"><i class="fas fa-arrow-left"></i> Voltar</button>
+                
+                <button id="btnAvancar" class="btn btn-primary btn-sm" onclick="stepper.next()" style="visibility: hidden" onmouseup="ativaBtns2()">Avançar <i class="fas fa-arrow-right"></i></button>
+                <button id="btnAvancar2" class="btn btn-primary btn-sm" onclick="stepper.next()" style="visibility: hidden" onmouseup="ativaBtns3()">Avançar <i class="fas fa-arrow-right"></i></button>
+                
                 <button type="button" name="submitbuttonSolicit" value="2" class="btn btn-sm btn-outline-primary swalSolicitSuccess" onclick="viewSpinner()" id="btnSolicitaRecolhe" style="visibility: hidden">Solicitar</button>
                 <button type="button" class="btn btn-success" style="visibility: hidden" id="spinnerFinalizandoRecolhe">
                     <span class="spinner-border spinner-border-sm"></span>
