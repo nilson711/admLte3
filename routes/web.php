@@ -83,3 +83,6 @@ Route::get('/msg-recupera-email', function(){
     // Mail::to('nilson711@gmail.com')->send(new MensagemRecuperaSenha());
     // return 'Emai enviado com sucesso!';
 });
+
+// Rotas de Lançamentos
+Route::post('/new_lanc', [App\Http\Controllers\LancamentoController::class, 'create'])->name('new_lanc');

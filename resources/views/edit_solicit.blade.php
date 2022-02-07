@@ -336,7 +336,7 @@
                                                                         data-toggle="modal" data-target='#modalConferir'
                                                                         style="color: green">
                                                                         {{-- <button class="btn btn-app" type="submit" style="color: green" name="submitbutton" value="2"> --}}
-                                                                        <i class="fas fa-check"></i>Confirma
+                                                                        <i class="fas fa-check"></i>Confirma add
                                                                     </button>
                                                                 </a>
                                                             @endif

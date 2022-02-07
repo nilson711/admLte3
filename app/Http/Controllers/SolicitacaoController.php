@@ -18,7 +18,7 @@ use Illuminate\Support\Facades\Mail;
 
 use App\Models\Cidade;
 use App\Models\Cliente;
-
+use App\Models\Lancamento;
 use Image;
 use stdClass;
 
@@ -275,6 +275,7 @@ public function iniciar_solicit(Request $request, $id){
             switch ( $solicit->type_solicit) {
                 case 1:
                    $typeSolicitFim = "Implantação";
+
                     break;
                 case 2:
                    $typeSolicitFim = "Recolhimento";
@@ -303,8 +304,8 @@ public function iniciar_solicit(Request $request, $id){
                             $regEquipSelecionado->pct_equip =  $pctForEquip;        //atribui o id do pctatual ao equipamento
                             $regEquipSelecionado->solicit_equip = $solicitForEquip;  //atribui o id da solicitação ao equipamento
                             $regEquipSelecionado->status_equip = 2;                 //status do equipamento para 2 = solicitado
-
                             $regEquipSelecionado->save();
+
                         }
                     }
 
@@ -395,8 +396,10 @@ public function add_equip_pct(Request $request){
             $regEquipSelecionado->pct_equip =  $pctForEquip;
             $regEquipSelecionado->solicit_equip = $solicitForEquip;  //atribui o id da solicitação ao equipamento
             $regEquipSelecionado->status_equip = 2;                 //status do equipamento para 2 = solicitado
-
             $regEquipSelecionado->save();
+
+            //INSERE OS REGISTROS DOS EQUIPAMENTOS IMPLANTADOS NA TABELA DE LANÇAMENTOS PARA COBRANÇA
+            Lancamento::create(['id_equip' => $equip, 'id_pct' => $pctForEquip, 'id_solicit' => $solicitForEquip, 'dias'=> 25]);
         }
     }
 
