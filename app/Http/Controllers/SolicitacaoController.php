@@ -70,7 +70,7 @@ class SolicitacaoController extends Controller
                 $typeSolicitFim = "Implantação";
                 $solicitante = auth()->user()->name;
 
-                //ENVIA EMAIL DE RECEBIDO PARA O HOME CARE
+                // //ENVIA EMAIL DE RECEBIDO PARA O HOME CARE
                 Mail::send('emails.emailRecebidoSolicit',
                 ['emailDestino' => $emailDestino,
                 'emailDestino2' => $emailDestino2,
@@ -271,21 +271,84 @@ public function iniciar_solicit(Request $request, $id){
             $itensSolicit = Solicitacao::where('id', $id)->pluck('equips_solicit')->get(0);
             $obsSolicit = Solicitacao::where('id', $id)->pluck('obs_solicit')->get(0);
 
-
             switch ( $solicit->type_solicit) {
                 case 1:
-                   $typeSolicitFim = "Implantação";
+                    $typeSolicitFim = "Implantação";
+                    $a = 0;
+                    
+                   //BUSCA OS DADOS OS INPUTS
+                //    $enviarEquip = $request->input('enviarEquip');  //Este input contém o array separado por vírgula
+                $enviarEquip = Equipamento::where('solicit_equip', $id)->pluck('id'); /// Busca os Equipamentos solicitados na solicitação atual
+                
+                //Converte o Array $enviarEquip em String
+                $collection = collect($enviarEquip);
+                $addEquipLancamento = $collection->implode(',');    //adicionar cada elemento numa collection separada por vírgula
+                   
+                // dd($addEquipLancamento);
+
+                   //SELECIONA O EQUIPAMENTO E ATRIBUI O PACIENTE ATUAL A ELE
+                   foreach (explode(',', $addEquipLancamento) as $equip){                 //separa o o conteúdo do array por vírgula
+                       if (empty($equip)) {
+                           //se for nulo não faz nada
+                       } else {
+
+                        //diferença entre o último dia do mês e a data atual
+                        $diasRestaMes = (date("t") - date("d"))+1;
+
+                        //id_hc do paciente
+                        $nrHcPct = $hcPctAtual->get(0);
+                        
+                        //BUSCA O PREÇO DO EQUIPAMENTO NA TABELA PREÇO
+                
+                        $preco = DB::SELECT("SELECT P.preco FROM equipamentos AS E
+                                            INNER JOIN precos AS P
+                                            ON P.name_equip = E.name_equip
+                                            WHERE E.id = $equip AND P.id_hc = $nrHcPct
+                                            ;");
+
+                        //CONVERTE O ARRAY $PREÇO EM STRING
+                        $vlpreco = value($preco[0]); 
+                        $collectionpreco = collect($vlpreco);           //transforma o array em uma collection
+                        $addEpreco = $collectionpreco->implode(',');    //transforma a collecttion em string
+
+                        // dd($addEpreco);
+
+                       //INSERE OS REGISTROS DOS EQUIPAMENTOS IMPLANTADOS NA TABELA DE LANÇAMENTOS PARA COBRANÇA
+                       //o formato date("Y-m-t") com o "t" no final, determina o último dia do mês
+                       Lancamento::create(['id_equip' => $equip, 'id_pct' => $idPct, 'id_hc' => $nrHcPct, 'id_solicit' => $idSolicit, 'dt_inicio' => date(now()), 'dt_fatura' => date("Y-m-t"), 'dias'=> $diasRestaMes, 'valor_mes'=> $addEpreco ]);
+                       
+                       }
+                   }
 
                     break;
                 case 2:
                    $typeSolicitFim = "Recolhimento";
-                   Equipamento::where('solicit_equip', $id)
+                   
+                   $idEquipRecolhe = Equipamento::find($id)->toArray();
+                //    $emailDestino = Cliente::find($hcPctAtual)->pluck('email')->toArray();
+                   
+                //    foreach ($idEquipRecolhe as $equipRecolhe => $value) {
+                //        $dataInicio = Lancamento::where('id_equip', $equipRecolhe)->pluck('dt_inicio')->get();
+
+                    //    $diasCobrar = (date("t") - date("d"))+1;
+                    //    Lancamento::where('id_equip', $equipRecolhe)
+                    //    ->update(['dt_retirada' => date('Y-m-d'), 'dt_fatura' => date('Y-m-d')]) 
+                    //    AQUI
+                    dd($idEquipRecolhe);
+                    //    ;
+                //    }
+
+                    Equipamento::where('solicit_equip', $id)
                     ->update(['pct_equip' => 0, 'solicit_equip' => 0, 'status_equip' => 0 ]);
+
+                    
+
                     break;
                 case 3:
                    $typeSolicitFim = "Troca / Manutenção";
                    Equipamento::where('solicit_equip', $id)
                     ->update(['pct_equip' => 0, 'solicit_equip' => 0, 'status_equip' => 0 ]);
+
                     $solicit->type_solicit = 1;
                     $solicit->save();
                     return back()->withInput();
@@ -306,6 +369,9 @@ public function iniciar_solicit(Request $request, $id){
                             $regEquipSelecionado->status_equip = 2;                 //status do equipamento para 2 = solicitado
                             $regEquipSelecionado->save();
 
+                        //INSERE OS REGISTROS DOS EQUIPAMENTOS IMPLANTADOS NA TABELA DE LANÇAMENTOS PARA COBRANÇA
+                        Lancamento::create(['id_equip' => $equip, 'id_pct' => $pctForEquip, 'id_solicit' => $solicitForEquip, 'dias'=> 25]);
+                        
                         }
                     }
 
@@ -398,8 +464,6 @@ public function add_equip_pct(Request $request){
             $regEquipSelecionado->status_equip = 2;                 //status do equipamento para 2 = solicitado
             $regEquipSelecionado->save();
 
-            //INSERE OS REGISTROS DOS EQUIPAMENTOS IMPLANTADOS NA TABELA DE LANÇAMENTOS PARA COBRANÇA
-            Lancamento::create(['id_equip' => $equip, 'id_pct' => $pctForEquip, 'id_solicit' => $solicitForEquip, 'dias'=> 25]);
         }
     }
 

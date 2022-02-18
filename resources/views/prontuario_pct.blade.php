@@ -231,12 +231,17 @@
                                             <th style="text-align: center" class="col-sm-1" tabindex="0" aria-controls="table_implantados" rowspan="1" colspan="1" aria-sort="ascending" title="Classificar crescente / decrescente">Patr</th>
                                             <th class="col-sm-3" tabindex="0" aria-controls="table_implantados" rowspan="1" colspan="1">Equipamento</th>
                                             <th class="col-sm-1" style="text-align: left" tabindex="0" aria-controls="table_implantados" rowspan="1" colspan="1">Implantação</th>
-                                            <th style="text-align: center" class="col-sm-2" tabindex="0" aria-controls="table_implantados" rowspan="1" colspan="1">Modelo</th>
-                                            <th style="text-align: center" class="col-sm-2" tabindex="0" aria-controls="table_implantados" rowspan="1" colspan="1">Marca</th>
+                                            <th style="text-align: center" class="col-sm-2" tabindex="0" aria-controls="table_implantados" rowspan="1" colspan="1">Inicio</th>
+                                            <th style="text-align: center" class="col-sm-2" tabindex="0" aria-controls="table_implantados" rowspan="1" colspan="1">Fatura</th>
+                                            <th style="text-align: center" class="col-sm-2" tabindex="0" aria-controls="table_implantados" rowspan="1" colspan="1">Recolhimento</th>
+                                            <th style="text-align: center" class="col-sm-2" tabindex="0" aria-controls="table_implantados" rowspan="1" colspan="1">Dias</th>
+                                            <th style="text-align: center" class="col-sm-2" tabindex="0" aria-controls="table_implantados" rowspan="1" colspan="1">R$ Mensal</th>
+                                            <th style="text-align: center" class="col-sm-2" tabindex="0" aria-controls="table_implantados" rowspan="1" colspan="1">R$ Dia</th>
+                                            <th style="text-align: center" class="col-sm-2" tabindex="0" aria-controls="table_implantados" rowspan="1" colspan="1">R$ Cobrado</th>
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        @foreach ($equipsPct as $equipPct)
+                                        @foreach ($equipsLancados as $equipPct)
                                             <tr class="odd" style="text-align: center; vertical-align: middle; line-height: 100%">
                                                 <td class="dtr-control sorting_1" tabindex="0">
                                                     <div class="row">
@@ -245,61 +250,64 @@
                                                             {{$equipPct->patr}}
                                                         </div>
                                                         <div class="col-sm-2" style="text-align: center; vertical-align: middle">
-                                                            @if ($equipPct->rent_equip == '0')
+                                                            {{-- @if ($equipPct->rent_equip == '0')
 
-                                                            @else
+                                                            @else --}}
                                                             {{-- Empresa que alugou o equipamento --}}
-                                                                @foreach ($fornecedores as $fornecedor)
-                                                                @if ($fornecedor->id == $equipPct->rent_empresa)
+                                                                {{-- @foreach ($fornecedores as $fornecedor)
+                                                                @if ($fornecedor->id == $equipPct->rent_empresa) --}}
                                                                     {{-- <p style="color: rgb(247, 170, 3)"><i class="fa fa-exchange-alt"></i></p> --}}
-                                                                    <p data-toggle="tooltip" data-placement="top" title="{{$fornecedor->name_fornec}}" style="color: rgb(247, 170, 3)">
+                                                                    {{-- <p data-toggle="tooltip" data-placement="top" title="{{$fornecedor->name_fornec}}" style="color: rgb(247, 170, 3)">
                                                                         <i class="fa fa-exchange-alt"></i>
                                                                     </p>
                                                                 @endif
                                                                 @endforeach
-                                                            @endif
+                                                            @endif --}}
                                                         </div>
                                                     </div>
                                                 </td>
                                                 <td style="text-align: left; vertical-align: middle">{{$equipPct->name_equip}}</td>
 
                                                 <td style="text-align: center">
-                                                    {{date('d/m/Y', strtotime($equipPct->updated_at))}}
+                                                    {{date('d/m/Y', strtotime($equipPct->created_at))}}
                                                 </td>
                                                 <td>
-                                                    {{$equipPct->modelo_equip}}
+                                                  {{date('d/m/Y', strtotime($equipPct->dt_inicio))}}
                                                 </td>
                                                 <td>
-                                                    {{$equipPct->marca_equip}}
+                                                  {{date('d/m/Y', strtotime($equipPct->dt_fatura))}}
                                                 </td>
-                                                {{-- <td>
-                                                    <span data-toggle="tooltip" title="Solicitação Pendente" style="text-align: center">
-                                                        @if ($equipPct->status_equip > 0)
-                                                        <a href="#" data-toggle="modal" style="color: rgb(200, 200, 0)"><i class="fas fa-exclamation-triangle"></i></a>
-                                                        @else
-                                                        <a href="#" data-toggle="modal" data-target="#" style="color: rgb(200, 200, 0); visibility: hidden"><i class="fas fa-exclamation-triangle"></i></a>
-
-                                                        @endif
-                                                    </span>
-                                                </td> --}}
-
+                                                <td>
+                                                  {{ $equipPct->dt_retirada!= null ? date('d/m/Y', strtotime($equipPct->dt_retirada)) : ''}}
+                                                </td>
+                                                <td>{{$equipPct->dias}}</td>
+                                                <td>{{ number_format($equipPct->valor_mes, 2, ",", ".")}}</td>
+                                                <td>{{ number_format($equipPct->valor_mes/$diasDoMes, 3, ",", ".")}}</td>
+                                                <td>{{ number_format(($equipPct->valor_mes/$diasDoMes)*$equipPct->dias, 2, ",", ".")}}</td>
                                             </tr>
-                                        @endforeach
+                                            
+                                            @endforeach
+                                          </tbody>
+                                          <tfoot>
+                                            {{-- <tr><th rowspan="1" colspan="1">Rendering engine</th><th rowspan="1" colspan="1">Browser</th><th rowspan="1" colspan="1">Platform(s)</th><th rowspan="1" colspan="1">Engine version</th><th rowspan="1" colspan="1" style="">CSS grade</th></tr> --}}
+                                          </tfoot>
+                                        </table>
+                                        
+                                      </div>
+                                    </div>
+                                    <div class="row">
+                                      <div class="col-md-6">
+                                        <p>Total de itens implantados: {{$equipsCount}}</p>
+                                      </div>
+                                      <h5 class="col-md-6" style="text-align: right">
+                                        <strong>
+                                          Total do mês: 
+                                          {{ $strTotal != null ? number_format($strTotal, 2, ",", ".") : '' }}
+                                        </strong>
 
-
-
-                                    </tbody>
-                                    <tfoot>
-                                    {{-- <tr><th rowspan="1" colspan="1">Rendering engine</th><th rowspan="1" colspan="1">Browser</th><th rowspan="1" colspan="1">Platform(s)</th><th rowspan="1" colspan="1">Engine version</th><th rowspan="1" colspan="1" style="">CSS grade</th></tr> --}}
-                                    </tfoot>
-                                </table>
-
-                                </div>
-                            </div>
-                            <div>
-                                <p>Total de itens implantados: {{$equipsCount}}</p>
-                            </div>
-
+                                      </h5>
+                                      
+                                    </div>
                         </div>
                     </div>
                     <hr>

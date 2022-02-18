@@ -8,6 +8,7 @@ use App\Models\Cliente;
 use App\Models\Equipamento;
 use App\Models\Fornecedor;
 use App\Models\Solicitacao;
+use App\Models\Lancamento;
 use Carbon\Carbon;
 
 
@@ -150,9 +151,35 @@ class PctController extends Controller
         $clientes = new Cliente;
         $clientes = DB::SELECT("SELECT * FROM clientes");
 
+        
         $equipsPct = new Equipamento();
         $equipsPct = DB::SELECT("SELECT * FROM equipamentos AS E  WHERE E.pct_equip = $id ");
+        
+        $equipsLancados = DB::SELECT("SELECT E.patr, E.name_equip, L.id_pct, L.id_solicit, L.dt_inicio, L.dt_retirada, L.dt_fatura, L.dias, L.valor_mes, L.valor_dia, L.valor_cobrado, L.created_at FROM lancamentos AS L  
+                                INNER JOIN equipamentos AS E
+                                ON L.id_equip = E.id
+                                WHERE L.id_pct = $id ")
+                                ;
+
+        // Qtd dias do mês atual
+        $diasDoMes = date("t");
+
+
+        // $totalEquips =  DB:: SELECT("SELECT SUM((L.valor_mes/30)*L.dias) 
+        $totalEquips =  DB:: SELECT("SELECT SUM((L.valor_mes/$diasDoMes)*L.dias) 
+                        FROM lancamentos AS L
+                        WHERE L.id_pct = $id ");
+
+       
+        //CONVERTE O ARRAY $totalEquips EM STRING
+        $vlTotalEquip = value($totalEquips[0]); 
+        $collectionTotal = collect($vlTotalEquip);           //transforma o array em uma collection
+        $strTotal = $collectionTotal->implode(',');    //transforma a collecttion em string
+
+
+
         $equipsCount = Count($equipsPct);
+
 
         $equipsEstoque = DB::SELECT("SELECT name_equip FROM equipamentos WHERE pct_equip = 0 GROUP BY name_equip ORDER BY name_equip");
         $equipsEstoqueCount = Count($equipsEstoque);
@@ -181,7 +208,7 @@ class PctController extends Controller
 
 
         // return view('edit_pct', ['pctSel'=>$pctSel] + ['allPcts'=>$allPcts] + ['allCities'=>$allCities] + ['clientes'=>$clientes]);
-        return view('prontuario_pct', ['pctSel'=>$pctSel] + ['solicitacoesPend'=>$solicitacoesPend] + ['solicitacoes'=>$solicitacoes] + ['solicitacoesFim'=>$solicitacoesFim] + ['allEquipsEstoqueCount'=>$allEquipsEstoqueCount] + ['allEquipsEstoque'=>$allEquipsEstoque] + ['equipsEstoque'=>$equipsEstoque] + ['equipsEstoqueCount'=>$equipsEstoqueCount] + ['allPcts'=>$allPcts] + ['allCities'=>$allCities] + ['clientes'=>$clientes] + ['equipsPct'=>$equipsPct] + ['fornecedores'=>$fornecedores] + ['equipsCount'=>$equipsCount]);
+        return view('prontuario_pct', ['pctSel'=>$pctSel] + ['diasDoMes'=>$diasDoMes] + ['strTotal'=>$strTotal] + ['equipsLancados'=>$equipsLancados] + ['solicitacoesPend'=>$solicitacoesPend] + ['solicitacoes'=>$solicitacoes] + ['solicitacoesFim'=>$solicitacoesFim] + ['allEquipsEstoqueCount'=>$allEquipsEstoqueCount] + ['allEquipsEstoque'=>$allEquipsEstoque] + ['equipsEstoque'=>$equipsEstoque] + ['equipsEstoqueCount'=>$equipsEstoqueCount] + ['allPcts'=>$allPcts] + ['allCities'=>$allCities] + ['clientes'=>$clientes] + ['equipsPct'=>$equipsPct] + ['fornecedores'=>$fornecedores] + ['equipsCount'=>$equipsCount]);
         // return view('edit_pct', compact('pctSel'));
 
     }

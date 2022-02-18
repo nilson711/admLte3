@@ -114,7 +114,7 @@
                                                                                 style="display: none">
                                                                             {{-- @if ($solicitSel->type_solicit == 1 or $solicitSel->type_solicit == 3) --}}
                                                                             @if ($solicitSel->type_solicit == 1)
-                                                                                @if ($atual->status_solicit < 2)
+                                                                                @if ($atual->status_solicit < 1)
                                                                                     <div class="input-group input-group-sm">
                                                                                         <select name="selectEquip"
                                                                                             class="selectEquip form-control select2 select2-hidden-accessible"
@@ -336,7 +336,7 @@
                                                                         data-toggle="modal" data-target='#modalConferir'
                                                                         style="color: green">
                                                                         {{-- <button class="btn btn-app" type="submit" style="color: green" name="submitbutton" value="2"> --}}
-                                                                        <i class="fas fa-check"></i>Confirma add
+                                                                        <i class="fas fa-check"></i>Confirma
                                                                     </button>
                                                                 </a>
                                                             @endif
