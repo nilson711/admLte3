@@ -155,20 +155,30 @@ class PctController extends Controller
         $equipsPct = new Equipamento();
         $equipsPct = DB::SELECT("SELECT * FROM equipamentos AS E  WHERE E.pct_equip = $id ");
         
-        $equipsLancados = DB::SELECT("SELECT E.patr, E.name_equip, L.id_pct, L.id_solicit, L.dt_inicio, L.dt_retirada, L.dt_fatura, L.dias, L.valor_mes, L.valor_dia, L.valor_cobrado, L.created_at FROM lancamentos AS L  
+        $mes_atual = (date('m'));
+        $ano_atual = (date('Y'));
+        $mes_ano = $ano_atual."-". $mes_atual;
+        // dd($mes_ano);
+
+        
+        $mes_lanc = Lancamento::where('dt_inicio',  $mes_atual)->pluck('dt_inicio', 'id_equip');
+        // dd($mes_lanc);
+
+        $equipsLancados = DB::SELECT("SELECT E.patr, E.name_equip, L.id, L.id_pct, L.id_solicit, L.dt_implantacao, L.dt_inicio, L.dt_retirada, L.dt_fatura, L.dias, L.valor_mes, L.valor_dia, L.valor_cobrado, L.created_at FROM lancamentos AS L  
                                 INNER JOIN equipamentos AS E
                                 ON L.id_equip = E.id
-                                WHERE L.id_pct = $id ")
+                                WHERE L.id_pct = $id AND  L.dt_inicio LIKE '$mes_ano%'") //exibe apenas os lancamentos do mês atual
                                 ;
+                                
 
         // Qtd dias do mês atual
         $diasDoMes = date("t");
 
 
         // $totalEquips =  DB:: SELECT("SELECT SUM((L.valor_mes/30)*L.dias) 
-        $totalEquips =  DB:: SELECT("SELECT SUM((L.valor_mes/$diasDoMes)*L.dias) 
+        $totalEquips =  DB:: SELECT("SELECT SUM((L.valor_mes/$diasDoMes)*L.dias)
                         FROM lancamentos AS L
-                        WHERE L.id_pct = $id ");
+                        WHERE L.id_pct = $id AND L.dt_inicio LIKE '$mes_ano%' "); //soma apenas os lançamento do mês atual
 
        
         //CONVERTE O ARRAY $totalEquips EM STRING

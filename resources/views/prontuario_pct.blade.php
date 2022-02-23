@@ -228,9 +228,9 @@
                                         </div>
                                         <tr role="row">
                                             {{-- <th>PCT</th> --}}
-                                            <th style="text-align: center" class="col-sm-1" tabindex="0" aria-controls="table_implantados" rowspan="1" colspan="1" aria-sort="ascending" title="Classificar crescente / decrescente">Patr</th>
+                                            <th style="text-align: center" class="col-sm-1" tabindex="0" aria-controls="table_implantados" rowspan="1" colspan="1"  title="Classificar crescente / decrescente">Patr</th>
                                             <th class="col-sm-3" tabindex="0" aria-controls="table_implantados" rowspan="1" colspan="1">Equipamento</th>
-                                            <th class="col-sm-1" style="text-align: left" tabindex="0" aria-controls="table_implantados" rowspan="1" colspan="1">Implantação</th>
+                                            <th class="col-sm-1" style="text-align: left" tabindex="0" aria-controls="table_implantados" rowspan="1" colspan="1">Implantação </th>
                                             <th style="text-align: center" class="col-sm-2" tabindex="0" aria-controls="table_implantados" rowspan="1" colspan="1">Inicio</th>
                                             <th style="text-align: center" class="col-sm-2" tabindex="0" aria-controls="table_implantados" rowspan="1" colspan="1">Fatura</th>
                                             <th style="text-align: center" class="col-sm-2" tabindex="0" aria-controls="table_implantados" rowspan="1" colspan="1">Recolhimento</th>
@@ -242,7 +242,8 @@
                                     </thead>
                                     <tbody>
                                         @foreach ($equipsLancados as $equipPct)
-                                            <tr class="odd" style="text-align: center; vertical-align: middle; line-height: 100%">
+                                            <tr class="odd" style="text-align: center; vertical-align: middle; line-height: 100%; 
+                                                  {{ $equipPct->dt_retirada!= null ? 'color:red' : ''}}">
                                                 <td class="dtr-control sorting_1" tabindex="0">
                                                     <div class="row">
                                                         {{-- Patrímônio do Equipamento --}}
@@ -269,7 +270,7 @@
                                                 <td style="text-align: left; vertical-align: middle">{{$equipPct->name_equip}}</td>
 
                                                 <td style="text-align: center">
-                                                    {{date('d/m/Y', strtotime($equipPct->created_at))}}
+                                                    {{date('d/m/Y', strtotime($equipPct->dt_implantacao))}}
                                                 </td>
                                                 <td>
                                                   {{date('d/m/Y', strtotime($equipPct->dt_inicio))}}
@@ -453,7 +454,9 @@
                                     <td>{{$solicFim->id}}</td>
                                     {{-- <td>{{}}</td> --}}
                                     {{-- <td>{{\Carbon\Carbon::createFromFormat('d/m/y', now())}}</td> --}}
-                                    <td>{{date('d/m/Y', strtotime($solicFim->date_solicit))}}</td>
+                                    <td>
+                                      {{date('d/m/Y', strtotime($solicFim->date_solicit))}}
+                                    </td>
                                     <td>
                                         {{$solicFim->equips_solicit}}
 

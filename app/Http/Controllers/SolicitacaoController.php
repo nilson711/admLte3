@@ -315,29 +315,53 @@ public function iniciar_solicit(Request $request, $id){
 
                        //INSERE OS REGISTROS DOS EQUIPAMENTOS IMPLANTADOS NA TABELA DE LANÇAMENTOS PARA COBRANÇA
                        //o formato date("Y-m-t") com o "t" no final, determina o último dia do mês
-                       Lancamento::create(['id_equip' => $equip, 'id_pct' => $idPct, 'id_hc' => $nrHcPct, 'id_solicit' => $idSolicit, 'dt_inicio' => date(now()), 'dt_fatura' => date("Y-m-t"), 'dias'=> $diasRestaMes, 'valor_mes'=> $addEpreco ]);
+                       Lancamento::create(['id_equip' => $equip, 'id_pct' => $idPct, 'id_hc' => $nrHcPct, 'id_solicit' => $idSolicit, 'dt_implantacao' => date(now()),  'dt_inicio' => date(now()), 'dt_fatura' => date("Y-m-t"), 'dias'=> $diasRestaMes, 'valor_mes'=> $addEpreco ]);
                        
                        }
                    }
 
                     break;
                 case 2:
-                   $typeSolicitFim = "Recolhimento";
-                   
-                   $idEquipRecolhe = Equipamento::find($id)->toArray();
-                //    $emailDestino = Cliente::find($hcPctAtual)->pluck('email')->toArray();
-                   
-                //    foreach ($idEquipRecolhe as $equipRecolhe => $value) {
-                //        $dataInicio = Lancamento::where('id_equip', $equipRecolhe)->pluck('dt_inicio')->get();
-
-                    //    $diasCobrar = (date("t") - date("d"))+1;
-                    //    Lancamento::where('id_equip', $equipRecolhe)
-                    //    ->update(['dt_retirada' => date('Y-m-d'), 'dt_fatura' => date('Y-m-d')]) 
                     //    AQUI
-                    dd($idEquipRecolhe);
-                    //    ;
-                //    }
+                   $typeSolicitFim = "Recolhimento";
+                                   
+                   $idEquipRecolhe = Equipamento:: where('solicit_equip', $id)->pluck('id');
+                   //    $emailDestino = Cliente::find($hcPctAtual)->pluck('email')->toArray();
+                   
+                   //Converte o Array $idEquipRecolhe em String
+                   $collectionRec = collect($idEquipRecolhe);
+                   $recEquipLancamento = $collectionRec->implode(',');
+                
+                //    dd($recEquipLancamento);
 
+                   foreach (explode(',', $recEquipLancamento) as $equipLancamento) {
+                    // busca a data de inicio da cobrança   
+                        $dataInicio = Lancamento::where('id_equip', $equipLancamento)->pluck('dt_inicio');
+                        
+                        // Converte a data dt_inicio em String
+                        $collect_dt_ini = collect($dataInicio);
+                        $str_dt_ini = $collect_dt_ini -> implode(',');
+                        
+                        // Seleciona somente o dia da data de inicio
+                        $diaInicio = (date('d', strtotime($str_dt_ini)));
+
+                        // Seleciona o dia de hoje
+                        $hoje = date('d');
+
+                        // Subtrai a data de hoje - dt_inicio para calcular os dias a serem cobrados.
+                       $diasCobrar = ($hoje - $diaInicio)+1;
+
+                        // Atualiza a tabela lançamentos com as datas e dias
+                        Lancamento::where('id_equip', $equipLancamento)
+                       ->update(['dt_retirada' => date('Y-m-d'), 'dt_fatura' => date('Y-m-d'), 'dias' => $diasCobrar]);
+                    //    ->update(['dt_retirada' => date('Y-m-d'), 'dt_fatura' => date('Y-m-d')]) 
+                    
+                    // dd($diasCobrar);
+                    // dd(date('d', strtotime($str_dt_ini)));
+
+                       
+                    }
+                   
                     Equipamento::where('solicit_equip', $id)
                     ->update(['pct_equip' => 0, 'solicit_equip' => 0, 'status_equip' => 0 ]);
 
