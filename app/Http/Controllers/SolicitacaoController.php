@@ -299,7 +299,6 @@ public function iniciar_solicit(Request $request, $id){
                         $nrHcPct = $hcPctAtual->get(0);
                         
                         //BUSCA O PREÇO DO EQUIPAMENTO NA TABELA PREÇO
-                
                         $preco = DB::SELECT("SELECT P.preco FROM equipamentos AS E
                                             INNER JOIN precos AS P
                                             ON P.name_equip = E.name_equip
@@ -316,7 +315,44 @@ public function iniciar_solicit(Request $request, $id){
                        //INSERE OS REGISTROS DOS EQUIPAMENTOS IMPLANTADOS NA TABELA DE LANÇAMENTOS PARA COBRANÇA
                        //o formato date("Y-m-t") com o "t" no final, determina o último dia do mês
                        Lancamento::create(['id_equip' => $equip, 'id_pct' => $idPct, 'id_hc' => $nrHcPct, 'id_solicit' => $idSolicit, 'dt_implantacao' => date(now()),  'dt_inicio' => date(now()), 'dt_fatura' => date("Y-m-t"), 'dias'=> $diasRestaMes, 'valor_mes'=> $addEpreco ]);
-                       
+
+                            // Busca se o equip é terceirizado
+                            $rentEquip = Equipamento::where('id', $equip)->pluck('rent_equip');
+                            $vlrentEquip = value($rentEquip[0]);
+                            
+                            //SE O EQUIPAMENTO FOR TERCEIRIZADO ENVIA EMAIL INFORMANDO A IMPLANTAÇÃO
+                            if ($vlrentEquip == 1) {
+                                # code...
+                                // dd('é terceirizado');
+                                // Buscar o id do fornecedor do oxigenio
+                                $idFornecEquip = Equipamento::where('id', $equip)->pluck('rent_empresa');
+                                $vlidFornecEquip = value($idFornecEquip[0]);
+
+                                // BUSCAR O EMAIL DO FORNECEDOR DE O2
+                                $emailEmpO2 = Fornecedor::where('id', $vlidFornecEquip )->pluck('email_fornec')->toArray();
+                                
+                                // $vlemailEmpO2 = value($emailEmpO2[0]);
+                                // dd($emailEmpO2);
+
+                                Mail::send('emails.EmailO2Implantado',
+                                ['emailEmpO2' => $emailEmpO2,
+                                'namePct' => $namePct,
+                                'typeSolicitFim' => $typeSolicitFim,
+                                'idSolicit' => $idSolicit,
+                                'equipsSolicFim'=> $equipsSolicFim,
+                                'obsSolicit' =>  $obsSolicit,
+                                'obsAtendfim' => $obsAtendfim
+                                ],
+                                function ($message)
+                                use ($emailEmpO2, $namePct, $typeSolicitFim, $idSolicit, $equipsSolicFim,  $obsSolicit, $obsAtendfim ) {
+                                    $message->from('nilson711@gmail.com', 'Atendimento');
+                                    $message->to($emailEmpO2, 'Email da empresa de O2');
+                                    $message->subject('O2 Implantado - Solicitação - nº: '.$idSolicit. ' - PCT: ' . $namePct);
+                                    // $message->attach('pathToFile');
+                                    // $message->attach('storage/guias/'.$idSolicit.'.jpg');
+                                });
+                            } 
+
                        }
                    }
 
@@ -420,7 +456,7 @@ public function iniciar_solicit(Request $request, $id){
             // Mail::to($emailDestino)->cc($emailDestino2)
             //         ->send(new EmailFimSolicit($idsolfim, $typeSolicitFim, $obsAtendfim, $pctSolFim, $equipsSolicFim, $idForGuia));
 
-
+            // ENVIA O EMAIL DE SOLICITAÇÃO CONCLUÍDA COM A GUIA EM ANEXO
             Mail::send('emails.EmailFimSolicit',
             ['emailDestino' => $emailDestino,
             'emailDestino2' => $emailDestino2,
