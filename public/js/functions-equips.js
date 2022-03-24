@@ -105,6 +105,13 @@ function locacaoSelecionada() {
     });
     //mostra a quantidade de checkboxes selecionados no elemento Html na página.
     QtdequipsSelecionados.innerHTML = "Total: " + selecionados + " equipamento(s) selecionado(s)";
+
+    // if (selecionados > 0) {
+    //     alert('contou')
+    //     document.getElementById("btnSolicita").style.display = "block";
+    // } else {
+    //     document.getElementById("btnSolicita").style.display = "none";
+    // }
 }
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /**Conta a quantidade de itens selecionados para recolhimento */
@@ -298,8 +305,8 @@ function coletaDados(){
             }, "");
     document.querySelector("#foo").innerHTML = codeHTML;
 
-    document.querySelector("#textEquips").innerHTML = sum;
-
+    e = document.querySelector("#textEquips").value = sum;
+    // console.log(e);
     // console.log(sum.length);
 
     if (sum.length > 0) {
@@ -497,6 +504,18 @@ function obsNotNull(){
         document.getElementById('tableEquipsRecolhe').style.visibility = 'visible';
 
     }
+}
+
+
+function obsCancel(){
+    tamTxtCancel =  document.getElementById('txtCancel')
+    if (tamTxtCancel.value.length > 10) {
+        document.getElementById('btnCancelSolicit').style.visibility = 'visible';
+    } else {
+        document.getElementById('btnCancelSolicit').style.visibility = 'hidden';
+        
+    }
+    // console.log(tamTxtCancel.value.length)
 }
 
 

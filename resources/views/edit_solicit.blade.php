@@ -180,13 +180,19 @@
                                                                                         </div>
                                                                                         <div class="modal-footer">
                                                                                             <button type="button"
-                                                                                                class="btn btn-secondary"
-                                                                                                data-dismiss="modal">Não</button>
+                                                                                                class="btn btn-app"
+                                                                                                data-dismiss="modal" style="color: red">
+                                                                                                <i class="fas fa-times" ></i>Não
+                                                                                            </button>
+
+                                                                                              
                                                                                             <button
-                                                                                                class="btn btn-primary swalDefaultAddEquip"
+                                                                                                class="btn btn-app swalDefaultAddEquip"
                                                                                                 name="submitbutton"
                                                                                                 value="2"
-                                                                                                type="submit">Sim</button>
+                                                                                                type="submit" style="color: blue">
+                                                                                                <i class="fas fa-check"></i>Sim
+                                                                                            </button>
                                                                                         </div>
                                                                                     </div>
                                                                                 </div>

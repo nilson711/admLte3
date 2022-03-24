@@ -1,5 +1,6 @@
 <?php
 
+
 namespace App\Http\Controllers;
 
 use App\Models\Solicitacao;
@@ -10,6 +11,7 @@ use App\Models\Provider;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use SebastianBergmann\Environment\Console;
+use App\Models\Recarga;
 
 use App\Mail\EmailFimSolicit;
 use App\Mail\EmailRecebidoSolicit;
@@ -19,8 +21,11 @@ use Illuminate\Support\Facades\Mail;
 use App\Models\Cidade;
 use App\Models\Cliente;
 use App\Models\Lancamento;
-use Image;
+// use Image;
 use stdClass;
+
+// use Intervention\Image\ImageManager;
+use Intervention\Image\Facades\Image;
 
 class SolicitacaoController extends Controller
 {
@@ -59,8 +64,8 @@ class SolicitacaoController extends Controller
 
                 //BUSCA NO BD AS INFORMAÇÕES REFERENTE A SOLICITAÇÃO
                 $hcPctAtual = Pct::where('id', $idPct)->pluck('id_hc');
-                $emailDestino = Cliente::find($hcPctAtual)->pluck('email')->toArray();
-                $emailDestino2 = Cliente::find($hcPctAtual)->pluck('email2')->toArray();
+                $emailDestino = Cliente::find($hcPctAtual)->pluck('email')->toArray()[0];
+                $emailDestino2 = Cliente::find($hcPctAtual)->pluck('email2')->toArray()[0];
 
                 $namePct = Pct::where('id', $idPct)->pluck('name_pct')->get(0);
                 $idSolicit = Solicitacao::where('pct_solicit', $idPct)->pluck('id')->last();
@@ -69,25 +74,26 @@ class SolicitacaoController extends Controller
 
                 $typeSolicitFim = "Implantação";
                 $solicitante = auth()->user()->name;
+                // dd($emailDestino);
 
                 // //ENVIA EMAIL DE RECEBIDO PARA O HOME CARE
-                Mail::send('emails.emailRecebidoSolicit',
-                ['emailDestino' => $emailDestino,
-                'emailDestino2' => $emailDestino2,
-                'namePct' => $namePct,
-                'typeSolicitFim' => $typeSolicitFim,
-                'idSolicit' => $idSolicit,
-                'itensSolicit'=> $itensSolicit,
-                'obsSolicit' =>  $obsSolicit,
-                'solicitante' => $solicitante
-                ],
-                function ($message)
-                use ($emailDestino, $emailDestino2, $namePct, $typeSolicitFim, $idSolicit, $itensSolicit,  $obsSolicit, $solicitante ) {
-                    $message->from('nilson711@gmail.com', 'Atendimento');
-                    $message->to($emailDestino, 'Email do Home Care');
-                    $message->cc($emailDestino2, 'Email do Home Care');
-                    $message->subject($typeSolicitFim . ' nº: '.$idSolicit. ' - PCT: '. $namePct);
-                });
+                // Mail::send('emails.emailRecebidoSolicit',
+                // ['emailDestino' => $emailDestino,
+                // 'emailDestino2' => $emailDestino2,
+                // 'namePct' => $namePct,
+                // 'typeSolicitFim' => $typeSolicitFim,
+                // 'idSolicit' => $idSolicit,
+                // 'itensSolicit'=> $itensSolicit,
+                // 'obsSolicit' =>  $obsSolicit,
+                // 'solicitante' => $solicitante
+                // ],
+                // function ($message)
+                // use ($emailDestino, $emailDestino2, $namePct, $typeSolicitFim, $idSolicit, $itensSolicit,  $obsSolicit, $solicitante ) {
+                //     $message->from('atendimento@requestcare.online', 'Atendimento'); //este email tem que ser o mesmo que está no arquivo .ENV
+                //     $message->to([$emailDestino, $emailDestino2]);
+                //     $message->cc(['mhsuprimentos.atendimento@gmail.com']);
+                //     $message->subject($typeSolicitFim . ' nº: '.$idSolicit. ' - PCT: '. $namePct);
+                // });
 
                 return back()->withInput();
 
@@ -119,8 +125,8 @@ class SolicitacaoController extends Controller
 
                 //BUSCA NO BD AS INFORMAÇÕES REFERENTE A SOLICITAÇÃO
                 $hcPctAtual = Pct::where('id', $idPct)->pluck('id_hc');
-                $emailDestino = Cliente::find($hcPctAtual)->pluck('email')->toArray();
-                $emailDestino2 = Cliente::find($hcPctAtual)->pluck('email2')->toArray();
+                $emailDestino = Cliente::find($hcPctAtual)->pluck('email')->toArray()[0];
+                $emailDestino2 = Cliente::find($hcPctAtual)->pluck('email2')->toArray()[0];
 
                 $namePct = Pct::where('id', $idPct)->pluck('name_pct')->get(0);
                 $idSolicit = Solicitacao::where('pct_solicit', $idPct)->pluck('id')->last();
@@ -153,6 +159,7 @@ class SolicitacaoController extends Controller
                     $solicitante = auth()->user()->name;
                     // $itensSolicit = Equipamento::where('solicit_equip', $solicitacao->id)->pluck('equips_solicit');
 
+                    
                     // ENVIA EMAIL DE RECEBIDO PARA O HOME CARE
                     Mail::send('emails.emailRecebidoSolicit',
                     ['emailDestino' => $emailDestino,
@@ -166,9 +173,10 @@ class SolicitacaoController extends Controller
                     ],
                     function ($message)
                     use ($emailDestino, $emailDestino2, $namePct, $typeSolicitFim, $idSolicit, $itensSolicit,  $obsSolicit, $solicitante ) {
-                        $message->from('nilson711@gmail.com', 'Atendimento');
-                        $message->to($emailDestino, 'Email do Home Care');
-                        $message->cc($emailDestino2, 'Email do Home Care');
+                        $message->from('atendimento@requestcare.online', 'Atendimento'); //este email tem que ser o mesmo que está no arquivo .ENV
+                        $message->to([$emailDestino, $emailDestino2]);
+                        $message->cc(['mhsuprimentos.atendimento@gmail.com']);
+                        // $message->cc(['mhsuprimentos.atendimento@gmail.com', 'atendimento@mhsuprimentos.com']);
                         $message->subject($typeSolicitFim . ' nº: '.$idSolicit. ' - PCT: '. $namePct);
                     });
 
@@ -210,8 +218,8 @@ public function iniciar_solicit(Request $request, $id){
             $solicit->save();
 
             $hcPctAtual = Pct::where('id', $idPct)->pluck('id_hc');
-            $emailDestino = Cliente::find($hcPctAtual)->pluck('email')->toArray();
-            $emailDestino2 = Cliente::find($hcPctAtual)->pluck('email2')->toArray();
+            $emailDestino = Cliente::find($hcPctAtual)->pluck('email')->toArray()[0];
+            $emailDestino2 = Cliente::find($hcPctAtual)->pluck('email2')->toArray()[0];
 
             $namePct = Pct::where('id', $idPct)->pluck('name_pct')->get(0);
             $idSolicit = Solicitacao::where('id', $id)->pluck('id')->get(0);
@@ -234,10 +242,21 @@ public function iniciar_solicit(Request $request, $id){
             //SALVA
             $solicit = Solicitacao::find($id);
             // $solicit->status_solicit = 2;
-            if ($solicit->type_solicit != 3) {
-                $nameFile = $request->id . '.' . $request->guia->extension();
-                $guia = $request->file('guia')->storeAs('public/guias', $nameFile); // busca no input 'guia' o arquivo e armazena na pasta 'guias'
-                $image_resize = $request->file('guia')->storeAs('public/guias', $nameFile); // busca no input 'guia' o arquivo e armazena na pasta 'guias'
+            if ($solicit->type_solicit < 6) {
+                
+                // o arquivo será o nº da solicitação em formato JPG
+                $nameFile = $request->id . '.' . 'jpg'; 
+               
+                // local onde o arquivo será salvo, na pasta pública do storage
+                $local = storage_path() . '\app\public\guias/' . $nameFile ;
+                
+                // busca no input guia o arquivo imagem, redimenciona e salva no $local 
+                Image::make($request->file('guia'))
+                        ->resize(800, null, function ($constraint) {
+                            $constraint->aspectRatio();
+                        })
+                        ->save($local);
+                
             }
 
             $solicit->obs_atend = $obs_atend;
@@ -261,10 +280,29 @@ public function iniciar_solicit(Request $request, $id){
             $idForGuia = $id;
 
             $hcPctAtual = Pct::where('id', $idPct)->pluck('id_hc');
-            $emailDestino = Cliente::find($hcPctAtual)->pluck('email')->toArray();
-            $emailDestino2 = Cliente::find($hcPctAtual)->pluck('email2')->toArray();
+            $emailDestino = Cliente::find($hcPctAtual)->pluck('email')->toArray()[0];
+            $emailDestino2 = Cliente::find($hcPctAtual)->pluck('email2')->toArray()[0];
 
             $namePct = Pct::where('id', $idPct)->pluck('name_pct')->get(0);
+
+            //Busca o Endereço do paciente
+            $endPct =  DB::SELECT("SELECT CONCAT(rua, ' Nº ', nr, compl, bairro ) AS endereco FROM pcts
+                                    WHERE id = $idPct 
+                                    ;");
+            
+             //CONVERTE O ARRAY $totalEquips EM STRING
+            $vlendPct = value($endPct[0]); 
+            $collectionEndPct = collect($vlendPct);           //transforma o array em uma collection
+            $strEndPct = $collectionEndPct->implode(',');    //transforma a collecttion em string
+            
+            //Busca o nome da cidade do paciente
+            $nrCity = Pct::where('id', $idPct)->pluck('city')->get(0);
+            $cityPct = Cidade::where('id', $nrCity)->pluck('nome')->get(0);
+
+            //Busca o contato do paciente
+            $celContatoPct = Pct::where('id', $idPct)->pluck('tel_resp')->get(0);
+            $respPct = Pct::where('id', $idPct)->pluck('resp')->get(0);
+
             $idSolicit = Solicitacao::where('id', $id)->pluck('id')->get(0);
             // $itensSolicit = Solicitacao::where('pct_solicit', $idPct)->pluck('equips_solicit')->last();
             // $obsSolicit = Solicitacao::where('pct_solicit', $idPct)->pluck('obs_solicit')->last();
@@ -276,99 +314,151 @@ public function iniciar_solicit(Request $request, $id){
                     $typeSolicitFim = "Implantação";
                     $a = 0;
                     
-                   //BUSCA OS DADOS OS INPUTS
-                //    $enviarEquip = $request->input('enviarEquip');  //Este input contém o array separado por vírgula
-                $enviarEquip = Equipamento::where('solicit_equip', $id)->pluck('id'); /// Busca os Equipamentos solicitados na solicitação atual
-                
-                //Converte o Array $enviarEquip em String
-                $collection = collect($enviarEquip);
-                $addEquipLancamento = $collection->implode(',');    //adicionar cada elemento numa collection separada por vírgula
-                   
-                // dd($addEquipLancamento);
-
-                   //SELECIONA O EQUIPAMENTO E ATRIBUI O PACIENTE ATUAL A ELE
-                   foreach (explode(',', $addEquipLancamento) as $equip){                 //separa o o conteúdo do array por vírgula
-                       if (empty($equip)) {
-                           //se for nulo não faz nada
-                       } else {
-
-                        //diferença entre o último dia do mês e a data atual
-                        $diasRestaMes = (date("t") - date("d"))+1;
-
-                        //id_hc do paciente
-                        $nrHcPct = $hcPctAtual->get(0);
+                        //BUSCA OS DADOS OS INPUTS
+                        //    $enviarEquip = $request->input('enviarEquip');  //Este input contém o array separado por vírgula
+                        $enviarEquip = Equipamento::where('solicit_equip', $id)->pluck('id'); /// Busca os Equipamentos solicitados na solicitação atual
                         
-                        //BUSCA O PREÇO DO EQUIPAMENTO NA TABELA PREÇO
-                        $preco = DB::SELECT("SELECT P.preco FROM equipamentos AS E
-                                            INNER JOIN precos AS P
-                                            ON P.name_equip = E.name_equip
-                                            WHERE E.id = $equip AND P.id_hc = $nrHcPct
-                                            ;");
+                        //Converte o Array $enviarEquip em String
+                        $collection = collect($enviarEquip);
+                        $addEquipLancamento = $collection->implode(',');    //adicionar cada elemento numa collection separada por vírgula
+                        
+                        // dd($addEquipLancamento);
 
-                        //CONVERTE O ARRAY $PREÇO EM STRING
-                        $vlpreco = value($preco[0]); 
-                        $collectionpreco = collect($vlpreco);           //transforma o array em uma collection
-                        $addEpreco = $collectionpreco->implode(',');    //transforma a collecttion em string
+                        //SELECIONA O EQUIPAMENTO E ATRIBUI O PACIENTE ATUAL A ELE
+                        foreach (explode(',', $addEquipLancamento) as $equip){                 //separa o o conteúdo do array por vírgula
+                            if (empty($equip)) {
+                                //se for nulo não faz nada
+                            } else {
 
-                        // dd($addEpreco);
+                                //diferença entre o último dia do mês e a data atual
+                                $diasRestaMes = (date("t") - date("d"))+1;
 
-                       //INSERE OS REGISTROS DOS EQUIPAMENTOS IMPLANTADOS NA TABELA DE LANÇAMENTOS PARA COBRANÇA
-                       //o formato date("Y-m-t") com o "t" no final, determina o último dia do mês
-                       Lancamento::create(['id_equip' => $equip, 'id_pct' => $idPct, 'id_hc' => $nrHcPct, 'id_solicit' => $idSolicit, 'dt_implantacao' => date(now()),  'dt_inicio' => date(now()), 'dt_fatura' => date("Y-m-t"), 'dias'=> $diasRestaMes, 'valor_mes'=> $addEpreco ]);
-
-                            // Busca se o equip é terceirizado
-                            $rentEquip = Equipamento::where('id', $equip)->pluck('rent_equip');
-                            $vlrentEquip = value($rentEquip[0]);
-                            
-                            //SE O EQUIPAMENTO FOR TERCEIRIZADO ENVIA EMAIL INFORMANDO A IMPLANTAÇÃO
-                            if ($vlrentEquip == 1) {
-                                # code...
-                                // dd('é terceirizado');
-                                // Buscar o id do fornecedor do oxigenio
-                                $idFornecEquip = Equipamento::where('id', $equip)->pluck('rent_empresa');
-                                $vlidFornecEquip = value($idFornecEquip[0]);
-
-                                // BUSCAR O EMAIL DO FORNECEDOR DE O2
-                                $emailEmpO2 = Fornecedor::where('id', $vlidFornecEquip )->pluck('email_fornec')->toArray();
+                                //id_hc do paciente
+                                $nrHcPct = $hcPctAtual->get(0);
                                 
-                                // $vlemailEmpO2 = value($emailEmpO2[0]);
-                                // dd($emailEmpO2);
+                                //BUSCA O PREÇO DO EQUIPAMENTO NA TABELA PREÇO
+                                $preco = DB::SELECT("SELECT P.preco FROM equipamentos AS E
+                                                    INNER JOIN precos AS P
+                                                    ON P.name_equip = E.name_equip
+                                                    WHERE E.id = $equip AND P.id_hc = $nrHcPct
+                                                    ;");
 
-                                Mail::send('emails.EmailO2Implantado',
-                                ['emailEmpO2' => $emailEmpO2,
-                                'namePct' => $namePct,
-                                'typeSolicitFim' => $typeSolicitFim,
-                                'idSolicit' => $idSolicit,
-                                'equipsSolicFim'=> $equipsSolicFim,
-                                'obsSolicit' =>  $obsSolicit,
-                                'obsAtendfim' => $obsAtendfim
-                                ],
-                                function ($message)
-                                use ($emailEmpO2, $namePct, $typeSolicitFim, $idSolicit, $equipsSolicFim,  $obsSolicit, $obsAtendfim ) {
-                                    $message->from('nilson711@gmail.com', 'Atendimento');
-                                    $message->to($emailEmpO2, 'Email da empresa de O2');
-                                    $message->subject('O2 Implantado - Solicitação - nº: '.$idSolicit. ' - PCT: ' . $namePct);
-                                    // $message->attach('pathToFile');
-                                    // $message->attach('storage/guias/'.$idSolicit.'.jpg');
-                                });
-                            } 
+                                    //CONVERTE O ARRAY $PREÇO EM STRING
+                                    $vlpreco = value($preco[0]); 
+                                    $collectionpreco = collect($vlpreco);           //transforma o array em uma collection
+                                    $addEpreco = $collectionpreco->implode(',');    //transforma a collecttion em string
 
-                       }
-                   }
+                                    // dd($addEpreco);
+
+                                    //INSERE OS REGISTROS DOS EQUIPAMENTOS IMPLANTADOS NA TABELA DE LANÇAMENTOS PARA COBRANÇA
+                                    //o formato date("Y-m-t") com o "t" no final, determina o último dia do mês
+                                    Lancamento::create(['id_equip' => $equip, 'id_pct' => $idPct, 'id_hc' => $nrHcPct, 'id_solicit' => $idSolicit, 'dt_implantacao' => date(now()),  'dt_inicio' => date(now()), 'dt_fatura' => date("Y-m-t"), 'dias'=> $diasRestaMes, 'valor_mes'=> $addEpreco ]);
+
+                                    // Busca se o equip é terceirizado
+                                    $rentEquip = Equipamento::where('id', $equip)->pluck('rent_equip');
+                                    $vlrentEquip = value($rentEquip[0]);
+                                    
+                                    //SE O EQUIPAMENTO FOR TERCEIRIZADO ENVIA EMAIL INFORMANDO A IMPLANTAÇÃO
+                                    if ($vlrentEquip == 1) {
+                                        # code...
+                                        // dd('é terceirizado');
+                                        // Buscar o id do fornecedor do oxigenio
+                                        $idFornecEquip = Equipamento::where('id', $equip)->pluck('rent_empresa');
+                                        $vlidFornecEquip = value($idFornecEquip[0]);
+
+                                        $old = Equipamento::get(['patr', 'name_equip', 'solicit_equip'])->where('solicit_equip', $id && 'rent_empresa', "5" );
+
+                                        $equipRentSolicit = DB::SELECT("SELECT E.patr, E.name_equip FROM equipamentos AS E
+                                                                        WHERE E.solicit_equip = $id AND E.rent_empresa = $vlidFornecEquip
+                                                                        ;");
+
+                                        // BUSCAR O EMAIL DO FORNECEDOR DE O2
+                                        $emailEmpO2 = Fornecedor::where('id', $vlidFornecEquip )->pluck('email_fornec')->toArray()[0];
+                                        
+                                        
+                                        // $vlemailEmpO2 = value($emailEmpO2[0]);
+                                        
+                                        // SE FOR CILINDRO LANÇA A RECARGA INICIAL NA TABELA RECARGAS
+                                        if (strpos($equipRentSolicit[0]->name_equip, 'REGULADOR')) {    //VERIFICA SE EXISTE A PALAVRA 
+                                            switch ($equipRentSolicit[0]->name_equip) {
+                                                case 'CILINDRO 7M(REGULADOR + BASE)':
+                                                    $tipoRecarga = 'RECARGA O2 7M';
+                                                    break;
+                                                case 'CILINDRO 10M(REGULADOR + BASE)':
+                                                    $tipoRecarga = 'RECARGA O2 10M';
+                                                    break;
+                                                case 'CILINDRO 1M(REGULADOR + CARRINHO)':
+                                                    $tipoRecarga = 'RECARGA O2 1M';
+                                                    break;
+                                                
+                                                default:
+                                                    # code...
+                                                    break;
+                                            }
+                                            
+                                            $PctO2recarga = DB::SELECT("SELECT  L.id, L.id_equip AS id_equip, L.id_pct AS id_pct, P.name_pct AS name_pct, P.id_hc AS id_hc, P.rua AS rua, 
+                                            P.nr AS nr, P.compl AS compl, P.bairro AS bairro, P.cep AS cep, P.resp AS resp, P.tel_resp AS tel_resp, P.resp2, P.tel_resp2, C.nome AS cidade, 
+                                            E.name_equip AS equip, E.rent_empresa AS rent_empresa, F.email_fornec AS emailO2, PR.id_hc, PR.preco AS preco   FROM lancamentos AS L
+
+                                                    INNER JOIN equipamentos AS E
+                                                    ON E.id = L.id_equip 
+                                                    INNER JOIN fornecedors AS F
+                                                    ON F.id = E.rent_empresa
+                                                    INNER JOIN pcts AS P
+                                                    ON P.id = L.id_pct
+                                                    INNER JOIN precos AS PR
+                                                    ON PR.id_hc = P.id_hc AND PR.name_equip = '$tipoRecarga'
+                                                    INNER JOIN cidades AS C
+                                                    ON C.id = P.city
+                                                    WHERE L.id_equip = $equip");
+                                    
+                                                // dd($PctO2recarga);
+
+                                            $r = Recarga::create(['id_equip' => $equip, 'id_pct' => $idPct, 'id_fornec' => $vlidFornecEquip, 'id_hc' => $nrHcPct, 'preco_recarga'=> $PctO2recarga[0]->preco ]);
+                                        }
+                                        
+                                        Mail::send('emails.EmailO2Implantado',
+                                        ['emailEmpO2' => $emailEmpO2,
+                                        'namePct' => $namePct,
+                                        'strEndPct' => $strEndPct,
+                                        'cityPct' => $cityPct,
+                                        'celContatoPct' => $celContatoPct,
+                                        'respPct' => $respPct,
+                                        'typeSolicitFim' => $typeSolicitFim,
+                                        'idSolicit' => $idSolicit,
+                                        'equipRentSolicit'=> $equipRentSolicit,
+                                        'obsSolicit' =>  $obsSolicit,
+                                        'obsAtendfim' => $obsAtendfim
+                                        ],
+                                        function ($message)
+                                        use ($emailEmpO2, $namePct, $strEndPct, $cityPct, $celContatoPct, $respPct, $typeSolicitFim, $idSolicit, $equipRentSolicit,  $obsSolicit, $obsAtendfim ) {
+                                            $message->from('atendimento@requestcare.online', 'Atendimento'); //este email tem que ser o mesmo que está no arquivo .ENV
+                                            $message->to($emailEmpO2);
+                                            $message->cc(['mhsuprimentos.atendimento@gmail.com']);
+                                            // $message->cc(['mhsuprimentos.atendimento@gmail.com', 'atendimento@mhsuprimentos.com']);
+                                            $message->subject('CILINDRO DE O2 - IMPLANTADO - Solicitação - nº: '.$idSolicit. ' - PCT: ' . $namePct);
+                                            // $message->attach('pathToFile');
+                                            // $message->attach('storage/guias/'.$idSolicit.'.jpg');
+                                        });
+                                    } 
+
+                            }
+                        }
 
                     break;
                 case 2:
-                    //    AQUI
+                    
                    $typeSolicitFim = "Recolhimento";
                                    
                    $idEquipRecolhe = Equipamento:: where('solicit_equip', $id)->pluck('id');
-                   //    $emailDestino = Cliente::find($hcPctAtual)->pluck('email')->toArray();
+                      $emailDestino = Cliente::find($hcPctAtual)->pluck('email')->toArray()[0];
+                      $emailDestino2 = Cliente::find($hcPctAtual)->pluck('email2')->toArray()[0];
                    
                    //Converte o Array $idEquipRecolhe em String
                    $collectionRec = collect($idEquipRecolhe);
                    $recEquipLancamento = $collectionRec->implode(',');
                 
-                //    dd($recEquipLancamento);
+                    //    dd($recEquipLancamento);
 
                    foreach (explode(',', $recEquipLancamento) as $equipLancamento) {
                     // busca a data de inicio da cobrança   
@@ -428,9 +518,6 @@ public function iniciar_solicit(Request $request, $id){
                             $regEquipSelecionado->solicit_equip = $solicitForEquip;  //atribui o id da solicitação ao equipamento
                             $regEquipSelecionado->status_equip = 2;                 //status do equipamento para 2 = solicitado
                             $regEquipSelecionado->save();
-
-                        //INSERE OS REGISTROS DOS EQUIPAMENTOS IMPLANTADOS NA TABELA DE LANÇAMENTOS PARA COBRANÇA
-                        Lancamento::create(['id_equip' => $equip, 'id_pct' => $pctForEquip, 'id_solicit' => $solicitForEquip, 'dias'=> 25]);
                         
                         }
                     }
@@ -469,9 +556,9 @@ public function iniciar_solicit(Request $request, $id){
             ],
             function ($message)
             use ($emailDestino, $emailDestino2, $namePct, $typeSolicitFim, $idSolicit, $equipsSolicFim,  $obsSolicit, $obsAtendfim ) {
-                $message->from('nilson711@gmail.com', 'Atendimento');
-                $message->to($emailDestino, 'Email do Home Care');
-                $message->cc($emailDestino2, 'Email do Home Care');
+                $message->from('atendimento@requestcare.online', 'Atendimento'); //este email tem que ser o mesmo que está no arquivo .ENV
+                $message->to([$emailDestino, $emailDestino2]);
+                $message->cc(['mhsuprimentos.atendimento@gmail.com', 'atendimento@requestcare.online']);
                 $message->subject('Solicitação Concluída - nº: '.$idSolicit. ' - PCT: ' . $namePct);
                 // $message->attach('pathToFile');
                 $message->attach('storage/guias/'.$idSolicit.'.jpg');
@@ -489,14 +576,31 @@ public function iniciar_solicit(Request $request, $id){
             $status1 = $request->input('status');
             $txtCancel = $request->input('txtCancel');
 
+            // VALIDAÇÃO DO CANCELAMENTO 
+            // Rules (regras de validação do campos)
+            $request->validate([
+                'txtCancel' => 'required|min:10'
+            ],
+            // Mensagem de retorno das regras
+            [
+                'txtCancel.required' => 'Cancelamento não enviado. Tente novamente. Especifique o motivo do Cancelamento',
+                'txtCancel.min' => 'Cancelamento não enviado. Tente novamente. O texto informado é inválido.'
+                
+            ]
+        );
+            // dd($txtCancel);
+
             //SALVA
             $solicit = Solicitacao::find($id);
             $solicit->status_solicit = 3;
             $solicit->obs_atend =  $txtCancel;
             $solicit->user_atend = auth()->user()->name;
             $solicit->save();
-            // return back()->withInput();
-            return redirect()->to('/solicitacoes');
+            return back()->withInput();
+            // return redirect()->to('/solicitacoes');
+            
+            // APÓS SALVAR ENVIAR EMAIL INFORMANDO O CANCELAMENTO 
+
         break;
 
         default:
@@ -600,18 +704,29 @@ $resultado = [];
                         INNER JOIN pcts AS P ON S.pct_solicit = P.id
                         INNER JOIN clientes AS C ON C.id = P.id_hc
                         INNER JOIN cidades AS Y ON Y.id = P.city
-                        WHERE s.status_solicit= 0 OR s.status_solicit= 1
+                        WHERE s.status_solicit= 0 OR s.status_solicit= 1 
                         ORDER BY S.priority DESC, S.id ASC
                         -- ORDER BY S.priority DESC, P.bairro ASC
                         ");
 
+        $solicitCanceladas = DB::SELECT("SELECT CONCAT(P.rua, ' Nº ', P.nr, P.compl, P.bairro ) AS endereco, S.id, Y.nome, S.priority, S.status_solicit, S.motivo, P.name_pct, P.id_hc, S.user_atend, 
+                            S.type_solicit, S.date_solicit, C.cliente, P.rua, P.nr, P.bairro, P.city, P.compl, S.equips_solicit, S.obs_solicit, S.obs_atend
+                            FROM solicitacaos AS S
+                            INNER JOIN pcts AS P ON S.pct_solicit = P.id
+                            INNER JOIN clientes AS C ON C.id = P.id_hc
+                            INNER JOIN cidades AS Y ON Y.id = P.city
+                            WHERE s.status_solicit = 3 AND DATE_FORMAT(S.updated_at, '%Y-%m-%d') = CURDATE()
+                            ORDER BY S.priority DESC, S.id ASC
+                            -- ORDER BY S.priority DESC, P.bairro ASC
+                            ");
 
 
+        // dd($solicitCanceladas);
         $equips = new Equipamento();
         $equips = DB::SELECT("SELECT * FROM equipamentos WHERE pct_equip = 0");
 
         // dd($nrCityStr);
-        return view('solicitacoes', ['solicitacoes'=>$solicitacoes] + ['equips'=>$equips]);
+        return view('solicitacoes', ['solicitacoes'=>$solicitacoes] + ['equips'=>$equips] + ['solicitCanceladas' => $solicitCanceladas]);
     }
 
     /////////////////SELECIONA A SOLICITAÇÃO ATUAL E EXIBE SUAS INFORMAÇÕES PARA EDIÇÃO /////////////////////
@@ -682,6 +797,91 @@ $resultado = [];
 
     }
 
+    ///========================================================================================================================
+    // RECARGA DE OXIGÊNIO
+    public function recargaO2($id, $c){
+
+            
+        switch ($c) {
+            case 'CILINDRO 7M(REGULADOR + BASE)':
+                $tipoRecarga = 'RECARGA O2 7M';
+                break;
+            case 'CILINDRO 10M(REGULADOR + BASE)':
+                $tipoRecarga = 'RECARGA O2 10M';
+                break;
+            case 'CILINDRO 1M(REGULADOR + CARRINHO)':
+                $tipoRecarga = 'RECARGA O2 1M';
+                break;
+            
+            default:
+                # code...
+                break;
+        }
+
+       
+        $PctO2recarga = DB::SELECT("SELECT  L.id, L.id_equip AS id_equip, L.id_pct AS id_pct, P.name_pct AS name_pct, P.id_hc AS id_hc, P.rua AS rua, 
+        P.nr AS nr, P.compl AS compl, P.bairro AS bairro, P.cep AS cep, P.resp AS resp, P.tel_resp AS tel_resp, P.resp2, P.tel_resp2, C.nome AS cidade, 
+        E.name_equip AS equip, E.rent_empresa AS rent_empresa, F.email_fornec AS emailO2, PR.id_hc, PR.preco AS preco   FROM lancamentos AS L
+
+                                    INNER JOIN equipamentos AS E
+                                    ON E.id = L.id_equip 
+                                    INNER JOIN fornecedors AS F
+                                    ON F.id = E.rent_empresa
+                                    INNER JOIN pcts AS P
+                                    ON P.id = L.id_pct
+                                    INNER JOIN precos AS PR
+                                    ON PR.id_hc = P.id_hc AND PR.name_equip = '$tipoRecarga'
+                                    INNER JOIN cidades AS C
+                                    ON C.id = P.city
+                                    WHERE L.id = $id");
+  
+
+        $idEquip = $PctO2recarga[0]->id_equip;
+
+        $r = Recarga::create(['id_equip' => $PctO2recarga[0]->id_equip, 'id_pct' => $PctO2recarga[0]->id_pct, 'id_fornec' => $PctO2recarga[0]->rent_empresa, 'id_hc' => $PctO2recarga[0]->id_hc, 'preco_recarga'=> $PctO2recarga[0]->preco ]);
+
+        $r = DB::SELECT("SELECT id AS id FROM recargas 
+                        WHERE id_equip = $idEquip
+                        ORDER BY id DESC limit 1
+                        ");
+
+        // dd($r[0]->id);
+
+        $emailEmpO2 = $PctO2recarga[0]->emailO2;
+        $namePct = $PctO2recarga[0]->name_pct;
+        $strEndPct = $PctO2recarga[0]->rua . " nº:".  $PctO2recarga[0]->nr . " ".  $PctO2recarga[0]->compl . " ". $PctO2recarga[0]->bairro . " - ". $PctO2recarga[0]->cidade;
+        $cityPct = $PctO2recarga[0]->cidade;
+        $celContatoPct = $PctO2recarga[0]->tel_resp;
+        $respPct = $PctO2recarga[0]->resp;
+        $equipRentSolicit = $PctO2recarga[0]->equip;
+
+        // Seleciona o hora atual
+        $hsAtual = date('H');
+
+        // ENVIA O EMAIL A EMPRESA DE OXIGÊNIO SOLICITANDO A RECARGA
+            Mail::send('emails.EmailO2Recarga',
+            ['emailEmpO2' => $emailEmpO2,
+            'namePct' => $namePct,
+            'strEndPct' => $strEndPct,
+            'cityPct' => $cityPct,
+            'celContatoPct' => $celContatoPct,
+            'respPct' => $respPct,
+            'idSolicit' => $idSolicit = $r[0]->id,                 //id da recarga
+            'equipRentSolicit'=> $equipRentSolicit,
+            'hsAtual' => $hsAtual,
+            
+            ],
+            function ($message)
+            use ($emailEmpO2, $namePct, $strEndPct, $cityPct, $celContatoPct, $respPct, $idSolicit, $equipRentSolicit, $hsAtual ) {
+                $message->from('nilson711@gmail.com', 'Atendimento');
+                $message->to($emailEmpO2, 'Email da empresa de O2');
+                $message->subject('Solicitação - nº: '.$idSolicit. ' - RECARGA DE O2 - PCT: ' . $namePct);
+                
+            });
+
+            return back()->withInput();
+
+    }
 
 
     /**

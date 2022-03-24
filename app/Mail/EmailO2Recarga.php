@@ -12,29 +12,30 @@ class EmailFimSolicit extends Mailable
 {
     use Queueable, SerializesModels;
 
-    public $user, $idsolfimEmail, $typeSolicitFimEmail, $obsAtendfimEmail, $pctSolFimEmail, $equipRentSolicitEmail, $strEndPctFimEmail, $cityPctFimEmail, $celContatoPctFimEmail, $respPctFimEmail;
+    public $user, $idsolfimEmail, $pctSolFimEmail, $equipRentSolicitEmail, $strEndPctFimEmail, $cityPctFimEmail, $celContatoPctFimEmail, $respPctFimEmail, $hsatualEmail;
 
 
-    public function __construct($idsolfim, $typeSolicitFim, $obsAtendfim, $pctSolFim, $equipRentSolicit, $strEndPct, $cityPct, $celContatoPct, $respPct)
+    public function __construct($idsolfim, $pctSolFim, $equipRentSolicit, $strEndPct, $cityPct, $celContatoPct, $respPct, $hsAtual)
     {
 
         $this->idsolfimEmail = $idsolfim;
-        $this->obsAtendfimEmail = $obsAtendfim;
+       
         $this->pctSolFimEmail = $pctSolFim;
         $this->strEndPctFimEmail = $strEndPct;
         $this->cityPctFimEmail = $cityPct;
         $this->celContatoPctFimEmail = $celContatoPct;
         $this->respPctFimEmail = $respPct;
         $this->equipRentSolicitEmail = $equipRentSolicit;
-        $this->typeSolicitFimEmail = $typeSolicitFim;
+        $this->hsatualEmail = $hsAtual;
+    
     }
 
 
     public function build()
     {
 
-        return $this->subject('Implantação de O2 - nº: '.$this->idsolfimEmail. ' - PCT: '.$this->pctSolFimEmail)
-                    ->view('emails.EmailO2Implantado');
+        return $this->subject('kkkkkkk - nº: '.$this->idsolfimEmail. ' - PCT: '.$this->pctSolFimEmail)
+                    ->view('emails.EmailO2Recarga');
                     // ->attach('storage/guias/'.$this->idsolfimEmail.'.jpg');
 
 
