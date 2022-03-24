@@ -81,6 +81,10 @@
                     </div>
                 </div>
             </a>
+            
+            <a href="https://api.whatsapp.com/send?phone=5561995022652&text=Testando um texto" target="_blanck">Enviar mensagem</a>
+            
+
         </div>
         <!-- ./col -->
       </div>

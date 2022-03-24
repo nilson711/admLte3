@@ -14,7 +14,30 @@
 {{-- <p>Painel de Informações</p> --}}
 
 <div >
-
+  <div>
+    
+    @foreach ($solicitCanceladas as $cancelada)
+    
+      <div class="card card-sm card-danger collapsed-card">
+        <div class="card-header">
+          <h3 class="card-title"><i class="fas fa-ban"></i> {{$cancelada->id}} - {{$cancelada->cliente}} </h3>
+        <div class="card-tools">
+          <button type="button" class="btn btn-tool" data-card-widget="collapse"><i class="fas fa-plus"></i>
+          </button>
+        </div>
+        
+        </div>
+          <div class="card-body">
+            PCT: {{$cancelada->name_pct}}<br>
+            End: {{$cancelada->endereco}} - {{$cancelada->nome}}<br>
+            Equips: {{$cancelada->equips_solicit}}<br>
+            <b style="color: red">Obs: {{$cancelada->obs_atend}}</b>
+            
+          </div>
+      </div>
+        
+    @endforeach
+  </div>
     <div>
         @foreach ($solicitacoes as $solicitacao )
         <a href="{{route('edit_solicit', $solicitacao->id)}}">
@@ -107,14 +130,14 @@
                           </span>
 
                               <span class="info-box-text">
-                                {{ $solicitacao->name_pct }}
-                                <hr>
+                               <b> {{ $solicitacao->name_pct }}</b><br>
+                               <small >{{ $solicitacao->bairro }} - {{ $solicitacao->nome }}</small>
+                                {{-- <hr> --}}
                               </span>
-                              <p style="text-transform:lowercase">
+                              <p style="text-transform:lowercase; color:black">
                                   {{$solicitacao->equips_solicit}}
                               </p>
 
-                            <small >{{ $solicitacao->bairro }} - {{ $solicitacao->nome }}</small>
 
                         {{-- <i class="fas fa-map-marker-alt" data-toggle="tooltip" title="{{ $solicitacao->bairro }}"></i> --}}
                   </div>

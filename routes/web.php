@@ -41,6 +41,8 @@ Route::post('/new_cliente_submit', [App\Http\Controllers\ClienteController::clas
 Route::get('/equipamentos', [App\Http\Controllers\EquipamentoController::class, 'listaEquips'])->name('listaEquips');
 Route::post('/newEquipSubmit', [App\Http\Controllers\EquipamentoController::class, 'newEquipSubmit'])->name('newEquipSubmit');
 
+Route::get('/recargaO2/{id}/{c}', [App\Http\Controllers\SolicitacaoController::class, 'recargaO2'])->name('recargaO2');
+
 //Rotas dos Pacientes
 Route::get('/pacientes', [App\Http\Controllers\PctController::class, 'listaPcs'])->name('listaPcs');
 Route::post('/new_Pct_submit', [App\Http\Controllers\PctController::class, 'new_Pct_submit'])->name('new_Pct_submit');

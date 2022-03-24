@@ -12,26 +12,33 @@
     <h3>IMPLANTAÇÃO DE CILINDRO DE O2</h3>
 
     <p>Informamos que na data de hoje foi realizado <b> {{$typeSolicitFim}} </b> do(s) seguinte(s) equipamento(s)<br>
-        para o(a) paciente {{$namePct}} conforme guia em anexo.<br>
+        para o(a) paciente {{$namePct}}.<br>
 
-    <table border="1" style="border-collapse: collapse">
-        <tr>
-            <th>Patr nº</th>
-            <th>Equipamento</th>
-        </tr>
-        @foreach ($equipsSolicFim as $equip)
-        <tr>
-            <td>{{$equip->patr}}</td>
-            <td>{{$equip->name_equip}}</td>
-        </tr>
-        @endforeach
+        <table border="1" style="border-collapse: collapse">
+            <tr>
+                <th>Patr nº</th>
+                <th>Equipamento</th>
+            </tr>
+            @foreach ($equipRentSolicit as $equip)
+            <tr>
+                <td>{{$equip->patr}}</td>
+                <td>{{$equip->name_equip}}</td>
+            </tr>
+            @endforeach
 
-    </table>
+        </table>
 
     </p>
-    @if ($obsAtendfim != null)
-        <i>Obs: {{$obsAtendfim}}</i>
-    @endif
+    
+    <p>
+        PCT: {{$namePct}}<br>
+        End: {{$strEndPct}} - {{$cityPct}}<br>
+        Contato: {{$celContatoPct}} ({{$respPct}})
+        <br>
+        
+    </p>
+
+
     <p>Att.</p>
     <p>MH Suprimentos</p>
 

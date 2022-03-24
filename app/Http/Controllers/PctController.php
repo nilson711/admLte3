@@ -164,7 +164,7 @@ class PctController extends Controller
         $mes_lanc = Lancamento::where('dt_inicio',  $mes_atual)->pluck('dt_inicio', 'id_equip');
         // dd($mes_lanc);
 
-        $equipsLancados = DB::SELECT("SELECT E.patr, E.name_equip, L.id, L.id_pct, L.id_solicit, L.dt_implantacao, L.dt_inicio, L.dt_retirada, L.dt_fatura, L.dias, L.valor_mes, L.valor_dia, L.valor_cobrado, L.created_at FROM lancamentos AS L  
+        $equipsLancados = DB::SELECT("SELECT E.patr, E.name_equip, L.id, L.id_equip, L.id_pct, L.id_solicit, L.dt_implantacao, L.dt_inicio, L.dt_retirada, L.dt_fatura, L.dias, L.valor_mes, L.valor_dia, L.valor_cobrado, L.created_at FROM lancamentos AS L  
                                 INNER JOIN equipamentos AS E
                                 ON L.id_equip = E.id
                                 WHERE L.id_pct = $id AND  L.dt_inicio LIKE '$mes_ano%'") //exibe apenas os lancamentos do mês atual
@@ -215,10 +215,24 @@ class PctController extends Controller
 
         
 
+        $recargas = DB::SELECT ("SELECT REC.id AS idrec, REC.id_equip AS rec_id_equip, REC.id_pct, REC.id_fornec, REC.id_hc, REC.preco_recarga, REC.status, REC.created_at FROM recargas as REC
+                                
+                                WHERE REC.id_pct = $id
+                                ");
+        // dd($recargas);
+        $qtdrecargas = (Count($recargas));
+        $somarecargas = DB::SELECT ("SELECT SUM(REC.preco_recarga) AS somaRecargas
+                                    FROM recargas as REC
+                                    WHERE REC.id_pct = $id
+                                    ");
+        // dd($somarecargas[0]->somaRecargas);
 
+        // DB:: SELECT("SELECT SUM((L.valor_mes/$diasDoMes)*L.dias)
+        //                 FROM lancamentos AS L
+        //                 WHERE L.id_pct = $id AND L.dt_inicio LIKE '$mes_ano%' ");
 
         // return view('edit_pct', ['pctSel'=>$pctSel] + ['allPcts'=>$allPcts] + ['allCities'=>$allCities] + ['clientes'=>$clientes]);
-        return view('prontuario_pct', ['pctSel'=>$pctSel] + ['diasDoMes'=>$diasDoMes] + ['strTotal'=>$strTotal] + ['equipsLancados'=>$equipsLancados] + ['solicitacoesPend'=>$solicitacoesPend] + ['solicitacoes'=>$solicitacoes] + ['solicitacoesFim'=>$solicitacoesFim] + ['allEquipsEstoqueCount'=>$allEquipsEstoqueCount] + ['allEquipsEstoque'=>$allEquipsEstoque] + ['equipsEstoque'=>$equipsEstoque] + ['equipsEstoqueCount'=>$equipsEstoqueCount] + ['allPcts'=>$allPcts] + ['allCities'=>$allCities] + ['clientes'=>$clientes] + ['equipsPct'=>$equipsPct] + ['fornecedores'=>$fornecedores] + ['equipsCount'=>$equipsCount]);
+        return view('prontuario_pct', ['pctSel'=>$pctSel] + ['recargas' => $recargas] + ['somarecargas' => $somarecargas] + ['qtdrecargas' => $qtdrecargas] + ['diasDoMes'=>$diasDoMes] + ['strTotal'=>$strTotal] + ['equipsLancados'=>$equipsLancados] + ['solicitacoesPend'=>$solicitacoesPend] + ['solicitacoes'=>$solicitacoes] + ['solicitacoesFim'=>$solicitacoesFim] + ['allEquipsEstoqueCount'=>$allEquipsEstoqueCount] + ['allEquipsEstoque'=>$allEquipsEstoque] + ['equipsEstoque'=>$equipsEstoque] + ['equipsEstoqueCount'=>$equipsEstoqueCount] + ['allPcts'=>$allPcts] + ['allCities'=>$allCities] + ['clientes'=>$clientes] + ['equipsPct'=>$equipsPct] + ['fornecedores'=>$fornecedores] + ['equipsCount'=>$equipsCount]);
         // return view('edit_pct', compact('pctSel'));
 
     }

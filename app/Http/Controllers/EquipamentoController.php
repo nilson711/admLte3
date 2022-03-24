@@ -4,10 +4,13 @@ namespace App\Http\Controllers;
 
 use App\Models\Equipamento;
 use App\Models\Fornecedor;
+use App\Models\Lancamento;
+use App\Models\Recarga;
 use App\Models\Pct;
 use App\Models\Provider;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Mail;
 // use \ DB;
 
 class EquipamentoController extends Controller
@@ -91,6 +94,91 @@ class EquipamentoController extends Controller
 
     }
 
+    ///========================================================================================================================
+    // RECARGA DE OXIGÊNIO
+    public function recargaO2($id, $c){
+
+            
+        switch ($c) {
+            case 'CILINDRO 7M(REGULADOR + BASE)':
+                $tipoRecarga = 'RECARGA O2 7M';
+                break;
+            case 'CILINDRO 10M(REGULADOR + BASE)':
+                $tipoRecarga = 'RECARGA O2 10M';
+                break;
+            case 'CILINDRO 1M(REGULADOR + CARRINHO)':
+                $tipoRecarga = 'RECARGA O2 1M';
+                break;
+            
+            default:
+                # code...
+                break;
+        }
+
+       
+        $PctO2recarga = DB::SELECT("SELECT  L.id, L.id_equip AS id_equip, L.id_pct AS id_pct, P.name_pct AS name_pct, P.id_hc AS id_hc, P.rua AS rua, 
+        P.nr AS nr, P.compl AS compl, P.bairro AS bairro, P.cep AS cep, P.resp AS resp, P.tel_resp AS tel_resp, P.resp2, P.tel_resp2, C.nome AS cidade, 
+        E.name_equip AS equip, E.rent_empresa AS rent_empresa, F.email_fornec AS emailO2, PR.id_hc, PR.preco AS preco   FROM lancamentos AS L
+
+                                    INNER JOIN equipamentos AS E
+                                    ON E.id = L.id_equip 
+                                    INNER JOIN fornecedors AS F
+                                    ON F.id = E.rent_empresa
+                                    INNER JOIN pcts AS P
+                                    ON P.id = L.id_pct
+                                    INNER JOIN precos AS PR
+                                    ON PR.id_hc = P.id_hc AND PR.name_equip = '$tipoRecarga'
+                                    INNER JOIN cidades AS C
+                                    ON C.id = P.city
+                                    WHERE L.id = $id");
+  
+
+        $idEquip = $PctO2recarga[0]->id_equip;
+
+        $r = Recarga::create(['id_equip' => $PctO2recarga[0]->id_equip, 'id_pct' => $PctO2recarga[0]->id_pct, 'id_fornec' => $PctO2recarga[0]->rent_empresa, 'id_hc' => $PctO2recarga[0]->id_hc, 'preco_recarga'=> $PctO2recarga[0]->preco ]);
+
+        $r = DB::SELECT("SELECT id AS id FROM recargas 
+                        WHERE id_equip = $idEquip
+                        ORDER BY id DESC limit 1
+                        ");
+
+        // dd($r[0]->id);
+
+        $emailEmpO2 = $PctO2recarga[0]->emailO2;
+        $namePct = $PctO2recarga[0]->name_pct;
+        $strEndPct = $PctO2recarga[0]->rua . " nº:".  $PctO2recarga[0]->nr . " ".  $PctO2recarga[0]->compl . " ". $PctO2recarga[0]->bairro . " - ". $PctO2recarga[0]->cidade;
+        $cityPct = $PctO2recarga[0]->cidade;
+        $celContatoPct = $PctO2recarga[0]->tel_resp;
+        $respPct = $PctO2recarga[0]->resp;
+        $equipRentSolicit = $PctO2recarga[0]->equip;
+
+        // Seleciona o hora atual
+        $hsAtual = date('H');
+
+        // ENVIA O EMAIL A EMPRESA DE OXIGÊNIO SOLICITANDO A RECARGA
+            Mail::send('emails.EmailO2Recarga',
+            ['emailEmpO2' => $emailEmpO2,
+            'namePct' => $namePct,
+            'strEndPct' => $strEndPct,
+            'cityPct' => $cityPct,
+            'celContatoPct' => $celContatoPct,
+            'respPct' => $respPct,
+            'idSolicit' => $idSolicit = $r[0]->id,                 //id da recarga
+            'equipRentSolicit'=> $equipRentSolicit,
+            'hsAtual' => $hsAtual,
+            
+            ],
+            function ($message)
+            use ($emailEmpO2, $namePct, $strEndPct, $cityPct, $celContatoPct, $respPct, $idSolicit, $equipRentSolicit, $hsAtual ) {
+                $message->from('nilson711@gmail.com', 'Atendimento');
+                $message->to($emailEmpO2, 'Email da empresa de O2');
+                $message->subject('Solicitação - nº: '.$idSolicit. ' - RECARGA DE O2 - PCT: ' . $namePct);
+                
+            });
+
+            return back()->withInput();
+
+    }
 ///========================================================================================================================
     /**
      * Show the form for creating a new resource.
