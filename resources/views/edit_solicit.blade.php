@@ -332,6 +332,14 @@
                                                                                         </a>
                                                                                     </li>
                                                                                 </div>
+                                                                                    <a href="http://localhost:8001/msg/{{$atual->SolicitId}}/{{$atual->name_pct}}/{{ $atual->cliente }}"  target="_blanck">
+                                                                                    
+
+                                                                                        <button class="btn btn-app" type="button">
+                                                                                            <i class="fas fa-robot"></i>
+                                                                                            Robot
+                                                                                        </button>
+                                                                                    </a>
                                                                             @endif
                                                                     </ul>
                                                                 @endif
@@ -586,6 +594,8 @@
         <script src={{ asset('js/buttons.print.min.js') }}></script>
         <script src={{ asset('js/buttons.colVis.min.js') }}></script>
         <script src={{ asset('js/functions-equips.js') }} defer></script>
+        <script src={{ asset('js/botFeedback.js') }} defer></script>
+        <script src={{ asset('js/chamarBot.js') }} defer></script>
 
 
         <script>

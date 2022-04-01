@@ -220,6 +220,7 @@ public function iniciar_solicit(Request $request, $id){
             $hcPctAtual = Pct::where('id', $idPct)->pluck('id_hc');
             $emailDestino = Cliente::find($hcPctAtual)->pluck('email')->toArray()[0];
             $emailDestino2 = Cliente::find($hcPctAtual)->pluck('email2')->toArray()[0];
+            
 
             $namePct = Pct::where('id', $idPct)->pluck('name_pct')->get(0);
             $idSolicit = Solicitacao::where('id', $id)->pluck('id')->get(0);
@@ -276,6 +277,7 @@ public function iniciar_solicit(Request $request, $id){
 
             $emailDestino = Cliente::where('id',  $hcPctAtual)->pluck('email');
             $emailDestino2 = Cliente::where('id',  $hcPctAtual)->pluck('email2');
+            $nameHc = Cliente::find($hcPctAtual)->pluck('cliente')->get(0);
 
             $idForGuia = $id;
 
@@ -284,6 +286,7 @@ public function iniciar_solicit(Request $request, $id){
             $emailDestino2 = Cliente::find($hcPctAtual)->pluck('email2')->toArray()[0];
 
             $namePct = Pct::where('id', $idPct)->pluck('name_pct')->get(0);
+            $telPct = Pct::where('id', $idPct)->pluck('tel_resp')->get(0);
 
             //Busca o Endereço do paciente
             $endPct =  DB::SELECT("SELECT CONCAT(rua, ' Nº ', nr, compl, bairro ) AS endereco FROM pcts
@@ -566,7 +569,37 @@ public function iniciar_solicit(Request $request, $id){
 
             $solicit->status_solicit = 2;
             $solicit->save();
-            return redirect()->to('/solicitacoes');
+
+            $strId =  strval ($idSolicit) ;
+            // dd($strId);
+            // dd("/msg/$strId/$namePct/$nameHc");
+            // return redirect()->to('/solicitacoes');
+            
+           
+                    
+                    //Converte o Array $equipsSolicFim em String
+                    // $collectionEqMsg = $equipsSolicFim->get();
+                    // $equipmsgStr = $collectionEqMsg->implode(',');    //adicionar cada elemento numa collection separada por vírgula
+                    
+            $jEquips = $equipsSolicFim->toJson();
+            $contatoClient = $telPct;
+            // dd($contatoClient);
+
+            if ($obsAtendfim == null) {
+                $obsmsg = "N";
+                // abre a página para envio de mensagem do Whatsapp
+                return redirect()->to("http://localhost:8001/msg/$strId/$namePct/$nameHc/$obsmsg/$typeSolicitFim/$jEquips");
+                // dd("http://localhost:8001/msg/$strId/$namePct/$nameHc/$obsmsg/$typeSolicitFim");
+            } else {
+                $obsmsg = $obsAtendfim;
+                // abre a página para envio de mensagem do Whatsapp
+                return redirect()->to("http://localhost:8001/msg/$strId/$namePct/$nameHc/$obsmsg/$typeSolicitFim/$jEquips");
+                // dd("http://localhost:8001/msg/$strId/$namePct/$nameHc/$obsmsg/$typeSolicitFim");
+            }
+            
+
+
+            
 
 
 
