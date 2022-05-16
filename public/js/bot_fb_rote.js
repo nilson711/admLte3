@@ -6,11 +6,11 @@ const express = require("express");
 const { toArray } = require("lodash");
 const rotaex = express();
 
-rotaex.get("/msg/:id/:nome/:hc/:obs/:type/:equips/:contato", function(req, res){
+rotaex.get("/msg/:id/:nome/:hc/:obs/:type/:equips", function(req, res){
     res.sendFile(__dirname + "/enviarMsg.html");
 
     // nome do contato do whatsapp
-    var contatoWhats = "Miguelzinho";
+    var contatoWhats = "MH Bot";
     
     // busca as informações dos equipamentos e coloca na const equips
     const equips = req.params.equips;

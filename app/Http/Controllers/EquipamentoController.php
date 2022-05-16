@@ -35,7 +35,7 @@ class EquipamentoController extends Controller
     //LISTA TODOS OS EQUIPAMENTOS DO BANCO DE DADOS
     public function listaEquips(){
         $equips = new Equipamento();
-        $equips = DB::SELECT("SELECT * FROM equipamentos WHERE pct_equip = 0");
+        $equips = DB::SELECT("SELECT * FROM equipamentos WHERE pct_equip = 0 AND status_equip = 0");
         // $equips = DB::SELECT("SELECT * FROM equipamentos");
 
         $equipsImplantados = new Equipamento();
@@ -102,6 +102,9 @@ class EquipamentoController extends Controller
         switch ($c) {
             case 'CILINDRO 7M(REGULADOR + BASE)':
                 $tipoRecarga = 'RECARGA O2 7M';
+                break;
+            case 'CILINDRO 8M(REGULADOR + BASE)':
+                $tipoRecarga = 'RECARGA O2 8M';
                 break;
             case 'CILINDRO 10M(REGULADOR + BASE)':
                 $tipoRecarga = 'RECARGA O2 10M';
@@ -187,7 +190,11 @@ class EquipamentoController extends Controller
      */
     public function create()
     {
-        //
+        $nome = "Nilson";
+        $framework = "Laravel";
+        $email = "nilson711@gmail.com";
+        $whatsapp = "61 99502-2652";
+        
     }
 
     /**

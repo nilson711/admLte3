@@ -1,7 +1,7 @@
 
 @extends('adminlte::page')
 
-@section('title', 'Solicitações')
+@section('title', 'Home Cares')
 
 @section('content_header')
     <h1>Clientes</h1>
@@ -109,12 +109,16 @@
                                 </div>
                                 <div class="col-md-6">
                                     <label for="celular">Celular:</label>
-                                    <input type="text" class="form-control" name="celular" id="celular" onkeypress="mascara(this, celularMasc)" maxlength="16" placeholder="(__) _____-____" required>
+                                    <input type="text" class="form-control" name="celular" id="celular" onkeypress="mascara(this, telefone)" maxlength="16" placeholder="(__) _____-____" required>
                                 </div>
                             </div>
                             <div class="row form-group">
                                 <label for="e-mail">E-mail:</label>
                                 <input type="email" class="form-control" name="e-mail" id="e-mail" placeholder="e-mail de contato" required>
+                            </div>
+                            <div class="row form-group">
+                                <label for="e-mail2">E-mail 2:</label>
+                                <input type="email" class="form-control" name="e-mail2" id="e-mail2" placeholder="outro e-mail de contato" required>
                             </div>
 
                         </div>
@@ -219,6 +223,87 @@
       });
     });
   </script>
+
+<script>
+  function mascara(o, f) {
+      v_obj = o
+      v_fun = f
+      setTimeout("execmascara()", 1)
+  }
+
+  function execmascara() {
+      v_obj.value = v_fun(v_obj.value)
+  }
+
+  function leech(v) {
+      v = v.replace(/o/gi, "0")
+      v = v.replace(/i/gi, "1")
+      v = v.replace(/z/gi, "2")
+      v = v.replace(/e/gi, "3")
+      v = v.replace(/a/gi, "4")
+      v = v.replace(/s/gi, "5")
+      v = v.replace(/t/gi, "7")
+      return v
+  }
+
+  function soNumeros(v) {
+      return v.replace(/\D/g, "")
+  }
+
+  function cep(v) {
+      // v=v.replace(/D/g,"")                //Remove tudo o que não é dígito
+      // v=v.replace(/\D/g,"")                    //Remove tudo o que não é dígito
+      v = v.replace(/^(\d{5})(\d)/, "$1-$2") //Esse é tão fácil que não merece explicações
+
+          +
+          "-"
+      return v
+  }
+
+  function soNumeros(v) {
+      return v.replace(/\D/g, "")
+  }
+
+  function telefone(v) {
+      v = v.replace(/\D/g, "") //Remove tudo o que não é dígito
+      v = v.replace(/^(\d\d)(\d)/g, "($1) $2") //Coloca parênteses em volta dos dois primeiros dígitos
+      v = v.replace(/(\d)(\d{3})/, "$1 $2") //Coloca um espaço no primeiro dígito do telefone
+      v = v.replace(/(\d{4})(\d)/, "$1-$2") //Coloca hífen entre o quarto e o quinto dígitos
+
+      return v
+  }
+
+  function cpf(v) {
+      v = v.replace(/\D/g, "") //Remove tudo o que não é dígito
+      v = v.replace(/(\d{3})(\d)/, "$1.$2") //Coloca um ponto entre o terceiro e o quarto dígitos
+      v = v.replace(/(\d{3})(\d)/, "$1.$2") //Coloca um ponto entre o terceiro e o quarto dígitos
+      //de novo (para o segundo bloco de números)
+      v = v.replace(/(\d{3})(\d{1,2})$/, "$1-$2") //Coloca um hífen entre o terceiro e o quarto dígitos
+      return v
+  }
+
+  function mdata(v) {
+      v = v.replace(/\D/g, "");
+      v = v.replace(/(\d{2})(\d)/, "$1/$2");
+      v = v.replace(/(\d{2})(\d)/, "$1/$2");
+
+      v = v.replace(/(\d{2})(\d{2})$/, "$1$2");
+      return v;
+  }
+
+  function mcc(v) {
+      v = v.replace(/\D/g, "");
+      v = v.replace(/^(\d{4})(\d)/g, "$1 $2");
+      v = v.replace(/^(\d{4})\s(\d{4})(\d)/g, "$1 $2 $3");
+      v = v.replace(/^(\d{4})\s(\d{4})\s(\d{4})(\d)/g, "$1 $2 $3 $4");
+      return v;
+  }
+
+  //Datemask dd/mm/yyyy
+  $('#data_rent').inputmask('dd/mm/yyyy', {
+      'placeholder': 'dd/mm/yyyy'
+  })
+</script>
 
 <script>
     console.log('Hi!');

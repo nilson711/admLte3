@@ -228,13 +228,53 @@ return [
 
     'menu' => [
         // Navbar items:
+        // [
+        //     'type'         => 'navbar-search',
+        //     'text'         => 'search',
+        //     'topnav_right' => false,
+        // ],
+        // [
+        //     'type'         => 'fullscreen-widget',
+        //     'topnav_right' => true,
+        // ],
         [
-            'type'         => 'navbar-search',
-            'text'         => 'search',
+            'text'        => 'Inicial',
+            'url'         => '/home',
+            'icon'        => 'fas fa-tachometer-alt',
+            // 'label'       => 4,
+            'label_color' => 'success',
             'topnav_right' => true,
         ],
         [
-            'type'         => 'fullscreen-widget',
+            'text'        => 'Home Cares',
+            'url'         => '/clientes',
+            'icon'        => 'fas fa-hospital-user',
+            // 'label'       => 4,
+            'label_color' => 'success',
+            'topnav_right' => true,
+        ],
+        [
+            'text'        => 'Pacientes',
+            'url'         => '/pacientes',
+            'icon'        => 'fas fa-procedures',
+            // 'label'       => 4,
+            'label_color' => 'success',
+            'topnav_right' => true,
+        ],
+        [
+            'text'        => 'Equipamentos',
+            'url'         => '/equipamentos',
+            'icon'        => 'fas fa-stethoscope',
+            // 'label'       => 4,
+            'label_color' => 'success',
+            'topnav_right' => true,
+        ],
+        [
+            'text'        => 'Solicitações',
+            'url'         => '/solicitacoes',
+            'icon'        => 'fas fa-exclamation-triangle',
+            // 'label'       => 4,
+            'label_color' => 'success',
             'topnav_right' => true,
         ],
 
@@ -276,24 +316,24 @@ return [
             // 'label'       => 4,
             'label_color' => 'success',
         ],
-        [
-            'text'        => 'Expedição',
-            'url'         => 'admin/pages',
-            'icon'        => 'fas fa-ambulance',
-            // 'label'       => 4,
-            'label_color' => 'success',
-        ],
-        ['header' => 'account_settings'],
-        [
-            'text' => 'profile',
-            'url'  => 'admin/settings',
-            'icon' => 'fas fa-fw fa-user',
-        ],
-        [
-            'text' => 'change_password',
-            'url'  => 'admin/settings',
-            'icon' => 'fas fa-fw fa-lock',
-        ],
+        // [
+        //     'text'        => 'Expedição',
+        //     'url'         => 'admin/pages',
+        //     'icon'        => 'fas fa-ambulance',
+        //     // 'label'       => 4,
+        //     'label_color' => 'success',
+        // ],
+        // ['header' => 'account_settings'],
+        // [
+        //     'text' => 'profile',
+        //     'url'  => 'admin/settings',
+        //     'icon' => 'fas fa-fw fa-user',
+        // ],
+        // [
+        //     'text' => 'change_password',
+        //     'url'  => 'admin/settings',
+        //     'icon' => 'fas fa-fw fa-lock',
+        // ],
         // [
         //     'text'    => 'multilevel',
         //     'icon'    => 'fas fa-fw fa-share',

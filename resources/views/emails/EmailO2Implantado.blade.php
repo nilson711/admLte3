@@ -9,7 +9,7 @@
 </head>
 <body>
     <h3>Solicitação nº {{$idSolicit}}</h3>
-    <h3>IMPLANTAÇÃO DE CILINDRO DE O2</h3>
+    <h3>IMPLANTAÇÃO</h3>
 
     <p>Informamos que na data de hoje foi realizado <b> {{$typeSolicitFim}} </b> do(s) seguinte(s) equipamento(s)<br>
         para o(a) paciente {{$namePct}}.<br>

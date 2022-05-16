@@ -69,6 +69,7 @@ class ClienteController extends Controller
         $newTelefone = $request->input('tel');
         $newCelular = $request->input('celular');
         $newEmail = $request->input('e-mail');
+        $newEmail2 = $request->input('e-mail2');
 
         //SALVA OS DADOS DOS INPUTS NO BANDO DE DADOS
         $TBCliente = new Cliente();
@@ -77,6 +78,7 @@ class ClienteController extends Controller
         $TBCliente->telefone = $newTelefone;
         $TBCliente->celular = $newCelular;
         $TBCliente->email = $newEmail;
+        $TBCliente->email2 = $newEmail2;
         $TBCliente->save();
 
         return redirect()->to('/clientes');

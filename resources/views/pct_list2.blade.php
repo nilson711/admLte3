@@ -41,15 +41,9 @@
                             <tr role="row">
                                 <th class="col-sm-1" style="text-align: center" >#</th>
                                 <th class="sorting col-sm-3" tabindex="0" aria-controls="example1" rowspan="1" colspan="1"  title="Classificar crescente / decrescente">Nome</th>
+                                <th class="col-sm-1">Home Care</th>
                                 <th class="sorting col-sm-5" tabindex="0" aria-controls="example1" rowspan="1" colspan="1">Local</th>
-                                {{-- <th class="sorting col-sm-1" tabindex="0" aria-controls="example1" rowspan="1" colspan="1">Bairro</th> --}}
-
                                 <th class="sorting col-sm-1" tabindex="0" aria-controls="example1" rowspan="1" colspan="1"></th>
-
-                                {{-- <th class="sorting" tabindex="0" aria-controls="example1" rowspan="1" colspan="1">Telefone</th> --}}
-                                {{-- <th class="sorting" tabindex="0" aria-controls="example1" rowspan="1" colspan="1">Celular</th> --}}
-                                {{-- <th class="sorting" tabindex="0" aria-controls="example1" rowspan="1" colspan="1">Home Care</th> --}}
-                            </tr>
                         </thead>
                         <tbody>
                             <div data-toggle="modal" data-target="#ModalAddPct">
@@ -61,17 +55,30 @@
                                     <td style="text-align: center">
                                         <div >{{$Pct->id}}</div>
                                     </td>
+                                    
                                     <td id="namePct">
+                                        @if ($Pct->vida == 0)
+                                            <i class="fas fa-skull" title="Paciente foi a óbito"></i>
+                                        @endif
                                         <a href="{{route('editPct', $Pct->id)}}" id="btnEditar" >
-                                            {{$Pct->name_pct}}</td>
+                                            {{$Pct->name_pct}}
                                         </a>
+                                    </td>
                                     <td>
-                                    {{$Pct->bairro}} -
-                                    @foreach ( $allCities as $City)
+                                        @foreach ($hcPct as $hc)
+                                            @if ($hc->id == $Pct->id_hc)
+                                                {{$hc->cliente}}
+                                            @endif
+                                        @endforeach
+                                            {{-- {{$hcPct->cliente}} --}}
+                                    </td>
+                                    <td>
+                                        {{$Pct->bairro}}
+                                        {{-- @foreach ( $allCities as $City)
                                             @if ($City->id == $Pct->city)
                                                 {{$City->nome}}
                                             @endif
-                                        @endforeach
+                                        @endforeach --}}
                                     </td>
                                     <td style="text-align: left">
                                         {{-- <div data-toggle="modal" data-target="#ModalEditPct" data-whatever="$Pct->id"> --}}

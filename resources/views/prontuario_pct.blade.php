@@ -60,7 +60,11 @@
                                                         <div class="card card-primary">
                                                             <div class="card-body box-profile">
                                                                 <div class="text-center">
-                                                                    <i class="fas fa-user-injured fa-7x"></i>
+                                                                    @if ($pctSel->vida == "0")
+                                                                        <i class="fas fa-skull fa-7x" title="Paciente foi a óbito"></i>
+                                                                    @else
+                                                                        <i class="fas fa-user-injured fa-7x"></i>
+                                                                    @endif
                                                                 </div>
                                                                 <div class="profile-username">
                                                                     <input type="text" class="form-control" name="Pct"
@@ -241,7 +245,7 @@
                                                                 </div>
 
                                                                 <div class="col-sm-1">
-                                                                    <input type="text" class="form-control" name="uf"
+                                                                    <input type="text" class="form-control" name="uf" value={{$ufPct}}
                                                                         id="uf" placeholder="uf">
                                                                 </div>
                                                             </div>
@@ -268,8 +272,12 @@
                                                     {{-- <button type="button" class="btn btn-success swalDefaultSuccess">Launch Success Toast</button> --}}
                                                     {{-- Retornar para página anterior --}}
                                                     {{-- <a href="javascript:history.back()"><button type="button" class="btn btn-outline-secondary " data-dismiss="modal">Cancelar</button></a> --}}
-                                                    <button type="submit"
-                                                        class="btn btn-outline-primary swalDefaultSuccess">Salvar</button>
+                                                    @if ($pctSel->vida == "1")
+                                                        <button type="submit"
+                                                                class="btn btn-outline-primary swalDefaultSuccess">
+                                                                Salvar 
+                                                        </button>
+                                                    @endif
                                                 </div>
                                             </div>
                                         </form>
@@ -292,13 +300,13 @@
 
                                                         <table id="table_implantados"
                                                             class="table table-sm table-striped dataTable dtr-inline"
-                                                            role="grid" aria-describedby="table_implantados_info">
+                                                            role="grid" aria-describedby="table_implantados_info" style="visibility:visible">
 
                                                             <thead>
-                                                                <div class="float-right">
+                                                                <div class="float-right" style=" {{$pctSel->vida == "0"? "visibility: hidden" : "visibility:visible"}} ">
+                                                                    {{-- {{$solicitSel->type_solicit == 2 ? "para recolhimento" : ""}} --}}
                                                                     <span data-toggle="modal" data-target="#modalSolicit">
-                                                                        <button data-toggle="tooltip"
-                                                                            title="Solicitar Implantação" type="button"
+                                                                        <button data-toggle="tooltip" title="Solicitar Implantação" type="button"
                                                                             class="btn btn-sm btn-outline-primary float-left"
                                                                             style="margin-right: 10px">
                                                                             <i class="fas fa-plus"></i>
@@ -307,11 +315,21 @@
                                                                     <span data-toggle="modal"
                                                                         data-target="#modalRecolhimento">
                                                                         <button data-toggle="tooltip"
-                                                                            title="Solicitar Recolhimento / Troca"
+                                                                            title="Solicitar Recolhimento"
                                                                             type="button"
                                                                             class="btn btn-sm btn-outline-primary float-left"
                                                                             style="color: red; margin-right: 10px">
                                                                             <i class="fas fa-minus"></i>
+                                                                        </button>
+                                                                    </span>
+                                                                    <span data-toggle="modal"
+                                                                        data-target="#modalTroca">
+                                                                        <button data-toggle="tooltip"
+                                                                            title="Solicitar Troca / Manutenção"
+                                                                            type="button"
+                                                                            class="btn btn-sm btn-outline-primary float-left"
+                                                                            style="color:orange; margin-right: 10px">
+                                                                            <i class="fas fa-tools"></i>
                                                                         </button>
                                                                     </span>
                                                                     <button data-toggle="tooltip"
@@ -367,8 +385,8 @@
                                                                             <div class="row">
                                                                                 {{-- Patrímônio do Equipamento --}}
                                                                                 <div class="col-sm-8"
-                                                                                    style="text-align: right; vertical-align: middle">
-                                                                                    {{ $equipPct->patr }}
+                                                                                    style="text-align: right; vertical-align: middle" title="{{$equipPct->id_equip}}">
+                                                                                    {{ $equipPct->patr }} 
                                                                                 </div>
                                                                                 <div class="col-sm-2"
                                                                                     style="text-align: center; vertical-align: middle">
@@ -413,19 +431,20 @@
                                                                         </td>
                                                                         <td>
 
-                                                                            @if ($equipPct->name_equip == 'CILINDRO 7M(REGULADOR + BASE)' || $equipPct->name_equip == 'CILINDRO 10M(REGULADOR + BASE)' || $equipPct->name_equip == 'CILINDRO 1M(REGULADOR + CARRINHO)')
+                                                                            @if ($equipPct->name_equip == 'CILINDRO 7M(REGULADOR + BASE)' || $equipPct->name_equip == 'CILINDRO 8M(REGULADOR + BASE)' || $equipPct->name_equip == 'CILINDRO 10M(REGULADOR + BASE)' || $equipPct->name_equip == 'CILINDRO 1M(REGULADOR + CARRINHO)')
                                                                                 @if ($equipPct->dt_retirada == null)
                                                                                     <div title="Solicitar Recarga">
                                                                                         {{-- <a href="{{route('recargaO2', $equipPct->id)}}" data-toggle="modal" data-target="#modalRecargaO2"> --}}
 
-                                                                                        {{-- Identifica o MODAL com o ID da linha da tabela (id do Equip) --}}
-                                                                                        <button type="button"
-                                                                                            class="btn btn-xs btn-outline-primary"
-                                                                                            data-toggle="modal"
-                                                                                            data-target="#modalRecargaO2{{ $equipPct->id }}">
-                                                                                            <i class="fas fa-sync"
-                                                                                                style="color: rgb(14, 121, 0)"></i>
-                                                                                        </button>
+                                                                                            {{-- Identifica o MODAL com o ID da linha da tabela (id do Equip) --}}
+                                                                                            <button type="button"
+                                                                                                class="btn btn-xs btn-outline-primary"
+                                                                                                data-toggle="modal"
+                                                                                                data-target="#modalRecargaO2{{ $equipPct->id }}">
+                                                                                                <i class="fas fa-sync"
+                                                                                                    style="color: rgb(14, 121, 0)"></i>
+                                                                                            </button>
+                                                                                        {{-- </a> --}}
                                                                                     </div>
                                                                                 @endif
                                                                         <td title="informações sobre Recarga">
@@ -613,7 +632,7 @@
                                                                                     <button type="button"
                                                                                         name="submitbuttonSolicit" value="1"
                                                                                         class="btn btn-outline-primary swalO2Solicitado"
-                                                                                        id="btnSolicita">Solicitar</button>
+                                                                                        id="btnSolicitaO2">Solicitar O2</button>
                                                                                 </a>
                                                                                 <button type="button"
                                                                                     class="btn btn-success"
@@ -638,27 +657,35 @@
 
                                                     </div>
                                                 </div>
-                                                <div class="row">
-                                                    <div class="col-md-6">
+                                                <div class="row" style="margin-right: 70px">
+                                                    <div class="col-md-3">
                                                         <p>Total de itens implantados: {{ $equipsCount }}</p>
                                                     </div>
-                                                    <h5 class="col-md-6" style="text-align: right">
-                                                        <strong>
-                                                            Implantações:
-                                                            {{ $strTotal != null ? number_format($strTotal, 2, ',', '.') : '' }}
-                                                        </strong><br>
-                                                        <strong>
-                                                            Recargas de O2:
-                                                            {{ $somarecargas[0]->somaRecargas != null? number_format($somarecargas[0]->somaRecargas, 2, ',', '.'): '00,00' }}
-                                                        </strong>
+                                                    <h5 class="col-md-9" style="text-align: right">
+
+                                                          <table class="float-right">
+                                                            <tr>
+                                                              <th>Implantações:</th>
+                                                              <td>{{ $strTotal != null ? number_format($strTotal, 2, ',', '.') : '00,00' }}</td>
+                                                            </tr>
+                                                            <tr>
+                                                              <th>Recargas de O2:</th>
+                                                              <td>{{ $somarecargas[0]->somaRecargas != null? number_format($somarecargas[0]->somaRecargas, 2, ',', '.'): '00,00' }}</td>
+                                                            </tr>
+                                                            <tr style="color: blue">
+                                                                <th>Total:</th>
+                                                                <td>{{$totalPct != null? number_format($totalPct, 2, ',', '.'): '00,00'}}</td>
+                                                            </tr>
+                                                          </table>
 
                                                     </h5>
+                                                    
 
                                                 </div>
                                             </div>
                                         </div>
                                         <hr>
-                                        <label for="">Solicitações pendentes:</label>
+                                        {{-- <label for="">Solicitações pendentes:</label> --}}
                                         <div>
                                           @foreach ($solicitacoes as $solicitacao)
                                             <table class="table table-sm">
@@ -689,7 +716,7 @@
                                                                                   Óbito
                                                                               @break
                                                                               @case(3)
-                                                                                  Sem uso
+                                                                                  Não precisa mais do equipamento
                                                                               @break
                                                                               @case(4)
                                                                                 Internado
@@ -814,7 +841,7 @@
                                                                                                 Óbito
                                                                                             @break
                                                                                             @case(3)
-                                                                                                Sem uso
+                                                                                                Não precisa mais do equipamento
                                                                                             @break
                                                                                             @case(4)
                                                                                               Internado
@@ -872,7 +899,7 @@
                                                                     <form action="{{route('iniciar_solicit', $solicitacao->id )}}" method="POST">
                                                                       @csrf
                                                                       <textarea name="txtCancel" id="txtCancel" rows="4" style="width:100%"
-                                                                          maxlength="99" placeholder="Digite o motivo do cancelamento." onkeyup="obsCancel()">
+                                                                          maxlength="99" placeholder="Digite o motivo do cancelamento." onkeyup="txtMin('txtCancel', 'btnCancelSolicit' )">
                                                                       </textarea>
                                                                       <small>*Mínimo de 10 caracteres</small>
                                                                       
@@ -1139,6 +1166,81 @@
                                                                         <textarea class="form-control" name="obsSolicitacao" id="obsSolicitacao" rows="3"
                                                                             placeholder="Observações sobre a solicitação"
                                                                             maxlength="99" ></textarea>
+                                                                        <hr>
+                                                                        <div class="row">
+                                                                            <div class="col-sm-8 input-group date" id="dataAgendamento" >
+                                                                                <label>
+                                                                                    Agendamento:
+                                                                                    <i class="fas fa-info-circle" style="color: blue" data-toggle="tooltip" title="Dia que deseja o atendimento" ></i>
+                                                                                </label>
+                                                                                <input type="date" class="col-sm-8" id="dtAgendamento" name="dtAgendamento" class="form-control datetimepicker-input" onchange="selHora()" style="visibility: hidden">
+                                                                            </div>
+                                                                            <div class="col-sm-4">
+                                                                                <label class="float-right">Horário:
+                                                                                    <i class="fas fa-clock"
+                                                                                    style="color: blue"
+                                                                                    data-toggle="tooltip"
+                                                                                    title="Horário aproximado"></i>
+                                                                                </label>
+                                                                                    <span id="selhorarios" style="visibility: hidden">
+                                                                                        <select id="horarios"
+                                                                                            class="form-control"
+                                                                                            name="horarios" required
+                                                                                            onchange="checkSolicitImplant()">
+                                                                                            <option id="select_0"
+                                                                                                value="0">Selecione
+                                                                                            </option>
+                                                                                            <option id="select_1"
+                                                                                                value="1"
+                                                                                                title="Qualquer horário do dia.">
+                                                                                                Dia todo</option>
+                                                                                            <option id="select_2"
+                                                                                                value="2"
+                                                                                                title="De 09hs às 12hs"
+                                                                                                disabled>Manhã
+                                                                                            </option>
+                                                                                            {{-- <option id="select_9"
+                                                                                                value="9" disabled>
+                                                                                                09-10hs
+                                                                                            </option>
+                                                                                            <option id="select_10"
+                                                                                                value="10" disabled>
+                                                                                                10-11hs
+                                                                                            </option>
+                                                                                            <option id="select_11"
+                                                                                                value="11" disabled>
+                                                                                                11-12hs
+                                                                                            </option> --}}
+                                                                                            <option id="select_3"
+                                                                                                value="3"
+                                                                                                title="De 13hs às 18hs"
+                                                                                                disabled>Tarde
+                                                                                            </option>
+                                                                                            {{-- <option id="select_13"
+                                                                                                value="13" disabled>
+                                                                                                13-14hs</option>
+                                                                                            <option id="select_14"
+                                                                                                value="14" disabled>
+                                                                                                14-15hs</option>
+                                                                                            <option id="select_15"
+                                                                                                value="15" disabled>
+                                                                                                15-16hs</option>
+                                                                                            <option id="select_16"
+                                                                                                value="16" disabled>
+                                                                                                16-17hs</option>
+                                                                                            <option id="select_17"
+                                                                                                value="17" disabled>
+                                                                                                17-18hs</option> --}}
+                                                                                            <option id="select_18"
+                                                                                                value="18" disabled
+                                                                                                title="Apenas emergências">
+                                                                                                +18hs*</option>
+                                                                                        </select>
+                                                                                    </span>
+                                                                            </div>
+    
+                                                                        </div>
+
                                                                     </div>
                                                                 </div>
                                                                 {{-- <div class="custom-control custom-checkbox">
@@ -1155,8 +1257,9 @@
                                                 <button type="button" class="btn btn-outline-secondary"
                                                     data-dismiss="modal" id="btnCancela">Cancelar</button>
                                                 <button type="submit" name="submitbuttonSolicit" value="1"
-                                                    class="btn btn-outline-primary swalSolicitSuccess"
-                                                    id="btnSolicita">Solicitar</button>
+                                                    class="btn btn-outline-primary swalSolicitSuccess" style="visibility: hidden"
+                                                    id="btnSolicita">Solicitar
+                                                </button>
                                                 <button type="button" class="btn btn-success" style="display: none"
                                                     id="spinnerFinalizando">
                                                     <span class="spinner-border spinner-border-sm"></span>
@@ -1197,9 +1300,7 @@
                                                     <div class="row">
                                                         <div class="col-md-12">
                                                             <div class="card card-default" style="padding-bottom: 0px">
-                                                                {{-- <div class="card-header">
-                        <h3 class="card-title">bs-stepper</h3>
-                      </div> --}}
+                                                                
                                                                 <div class="card-body p-0">
                                                                     <div class="bs-stepper linear">
                                                                         <div class="bs-stepper-header" role="tablist">
@@ -1235,7 +1336,7 @@
                                                                                 </button>
                                                                             </div>
                                                                             <div class="line"></div>
-                                                                            <div class="step"
+                                                                            {{-- <div class="step"
                                                                                 data-target="#finalizar-parts">
                                                                                 <button type="button"
                                                                                     class="step-trigger" role="tab"
@@ -1248,7 +1349,7 @@
                                                                                     <span
                                                                                         class="bs-stepper-label">Finalizar</span>
                                                                                 </button>
-                                                                            </div>
+                                                                            </div> --}}
                                                                         </div>
                                                                         <div class="bs-stepper-content"
                                                                             style="padding-bottom: 0px">
@@ -1260,11 +1361,12 @@
                                                                                 aria-labelledby="equip-parts-trigger">
                                                                                 <div>
 
+                                                                                    
                                                                                     <div class="row">
-                                                                                        <div class="col-md-5">
+                                                                                                                                                                                
+                                                                                        <div class="col-md-6">
 
-                                                                                            <div id="selectMotivo"
-                                                                                                class="form-group">
+                                                                                            <div id="selectMotivo" class="form-group">
                                                                                                 <label
                                                                                                     for="motivo">Motivo:</label>
                                                                                                 <select name="motivo"
@@ -1275,7 +1377,7 @@
                                                                                                     required
                                                                                                     onchange="habilitarBtnSolicitar()">
                                                                                                     <option value="9"
-                                                                                                        selected>Selecione
+                                                                                                        selected disabled>Selecione
                                                                                                         um motivo</option>
                                                                                                     <option value="1"
                                                                                                         title="Paciente recebeu alta">
@@ -1285,7 +1387,7 @@
                                                                                                         Óbito</option>
                                                                                                     <option value="3"
                                                                                                         title="Paciente não usa o equipamento">
-                                                                                                        Sem uso</option>
+                                                                                                        Não precisa mais do equipamento</option>
                                                                                                     <option value="4"
                                                                                                         title="Paciente internado sem previsão de alta">
                                                                                                         Paciente Internado
@@ -1298,44 +1400,14 @@
                                                                                                         title="Paciente migrou para outro home care">
                                                                                                         Troca de home care
                                                                                                     </option>
-                                                                                                    <option value="7"
+                                                                                                    {{-- <option value="7"
                                                                                                         title="Equipamento não está funcionamento corretamente">
                                                                                                         Trocar Equipamento
-                                                                                                    </option>
+                                                                                                    </option> --}}
                                                                                                     {{-- <option value = "8">Outro</option> --}}
                                                                                                 </select>
                                                                                             </div>
-                                                                                            <textarea name="txtMotivo" id="txtMotivo" cols="30" rows="1" style="display: none"></textarea>
-                                                                                            <div class="form-group">
-                                                                                                <label
-                                                                                                    for="obsSolicitacaoRecolhe">Observações:</label>
-                                                                                                <textarea class="form-control" name="obsSolicitacaoRecolhe" id="obsSolicitacaoRecolhe" onkeyup="obsNotNull()"
-                                                                                                    rows="2"
-                                                                                                    placeholder="Observações sobre a solicitação"
-                                                                                                    maxlength="150"></textarea>
-                                                                                            </div>
-
-                                                                                            <div class="form-group"
-                                                                                                id="fotoEquip"
-                                                                                                style="visibility: hidden">
-                                                                                                <label for="fotoEquip">Foto
-                                                                                                    / Vídeo: <i
-                                                                                                        class="fas fa-info-circle"
-                                                                                                        style="color: blue"
-                                                                                                        data-toggle="tooltip"
-                                                                                                        title="Videos curtos de 30 segundos aproximadamente."></i></label>
-                                                                                                <input type="file"
-                                                                                                    class="form-control-file"
-                                                                                                    name="file_fotoEquip"
-                                                                                                    id="file_fotoEquip"
-                                                                                                    title="Anexar foto mostrando o defeito do equipamento.">
-                                                                                            </div>
-
-
-                                                                                        </div>
-
-                                                                                        <div class="col-sm-1">
-
+                                                                                            <textarea name="txtMotivo" id="txtMotivo" cols="100%" rows="1" style="display: none"></textarea>
                                                                                         </div>
 
                                                                                         <div class="form-group col-sm-6">
@@ -1393,9 +1465,10 @@
                                                                                                 style="display: none">
                                                                                             <p id="txtcama"></p>
                                                                                         </div>
+                                                                                        
                                                                                     </div>
+                                                                                    
                                                                                 </div>
-
                                                                             </div>
 
                                                                             <div id="agendamento-parts"
@@ -1403,11 +1476,11 @@
                                                                                 aria-labelledby="agendamento-parts-trigger">
                                                                                 <div class=" row form-group">
 
-                                                                                    <div class="col-sm-6">
+                                                                                    {{-- <div class="col-sm-6"> --}}
 
-                                                                                        <div class="card-body table-responsive p-0"
-                                                                                            style="height: 200px;">
-                                                                                            <table
+                                                                                        {{-- <div class="card-body table-responsive p-0" --}}
+                                                                                            {{-- style="height: 200px;"> --}}
+                                                                                            {{-- <table
                                                                                                 class="table table-sm table-head-fixed text-nowrap">
                                                                                                 <thead>
                                                                                                     <tr>
@@ -1415,8 +1488,6 @@
                                                                                                             colspan="3">
                                                                                                             Solicitações
                                                                                                             Pendentes</th>
-                                                                                                        {{-- <th>Hora</th> --}}
-                                                                                                        {{-- <th>Local</th> --}}
                                                                                                     </tr>
                                                                                                 </thead>
                                                                                                 <tbody>
@@ -1486,121 +1557,102 @@
                                                                                                         @endforeach
                                                                                                     </small>
                                                                                                 </tbody>
-                                                                                            </table>
+                                                                                            </table> --}}
+                                                                                        {{-- </div> --}}
+
+                                                                                    {{-- </div> --}}
+
+                                                                                    <div class="row">
+                                                                                        <div class="col-sm-8 input-group date" id="dataAgendamento" >
+                                                                                            <label>
+                                                                                                Agendamento recolhe:
+                                                                                                <i class="fas fa-info-circle" style="color: blue" data-toggle="tooltip" title="Dia que deseja o atendimento"></i>
+                                                                                            </label>
+                                                                                            <input type="date" class="col-sm-8" id="dtAgendamentoRecolhe" name="dtAgendamentoRecolhe" class="form-control datetimepicker-input" required onchange="selHoraRecolhe()">
                                                                                         </div>
-
-                                                                                    </div>
-
-                                                                                    <div class="form-group">
-
-                                                                                        {{-- <textarea name="textEquipsRecolhe" id="textEquipsRecolhe"></textarea> --}}
-
-                                                                                        {{-- <div id="fooRecolhe"></div> --}}
-                                                                                    </div>
-
-
-                                                                                    <div class="col-sm-5"
-                                                                                        id="dataAgendamento">
-                                                                                        <label>Agendamento:</label>
-                                                                                        {{-- <button type="button" class="btn btn-sm btn-outline-primary float-left" style="margin-right: 10px" > --}}
-                                                                                        <i class="fas fa-info-circle"
-                                                                                            style="color: blue"
-                                                                                            data-toggle="tooltip"
-                                                                                            title="Agende com os familiares dia e horario aproximado"></i>
-                                                                                        {{-- </button> --}}
-                                                                                        <label
-                                                                                            class="float-right">Horário:
-                                                                                            <i class="fas fa-clock"
+                                                                                        <div class="col-sm-4">
+                                                                                            <label class="float-right">Horário:
+                                                                                                <i class="fas fa-clock"
                                                                                                 style="color: blue"
                                                                                                 data-toggle="tooltip"
                                                                                                 title="Horário aproximado"></i>
-                                                                                        </label>
-                                                                                        <div class="input-group date">
-                                                                                            <input type="date"
-                                                                                                class="col-sm-7"
-                                                                                                id="dtAgendamento"
-                                                                                                name="dtAgendamento"
-                                                                                                class="form-control datetimepicker-input"
-                                                                                                required
-                                                                                                onchange="selHora()">
-                                                                                            <!-- {{-- <select class="select select2" id="hours" data-toggle="tooltip" title="Hora aproximada da solicitação." onchange="msgHora()"></select> --}} -->
-
-
-                                                                                            <div id="selhorarios"
-                                                                                                style="visibility: hidden; width: 40%">
-                                                                                                <select id="horarios"
-                                                                                                    class="form-control"
-                                                                                                    name="horarios" required
-                                                                                                    onchange="msgHora()">
-                                                                                                    <option id="select_0"
-                                                                                                        value="0">Selecione
-                                                                                                    </option>
-                                                                                                    <option id="select_1"
-                                                                                                        value="1"
-                                                                                                        title="Qualquer horário do dia.">
-                                                                                                        Dia todo</option>
-                                                                                                    <option id="select_2"
-                                                                                                        value="2"
-                                                                                                        title="De 09hs às 12hs"
-                                                                                                        disabled>Manhã
-                                                                                                    </option>
-                                                                                                    <option id="select_9"
-                                                                                                        value="9" disabled>
-                                                                                                        09-10hs</option>
-                                                                                                    <option id="select_10"
-                                                                                                        value="10" disabled>
-                                                                                                        10-11hs</option>
-                                                                                                    <option id="select_11"
-                                                                                                        value="11" disabled>
-                                                                                                        11-12hs</option>
-                                                                                                    <option id="select_3"
-                                                                                                        value="3"
-                                                                                                        title="De 13hs às 18hs"
-                                                                                                        disabled>Tarde
-                                                                                                    </option>
-                                                                                                    <option id="select_13"
-                                                                                                        value="13" disabled>
-                                                                                                        13-14hs</option>
-                                                                                                    <option id="select_14"
-                                                                                                        value="14" disabled>
-                                                                                                        14-15hs</option>
-                                                                                                    <option id="select_15"
-                                                                                                        value="15" disabled>
-                                                                                                        15-16hs</option>
-                                                                                                    <option id="select_16"
-                                                                                                        value="16" disabled>
-                                                                                                        16-17hs</option>
-                                                                                                    <option id="select_17"
-                                                                                                        value="17" disabled>
-                                                                                                        17-18hs</option>
-                                                                                                    <option id="select_18"
-                                                                                                        value="18" disabled
-                                                                                                        title="Apenas emergências">
-                                                                                                        +18hs*</option>
-                                                                                                </select>
-                                                                                            </div>
+                                                                                            </label>
+                                                                                                <span id="selhorariosRecolhe" style="visibility: hidden">
+                                                                                                    <select id="horariosRecolhe"
+                                                                                                        class="form-control"
+                                                                                                        name="horariosRecolhe" required
+                                                                                                        onchange="checkSolicit()">
+                                                                                                        <option id="select_0" disabled selected
+                                                                                                            value="0">Selecione
+                                                                                                        </option>
+                                                                                                        <option id="select_1"
+                                                                                                            value="1"
+                                                                                                            title="Qualquer horário do dia.">
+                                                                                                            Dia todo</option>
+                                                                                                        <option id="select_2"
+                                                                                                            value="2"
+                                                                                                            title="De 09hs às 12hs"
+                                                                                                            >Manhã
+                                                                                                        </option>
+                                                                                                        {{-- <option id="select_9"
+                                                                                                            value="9" disabled>
+                                                                                                            09-10hs
+                                                                                                        </option>
+                                                                                                        <option id="select_10"
+                                                                                                            value="10" disabled>
+                                                                                                            10-11hs
+                                                                                                        </option>
+                                                                                                        <option id="select_11"
+                                                                                                            value="11" disabled>
+                                                                                                            11-12hs
+                                                                                                        </option> --}}
+                                                                                                        <option id="select_3"
+                                                                                                            value="3"
+                                                                                                            title="De 13hs às 18hs"
+                                                                                                            >Tarde
+                                                                                                        </option>
+                                                                                                        {{-- <option id="select_13"
+                                                                                                            value="13" disabled>
+                                                                                                            13-14hs</option>
+                                                                                                        <option id="select_14"
+                                                                                                            value="14" disabled>
+                                                                                                            14-15hs</option>
+                                                                                                        <option id="select_15"
+                                                                                                            value="15" disabled>
+                                                                                                            15-16hs</option>
+                                                                                                        <option id="select_16"
+                                                                                                            value="16" disabled>
+                                                                                                            16-17hs</option>
+                                                                                                        <option id="select_17"
+                                                                                                            value="17" disabled>
+                                                                                                            17-18hs</option> --}}
+                                                                                                        <option id="select_18"
+                                                                                                            value="18" 
+                                                                                                            title="Apenas emergências">
+                                                                                                            +18hs*</option>
+                                                                                                    </select>
+                                                                                                </span>
                                                                                         </div>
+
                                                                                     </div>
-
                                                                                 </div>
-
-
-
-
-
                                                                             </div>
 
-                                                                            <div id="finalizar-parts"
+                                                                            <div class="form-group">
+                                                                                <label
+                                                                                    for="obsSolicitacaoRecolhe">Observações:</label>
+                                                                                <textarea class="form-control" name="obsSolicitacaoRecolhe" id="obsSolicitacaoRecolhe" onkeyup="obsNotNull()"
+                                                                                    cols="100%" rows="2"  placeholder="Observações sobre a solicitação" maxlength="150"></textarea>
+                                                                            </div>
+                                                                            {{-- <div id="finalizar-parts"
                                                                                 class="content" role="tabpanel"
                                                                                 aria-labelledby="finalizar-parts-trigger">
                                                                                 <div class="form-group">
                                                                                     <label for="resumoSolicit">Para
-                                                                                        proseguir Confirme na opção abaixo e
+                                                                                        prosseguir Confirme na opção abaixo e
                                                                                         clique em Solicitar. Para alterar
                                                                                         clique em Voltar.</label>
-                                                                                    <textarea name="resumoSolicit" id="resumoSolicit" cols="95" rows="7" readonly></textarea>
-
-
+                                                                                    <textarea name="resumoSolicit" id="resumoSolicit" style="width: 100%" rows="4" readonly></textarea>
                                                                                     <div class="form-check">
                                                                                         <input class="form-check-input"
                                                                                             name="checkSolicitOk"
@@ -1611,27 +1663,19 @@
                                                                                             for="checkSolicitOk">Confirmo a
                                                                                             solicitação.</label>
                                                                                     </div>
-
-
-
                                                                                 </div>
 
-                                                                            </div>
-                                                                        </div>
+                                                                            </div> --}}
                                                                     </div>
                                                                 </div>
-                                                                <!-- /.card-body -->
-                                                                {{-- <div class="card-footer">
-                           <small>
-                            Preencha os campos solicitados em cada etapa para finalizar a solicitação.
-                          </small> 
-                      </div> --}}
+                                                               
                                                             </div>
                                                             <!-- /.card -->
                                                         </div>
                                                     </div>
 
 
+                                                </div>
                                             </div>
 
 
@@ -1639,35 +1683,41 @@
 
                                                 <div>
                                                     <button type="submit" name="submitbuttonSolicit" value="2"
-                                                        class="btn btn-sm btn-success swalSolicitSuccess"
+                                                        class="btn  btn-success swalSolicitSuccess"
                                                         onclick="viewSpinner()" id="btnSolicitaRecolhe"
-                                                        style="visibility: hidden">Solicitar</button>
+                                                        >Solicitar
+                                                    </button>
                                                 </div>
                                                 </form>
 
                                                 <div class="col-sm-9">
-                                                    <button id="btnVoltar" class="btn btn-outline-primary btn-sm"
+                                                    <button id="btnVoltar" class="btn btn-outline-primary "
                                                         onclick="stepper.previous(); desativaBtnSolicitar()"
                                                         style="visibility: hidden"><i class="fas fa-arrow-left"></i>
                                                         Voltar</button>
                                                     {{-- <button id="btnVoltar2" class="btn btn-primary btn-sm" onclick="stepper.previous(); desativaBtns3()" style="visibility: hidden"><i class="fas fa-arrow-left"></i> Voltar</button> --}}
 
-                                                    <button id="btnAvancar" class="btn btn-outline-primary btn-sm"
+                                                    <button id="btnAvancar" class="btn btn-outline-primary "
                                                         onclick="stepper.next(); desativarBtnAvancar()"
                                                         style="visibility: hidden">Avançar <i
                                                             class="fas fa-arrow-right"></i></button>
                                                     {{-- <button id="btnAvancar2" class="btn btn-primary btn-sm" onclick="stepper.next()" style="visibility: hidden" onmouseup="ativaBtns3()">Avançar <i class="fas fa-arrow-right"></i></button> --}}
 
-                                                    <button type="button" class="btn btn-sm btn-success"
+                                                    <div class="float-right">
+                                                        <button type="button" class="btn btn-outline-secondary "
+                                                            data-dismiss="modal" id="btnCancela">Cancelar</button>
+                                                    </div>
+
+                                                    <button type="button" class="btn  btn-success"
                                                         style="visibility: hidden" id="spinnerFinalizandoRecolhe">
                                                         <span class="spinner-border spinner-border-sm"></span>
                                                         Enviando...
                                                     </button>
                                                 </div>
-                                                <div class="float-right">
+                                                {{-- <div class="float-right">
                                                     <button type="button" class="btn btn-outline-secondary btn-sm"
                                                         data-dismiss="modal" id="btnCancela">Cancelar</button>
-                                                </div>
+                                                </div> --}}
 
 
 
@@ -1679,6 +1729,203 @@
 
                                 <!--/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////-->
 
+                                <!--////////////////////////////////////////////////////  MODAL TROCA  ////////////////////////////////////////////////-->
+
+                                <div class="modal fade bd-example-modal-lg" id="modalTroca" tabindex="-1"
+                                    role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                    <div class="modal-dialog modal-lg" role="document">
+                                        <div class="modal-content">
+                                            <div class="modal-header">
+                                                <ion-icon size="large" style="color: orange" name="construct">
+                                                </ion-icon>
+                                                <h5 class="modal-title" id="exampleModalLabel"><span style="color: orange">
+                                                         Troca / Manutenção >> </span>
+                                                    Paciente:{{ $pctSel->name_pct }}</h5>
+                                                <button type="button" class="close" data-dismiss="modal"
+                                                    aria-label="Close">
+                                                    <span aria-hidden="true">&times;</span>
+                                                </button>
+                                            </div>
+                                            <div class="modal-body">
+
+                                                <form action="{{ route('new_solicita') }}" method="POST">
+                                                    @csrf
+                                                    <input type="number" name="idPctTroca" id="idPctTroca"
+                                                        value="{{ $pctSel->id }}" style="display: none">
+                                                    <div class="row">
+                                                        <div class="col-md-12">
+                                                            <div class="card card-default" style="padding-bottom: 0px">
+                                                                
+                                                                <div class="card-body p-0">
+                                                                    <div>
+                                                                        <div>
+                                                                            <div id="equip-parts-troca" >
+                                                                                <div>
+                                                                                    <div class="row">
+                                                                                        <div class="form-group col-sm-6">
+                                                                                            <div class="card-body table-responsive p-0">
+                                                                                                <label>Selecione o equipamento:</label>
+                                                                                                <table
+                                                                                                    class="table table-sm table-striped table-head-fixed text-nowrap"
+                                                                                                    id="tableEquipsTroca">
+                                                                                                    <thead>
+                                                                                                        <tr>
+                                                                                                            <th></th>
+                                                                                                            <th>Patr / Equipamento</th>
+                                                                                                        </tr>
+                                                                                                    </thead>
+                                                                                                    <tbody>
+                                                                                                        @foreach ($equipsPct as $equipImplant)
+                                                                                                            <tr class="tr-row"
+                                                                                                                style="vertical-align: middle; line-height: 100%">
+                                                                                                                <td>
+                                                                                                                    <div style="margin-left: -40px"
+                                                                                                                        id="checkSelEquipTroca"
+                                                                                                                        class="checkSelEquipTroca form-check col-sm-6"
+                                                                                                                        onclick="ContarSelecionadosTroca()">
+                                                                                                                        {{-- <input class="qtdDoItem" type="number" min="0" value="0" onchange="qtdSolicitada(this.value)" style="width: 50px"> --}}
+                                                                                                                        {{-- <input type="number" onchange="cadastraNotaImportada(this.value)" class="form-control disciplina" name="" value="0"> --}}
+                                                                                                                        <input
+                                                                                                                            class="checkbox checkbox-Troca"
+                                                                                                                            type="checkbox"
+                                                                                                                            id=" {{ $equipImplant->id }}"
+                                                                                                                            name=" {{ $equipImplant->name_equip }}"
+                                                                                                                            onclick="coletaDadosTroca()"
+                                                                                                                            style="margin-left: 7px; transform: scale(1.2)">
+                                                                                                                    </div>
+                                                                                                                </td>
+                                                                                                                <td id="nomeEquipTroca"
+                                                                                                                    class="nomeEquipTroca">
+                                                                                                                    {{ $equipImplant->patr }}-
+                                                                                                                    {{ $equipImplant->name_equip }}
+                                                                                                                </td>
+                                                                                                            </tr>
+                                                                                                        @endforeach
+                                                                                                    </tbody>
+                                                                                                </table>
+                                                                                            </div>
+                                                                                            <input type="number" name="qtdSelTroca" id="qtdSelTroca" style="display: none">
+                                                                                            <p id="QtdequipsSelecionadosTroca" style="margin-left: 10px">
+                                                                                                Total: 0 equipamento(s) selecionado(s)
+                                                                                            </p>
+                                                                                            <textarea name="textEquipsTroca" id="textEquipsTroca" ></textarea>
+                                                                                            <input type="text"
+                                                                                                name="enviarEquipTroca"
+                                                                                                id="enviarEquipTroca"
+                                                                                                style="display: none">
+                                                                                            <p id="txtcama"></p>
+                                                                                        </div>
+                                                                                        <div class="col-md-6">
+                                                                                            <div class="form-group">
+                                                                                                <label
+                                                                                                    for="obsSolicitacaoTroca">Observações:</label>
+                                                                                                <textarea class="form-control" name="obsSolicitacaoTroca" id="obsSolicitacaoTroca"
+                                                                                                    cols="100%" rows="4"  placeholder="Descreva de forma clara o que está ocorrendo com o equipamento." maxlength="150"
+                                                                                                    onkeyup="txtMin('obsSolicitacaoTroca', 'dataAgendamentoTroca' )"></textarea>
+                                                                                                    <small>*Entre 10 e 150 caracteres.</small>
+                                                                                            </div>
+                                                                                            <div class=" form-group">
+                                                                                                <div class="row">
+                                                                                                    <div class="col-sm-8 input-group date" id="dataAgendamentoTroca" style="visibility: hidden" >
+                                                                                                        <label>
+                                                                                                            Agendamento:
+                                                                                                            <i class="fas fa-info-circle" style="color: blue" data-toggle="tooltip" title="Dia que deseja o atendimento"></i>
+                                                                                                        </label>
+                                                                                                        <input type="date" class="col-sm-8" id="dtAgendamentoTroca" name="dtAgendamentoTroca" 
+                                                                                                        class="form-control datetimepicker-input" required onchange="selHoraTroca()">
+                                                                                                    </div>
+                                                                                                    <div class="col-sm-4" id="horarioTroca" style="visibility: hidden">
+                                                                                                        <label class="float-right">Horário:
+                                                                                                            <i class="fas fa-clock"
+                                                                                                            style="color: blue"
+                                                                                                            data-toggle="tooltip"
+                                                                                                            title="Horário aproximado"></i>
+                                                                                                        </label>
+                                                                                                            <span id="selhorariosTroca" style="visibility: hidden">
+                                                                                                                <select id="horariosTroca"
+                                                                                                                    class="form-control"
+                                                                                                                    name="horariosTroca" required
+                                                                                                                    onchange="checkSolicit('qtdSelTroca', 'btnSolicitaTroca')">
+                                                                                                                    <option id="select_0" disabled selected
+                                                                                                                        value="0">Selecione
+                                                                                                                    </option>
+                                                                                                                    <option id="select_1"
+                                                                                                                        value="1"
+                                                                                                                        title="Qualquer horário do dia.">
+                                                                                                                        Dia todo</option>
+                                                                                                                    <option id="select_2"
+                                                                                                                        value="2"
+                                                                                                                        title="De 09hs às 12hs"
+                                                                                                                        >Manhã
+                                                                                                                    </option>
+                                                                                                                    
+                                                                                                                    <option id="select_3"
+                                                                                                                        value="3"
+                                                                                                                        title="De 13hs às 18hs"
+                                                                                                                        >Tarde
+                                                                                                                    </option>
+                                                                                                                    
+                                                                                                                    <option id="select_18"
+                                                                                                                        value="18" 
+                                                                                                                        title="Apenas emergências">
+                                                                                                                        +18hs*</option>
+                                                                                                                </select>
+                                                                                                            </span>
+                                                                                                    </div>
+                                                                                                </div>
+                                                                                            </div>
+                                                                                        </div>
+                                                                                    </div>
+                                                                                </div>
+                                                                            </div>
+
+                                                                            <div id="agendamento-parts-troca"
+                                                                                class="content" role="tabpanel"
+                                                                                aria-labelledby="agendamento-parts-troca">
+                                                                                
+                                                                            </div>
+                                                                    </div>
+                                                                </div>
+                                                               
+                                                            </div>
+                                                            <!-- /.card -->
+                                                        </div>
+                                                    </div>
+
+                                                    </div>
+                                                </div>
+
+                                                <div class="modal-footer">
+
+                                                    <div>
+                                                        <button type="submit" name="submitbuttonSolicit" value="3"
+                                                            class="btn  btn-success swalSolicitSuccess"
+                                                            onclick="viewSpinner()" id="btnSolicitaTroca"  id="modalTroca" tabindex="-1"
+                                                            role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true" style="visibility: hidden">Solicitar
+                                                        </button>
+                                                    </div>
+                                                </form>
+
+                                                <div class="col-sm-9">
+                                                                                                        
+                                                    <div class="float-right">
+                                                        <button type="button" class="btn btn-outline-secondary "
+                                                            data-dismiss="modal" id="btnCancela">Cancelar</button>
+                                                    </div>
+
+                                                    <button type="button" class="btn  btn-success"
+                                                        style="visibility: hidden" id="spinnerFinalizandoTroca">
+                                                        <span class="spinner-border spinner-border-sm"></span>
+                                                        Enviando...
+                                                    </button>
+                                                </div>
+                                            </div>
+
+                                            </div>
+                                            
+                                        </div>
+                                    </div>
+                                </div>
 
                             </div>
                             <!-- /.card -->

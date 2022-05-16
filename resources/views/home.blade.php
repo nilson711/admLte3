@@ -82,7 +82,8 @@
                 </div>
             </a>
             
-            <a href="https://api.whatsapp.com/send?phone=MH Suprimentos&text=Testando um texto" target="_blanck">Enviar mensagem</a>
+            {{-- <a href="https://api.whatsapp.com/send?phone=MH Suprimentos&text=Testando um texto" target="_blanck">Enviar mensagem</a> --}}
+
             
 
         </div>
@@ -94,14 +95,55 @@
 
 @section('css')
     {{-- <link rel="stylesheet" href="/css/admin_custom.css"> --}}
+    <script src= {{asset('js/jquery.min.js')}}></script>
+    <link rel="stylesheet" href={{asset('css/css')}}>
+    <link rel="stylesheet" href={{asset('css/all.min.css')}}>
+    <link rel="stylesheet" href={{asset('css/adminlte.min.css')}}>
+   
+ 
 @stop
 
 @section('js')
     <script> console.log('Hi!'); </script>
+
+    <script defer="" referrerpolicy="origin" src={{('js/s.js')}}></script>
+   
 
     <script>
         $(function () {
         $('[data-toggle="tooltip"]').tooltip()
       })
       </script>
-@stop
+
+<script src= {{asset('js/jquery.min.js')}}></script>
+<script src= {{asset('js/Chart.min.js')}}></script>
+<script src= {{asset('js/Chart.min.js')}}></script>
+      
+      
+      
+    {{-- <script src="./AdminLTE 3 _ ChartJS_files/bootstrap.bundle.min.js"></script>
+
+    <script src="./AdminLTE 3 _ ChartJS_files/Chart.min.js"></script>
+
+    <script src="./AdminLTE 3 _ ChartJS_files/adminlte.min.js"></script>
+
+    <script src="./AdminLTE 3 _ ChartJS_files/demo.js"></script> --}}
+<script>
+
+    $(function () {
+        
+    }
+    //-------------
+    //- PIE CHART -
+    //-------------
+    // Get context with jQuery - using jQuery's .get() method.
+    var pieChartCanvas = $('#pieChart').get(0).getContext('2d')
+    var pieData        = donutData;
+    var pieOptions     = {
+        maintainAspectRatio : false,
+        responsive : true,
+    }
+    </script>
+    
+    @stop
+    

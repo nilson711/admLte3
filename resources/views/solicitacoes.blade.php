@@ -45,7 +45,8 @@
         @if ($solicitacao->priority == 0)
             <div class="col-12">
                 <div class="info-box">
-                  <span class="info-box-icon bg-info">
+                  
+                  <span class="info-box-icon bg-info" style="width: 60px">
                     @switch($solicitacao->type_solicit)
                         @case(1)
                             <i class="fas fa-plus-circle fa-lg" data-toggle="tooltip"
@@ -112,10 +113,26 @@
 
                   </span>
 
-                  <div class="info-box-content ">
+                  <div class="info-box-content" style="width: 80%">
                         <span class="info-box-number ">
                           <small>
-                            Nº: {{$solicitacao->id}} ({{ $solicitacao->cliente }})
+                            Nº: {{$solicitacao->id}} ({{ $solicitacao->cliente }}) - {{ date('d/m', strtotime($solicitacao->date_agenda)) }} -
+                                @switch($solicitacao->hour_agenda)
+                                    @case(1) Dia todo @break
+                                    @case(2) Manhã @break
+                                    @case(3) Tarde @break
+                                    @case(9) 09-10hs @break
+                                    @case(10) 10-11hs @break
+                                    @case(11) 11-12hs @break
+                                    @case(13) 13-14hs @break
+                                    @case(14) 14-15hs @break
+                                    @case(15) 15-16hs @break
+                                    @case(16) 16-17hs @break
+                                    @case(17) 17-18hs @break
+                                    @case(18) +18hs @break
+                                    @default
+                                @endswitch
+                            
                           </small>
                             @if ($solicitacao->status_solicit == 1)
                             <div class="spinner-grow spinner-grow-sm text-warning" role="status">

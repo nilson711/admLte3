@@ -58,6 +58,7 @@ class HomeController extends Controller
         $mes_atual = (date('m'));
         $ano_atual = (date('Y'));
         $mes_ano = $ano_atual."-". $mes_atual;
+        // dd($mes_ano);
 
         $dt_full = date('Y-m-d H:i:s');
         

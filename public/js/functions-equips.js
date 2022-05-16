@@ -106,12 +106,12 @@ function locacaoSelecionada() {
     //mostra a quantidade de checkboxes selecionados no elemento Html na página.
     QtdequipsSelecionados.innerHTML = "Total: " + selecionados + " equipamento(s) selecionado(s)";
 
-    // if (selecionados > 0) {
-    //     alert('contou')
-    //     document.getElementById("btnSolicita").style.display = "block";
-    // } else {
-    //     document.getElementById("btnSolicita").style.display = "none";
-    // }
+    if (selecionados > 0) {
+        // alert('contou')
+        document.getElementById("dtAgendamento").style.visibility = "visible";
+    } else {
+        document.getElementById("dtAgendamento").style.visibility = "hidden";
+    }
 }
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /**Conta a quantidade de itens selecionados para recolhimento */
@@ -128,6 +128,35 @@ function ContarSelecionadosRecolhe(){
     });
     //mostra a quantidade de checkboxes selecionados no elemento Html na página.
     QtdequipsSelecionadosRecolhe.innerHTML = "Total: " + selecionados + " equipamento(s) selecionado(s)";
+
+    //torna visível o botão avançar
+
+    
+    if (selecionados > 0) {
+        document.getElementById('btnAvancar').style.visibility = "visible";
+        // document.getElementById('selectMotivo').style.visibility = "visible";
+    } else {
+        // document.getElementById('selectMotivo').style.visibility = "hidden";
+        document.getElementById('btnAvancar').style.visibility = "hidden";
+    }
+}
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/**Conta a quantidade de itens selecionados para troca */
+function ContarSelecionadosTroca(){
+    var checkBoxes = document.querySelectorAll(".checkbox");                        //Seleciona todos os objetos da classe "checkbox"
+    var QtdequipsSelecionadosTroca = document.getElementById("QtdequipsSelecionadosTroca");   //Seleciona o elemento pelo id
+    var selecionados = 0;                                                           //cria uma variâvel chamada "selecionados" e atribui o valor 0 a ela
+
+    //soma a quantidade de checkbox selecionados
+    checkBoxes.forEach(function(el){                    //faz um forEach por todos os checkboxes da tabela
+        if (el.checked) {                               //verifica que o checkbox está marcado
+        selecionados++;                                 //se estiver marcado adiciona um incremento a variável
+        }
+    });
+    //mostra a quantidade de checkboxes selecionados no elemento Html na página.
+    QtdequipsSelecionadosTroca.innerHTML = "Total: " + selecionados + " equipamento(s) selecionado(s)";
+    document.getElementById('qtdSelTroca').value = selecionados;
 
     //torna visível o botão avançar
 
@@ -192,8 +221,10 @@ function ContarSelecionadosRecolhe(){
             // alert ("Esta solicitação é uma IMPLANTAÇÃO!");
             document.getElementById('btnConferido').style.visibility = "visible";
             break;
-        case '3':
-            alert ("Esta solicitação é um troca!");
+            case '3':
+            // document.getElementById('btnConferido').style.visibility = "visible";
+            // alert ("Esta solicitação é um troca!");
+            document.querySelector("#enviarEquipTroca").value = e;
             break;
 
         default:
@@ -230,6 +261,18 @@ function ContarSelecionadosRecolhe(){
     coletaIDsRecolhe(ids);
     coletaPatrRecolhe(patrs);
  }
+
+ /*********************************************************************************************************************************
+ * Função BUSCA OS EQUIPAMENTOS DO PACIENTES QUE ESTÃO SELECIONADOS TROCA/MANUTENÇÃO
+ */
+  function coletaDadosTroca(){
+        var patrs = document.getElementsByClassName('checkbox');  //Seleciona todos os objetos da classe "checkbox"
+        coletaIDsTroca(patrs);
+ }
+
+ /*********************************************************************************************************************************
+ * Função Coleta os ids dos equipamentos selecionados
+ */
  function coletaPatrRecolhe(dados){
     var array_dadosPatr = dados;                            //cria variável com os dados do array
     var newArrayPatr = [];                                  //cria o array
@@ -247,14 +290,36 @@ function ContarSelecionadosRecolhe(){
         return html + "<li>" + item + "</li>";
             }, "");
 
-    // var e = document.querySelector("#equipSelecionados").innerHTML = sum;
     document.querySelector("#enviarEquipRecolhe").value = sum;
-    // document.querySelector("#enviarEquipRecolhe").innerHTML = sum;
-    
-  
  }
 
- //////////////////////////////////////////////////////////////////////
+  /*********************************************************************************************************************************
+ * Função Coleta os ids dos equipamentos selecionados
+ */
+   function coletaPatrTroca(dados){
+    var array_dadosPatr = dados;                            //cria variável com os dados do array
+    var newArrayPatr = [];                                  //cria o array
+    for(var x = 0; x <= array_dadosPatr.length; x++){
+         if(typeof array_dadosPatr[x] == 'object'){         //typeof retorna o tipo de operando. verifica de o array_dados é um objeto
+           if(array_dadosPatr[x].checked){                  //verifica no array_dados se estão marcados
+            newArrayPatr.push(array_dadosPatr[x].id)      //o push adiciona o dado (id) selecionado ao array
+            }
+        }
+    }
+    console.log(newArrayPatr);
+
+    let sum = newArrayPatr;
+    const codeHTML = sum.reduce((html, item) => {
+        return html + "<li>" + item + "</li>";
+            }, "");
+
+    document.querySelector("#enviarEquipRecolhe").value = sum;
+ }
+
+/*********************************************************************************************************************************
+ * Função coletaDados busca na tabela o nome dos itens selecionados dos recolhimento
+ */
+
  function coletaIDsRecolhe(dados){
     var array_dados = dados;                            //cria variável com os dados do array
     var newArray = [];                                  //cria o array
@@ -265,17 +330,39 @@ function ContarSelecionadosRecolhe(){
             }
         }
     }
-    // console.log(newArray);
-    // NomeEquipsSelecionados.innerHTML = newArray;    //exibe na página os elementos do array (nomes dos equipamentos)
     //CRIA UMA LISTA A PARTIR DO ARRAY ///////////////////////////////////////////////////////////////////////////////////////////
     let sum = newArray;
     const codeHTML = sum.reduce((html, item) => {
         return html + "<li>" + item + "</li>";
             }, "");
     // document.querySelector("#fooRecolhe").innerHTML = codeHTML;
-    document.querySelector("#textEquipsRecolhe").innerHTML = sum;
+    document.querySelector("#textEquipsTroca").innerHTML = sum;
  }
 
+ /*********************************************************************************************************************************
+ * Função coletaDados busca na tabela o nome dos itens selecionados da troca/manutenção
+ */
+
+  function coletaIDsTroca(dados){
+    var array_dados = dados;                            //cria variável com os dados do array
+    var newArray = [];                                  //cria o array
+    for(var x = 0; x <= array_dados.length; x++){
+         if(typeof array_dados[x] == 'object'){         //typeof retorna o tipo de operando. verifica de o array_dados é um objeto
+           if(array_dados[x].checked){                  //verifica no array_dados se estão marcados
+                newArray.push(array_dados[x].name)      //o push adiciona o dado selecionado ao array
+            }
+        }
+    }
+    //CRIA UMA LISTA A PARTIR DO ARRAY ///////////////////////////////////////////////////////////////////////////////////////////
+    let sum = newArray;
+    const codeHTML = sum.reduce((html, item) => {
+        return html + "<li>" + item + "</li>";
+            }, "");
+    // document.querySelector("#fooRecolhe").innerHTML = codeHTML;
+    document.querySelector("#textEquipsTroca").innerHTML = sum;
+ }
+
+ 
 /*********************************************************************************************************************************
  * Função coletaDados busca na tabela o nome dos itens selecionados
  */
@@ -506,19 +593,20 @@ function obsNotNull(){
     }
 }
 
-
-function obsCancel(){
-    tamTxtCancel =  document.getElementById('txtCancel')
-    if (tamTxtCancel.value.length > 10) {
-        document.getElementById('btnCancelSolicit').style.visibility = 'visible';
-    } else {
-        document.getElementById('btnCancelSolicit').style.visibility = 'hidden';
-        
+/*********************************************************************************************************************************
+ * Função habilita o botão quando houver mais de 10 caracteres no campo txtInput
+ */
+function txtMin (txtInput, btn){
+    // alert('txt aqui');
+    if(document.getElementById(txtInput).value.length > 10){
+        // alert('validou +10');
+        document.getElementById(btn).style.visibility = 'visible';
+    }else{
+        document.getElementById(btn).style.visibility = 'hidden';
     }
-    // console.log(tamTxtCancel.value.length)
 }
 
-
+/************************************************************************************ */
 
 function obsForNull(){
     if (document.getElementById('obsSolicitacaoRecolhe') = null) {
@@ -739,7 +827,7 @@ function msgHora(){
     /***************************************************************************************************************/
     // console.log(dataFormatada);
 
-    document.getElementById('resumoSolicit').innerHTML = "Dia: " +  dataFormatada + " - (" + txtHsAgenda + ")" + "\n" + txtResumo + "\n" + "Obs: "+ obs + "\n" + "Equipamento(s): " + txtEquips;
+    document.getElementById('resumoSolicit').innerText = "Dia: " +  dataFormatada + " - (" + txtHsAgenda + ")" + "\n" + txtResumo + "\n" + "Obs: "+ obs + "\n" + "Equipamento(s): " + txtEquips;
     // console.log(dtAgenda);
     
    
@@ -863,16 +951,177 @@ function selHora(){
     }
 }
 
+function selHoraRecolhe(){
+    //dtAgendamento é o input que pega a data selecionada
+    var sel_data = new Date( document.getElementById('dtAgendamentoRecolhe').value);
+    // var sel_dia = sel_data.getUTCDate();
+    var sel_dia = sel_data.getUTCDate();
+    var sel_mes = sel_data.getUTCMonth();
+    var sel_ano = sel_data.getUTCFullYear();
+    var nr_day = sel_data.getUTCDay();
+
+    var hoje = new Date();
+    var atual_dia = hoje.getDate();
+    var atual_mes = hoje.getUTCMonth();
+    var atual_ano = hoje.getUTCFullYear();
+
+    // console.log('nr '  + sel_data.getUTCDay());   //número do dia da semana (0=dom, 1=seg, 2=ter, 3=qua, 4=qui, 5=sex, 6=sab)
+    // console.log(tem_cama);
+    // console.log('dia ' + sel_dia);                //retorna o dia do mês (1 a 31)
+    // console.log('dia atual ' + atual_dia);         //retorna o dia de hoje (1 a 31)
+    // console.log('mes ' + sel_mes);                //retorna o mês (0=jan, 1=fev, 2=mar, 3=abr, 4=mai, 5=jun, 6=jul, 7=ago, 8=set, 9=out, 10=nov, 11=dez)
+    // console.log('mes atual ' + atual_mes);        //retorna o mês atual (0=jan, 1=fev, 2=mar, 3=abr, 4=mai, 5=jun, 6=jul, 7=ago, 8=set, 9=out, 10=nov, 11=dez)
+    // console.log('ano ' + sel_ano);                //retorna o ano
+    // console.log('ano atual ' + atual_ano);        //retorna o ano atual
+
+    //Busca dentro do input dos equipamentos selecionado se tem alguma CAMA
+    var tem_cama = document.getElementById('textEquipsRecolhe').value;
+    var test_cama = tem_cama.indexOf("CAMA");
+    console.log(test_cama);
+
+    //Verifica se o dia da semana é sábado ou domingo
+    if (nr_day == 6 || nr_day == 0) {
+        //Verifica se tem cama na solicitação
+        if (test_cama > 0) {
+            alert('\u274C Não recolhemos ou implantamos CAMAS aos finais de semana!\n\n Em casos de EXTREMA urgência favor entrar em contato \n com o Plantão de Intercorrências.')
+            document.getElementById('dtAgendamentoRecolhe').value = null;
+            document.getElementById('btnAvancar').style.visibility = "hidden";
+        }else{
+            alert('\u274C Não fazermos Recolhimentos aos finais de semana! \n\n Em casos de EXTREMA urgência favor entrar em contato \n com o Plantão de Intercorrências.');
+            document.getElementById('dtAgendamentoRecolhe').value = null;
+            document.getElementById('selhorariosRecolhe').style.visibility = "hidden";
+
+        }
+    }else{
+
+        
+        if (sel_ano >= atual_ano) {             // verifica se o ano selecionado é anterior ao ano atual
+            if (sel_mes >= atual_mes) {         // verifica se o mês selecionado é anterior ao mês atual
+                if (sel_dia >= atual_dia) {     // verifica se o dia selecionado é anterior ao dia atual
+                    // alert('Selecione um horário!');
+                    document.getElementById('selhorariosRecolhe').style.visibility = "visible";
+                    document.getElementById('horarios').focus();
+                    
+                    //Habilita os horários de hoje e de amanhã
+                        if (sel_dia == atual_dia) {
+                            horasHoje();
+                        } else {
+                            horasAmanha();
+                        }
+
+                    
+                        
+                }else{
+                    if (sel_mes > atual_mes) {
+                        // alert('O dia é menor mas o mês é maior!');
+                        horasAmanha();
+                        document.getElementById('selhorariosRecolhe').style.visibility = "visible";
+                        document.getElementById('horarios').focus();
+                    }else{
+                        alert('A data selecionada é anterior a data atual! DIA');
+                        document.getElementById('dtAgendamentoRecolhe').value = null;
+                        document.getElementById('selhorariosRecolhe').style.visibility = "hidden";
+                        document.getElementById('btnSolicitaRecolhe').style.visibility = "hidden";
+                        document.getElementById('obsSolicitacaoRecolhe').style.visibility = 'hidden';
+                    }
+                }
+            }else{
+                alert('A data selecionada é anterior a data atual! MÊS');
+                document.getElementById('dtAgendamentoRecolhe').value = null;
+                document.getElementById('btnAvancar').style.visibility = "hidden";
+                document.getElementById('obsSolicitacaoRecolhe').style.visibility = 'hidden';
+            }
+        }else{
+            alert('A data selecionada é anterior a data atual! ANO');
+            document.getElementById('dtAgendamentoRecolhe').value = null;
+            document.getElementById('btnAvancar').style.visibility = "hidden";
+            document.getElementById('obsSolicitacaoRecolhe').style.visibility = 'hidden';
+        }
+    }
+}
+
+function selHoraTroca(){
+    //dtAgendamento é o input que pega a data selecionada
+    var sel_data = new Date( document.getElementById('dtAgendamentoTroca').value);
+    // var sel_dia = sel_data.getUTCDate();
+    var sel_dia = sel_data.getUTCDate();
+    var sel_mes = sel_data.getUTCMonth();
+    var sel_ano = sel_data.getUTCFullYear();
+    var nr_day = sel_data.getUTCDay();
+
+    var hoje = new Date();
+    var atual_dia = hoje.getDate();
+    var atual_mes = hoje.getUTCMonth();
+    var atual_ano = hoje.getUTCFullYear();
+
+    //Busca dentro do input dos equipamentos selecionado se tem alguma CAMA
+    var tem_cama = document.getElementById('textEquipsTroca').value;
+    var test_cama = tem_cama.indexOf("CAMA");
+    console.log(test_cama);
+
+        if (sel_ano >= atual_ano) {             // verifica se o ano selecionado é anterior ao ano atual
+            if (sel_mes >= atual_mes) {         // verifica se o mês selecionado é anterior ao mês atual
+                if (sel_dia >= atual_dia) {     // verifica se o dia selecionado é anterior ao dia atual
+                    // alert('Selecione um horário!');
+                    document.getElementById('selhorariosTroca').style.visibility = "visible";
+                    document.getElementById('horarios').focus();
+                    
+                    //Habilita os horários de hoje e de amanhã
+                        if (sel_dia == atual_dia) {
+                            horasHoje();
+                        } else {
+                            horasAmanha();
+                        }
+                }else{
+                    if (sel_mes > atual_mes) {
+                        // alert('O dia é menor mas o mês é maior!');
+                        horasAmanha();
+                        document.getElementById('selhorariosTroca').style.visibility = "visible";
+                        document.getElementById('horarios').focus();
+                    }else{
+                        alert('A data selecionada é anterior a data atual! DIA');
+                        document.getElementById('dtAgendamentoTroca').value = null;
+                        document.getElementById('selhorariosTroca').style.visibility = "hidden";
+                        document.getElementById('btnSolicitaTroca').style.visibility = "hidden";
+                        document.getElementById('obsSolicitacaoTroca').style.visibility = 'hidden';
+                    }
+                }
+            }else{
+                alert('A data selecionada é anterior a data atual! MÊS');
+                document.getElementById('dtAgendamentoTroca').value = null;
+                document.getElementById('btnAvancar').style.visibility = "hidden";
+                document.getElementById('obsSolicitacaoTroca').style.visibility = 'hidden';
+            }
+        }else{
+            alert('A data selecionada é anterior a data atual! ANO');
+            document.getElementById('dtAgendamentoTroca').value = null;
+            document.getElementById('btnAvancar').style.visibility = "hidden";
+            document.getElementById('obsSolicitacaoTroca').style.visibility = 'hidden';
+        }
+}
+
 function viewBtnSolicita(){
     document.getElementById('btnSolicitaRecolhe').style.visibility = "visible";
 }
-function checkSolicit(){
-    if (document.getElementById('checkSolicitOk').checked) {
-        document.getElementById('btnSolicitaRecolhe').style.visibility = "visible";
+
+/*****************************************************************************************************************
+ * Verifica se a solicitação tem equipamento selecionado, observações e agendamento.
+ */
+function checkSolicit(equipSel, btn){
+    
+    if(document.getElementById(equipSel).value == 0 ){
+        alert('Selecione o equipamento!');
+        document.getElementById(btn).style.visibility = 'hidden';
     }else{
-        document.getElementById('btnSolicitaRecolhe').style.visibility = "hidden";
+        document.getElementById(btn).style.visibility = 'visible';
     }
-    console.log(document.getElementById('checkSolicitOk').value);
+}
+
+/*******************************************************************************************************************/
+
+function checkSolicitImplant(){
+    document.getElementById('btnSolicita').style.visibility = "visible";
+    console.log('achei vc');
 }
 
 function offBtnSolicita(){
