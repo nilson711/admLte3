@@ -9,12 +9,12 @@
 @section('content')
 
     <body>
-        <div class="col-md-12">
-            <div class="row">
-                <div class="col-sm-6">
+        <div >
+            {{-- <div class="row"> --}}
+                {{-- <div class="col-sm-6"> --}}
                     {{-- <p>Detalhes da Solicitação</p> --}}
-                </div>
-            </div>
+                {{-- </div> --}}
+            {{-- </div> --}}
             @foreach ($solicitAtual as $atual)
             <div class="card card-primary">
                 <div class="card-header">
@@ -100,10 +100,6 @@
                         <strong>Obs: </strong> 
                         {{$atual->obs_solicit}}
                         
-                        
-                        {{-- <hr> --}}
-                        {{-- <i class="fas fa-procedures"></i> --}}
-
                         <div class="row">
                             <div class="col-md-12">
                                 <div>
@@ -115,7 +111,8 @@
                                             <div>
                                                 <!-- your steps content here -->
                                                 <div id="select-equips">
-                                                    <div >
+                                                    <div>
+                                                        
                                                         @if ($solicitSel->type_solicit == 1)
                                                             <label for="exampleInputEmail1">Solicitados</label>
                                                         @endif
@@ -124,9 +121,10 @@
                                                                 {{-- Separa os itens por vírgula e joga numa lista --}}
                                                                 <div class="form-group">
                                                                     <div>
-                                                                        @if ($solicitSel->type_solicit == 1)
+                                                                        @if ($solicitSel->type_solicit == 1 )
                                                                             <li class="li_itens">{{ $itemEquip }}</li>
                                                                         @endif
+                                                                       
                                                                         {{-- <i class="fas fa-plus"></i> --}}
                                                                         <form action="{{ route('add_equip_pct') }}"
                                                                             method="post">
@@ -135,14 +133,13 @@
                                                                                 value="{{ $solicitSel->id }}"
                                                                                 style="display: none">
                                                                             @if ($solicitSel->type_solicit == 1 or $solicitSel->type_solicit == 3)
-                                                                            {{-- @if ($solicitSel->type_solicit == 1) --}}
                                                                                 @if ($atual->status_solicit < 1)
                                                                                     <div class="input-group input-group-sm">
                                                                                         <select name="selectEquip"
                                                                                             class="selectEquip form-control select2 select2-hidden-accessible"
                                                                                             onchange="coletaProdutoSelecionado()"
                                                                                             on style="width: 100%;"
-                                                                                            aria-hidden="true">]
+                                                                                            aria-hidden="true">
                                                                                             <option value="" selected>
                                                                                                 Selecione</option>
                                                                                             @foreach ($equips as $equip)
@@ -156,13 +153,13 @@
                                                                                     </div>
                                                                                 @endif
                                                                                 <hr>
-                                                                                
                                                                             @endif
+                                                                                
                                                                             <input type="text" name="pctForEquip"
                                                                                 value="{{ $atual->id }}"
                                                                                 style="display: none">
                                                                             <div id="equipSelecionados"
-                                                                                style="display: none"></div>
+                                                                               ></div>
                                                                             <input type="text" name="enviarEquip"
                                                                                 id="enviarEquip" 
                                                                                 style="display: none"
@@ -226,98 +223,103 @@
                                                                     </div>
                                                                 </div>
                                                             @endforeach
+
+
                                                             <div class="col-md-12">
+                                                                
                                                                 @if ($equipsSel != null)
-                                                                    <label for="">Selecionados {{$solicitSel->type_solicit == 2 ? "para recolhimento" : ""}}</label><br>
-                                                                    @foreach ($equipsSel as $itemSel)
-                                                                        <form action="{{ route('cancelOneEquipSolicit', [$itemSel->id, $itemSel->solicit_equip]) }}"
-                                                                            method="post">
-                                                                            @csrf
-                                                                                <small>
-                                                                                <p>
-                                                                                    @if ($itemSel->status_equip == 1)
-                                                                                        <span style="color: blue">
-                                                                                            <i class="fas fa-arrow-up"></i>
-                                                                                            {{ $itemSel->patr }} - {{ $itemSel->name_equip }}
-                                                                                        </span>
-                                                                                    @else
-                                                                                        <span style="color: red">
-                                                                                            <i class="fas fa-arrow-down"></i>
-                                                                                            {{ $itemSel->patr }} - {{ $itemSel->name_equip }}
-                                                                                        </span>
-                                                                                    @endif
-                                                                                        {{-- @if ($solicitSel->type_solicit == 1) --}}
-                                                                                        @if ($itemSel->status_equip != 1)
-                                                                                            <button class="btn" type="submit" data-toggle="tooltip" title="Retirar este equipamento"
-                                                                                                style="color: red">
-                                                                                                <i class="fas fa-trash"></i>
-                                                                                            </button>
-                                                                                        @endif
+                                                                
+                                                                {{-- BOX SELECIONADOS PARA RECOLHIMENTO OU TROCA ----------------------------------------}}
+                                                                    <div class="card card-outline card-danger">
+                                                                        <div class="card-header">
+                                                                        <h3 class="card-title">Selecionados {{$solicitSel->type_solicit == 2 ? "para recolhimento" : " para troca"}}</h3>
+                                                                        </div>
+                                                                        <div class="card-body">
+                                                                            @foreach ($equipsSel as $itemSel)
+                                                                                <form action="{{ route('cancelOneEquipSolicit', [$itemSel->id, $itemSel->solicit_equip]) }}"
+                                                                                    method="post">
+                                                                                    @csrf
+                                                                                        <small>
+                                                                                        <p>
+                                                                                            @if ($itemSel->status_equip == 1)
+                                                                                                <span style="color: blue">
+                                                                                                    <i class="fas fa-arrow-up"></i>
+                                                                                                    {{ $itemSel->patr }} - {{ $itemSel->name_equip }}
+                                                                                                </span>
+                                                                                            @else
+                                                                                                <span style="color: red" >
+                                                                                                    <i class="fas fa-arrow-down"></i>
+                                                                                                    <span id="itemRetirado">
+                                                                                                        {{ $itemSel->patr }} - {{ $itemSel->name_equip }}
+                                                                                                    </span>
+                                                                                                    @if ($itemSel->status_equip != 1)
+                                                                                                    <button class="btn"  data-toggle="tooltip" title="Retirar este equipamento" onclick="coletaRetirados()"
+                                                                                                        style="color: red">
+                                                                                                        <i class="fas fa-trash"></i>
+                                                                                                    </button>
+                                                                                                @endif
+                                                                                                </span>
+                                                                                                
+                                                                                                <hr>
+                                                                                            @endif
+                                                                                            
+                                                                                                <!-- Modal Confirma Exclusão Equip -->
+                                                                                                    <div class="modal fade" id="modalConfirmaExclusão"
+                                                                                                            tabindex="-1" role="dialog"
+                                                                                                            aria-labelledby="exampleModalLabel"
+                                                                                                            aria-hidden="true">
+                                                                                                        <div class="modal-dialog modal-dialog-centered"
+                                                                                                            role="document">
+                                                                                                            <div class="modal-content">
+                                                                                                                <div class="modal-header">
+                                                                                                                    <h5 class="modal-title"
+                                                                                                                        id="exampleModalLabel">
+                                                                                                                        Excluir Equipamento
+                                                                                                                    </h5>
+                                                                                                                    <button type="button"
+                                                                                                                        class="close"
+                                                                                                                        data-dismiss="modal"
+                                                                                                                        aria-label="Close">
+                                                                                                                        <span
+                                                                                                                            aria-hidden="true">&times;</span>
+                                                                                                                    </button>
+                                                                                                                </div>
+                                                                                                                <div class="modal-body">
 
-                                                                                        {{-- @endif --}}
-
-                                                                                        <!-- Modal Confirma Exclusão Equip -->
-                                                                                            <div class="modal fade" id="modalConfirmaExclusão"
-                                                                                                    tabindex="-1" role="dialog"
-                                                                                                    aria-labelledby="exampleModalLabel"
-                                                                                                    aria-hidden="true">
-                                                                                                <div class="modal-dialog modal-dialog-centered"
-                                                                                                    role="document">
-                                                                                                    <div class="modal-content">
-                                                                                                        <div class="modal-header">
-                                                                                                            <h5 class="modal-title"
-                                                                                                                id="exampleModalLabel">
-                                                                                                                Excluir Equipamento
-                                                                                                            </h5>
-                                                                                                            <button type="button"
-                                                                                                                class="close"
-                                                                                                                data-dismiss="modal"
-                                                                                                                aria-label="Close">
-                                                                                                                <span
-                                                                                                                    aria-hidden="true">&times;</span>
-                                                                                                            </button>
-                                                                                                        </div>
-                                                                                                        <div class="modal-body">
-
-                                                                                                            <h5>Deseja continuar?</h5>
-                                                                                                            {{-- <label
-                                                                                                                for="obs_atend">Observações:</label><br>
-                                                                                                            <textarea name="obs_atend"
-                                                                                                                id="obs_atend" cols="38"
-                                                                                                                rows="4"></textarea> --}}
-                                                                                                        </div>
-                                                                                                        <div class="modal-footer">
-                                                                                                            <button type="button"
-                                                                                                                class="btn btn-secondary"
-                                                                                                                data-dismiss="modal">Não</button>
-                                                                                                            <button class="btn btn-primary swalDefaultCancelEquip"
-                                                                                                                name="submitbutton"
-                                                                                                                value="2"
-                                                                                                                type="submit">Sim
-                                                                                                            </button>
+                                                                                                                    <h5>Deseja continuar?</h5>
+                                                                                                                    {{-- <label
+                                                                                                                        for="obs_atend">Observações:</label><br>
+                                                                                                                    <textarea name="obs_atend"
+                                                                                                                        id="obs_atend" cols="38"
+                                                                                                                        rows="4"></textarea> --}}
+                                                                                                                </div>
+                                                                                                                <div class="modal-footer">
+                                                                                                                    <button type="button"
+                                                                                                                        class="btn btn-secondary"
+                                                                                                                        data-dismiss="modal">Não</button>
+                                                                                                                    <button class="btn btn-primary swalDefaultCancelEquip"
+                                                                                                                        name="submitbutton"
+                                                                                                                        value="2"
+                                                                                                                        type="submit">Sim
+                                                                                                                    </button>
+                                                                                                                </div>
+                                                                                                            </div>
                                                                                                         </div>
                                                                                                     </div>
-                                                                                                </div>
-                                                                                            </div>
-                                                                                </p>
-                                                                                </small>
-                                                                        </form>
-                                                                    @endforeach
+                                                                                        </p>
+                                                                                        </small>
+                                                                                </form>
+                                                                            @endforeach
+                                                                        </div>
+                                                                    </div>
+                                                                    <hr>
 
-                                                                    {{-- <i class="fas fa-hand-point-right"></i> --}}
-                                                                    <span style="color: red">
-                                                                        <i>{{ $atual->obs_solicit }}</i>
-                                                                    </span>
-                                                                    {{-- <form
-                                                                        action="{{ route('cancelAllEquipsSolicit', $atual->SolicitId) }}"
-                                                                        method="post">
-                                                                        @csrf
-                                                                        <button class="btn btn-app" type="submit"
-                                                                            style="color: red" onclick="txtCancelRequired()">
-                                                                            <i class="fas fa-window-close"></i>
-                                                                            Excluir Selecionados dddd
-                                                                        </button>
-                                                                    </form> --}}
+                                                                  
+                                                                   
+                                                                    
+
+                                                                    <input type="text" name="retirados" id="retirados" placeholder="retirados" >
+                                                                    
                                                                     <hr>
                                                                     <ul class="nav nav-pills ml-auto p-2">
 
@@ -344,27 +346,24 @@
                                                                         <form action="{{ route('iniciar_solicit', $atual->SolicitId) }}"
                                                                             method="post" enctype="multipart/form-data">
                                                                             @csrf
-                                                                            {{-- @if ($atual->status_solicit == 0) --}}
                                                                                 <div class="row">
                                                                                     <li class="nav-item">
-                                                                                        @if ($atual->type_solicit == 3)
-                                                                                            <button id="btnConfirmaRetiradaTroca" class="btn btn-app" style="color: rgb(40, 184, 40)" 
-                                                                                            name="submitbutton" value="2" type="submit" >
-                                                                                                <i class="far fa-check-square"></i>
-                                                                                                Confirma Incluir
-                                                                                            </button>
-                                                                                                <input type="text" name="enviarEquipTroca"
-                                                                                                id="enviarEquipTroca" 
-                                                                                                    style="display: none"
-                                                                                                    >
-                                                                                        @else
+                                                                                        {{-- @if ($atual->type_solicit == 3)
+                                                                                            <a data-toggle="modal" data-target="#modalFinalizar">
+                                                                                                <button id="btnConfirmaRetiradaTroca" class="btn btn-app" style="color: rgb(40, 184, 40)">
+                                                                                                    <i class="far fa-check-square"></i>
+                                                                                                    Concluir T/M
+                                                                                                </button>
+                                                                                            </a> --}}
+                                                                                                {{-- <input type="text" name="enviarEquipTroca" id="enviarEquipTroca" placeholder="Equips troca"> --}}
+                                                                                        {{-- @else --}}
                                                                                             <a id="linkBtnFinalizar" data-toggle="modal" data-target='#modalFinalizar' onclick="coletaProdutoSelecionado()">
                                                                                                 <button id="btnFinalizar" class="btn btn-app" style="color: rgb(40, 184, 40)">
                                                                                                     <i class="far fa-check-square"></i>
                                                                                                     Finalizar
                                                                                                 </button>
                                                                                             </a>
-                                                                                        @endif
+                                                                                        {{-- @endif --}}
                                                                                     </li>
 
                                                                                     <li class="nav-item">
@@ -379,13 +378,13 @@
                                                                                             </button>
                                                                                         </a>
                                                                                     </li>
-                                                                                    {{-- <a href="http://localhost:8001/msg/{{$atual->SolicitId}}/{{$atual->name_pct}}/{{ $atual->cliente }}"  target="_blanck">
-                                                                                        <button class="btn btn-app" type="button">
-                                                                                            <i class="fas fa-robot"></i>
-                                                                                            Robot
-                                                                                        </button>
-                                                                                    </a> --}}
-                                                                            {{-- @endif --}}
+                                                                                        {{-- <a href="http://localhost:8001/msg/{{$atual->SolicitId}}/{{$atual->name_pct}}/{{ $atual->cliente }}"  target="_blanck">
+                                                                                            <button class="btn btn-app" type="button">
+                                                                                                <i class="fas fa-robot"></i>
+                                                                                                Robot
+                                                                                            </button>
+                                                                                        </a> --}}
+                                                                                        {{-- @endif --}}
                                                                                     <li>
                                                                                         <a href="{{ route('solicitacoes') }}">
                                                                                             <button class="btn btn-app" type="button"
@@ -394,29 +393,35 @@
                                                                                                 Fechar
                                                                                             </button>
                                                                                         </a>
-                                                                                </li>
+                                                                                    </li>
                                                                             </ul>
                                                                         </div>
-                                                                        
+
                                                                 @endif
                                                             </div>
-                                                                            @if ($equipsSel == null)
-                                                                                <a id="btnConferido" style="visibility: hidden">
-                                                                                    <button class="btn btn-app" type="button"
-                                                                                        data-toggle="modal" data-target='#modalConferir'
-                                                                                        style="color: green">
-                                                                                        {{-- <button class="btn btn-app" type="submit" style="color: green" name="submitbutton" value="2"> --}}
-                                                                                        <i class="fas fa-check"></i>Confirma Equipamento
-                                                                                    </button>
-                                                                                </a>
-                                                                            @endif
-                                                                            <a href="{{ route('solicitacoes') }}">
-                                                                                <button class="btn btn-app" type="button"
-                                                                                    style="color: red">
-                                                                                    <i class="fas fa-times"></i>
-                                                                                    Fechar
-                                                                                </button>
-                                                                            </a>
+
+
+
+
+                                                            {{-- @if ($equipsSel == null) --}}
+                                                                <a id="btnConferido" >
+                                                                    <button class="btn btn-app" type="button"
+                                                                        data-toggle="modal" data-target='#modalConferir'
+                                                                        style="color: green">
+                                                                        {{-- <button class="btn btn-app" type="submit" style="color: green" name="submitbutton" value="2"> --}}
+                                                                        <i class="fas fa-check"></i>Confirma Equipamento
+                                                                    </button>
+                                                                </a>
+                                                            {{-- @endif --}}
+
+                                                                <a href="{{ route('solicitacoes') }}">
+                                                                    <button class="btn btn-app" type="button"
+                                                                        style="color: red">
+                                                                        <i class="fas fa-times"></i>
+                                                                        Fechar RRRR
+                                                                    </button>
+                                                                </a>
+                                                                            
                                                             </a>
                                                         </div>
                                                     </div>
@@ -472,7 +477,7 @@
                             <!-- Modal Concluir -->
                             <div class="modal fade" id="modalFinalizar" tabindex="-1" role="dialog"
                                 aria-labelledby="exampleModalLabel" aria-hidden="true">
-                                <div class="modal-dialog modal-dialog-centered" role="document">
+                                <div class="modal-dialog modal-sm " >
                                     <div class="modal-content">
                                         <div class="modal-header">
                                             <h5 class="modal-title" id="exampleModalLabel">Concluir Solicitação</h5>
@@ -486,6 +491,19 @@
                                             <h5 id="txtAvisoQtd" style="color: red; display:none">Atenção - A quantidade de
                                                 ítens solicitada é diferente da quantidade de itens implantados!</h5>
                                             <h5>Deseja concluir esta solicitação?</h5> <br>
+                                                @if ($atual->type_solicit == 3)
+                                                    <div class="form-group clearfix" id="radioManutDiv">
+                                                        <div class="icheck-success d-inline float-left ">
+                                                            <input type="radio" id="radioManut" name="rTM" value="M" style="height: 40px; width: 40px">
+                                                            <label for="radioManut">Manutenção</label>
+                                                        </div>
+                                                        <div class="icheck-success d-inline float-right">
+                                                            <input type="radio" id="radioTroca" name="rTM" value="T">
+                                                            <label for="radioTroca">Troca</label>
+                                                        </div>
+                                                    </div>
+                                                @endif
+                                           
 
                                             <div class="form-group">
                                                 <label for="exampleFormControlFile1">Anexar Guia:</label>
@@ -499,28 +517,139 @@
                                             </div>
 
                                             <label for="obs_atend">Observações:</label><br>
-                                            <textarea name="obs_atend" id="obs_atend" cols="38" rows="4"></textarea>
+                                            <textarea name="obs_atend" id="obs_atend" style="width: 99%" rows="4" maxlength="100"></textarea>
                                         </div>
                                         <div class="modal-footer">
-                                            <button type="button" class="btn btn-secondary"
-                                                id="btnCancelarEnvio"
-                                                data-dismiss="modal">Cancelar
-                                            </button>
-                                            <button class="btn btn-primary "
+                                           
+                                                <button type="button" class="btn btn-lg btn-block btn-danger"
                                                     name="submitbutton"
-                                                    id="btnConclui" style="display: none"
-                                                    value="2"
-                                                    type="submit">
-                                                    Concluir
+                                                    id="btnNaoConcluida"
+                                                    value="???"
+                                                    data-dismiss="modal"
+                                                    data-toggle="modal"
+                                                    data-target="#modalNaoConcluida">Não Concluída
+                                                </button>
+                                            
+                                                <button type="button" class="btn btn-lg btn-block btn-secondary"
+                                                    id="btnCancelarEnvio"
+                                                    data-dismiss="modal">Cancelar
+                                                </button>
+                                            
+                                                <button class="btn btn-lg btn-block btn-primary "
+                                                        name="submitbutton"
+                                                        id="btnConclui" style="display: none"
+                                                        value="2"
+                                                        type="submit">
+                                                        Concluir add
+                                                </button>
+                                            
+                                                <button type="button" class="btn btn-lg btn-success" style="display: none" id="spinnerFinalizando">
+                                                    <span class="spinner-border spinner-border-sm"></span>
+                                                    Finalizando...
+                                                </button>
+                                            
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- Modal Não Concluída -->
+                            <div class="modal fade" id="modalNaoConcluida" tabindex="-1" role="dialog"
+                                aria-labelledby="modalNaoConcluida" aria-hidden="true">
+                                <div class="modal-dialog " role="document">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <h5 class="modal-title" id="modalNaoConcluida">Solicitação Não Concluída</h5>
+                                            <button type="button" class="close" data-dismiss="modal"
+                                                aria-label="Close">
+                                                <span aria-hidden="true">&times;</span>
                                             </button>
-                                            <button type="button" class="btn btn-success" style="display: none" id="spinnerFinalizando">
-                                                <span class="spinner-border spinner-border-sm"></span>
-                                                Finalizando...
+                                        </div>
+                                        <div class="modal-body">
+                                           <h3>
+                                               <strong>
+                                                   Deseja reagendar esta solicitação?
+                                               </strong>
+                                            </h3> 
+                                            <div class="col-sm-12">
+
+                                                <div class="form-group clearfix">
+                                                    <div class="icheck-primary d-inline float-left ">
+                                                        <input type="radio" id="radioPrimary1" value="1" name="r1" style="height: 40px; width: 40px" onclick="funcReagenda(1)">
+                                                        <label for="radioPrimary1">SIM - Reagendar</label>
+                                                    </div>
+                                                    <div class="icheck-danger d-inline float-right">
+                                                        <input type="radio" id="radioPrimary2" value="2" name="r1" onclick="funcReagenda(2)">
+                                                        <label for="radioPrimary2">NÃO REAGENDAR - Finalizar</label>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            
+                                            <div>
+                                                <label for="obs_reagenda">Observações:</label><br>
+                                                <textarea  name="obs_reagenda" id="obs_reagenda" 
+                                                rows="4" maxlength="100" style="width:100%" 
+                                                placeholder="Anote observações e selecione a data e horário."
+                                                disabled onkeyup="txtMin('obs_reagenda', 'dtSelReagenda')">
+                                                </textarea>
+                                            </div>
+                                            <br>
+                                            <div class="row" id="rowAgenda">
+                                                <div class="col-sm-8 input-group date" id="dtReagenda" >
+                                                    <label>
+                                                        Reagendamento:
+                                                        <i class="fas fa-info-circle" style="color: blue" data-toggle="tooltip" 
+                                                        title="Selecione o dia que foi combinado com os familiares/home care">
+                                                        </i>
+                                                    </label>
+                                                    <input type="date" class="col-sm-8" id="dtSelReagenda" name="dtSelReagenda" 
+                                                    class="form-control datetimepicker-input" disabled onchange="habilitaOutro('dtSelReagenda', 'horariosReagenda')">
+                                                </div>
+                                                <div class="col-sm-4">
+                                                    <label for="">Horário</label>
+                                                    <span id="selhorariosReagenda" >
+                                                        <select id="horariosReagenda"
+                                                            class="form-control"
+                                                            name="horariosReagenda" disabled>
+                                                            <option id="select_0" disabled selected
+                                                                value="0">Selecione
+                                                            </option>
+                                                            <option id="select_1"
+                                                                value="1"
+                                                                title="Qualquer horário do dia.">
+                                                                Dia todo</option>
+                                                            <option id="select_2"
+                                                                value="2"
+                                                                title="De 09hs às 12hs"
+                                                                >Manhã
+                                                            </option>
+                                                            <option id="select_3"
+                                                                value="3"
+                                                                title="De 13hs às 18hs"
+                                                                >Tarde
+                                                            </option>
+                                                            <option id="select_18"
+                                                                value="18" 
+                                                                title="Apenas emergências">
+                                                                +18hs*</option>
+                                                        </select>
+                                                    </span>
+                                                </div>
+                                            </div>
+                                            
+                                        </div>
+                                        <div class="modal-footer">
+                                            <button type="button" class="btn btn-block btn-danger" 
+                                                value="???"
+                                                id="btnNotAgenda"
+                                                data-dismiss="modal"
+                                                disabled>NÃO REAGENDAR - Finalizar atendimento
                                             </button>
-
-
-
-
+                                            <button type="button" class="btn btn-block btn-primary" 
+                                                value="???"
+                                                id="btnAgenda"
+                                                data-dismiss="modal"
+                                                disabled>SIM - Reagendar
+                                            </button>
                                         </div>
                                     </div>
                                 </div>
@@ -614,6 +743,8 @@
         <link rel="stylesheet" href="{{ asset('css/dataTables.bootstrap4.min.css') }}">
         <link rel="stylesheet" href="{{ asset('css/responsive.bootstrap4.min.css') }}">
         <link rel="stylesheet" href="{{ asset('css/buttons.bootstrap4.min.css') }}">
+        <link rel="stylesheet" href="{{ asset('css/icheck-bootstrap.min.css') }}">
+        
 
     @stop
 
@@ -1129,7 +1260,14 @@
                 document.getElementById('spinnerFinalizando').style.display = "block";
                 document.getElementById('btnConclui').style.display = "none";
                 document.getElementById('btnCancelarEnvio').style.display = "none";
+                document.getElementById('btnNaoConcluida').style.display = "none";
                 // document.getElementById('guia').readonly = true;
+            });
+            $("#radioManut").on('click', function() {
+                document.getElementById('btnConclui').style.display = "block";
+            });
+            $("#radioTroca").on('click', function() {
+                document.getElementById('btnConclui').style.display = "none";
             });
         </script>
 

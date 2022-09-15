@@ -179,7 +179,6 @@ class PctController extends Controller
                                 WHERE L.id_pct = $id AND  L.dt_inicio LIKE '$mes_ano%'") //exibe apenas os lancamentos do mês atual
                                 ;
                                 // WHERE L.id_pct = $id ") //exibe todos os lancamentos
-                                
 
         // Qtd dias do mês atual
         $diasDoMes = date("t");
@@ -306,7 +305,7 @@ class PctController extends Controller
 
         $pctEdit->save();
 
-        return redirect()->route('listaPcs');
+        return back()->withInput();
 
 
     }

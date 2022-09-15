@@ -205,7 +205,7 @@
                                 </div>
                                 <div class="row form-group">
                                     <div class="col-sm-4">
-                                        <input type="text" class="form-control form-control-sm" name="compl" id="compl" placeholder="Complemento"  title="Complemento ou Ponto de referência" maxlength="30" value="-">
+                                        <input type="text" class="form-control form-control-sm" name="compl" id="compl" placeholder="Complemento"  title="Complemento ou Ponto de referência" maxlength="30" value="-" required>
                                     </div>
                                     <div class="col-sm-4">
                                         <input type="text" class="form-control form-control-sm" name="bairro" id="bairro" placeholder="Bairro" required>

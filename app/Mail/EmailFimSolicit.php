@@ -30,8 +30,8 @@ class EmailFimSolicit extends Mailable
     {
 
         return $this->subject('Solicitação Concluída - nº: '.$this->idsolfimEmail. ' - PCT: '.$this->pctSolFimEmail)
-                    ->view('emails.emailFimSolicit')
-                    ->attach('storage/guias/'.$this->idsolfimEmail.'.jpg');
+                    ->view('emails.emailFimSolicit');
+                    // ->attach('storage/guias/'.$this->idsolfimEmail.'.jpg');
 
 
     }

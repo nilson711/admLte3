@@ -64,28 +64,29 @@ class HomeController extends Controller
         
         
         // duplica os lançamentos que não foram recolhidos para o mês atual
-        $lanc_mes_atual = DB::SELECT("
-                                SELECT * FROM lancamentos
-                                WHERE YEAR(dt_inicio) = $ano_atual 
-                                AND MONTH(dt_inicio) = $mes_atual;
-                                    ") != null ; //verifica se tem registro do mês e ano atual
+        // //verifica se tem registro do mês e ano atual
+        // $lanc_mes_atual = DB::SELECT("
+        //                         SELECT * FROM lancamentos
+        //                         WHERE YEAR(dt_inicio) = $ano_atual 
+        //                         AND MONTH(dt_inicio) = $mes_atual;
+        //                             ") != null ; 
 
         // dd($lanc_mes_atual);
-        if ($lanc_mes_atual == false) {
+        // if ($lanc_mes_atual == false) {
             
-            $id_lanc = Lancamento::where('dt_retirada', null)->pluck('id');
+        //     $id_lanc = Lancamento::where('dt_retirada', null)->pluck('id');
 
-            foreach ($id_lanc as $sel_lanc) {
-                $sel_lanc = Lancamento::find($sel_lanc);
-                $new_lanc = $sel_lanc->replicate()
-                                        ->save();
+        //     foreach ($id_lanc as $sel_lanc) {
+        //         $sel_lanc = Lancamento::find($sel_lanc);
+        //         $new_lanc = $sel_lanc->replicate()
+        //                                 ->save();
                                         
-            }   
+        //     }   
                 // Lancamento::where('created_at', date('Y-m-d H:i:s'))
-              $l =  Lancamento::where('created_at', '>=', $dt_full )
-                            ->update(['dt_inicio' => date('Y-m-01'), 'dt_fatura' => date('Y-m-t') ]);
+        //       $l =  Lancamento::where('created_at', '>=', $dt_full )
+        //                     ->update(['dt_inicio' => date('Y-m-01'), 'dt_fatura' => date('Y-m-t') ]);
         
-        }
+        // }
          
         
 

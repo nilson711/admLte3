@@ -20,7 +20,7 @@
     
       <div class="card card-sm card-danger collapsed-card">
         <div class="card-header">
-          <h3 class="card-title"><i class="fas fa-ban"></i> {{$cancelada->id}} - {{$cancelada->cliente}} </h3>
+          <p class="card-title"><i class="fas fa-ban"></i> {{$cancelada->id}} - {{$cancelada->cliente}} <br> <i class="fas fa-user-injured fa"></i> {{$cancelada->name_pct}}</p>
         <div class="card-tools">
           <button type="button" class="btn btn-tool" data-card-widget="collapse"><i class="fas fa-plus"></i>
           </button>
@@ -42,7 +42,7 @@
         @foreach ($solicitacoes as $solicitacao )
         <a href="{{route('edit_solicit', $solicitacao->id)}}">
 
-        @if ($solicitacao->priority == 0)
+        {{-- @if ($solicitacao->priority == 0) --}}
             <div class="col-12">
                 <div class="info-box">
                   
@@ -148,6 +148,8 @@
 
                               <span class="info-box-text">
                                <b> {{ $solicitacao->name_pct }}</b><br>
+                               <small>{{$solicitacao->rua}} - {{$solicitacao->nr == 0? '' : $solicitacao->nr}}</small><br>
+                               <small>{{$solicitacao->compl === 0 OR "-"? '': $solicitacao->compl}}</small>
                                <small >{{ $solicitacao->bairro }} - {{ $solicitacao->nome }}</small>
                                 {{-- <hr> --}}
                               </span>
@@ -188,7 +190,7 @@
                           </div>
                       </div>
             </div>
-            @else
+            {{-- @else
             <div class="col-12">
                 <div class="info-box">
                     <span class="info-box-icon bg-danger">
@@ -245,7 +247,7 @@
                 </div>
                 <!-- /.info-box -->
               </div>
-            @endif
+            @endif --}}
         @endforeach
         </a>
     </div>

@@ -21,6 +21,10 @@ Route::get('/', function () {
     return view('welcome');
 });
 
+Route::get('/emailManutencao', function () {
+    return view('emails.emailFimManuten');
+});
+
 Auth::routes();
 
 

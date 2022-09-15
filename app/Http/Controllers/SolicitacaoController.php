@@ -55,6 +55,7 @@ class SolicitacaoController extends Controller
                 $checkUrgente = $request->input('checkUrgente');
                 $dtAgendamento = $request->input('dtAgendamento');
                 $hsAgenda = $request->input('horarios');
+                $notEmail = $request->input('notEmail');
 
                 //SALVA DOS DADOS DOS INPUTS NO BANCO DE DADOS
                 $solicitacao = new Solicitacao();
@@ -82,25 +83,28 @@ class SolicitacaoController extends Controller
                 $solicitante = auth()->user()->name;
                 // dd($emailDestino);
 
-                //ENVIA EMAIL DE RECEBIDO PARA O HOME CARE
-                Mail::send('emails.emailRecebidoSolicit',
-                ['emailDestino' => $emailDestino,
-                'emailDestino2' => $emailDestino2,
-                'namePct' => $namePct,
-                'typeSolicitFim' => $typeSolicitFim,
-                'idSolicit' => $idSolicit,
-                'itensSolicit'=> $itensSolicit,
-                'obsSolicit' =>  $obsSolicit,
-                'solicitante' => $solicitante
-                ],
-                function ($message)
-                use ($emailDestino, $emailDestino2, $namePct, $typeSolicitFim, $idSolicit, $itensSolicit,  $obsSolicit, $solicitante ) {
-                    $message->from('atendimento@requestcare.online', 'Atendimento'); //este email tem que ser o mesmo que está no arquivo .ENV
-                    $message->to([$emailDestino, $emailDestino2]);
-                    // $message->cc(['mhsuprimentos.atendimento@gmail.com']);
-                    $message->cc(['mhsuprimentos.atendimento@gmail.com', 'atendimento@mhsuprimentos.com']);
-                    $message->subject($typeSolicitFim . ' nº: '.$idSolicit. ' - PCT: '. $namePct);
-                });
+                if ($notEmail == null) {
+                    
+                    //ENVIA EMAIL DE RECEBIDO PARA O HOME CARE
+                    Mail::send('emails.emailRecebidoSolicit',
+                    ['emailDestino' => $emailDestino,
+                    'emailDestino2' => $emailDestino2,
+                    'namePct' => $namePct,
+                    'typeSolicitFim' => $typeSolicitFim,
+                    'idSolicit' => $idSolicit,
+                    'itensSolicit'=> $itensSolicit,
+                    'obsSolicit' =>  $obsSolicit,
+                    'solicitante' => $solicitante
+                    ],
+                    function ($message)
+                    use ($emailDestino, $emailDestino2, $namePct, $typeSolicitFim, $idSolicit, $itensSolicit,  $obsSolicit, $solicitante ) {
+                        $message->from('atendimento@requestcare.online', 'Atendimento'); //este email tem que ser o mesmo que está no arquivo .ENV
+                        $message->to([$emailDestino, $emailDestino2]);
+                        // $message->cc(['mhsuprimentos.atendimento@gmail.com']);
+                        $message->cc(['mhsuprimentos.atendimento@gmail.com', 'atendimento@mhsuprimentos.com']);
+                        $message->subject($typeSolicitFim . ' nº: '.$idSolicit. ' - PCT: '. $namePct);
+                    });
+                }
 
                 return back()->withInput();
 
@@ -108,12 +112,14 @@ class SolicitacaoController extends Controller
             case '2': case '3': //// 2 = recolhimento 3=troca / manutenção
 
                 if ($request->submitbuttonSolicit == 2) {
-                    $listEquipSel = $request->input('textEquipsRecolhe');
+                    $listEquipSel = $request->input('EquipRecolhe');
                     $obsSolicitacao = $request->input('obsSolicitacaoRecolhe');
                     $idPct = $request->input('idPctRecolhe');
                     $motivo = $request->input('motivo');
                     $dtAgendamento = $request->input('dtAgendamentoRecolhe');
                     $horarios = $request->input('horariosRecolhe');
+                    $enviarEquip = $request->input('enviarEquipRecolhe');  //Este input contém o array separado por vírgula
+                    $notEmailRecolhe = $request-> input('notEmailRecolhe');
                     
                 } else {
                     $listEquipSel = $request->input('textEquipsTroca');
@@ -121,8 +127,11 @@ class SolicitacaoController extends Controller
                     $idPct = $request->input('idPctTroca');
                     $motivo = null;
                     $dtAgendamento = $request->input('dtAgendamentoRecolhe');
-                    $horarios = $request->input('horariosRecolhe');
+                    $horarios = $request->input('horariosTroca');
+                    $enviarEquip = $request->input('enviarEquipTroca');  //Este input contém o array separado por vírgula
+                    $notEmailRecolhe = $request-> input('notEmailTroca');
                 }
+                
                 
                 // dd($request->all());
                 //SALVA DOS DADOS DOS INPUTS NO BANCO DE DADOS
@@ -148,9 +157,8 @@ class SolicitacaoController extends Controller
 
                 $solicitacao->where('pct_solicit', $idPct)->get();  //Busca no BD a Solicitação deste paciente
 
-                //BUSCA OS DADOS OS INPUTS
-                $enviarEquip = $request->input('enviarEquipRecolhe');  //Este input contém o array separado por vírgula
-
+                
+                
                 //SELECIONA OS EQUIPAMENTOS E ATRIBUI STATUS COMO RECOLHER
                 foreach (explode(',', $enviarEquip) as $equip){                 //separa o o conteúdo do input por vírgula
                     if (empty($equip)) {
@@ -165,7 +173,7 @@ class SolicitacaoController extends Controller
                             }
                     }
 
-                    if ($motivo == 7 ) {
+                    if ($request->submitbuttonSolicit == 3 ) {
                         $typeSolicitFim = "Troca / Manutenção";
                     } else {
                         $typeSolicitFim = "Recolhimento";
@@ -174,26 +182,29 @@ class SolicitacaoController extends Controller
                     // $itensSolicit = Equipamento::where('solicit_equip', $solicitacao->id)->pluck('equips_solicit');
 
                     
-                    // ENVIA EMAIL DE RECEBIDO PARA O HOME CARE
-                    Mail::send('emails.emailRecebidoSolicit',
-                    ['emailDestino' => $emailDestino,
-                    'emailDestino2' => $emailDestino2,
-                    'namePct' => $namePct,
-                    'typeSolicitFim' => $typeSolicitFim,
-                    'idSolicit' => $idSolicit,
-                    'itensSolicit'=> $itensSolicit,
-                    'obsSolicit' =>  $obsSolicit,
-                    'solicitante' => $solicitante
-                    ],
-                    function ($message)
-                    use ($emailDestino, $emailDestino2, $namePct, $typeSolicitFim, $idSolicit, $itensSolicit,  $obsSolicit, $solicitante ) {
-                        $message->from('atendimento@requestcare.online', 'Atendimento'); //este email tem que ser o mesmo que está no arquivo .ENV
-                        $message->to([$emailDestino, $emailDestino2]);
-                        // $message->cc(['mhsuprimentos.atendimento@gmail.com']);
-                        $message->cc(['mhsuprimentos.atendimento@gmail.com', 'atendimento@mhsuprimentos.com']);
-                        $message->subject($typeSolicitFim . ' nº: '.$idSolicit. ' - PCT: '. $namePct);
-                    });
-
+                    if ($notEmailRecolhe == null) {
+                        # code...
+                    
+                        // ENVIA EMAIL DE RECEBIDO PARA O HOME CARE
+                        Mail::send('emails.emailRecebidoSolicit',
+                        ['emailDestino' => $emailDestino,
+                        'emailDestino2' => $emailDestino2,
+                        'namePct' => $namePct,
+                        'typeSolicitFim' => $typeSolicitFim,
+                        'idSolicit' => $idSolicit,
+                        'itensSolicit'=> $itensSolicit,
+                        'obsSolicit' =>  $obsSolicit,
+                        'solicitante' => $solicitante
+                        ],
+                        function ($message)
+                        use ($emailDestino, $emailDestino2, $namePct, $typeSolicitFim, $idSolicit, $itensSolicit,  $obsSolicit, $solicitante ) {
+                            $message->from('atendimento@requestcare.online', 'Atendimento'); //este email tem que ser o mesmo que está no arquivo .ENV
+                            $message->to([$emailDestino, $emailDestino2]);
+                            // $message->cc(['mhsuprimentos.atendimento@gmail.com']);
+                            $message->cc(['mhsuprimentos.atendimento@gmail.com', 'atendimento@mhsuprimentos.com', 'atendimento@mhsuprimentos.com']);
+                            $message->subject($typeSolicitFim . ' nº: '.$idSolicit. ' - PCT: '. $namePct);
+                        });
+                    }
                 return back()->withInput();
 
                 // dd($request->all());
@@ -209,6 +220,8 @@ class SolicitacaoController extends Controller
 /* coloca o valor do status para 1 para que informe que a solicitação está em andamento */
 public function iniciar_solicit(Request $request, $id){
 
+    // dd($request->all());
+    
     switch ($request->submitbutton) {
         case '0':
             //SE O VALUE DO SBMITBUTTON FOR 0 (RETORNA STATUS PARA 0 - PENDENTE)
@@ -248,6 +261,7 @@ public function iniciar_solicit(Request $request, $id){
             $status1 = $request->input('status');
             $obs_atend = $request->input('obs_atend');
 
+                        
             // se a solicitação for diferente de troca ele habilita o input para inserir a guia
 
 
@@ -258,8 +272,10 @@ public function iniciar_solicit(Request $request, $id){
             $solicit = Solicitacao::find($id);
             // $solicit->status_solicit = 2;
             
+            $trocaMant = $request->rTM;
+            
             // ANEXA A GUIA
-            if ($solicit->type_solicit < 6) {
+            if ($solicit->type_solicit < 6 AND $request->rTM != "M" ) {
                 
                 // o arquivo será o nº da solicitação em formato JPG
                 $nameFile = $request->id . '.' . 'jpg'; 
@@ -273,7 +289,6 @@ public function iniciar_solicit(Request $request, $id){
                             $constraint->aspectRatio();
                         })
                         ->save($local);
-                
             }
 
             $solicit->obs_atend = $obs_atend;
@@ -328,15 +343,45 @@ public function iniciar_solicit(Request $request, $id){
             $itensSolicit = Solicitacao::where('id', $id)->pluck('equips_solicit')->get(0);
             $obsSolicit = Solicitacao::where('id', $id)->pluck('obs_solicit')->get(0);
 
+            
             switch ( $solicit->type_solicit) {
-                case 1:
-                    $typeSolicitFim = "Implantação";
+                case 1: case 3:
+                    
                     $a = 0;
                     
                         //BUSCA OS DADOS OS INPUTS
                         //    $enviarEquip = $request->input('enviarEquip');  //Este input contém o array separado por vírgula
                         $enviarEquip = Equipamento::where('solicit_equip', $id)->pluck('id'); /// Busca os Equipamentos solicitados na solicitação atual
                         
+                        if ($solicit->type_solicit == 1) {
+                            $typeSolicitFim = "Implantação";
+                        } else {
+                            if ($request->rTM == "M") {
+                                $typeSolicitFim = "Manutenção";
+                            } else {
+                                $typeSolicitFim = "Troca";
+                                $equipTroca = Equipamento::where('solicit_equip', $id)->where('status_equip', 0)->pluck('id');
+                                // converte o Array $equipTroca em String
+                                $collectionTroca = collect($equipTroca);
+                                $retiraEquip = $collectionTroca->implode(','); //lista de equips para retirar separados por vírgula
+                                // dd($retiraEquip);
+
+                                //SELECIONA O EQUIPAMENTO E RETIRA ELE DO PACIENTE (RETORNA PRO ESTOQUE)
+                                foreach (explode(',', $retiraEquip) as $equipRetirado) {
+                                    if (empty($equipRetirado)) {
+                                        # se for nulo não faz nada
+                                    } else {
+                                        $tiraEquip = Equipamento::find($equipRetirado);     //busca no Bd o id do equipamento
+                                        $tiraEquip->pct_equip =  0;                         //coloca pct zero (retorna equipamento pro estoque)
+                                        $tiraEquip->save();
+                                        dd($tiraEquip);
+                                    }
+                                    
+                                }
+                            }
+                        }
+                        
+
                         //Converte o Array $enviarEquip em String
                         $collection = collect($enviarEquip);
                         $addEquipLancamento = $collection->implode(',');    //adicionar cada elemento numa collection separada por vírgula
@@ -361,7 +406,7 @@ public function iniciar_solicit(Request $request, $id){
                                                     ON P.name_equip = E.name_equip
                                                     WHERE E.id = $equip AND P.id_hc = $nrHcPct
                                                     ;");
-
+                                    
                                     //CONVERTE O ARRAY $PREÇO EM STRING
                                     $vlpreco = value($preco[0]); 
                                     $collectionpreco = collect($vlpreco);           //transforma o array em uma collection
@@ -439,29 +484,29 @@ public function iniciar_solicit(Request $request, $id){
                                             $r = Recarga::create(['id_equip' => $equip, 'id_pct' => $idPct, 'id_fornec' => $vlidFornecEquip, 'id_hc' => $nrHcPct, 'preco_recarga'=> $PctO2recarga[0]->preco ]);
                                         }
                                         // ENVIA EMAIL PARA EMPRESA TERCEIRIZADA
-                                        Mail::send('emails.EmailO2Implantado',
-                                        ['emailEmpO2' => $emailEmpO2,
-                                        'namePct' => $namePct,
-                                        'strEndPct' => $strEndPct,
-                                        'cityPct' => $cityPct,
-                                        'celContatoPct' => $celContatoPct,
-                                        'respPct' => $respPct,
-                                        'typeSolicitFim' => $typeSolicitFim,
-                                        'idSolicit' => $idSolicit,
-                                        'equipRentSolicit'=> $equipRentSolicit,
-                                        'obsSolicit' =>  $obsSolicit,
-                                        'obsAtendfim' => $obsAtendfim
-                                        ],
-                                        function ($message)
-                                        use ($emailEmpO2, $namePct, $strEndPct, $cityPct, $celContatoPct, $respPct, $typeSolicitFim, $idSolicit, $equipRentSolicit,  $obsSolicit, $obsAtendfim ) {
-                                            $message->from('atendimento@requestcare.online', 'Atendimento'); //este email tem que ser o mesmo que está no arquivo .ENV
-                                            $message->to($emailEmpO2);
-                                            // $message->cc(['mhsuprimentos.atendimento@gmail.com']);
-                                            $message->cc(['mhsuprimentos.atendimento@gmail.com', 'atendimento@mhsuprimentos.com']);
-                                            $message->subject('IMPLANTAÇÃO - Solicitação - nº: '.$idSolicit. ' - PCT: ' . $namePct);
-                                            // $message->attach('pathToFile');
-                                            // $message->attach('storage/guias/'.$idSolicit.'.jpg');
-                                        });
+                                        // Mail::send('emails.EmailO2Implantado',
+                                        // ['emailEmpO2' => $emailEmpO2,
+                                        // 'namePct' => $namePct,
+                                        // 'strEndPct' => $strEndPct,
+                                        // 'cityPct' => $cityPct,
+                                        // 'celContatoPct' => $celContatoPct,
+                                        // 'respPct' => $respPct,
+                                        // 'typeSolicitFim' => $typeSolicitFim,
+                                        // 'idSolicit' => $idSolicit,
+                                        // 'equipRentSolicit'=> $equipRentSolicit,
+                                        // 'obsSolicit' =>  $obsSolicit,
+                                        // 'obsAtendfim' => $obsAtendfim
+                                        // ],
+                                        // function ($message)
+                                        // use ($emailEmpO2, $namePct, $strEndPct, $cityPct, $celContatoPct, $respPct, $typeSolicitFim, $idSolicit, $equipRentSolicit,  $obsSolicit, $obsAtendfim ) {
+                                        //     $message->from('atendimento@requestcare.online', 'Atendimento'); //este email tem que ser o mesmo que está no arquivo .ENV
+                                        //     $message->to($emailEmpO2);
+                                        //     // $message->cc(['mhsuprimentos.atendimento@gmail.com']);
+                                        //     $message->cc(['mhsuprimentos.atendimento@gmail.com', 'atendimento@mhsuprimentos.com']);
+                                        //     $message->subject('IMPLANTAÇÃO - Solicitação - nº: '.$idSolicit. ' - PCT: ' . $namePct);
+                                        //     // $message->attach('pathToFile');
+                                        //     // $message->attach('storage/guias/'.$idSolicit.'.jpg');
+                                        // });
                                     } 
 
                             }
@@ -509,8 +554,15 @@ public function iniciar_solicit(Request $request, $id){
                     
 
                     break;
-                case 3:
-                   $typeSolicitFim = "Troca / Manutenção";
+                case 33:
+                    // TROCA
+                    if ($request->rTM == "M") {
+                        $typeSolicitFim = "Manutenção";
+                    } else {
+                        $typeSolicitFim = "Troca";
+                    }
+                    
+                    // dd($request->rTM .' '. $typeSolicitFim);
 
                     // só vai dar baixa no equipamento se for necessário
                     //    Equipamento::where('solicit_equip', $id)
@@ -563,7 +615,7 @@ public function iniciar_solicit(Request $request, $id){
             }
 
            sleep(5);
-
+        
             
             // ENVIA O EMAIL DE SOLICITAÇÃO CONCLUÍDA COM A GUIA EM ANEXO
             Mail::send('emails.EmailFimSolicit',
@@ -574,17 +626,22 @@ public function iniciar_solicit(Request $request, $id){
             'idSolicit' => $idSolicit,
             'equipsSolicFim'=> $equipsSolicFim,
             'obsSolicit' =>  $obsSolicit,
-            'obsAtendfim' => $obsAtendfim
+            'obsAtendfim' => $obsAtendfim,
+            'trocaManut' => $trocaMant
             ],
             function ($message)
-            use ($emailDestino, $emailDestino2, $namePct, $typeSolicitFim, $idSolicit, $equipsSolicFim,  $obsSolicit, $obsAtendfim ) {
+            use ($emailDestino, $emailDestino2, $namePct, $typeSolicitFim, $idSolicit, $equipsSolicFim,  $obsSolicit, $obsAtendfim, $trocaMant ) {
                 $message->from('atendimento@requestcare.online', 'Atendimento'); //este email tem que ser o mesmo que está no arquivo .ENV
                 $message->to([$emailDestino, $emailDestino2]);
                 // $message->cc(['mhsuprimentos.atendimento@gmail.com', 'atendimento@requestcare.online']);
                 $message->cc(['mhsuprimentos.atendimento@gmail.com', 'atendimento@mhsuprimentos.com']);
                 $message->subject('Solicitação Concluída - nº: '.$idSolicit. ' - PCT: ' . $namePct);
                 // $message->attach('pathToFile');
-                $message->attach('storage/guias/'.$idSolicit.'.jpg');
+                if ($trocaMant == "M") {
+                    // se for Manutenção não anexa guia
+                }else {
+                    $message->attach('storage/guias/'.$idSolicit.'.jpg');
+                }
             });
 
             $solicit->status_solicit = 2;
@@ -702,6 +759,14 @@ public function add_equip_pct(Request $request){
 }
 
 ///========================================================================================================================
+ //CANCELA A SOLICITAÇÃO 
+public function cancelar_solicit($id){
+    // $solicitCancel = Solicitacao::find($id);
+   dd($id);
+}
+
+
+///========================================================================================================================
  //EXCLUI APENAS O EQUIPAMENTO ATUAL DA SOLICITAÇÃO
 public function cancelOneEquipSolicit (Request $request, $idEquip, $solicit_equip){
     // echo 'cancelar apenas este' . $idEquip ;
@@ -761,8 +826,8 @@ $resultado = [];
                         INNER JOIN clientes AS C ON C.id = P.id_hc
                         INNER JOIN cidades AS Y ON Y.id = P.city
                         WHERE s.status_solicit= 0 OR s.status_solicit= 1 
-                        ORDER BY S.priority DESC, S.id ASC
-                        -- ORDER BY S.priority DESC, P.bairro ASC
+                        ORDER BY S.priority ASC, S.id ASC
+                        -- ORDER BY P.bairro ASC
                         ");
 
         $solicitCanceladas = DB::SELECT("SELECT CONCAT(P.rua, ' Nº ', P.nr, P.compl, P.bairro ) AS endereco, S.id, Y.nome, S.priority, S.status_solicit, S.motivo, P.name_pct, P.id_hc, S.user_atend, 
@@ -847,8 +912,7 @@ $resultado = [];
                         -- INNER JOIN equipamentos AS E ON E.id = PCT.id
                         -- WHERE SOLICIT.id = $id
                         ");
-
-
+        // dd($equipsSel);
 
         return view('edit_solicit', ['solicitSel'=>$solicitSel] + ['cityPct'=>$cityPct] + ['idPctSel'=>$idPctSel] + ['equipsSel'=>$equipsSel] + ['equips'=>$equips] +  compact('solicitAtual'));
 
@@ -919,25 +983,25 @@ $resultado = [];
         $hsAtual = date('H');
 
         // ENVIA O EMAIL A EMPRESA DE OXIGÊNIO SOLICITANDO A RECARGA
-            Mail::send('emails.EmailO2Recarga',
-            ['emailEmpO2' => $emailEmpO2,
-            'namePct' => $namePct,
-            'strEndPct' => $strEndPct,
-            'cityPct' => $cityPct,
-            'celContatoPct' => $celContatoPct,
-            'respPct' => $respPct,
-            'idSolicit' => $idSolicit = $r[0]->id,                 //id da recarga
-            'equipRentSolicit'=> $equipRentSolicit,
-            'hsAtual' => $hsAtual,
+            // Mail::send('emails.EmailO2Recarga',
+            // ['emailEmpO2' => $emailEmpO2,
+            // 'namePct' => $namePct,
+            // 'strEndPct' => $strEndPct,
+            // 'cityPct' => $cityPct,
+            // 'celContatoPct' => $celContatoPct,
+            // 'respPct' => $respPct,
+            // 'idSolicit' => $idSolicit = $r[0]->id,                 //id da recarga
+            // 'equipRentSolicit'=> $equipRentSolicit,
+            // 'hsAtual' => $hsAtual,
             
-            ],
-            function ($message)
-            use ($emailEmpO2, $namePct, $strEndPct, $cityPct, $celContatoPct, $respPct, $idSolicit, $equipRentSolicit, $hsAtual ) {
-                $message->from('atendimento@requestcare.online', 'Atendimento'); //este email tem que ser o mesmo que está no arquivo .ENV
-                $message->to($emailEmpO2, 'Email da empresa de O2');
-                $message->subject('Solicitação - nº: '.$idSolicit. ' - RECARGA DE O2 - PCT: ' . $namePct);
+            // ],
+            // function ($message)
+            // use ($emailEmpO2, $namePct, $strEndPct, $cityPct, $celContatoPct, $respPct, $idSolicit, $equipRentSolicit, $hsAtual ) {
+            //     $message->from('atendimento@requestcare.online', 'Atendimento'); //este email tem que ser o mesmo que está no arquivo .ENV
+            //     $message->to($emailEmpO2, 'Email da empresa de O2');
+            //     $message->subject('Solicitação - nº: '.$idSolicit. ' - RECARGA DE O2 - PCT: ' . $namePct);
                 
-            });
+            // });
 
 
             return back()->withInput();

@@ -177,14 +177,15 @@
 
                                                             <div class="row form-group">
                                                                 <div class="col-sm-2">
-                                                                    <label for="cep">Cep:</label>
+                                                                    <label for="cep">Cep DDD:</label>
                                                                     <div class="input-group input-group-sm">
                                                                         <input type="text" class="form-control"
                                                                             title="Digite o CEP para preencher o endereço automaticamente."
                                                                             name="cep" id="cep" size="10" maxlength="9"
                                                                             onkeypress="mascara(this, cep)"
                                                                             onblur="pesquisacep(this.value);"
-                                                                            value="{{ $pctSel->cep }}">
+                                                                            value="{{ $pctSel->cep }}"
+                                                                            >
                                                                         <div class="input-group-append">
                                                                             <span class="input-group-text"><a
                                                                                     href="https://buscacepinter.correios.com.br/app/endereco/index.php"
@@ -218,7 +219,7 @@
                                                                     <input type="text" class="form-control" name="compl"
                                                                         id="compl" placeholder="Complemento"
                                                                         title="Complemento ou Ponto de referência"
-                                                                        maxlength="30" value="{{ $pctSel->compl }}">
+                                                                        maxlength="30" value="{{ $pctSel->compl }}" required>
                                                                 </div>
                                                                 <div class="col-sm-4">
                                                                     <input type="text" class="form-control" name="bairro"
@@ -341,7 +342,7 @@
                                                                 </div>
                                                                 <tr role="row">
                                                                     {{-- <th>PCT</th> --}}
-                                                                    <th style="text-align: center" class="col-sm-1"
+                                                                    {{-- <th style="text-align: center" class="col-sm-1"
                                                                         tabindex="0" aria-controls="table_implantados"
                                                                         rowspan="1" colspan="1"
                                                                         title="Classificar crescente / decrescente">Patr
@@ -374,280 +375,195 @@
                                                                         tabindex="0" aria-controls="table_implantados"
                                                                         rowspan="1" colspan="1">R$ Cobrado</th>
                                                                     <th></th>
-                                                                    <th></th>
+                                                                    <th></th> --}}
                                                                 </tr>
                                                             </thead>
                                                             <tbody>
-                                                                @foreach ($equipsLancados as $equipPct)
-                                                                    <tr class="odd" style="text-align: center; vertical-align: middle; line-height: 100%;
-                                                      {{ $equipPct->dt_retirada != null ? 'color:red' : '' }}">
-                                                                        <td class="dtr-control sorting_1" tabindex="0">
-                                                                            <div class="row">
-                                                                                {{-- Patrímônio do Equipamento --}}
-                                                                                <div class="col-sm-8"
-                                                                                    style="text-align: right; vertical-align: middle" title="{{$equipPct->id_equip}}">
-                                                                                    {{ $equipPct->patr }} 
-                                                                                </div>
-                                                                                <div class="col-sm-2"
-                                                                                    style="text-align: center; vertical-align: middle">
-                                                                                    {{-- @if ($equipPct->rent_equip == '0')
-
-                                                            @else --}}
-                                                                                    {{-- Empresa que alugou o equipamento --}}
-                                                                                    {{-- @foreach ($fornecedores as $fornecedor)
-                                                                @if ($fornecedor->id == $equipPct->rent_empresa) --}}
-                                                                                    {{-- <p style="color: rgb(247, 170, 3)"><i class="fa fa-exchange-alt"></i></p> --}}
-                                                                                    {{-- <p data-toggle="tooltip" data-placement="top" title="{{$fornecedor->name_fornec}}" style="color: rgb(247, 170, 3)">
-                                                                        <i class="fa fa-exchange-alt"></i>
-                                                                    </p>
-                                                                @endif
+                                                                @foreach ($equipsPct as $equipPct)
+                                                                    <tr>
+                                                                        <td>
+                                                                            {{$equipPct->patr}} - {{$equipPct->name_equip}}
+                                                                                
+                                                                        </td>
+                                                                    </tr>
                                                                 @endforeach
-                                                            @endif --}}
-                                                                                </div>
-                                                                            </div>
-                                                                        </td>
-                                                                        <td
-                                                                            style="text-align: left; vertical-align: middle">
-                                                                            {{ $equipPct->name_equip }}</td>
+                                                                @foreach ($equipsLancados as $equipPct)
+                                                                    
 
-                                                                        <td style="text-align: center">
-                                                                            {{ date('d/m/Y', strtotime($equipPct->dt_implantacao)) }}
-                                                                        </td>
-                                                                        <td>
-                                                                            {{ date('d/m/Y', strtotime($equipPct->dt_inicio)) }}
-                                                                        </td>
-                                                                        <td>
-                                                                            {{ date('d/m/Y', strtotime($equipPct->dt_fatura)) }}
-                                                                        </td>
-                                                                        <td>
-                                                                            {{ $equipPct->dt_retirada != null ? date('d/m/Y', strtotime($equipPct->dt_retirada)) : '' }}
-                                                                        </td>
-                                                                        <td>{{ $equipPct->dias }}</td>
-                                                                        <td>{{ number_format($equipPct->valor_mes, 2, ',', '.') }}
-                                                                        </td>
-                                                                        <td>{{ number_format($equipPct->valor_mes / $diasDoMes, 3, ',', '.') }}
-                                                                        </td>
-                                                                        <td>{{ number_format(($equipPct->valor_mes / $diasDoMes) * $equipPct->dias, 2, ',', '.') }}
-                                                                        </td>
-                                                                        <td>
 
-                                                                            @if ($equipPct->name_equip == 'CILINDRO 7M(REGULADOR + BASE)' || $equipPct->name_equip == 'CILINDRO 8M(REGULADOR + BASE)' || $equipPct->name_equip == 'CILINDRO 10M(REGULADOR + BASE)' || $equipPct->name_equip == 'CILINDRO 1M(REGULADOR + CARRINHO)')
-                                                                                @if ($equipPct->dt_retirada == null)
-                                                                                    <div title="Solicitar Recarga">
-                                                                                        {{-- <a href="{{route('recargaO2', $equipPct->id)}}" data-toggle="modal" data-target="#modalRecargaO2"> --}}
 
-                                                                                            {{-- Identifica o MODAL com o ID da linha da tabela (id do Equip) --}}
-                                                                                            <button type="button"
-                                                                                                class="btn btn-xs btn-outline-primary"
-                                                                                                data-toggle="modal"
-                                                                                                data-target="#modalRecargaO2{{ $equipPct->id }}">
-                                                                                                <i class="fas fa-sync"
-                                                                                                    style="color: rgb(14, 121, 0)"></i>
-                                                                                            </button>
-                                                                                        {{-- </a> --}}
+                                                                        <!--//////////////////////////////////////////////////// Modal LISTA RECARGA O2 /////////////////////////////////////////////-->
+
+                                                                        <div class="modal fade bd-example-modal-md"
+                                                                            id="modalListaRecargaO2{{ $equipPct->id }}"
+                                                                            tabindex="-1" role="dialog"
+                                                                            aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                                                            <div class="modal-dialog modal-md" role="document">
+                                                                                <div class="modal-content">
+                                                                                    <div class="modal-header">
+
+                                                                                        <div
+                                                                                            style="display: inline-block; transform: rotate(-90deg);">
+                                                                                            <ion-icon size="large"
+                                                                                                style="color: rgb(99, 99, 233)"
+                                                                                                name="battery-dead-outline">
+                                                                                            </ion-icon>
+                                                                                        </div>
+
+                                                                                        <ion-icon size="large" style="color: green"
+                                                                                            name="repeat-outline"></ion-icon>
+
+                                                                                        <div
+                                                                                            style="display: inline-block; transform: rotate(-90deg);">
+                                                                                            <ion-icon size="large"
+                                                                                                style="color: rgb(99, 99, 233)"
+                                                                                                name="battery-full-outline">
+                                                                                            </ion-icon>
+                                                                                        </div>
+
+                                                                                        <h5 class="modal-title"
+                                                                                            id="exampleModalLabel"><span
+                                                                                                style="color: rgb(99, 99, 233)">
+                                                                                                Lista de Recargas</span></h5>
+                                                                                        <button type="button"
+                                                                                            class="close"
+                                                                                            data-dismiss="modal" aria-label="Close">
+                                                                                            <span aria-hidden="true">&times;</span>
+                                                                                        </button>
                                                                                     </div>
-                                                                                @endif
-                                                                        <td title="informações sobre Recarga">
-                                                                            <button type="button"
-                                                                                class="btn btn-xs btn-outline-primary"
-                                                                                data-toggle="modal"
-                                                                                data-target="#modalListaRecargaO2{{ $equipPct->id }}">
-                                                                                <div style="display: none">
-                                                                                    {{ $qtd = 0 }}
-                                                                                </div>
-
-                                                                                @foreach ($recargas as $recarga)
-                                                                                    @if ($recarga->rec_id_equip == $equipPct->id_equip)
-                                                                                        <div style="display: none">
-                                                                                            {{ $qtd = $qtd + 1 }}
+                                                                                    <div class="modal-body">
+                                                                                        <div class="row">
+                                                                                            Paciente: {{ $pctSel->name_pct }}<br>
+                                                                                            • {{ $equipPct->name_equip }}
                                                                                         </div>
-                                                                                    @endif
-                                                                                @endforeach
+                                                                                        <hr>
 
-                                                                                <b>{{ $qtd }}</b>
-
-                                                                            </button>
-                                                                        </td>
-                                                                @endif
-
-
-                                                                </td>
-                                                                </tr>
-
-
-
-                                                                <!--//////////////////////////////////////////////////// Modal LISTA RECARGA O2 /////////////////////////////////////////////-->
-
-                                                                <div class="modal fade bd-example-modal-md"
-                                                                    id="modalListaRecargaO2{{ $equipPct->id }}"
-                                                                    tabindex="-1" role="dialog"
-                                                                    aria-labelledby="exampleModalLabel" aria-hidden="true">
-                                                                    <div class="modal-dialog modal-md" role="document">
-                                                                        <div class="modal-content">
-                                                                            <div class="modal-header">
-
-                                                                                <div
-                                                                                    style="display: inline-block; transform: rotate(-90deg);">
-                                                                                    <ion-icon size="large"
-                                                                                        style="color: rgb(99, 99, 233)"
-                                                                                        name="battery-dead-outline">
-                                                                                    </ion-icon>
-                                                                                </div>
-
-                                                                                <ion-icon size="large" style="color: green"
-                                                                                    name="repeat-outline"></ion-icon>
-
-                                                                                <div
-                                                                                    style="display: inline-block; transform: rotate(-90deg);">
-                                                                                    <ion-icon size="large"
-                                                                                        style="color: rgb(99, 99, 233)"
-                                                                                        name="battery-full-outline">
-                                                                                    </ion-icon>
-                                                                                </div>
-
-                                                                                <h5 class="modal-title"
-                                                                                    id="exampleModalLabel"><span
-                                                                                        style="color: rgb(99, 99, 233)">
-                                                                                        Lista de Recargas</span></h5>
-                                                                                <button type="button"
-                                                                                    class="close"
-                                                                                    data-dismiss="modal" aria-label="Close">
-                                                                                    <span aria-hidden="true">&times;</span>
-                                                                                </button>
-                                                                            </div>
-                                                                            <div class="modal-body">
-                                                                                <div class="row">
-                                                                                    Paciente: {{ $pctSel->name_pct }}<br>
-                                                                                    • {{ $equipPct->name_equip }}
-                                                                                </div>
-                                                                                <hr>
-
-                                                                                <div style="display: none">
-                                                                                    {{ $qtd = 0 }}
-                                                                                    {{ $somaRecargaCil = 0 }}
-                                                                                </div>
-
-                                                                                @foreach ($recargas as $recarga)
-                                                                                    @if ($recarga->rec_id_equip == $equipPct->id_equip)
-                                                                                        <a href="#"><i
-                                                                                                class="far fa-file"
-                                                                                                title="Guia - {{ $recarga->idrec }}"></i></a>
-                                                                                        Nº: {{ $recarga->idrec }} -
-                                                                                        {{ date('d/m/Y', strtotime($recarga->created_at)) }}
-                                                                                        <span class="float-right">
-                                                                                            {{ number_format($recarga->preco_recarga, 2, ',', '.') }}
-                                                                                        </span><br>
                                                                                         <div style="display: none">
-                                                                                            {{ $qtd = $qtd + 1 }}
-                                                                                            {{ $somaRecargaCil = $somaRecargaCil + $recarga->preco_recarga }}
+                                                                                            {{ $qtd = 0 }}
+                                                                                            {{ $somaRecargaCil = 0 }}
                                                                                         </div>
-                                                                                    @endif
-                                                                                @endforeach
-                                                                                <hr>
-                                                                                Qtd: <b>{{ $qtd }}</b> <span
-                                                                                    class="float-right"> Soma: <b>
-                                                                                        {{ number_format($somaRecargaCil, 2, ',', '.') }}</b>
-                                                                                </span>
 
-                                                                                <input type="text" name="enviarEquipO2"
-                                                                                    id="enviarEquipO2"
-                                                                                    style="visibility: hidden">
-                                                                            </div>
-                                                                            <div class="modal-footer">
-                                                                                {{-- <button type="button" class="btn btn-outline-secondary" data-dismiss="modal" id="btnCancela">Cancelar</button> --}}
-                                                                                {{-- <a href="{{route('recargaO2', ['id' => $equipPct->id, 'c' => $equipPct->name_equip])}}">
-                
-                <button type="button" name="submitbuttonSolicit" value="1" class="btn btn-outline-primary swalO2Solicitado" id="btnSolicita" >Solicitar</button>
-              </a> --}}
+                                                                                        @foreach ($recargas as $recarga)
+                                                                                            @if ($recarga->rec_id_equip == $equipPct->id_equip)
+                                                                                                <a href="#"><i
+                                                                                                        class="far fa-file"
+                                                                                                        title="Guia - {{ $recarga->idrec }}"></i></a>
+                                                                                                Nº: {{ $recarga->idrec }} -
+                                                                                                {{ date('d/m/Y', strtotime($recarga->created_at)) }}
+                                                                                                <span class="float-right">
+                                                                                                    {{ number_format($recarga->preco_recarga, 2, ',', '.') }}
+                                                                                                </span><br>
+                                                                                                <div style="display: none">
+                                                                                                    {{ $qtd = $qtd + 1 }}
+                                                                                                    {{ $somaRecargaCil = $somaRecargaCil + $recarga->preco_recarga }}
+                                                                                                </div>
+                                                                                            @endif
+                                                                                        @endforeach
+                                                                                        <hr>
+                                                                                        Qtd: <b>{{ $qtd }}</b> <span
+                                                                                            class="float-right"> Soma: <b>
+                                                                                                {{ number_format($somaRecargaCil, 2, ',', '.') }}</b>
+                                                                                        </span>
 
+                                                                                        <input type="text" name="enviarEquipO2"
+                                                                                            id="enviarEquipO2"
+                                                                                            style="visibility: hidden">
+                                                                                    </div>
+                                                                                    <div class="modal-footer">
+                                                                                        {{-- <button type="button" class="btn btn-outline-secondary" data-dismiss="modal" id="btnCancela">Cancelar</button> --}}
+                                                                                        {{-- <a href="{{route('recargaO2', ['id' => $equipPct->id, 'c' => $equipPct->name_equip])}}">
+                        
+                                                                                                <button type="button" name="submitbuttonSolicit" value="1" class="btn btn-outline-primary swalO2Solicitado" id="btnSolicita" >Solicitar</button>
+                                                                                            </a> --}}
+
+                                                                                    </div>
+                                                                                </div>
                                                                             </div>
                                                                         </div>
-                                                                    </div>
-                                                                </div>
 
-                                                                <!--//////////////////////////////////////////////////// FIM MODAL LISTA RECARGA O2 ////////////////////////////////////////////////-->
+                                                                        <!--//////////////////////////////////////////////////// FIM MODAL LISTA RECARGA O2 ////////////////////////////////////////////////-->
 
 
-                                                                <!--//////////////////////////////////////////////////// Modal RECARGA O2 /////////////////////////////////////////////-->
+                                                                        <!--//////////////////////////////////////////////////// Modal RECARGA O2 /////////////////////////////////////////////-->
 
-                                                                <div class="modal fade bd-example-modal-md"
-                                                                    id="modalRecargaO2{{ $equipPct->id }}" tabindex="-1"
-                                                                    role="dialog" aria-labelledby="exampleModalLabel"
-                                                                    aria-hidden="true">
-                                                                    <div class="modal-dialog modal-md" role="document">
-                                                                        <div class="modal-content">
-                                                                            <div class="modal-header">
+                                                                        <div class="modal fade bd-example-modal-md"
+                                                                            id="modalRecargaO2{{ $equipPct->id }}" tabindex="-1"
+                                                                            role="dialog" aria-labelledby="exampleModalLabel"
+                                                                            aria-hidden="true">
+                                                                            <div class="modal-dialog modal-md" role="document">
+                                                                                <div class="modal-content">
+                                                                                    <div class="modal-header">
 
-                                                                                <div
-                                                                                    style="display: inline-block; transform: rotate(-90deg);">
-                                                                                    <ion-icon size="large"
-                                                                                        style="color: rgb(99, 99, 233)"
-                                                                                        name="battery-dead-outline">
-                                                                                    </ion-icon>
+                                                                                        <div
+                                                                                            style="display: inline-block; transform: rotate(-90deg);">
+                                                                                            <ion-icon size="large"
+                                                                                                style="color: rgb(99, 99, 233)"
+                                                                                                name="battery-dead-outline">
+                                                                                            </ion-icon>
+                                                                                        </div>
+
+                                                                                        <ion-icon size="large" style="color: green"
+                                                                                            name="repeat-outline"></ion-icon>
+
+                                                                                        <div
+                                                                                            style="display: inline-block; transform: rotate(-90deg);">
+                                                                                            <ion-icon size="large"
+                                                                                                style="color: rgb(99, 99, 233)"
+                                                                                                name="battery-full-outline">
+                                                                                            </ion-icon>
+                                                                                        </div>
+
+                                                                                        <h5 class="modal-title"
+                                                                                            id="exampleModalLabel"><span
+                                                                                                style="color: rgb(99, 99, 233)">
+                                                                                                Solicitação de Recarga de
+                                                                                                Oxigênio</span></h5>
+                                                                                        <button type="button"
+                                                                                            class="close"
+                                                                                            data-dismiss="modal" aria-label="Close">
+                                                                                            <span aria-hidden="true">&times;</span>
+                                                                                        </button>
+                                                                                    </div>
+                                                                                    <div class="modal-body">
+
+                                                                                        <div class="row">
+                                                                                            Deseja solicitar RECARGA de O2 para este
+                                                                                            paciente?<br>
+                                                                                            Pct: {{ $pctSel->name_pct }}<br>
+                                                                                            • {{ $equipPct->name_equip }} <br>
+                                                                                        </div>
+
+                                                                                    </div>
+                                                                                    <div class="modal-footer">
+                                                                                        <input type="text" name="enviarEquipO2"
+                                                                                            id="enviarEquipO2"
+                                                                                            style="visibility: hidden">
+                                                                                        <button type="button"
+                                                                                            class="btn btn-outline-secondary"
+                                                                                            data-dismiss="modal"
+                                                                                            id="btnCancela">Cancelar</button>
+                                                                                        <a
+                                                                                            href="{{ route('recargaO2', ['id' => $equipPct->id, 'c' => $equipPct->name_equip]) }}">
+
+                                                                                            <button type="button"
+                                                                                                name="submitbuttonSolicit" value="1"
+                                                                                                class="btn btn-outline-primary swalO2Solicitado"
+                                                                                                id="btnSolicitaO2">Solicitar O2</button>
+                                                                                        </a>
+                                                                                        <button type="button"
+                                                                                            class="btn btn-success"
+                                                                                            style="display: none"
+                                                                                            id="spinnerFinalizando">
+                                                                                            <span
+                                                                                                class="spinner-border spinner-border-sm"></span>
+                                                                                            Enviando...
+                                                                                        </button>
+                                                                                    </div>
                                                                                 </div>
-
-                                                                                <ion-icon size="large" style="color: green"
-                                                                                    name="repeat-outline"></ion-icon>
-
-                                                                                <div
-                                                                                    style="display: inline-block; transform: rotate(-90deg);">
-                                                                                    <ion-icon size="large"
-                                                                                        style="color: rgb(99, 99, 233)"
-                                                                                        name="battery-full-outline">
-                                                                                    </ion-icon>
-                                                                                </div>
-
-                                                                                <h5 class="modal-title"
-                                                                                    id="exampleModalLabel"><span
-                                                                                        style="color: rgb(99, 99, 233)">
-                                                                                        Solicitação de Recarga de
-                                                                                        Oxigênio</span></h5>
-                                                                                <button type="button"
-                                                                                    class="close"
-                                                                                    data-dismiss="modal" aria-label="Close">
-                                                                                    <span aria-hidden="true">&times;</span>
-                                                                                </button>
-                                                                            </div>
-                                                                            <div class="modal-body">
-
-                                                                                <div class="row">
-                                                                                    Deseja solicitar RECARGA de O2 para este
-                                                                                    paciente?<br>
-                                                                                    Pct: {{ $pctSel->name_pct }}<br>
-                                                                                    • {{ $equipPct->name_equip }} <br>
-                                                                                </div>
-
-                                                                            </div>
-                                                                            <div class="modal-footer">
-                                                                                <input type="text" name="enviarEquipO2"
-                                                                                    id="enviarEquipO2"
-                                                                                    style="visibility: hidden">
-                                                                                <button type="button"
-                                                                                    class="btn btn-outline-secondary"
-                                                                                    data-dismiss="modal"
-                                                                                    id="btnCancela">Cancelar</button>
-                                                                                <a
-                                                                                    href="{{ route('recargaO2', ['id' => $equipPct->id, 'c' => $equipPct->name_equip]) }}">
-
-                                                                                    <button type="button"
-                                                                                        name="submitbuttonSolicit" value="1"
-                                                                                        class="btn btn-outline-primary swalO2Solicitado"
-                                                                                        id="btnSolicitaO2">Solicitar O2</button>
-                                                                                </a>
-                                                                                <button type="button"
-                                                                                    class="btn btn-success"
-                                                                                    style="display: none"
-                                                                                    id="spinnerFinalizando">
-                                                                                    <span
-                                                                                        class="spinner-border spinner-border-sm"></span>
-                                                                                    Enviando...
-                                                                                </button>
                                                                             </div>
                                                                         </div>
-                                                                    </div>
-                                                                </div>
 
-                                                                <!--//////////////////////////////////////////////////// FIM MODAL RECARGA O2 ////////////////////////////////////////////////-->
+                                                                        <!--//////////////////////////////////////////////////// FIM MODAL RECARGA O2 ////////////////////////////////////////////////-->
                                                                 @endforeach
                                                             </tbody>
                                                             <tfoot>
@@ -658,12 +574,12 @@
                                                     </div>
                                                 </div>
                                                 <div class="row" style="margin-right: 70px">
-                                                    <div class="col-md-3">
+                                                    {{-- <div class="col-md-3">
                                                         <p>Total de itens implantados: {{ $equipsCount }}</p>
-                                                    </div>
+                                                    </div> --}}
                                                     <h5 class="col-md-9" style="text-align: right">
 
-                                                          <table class="float-right">
+                                                          {{-- <table class="float-right">
                                                             <tr>
                                                               <th>Implantações:</th>
                                                               <td>{{ $strTotal != null ? number_format($strTotal, 2, ',', '.') : '00,00' }}</td>
@@ -676,7 +592,7 @@
                                                                 <th>Total:</th>
                                                                 <td>{{$totalPct != null? number_format($totalPct, 2, ',', '.'): '00,00'}}</td>
                                                             </tr>
-                                                          </table>
+                                                          </table> --}}
 
                                                     </h5>
                                                     
@@ -980,8 +896,6 @@
                                             </thead>
                                             <tbody>
                                               @foreach ($solicitacoesFim as $solicFim)
-                                              @if ($solicFim->status_solicit == 3)
-                                              @endif
                                                   
                                                     @if ($solicFim->status_solicit == 3)
                                                       <tr style="color: red" title="Esta solicitação foi cancelada">
@@ -1050,13 +964,20 @@
 
                                                         <td>
                                                             @if ($solicFim->status_solicit < 3)
-                                                              <div style="display: inline-block">
-                                                                  <a href="{{ asset('storage/guias/' . $solicFim->id . '.jpg') }}"
-                                                                      target="_blank" data-toggle="lightbox"
-                                                                      data-title="sample 1 - white">
-                                                                      <i class="far fa-file" title="Guia"></i>
-                                                                  </a>
-                                                              </div>
+
+                                                                {{-- Se nas obs tiver 'Manutenção' então não exibe icone da guia--}}
+                                                                @if (strpos($solicFim->obs_atend, 'Manutenção') === false)
+                                                                    <div style="display: inline-block">
+                                                                        <a href="{{ asset('storage/guias/' . $solicFim->id . '.jpg') }}"
+                                                                            target="_blank" data-toggle="lightbox"
+                                                                            data-title="sample 1 - white">
+                                                                            <i class="far fa-file" title="Guia"></i>
+                                                                        </a>
+                                                                    </div>
+                                                                @else
+                                                                    {{-- Se for manutenção não exibe o ícone da guia --}}
+                                                                @endif
+                                                                
                                                             @endif
                                                             
 
@@ -1182,11 +1103,11 @@
                                                                                     data-toggle="tooltip"
                                                                                     title="Horário aproximado"></i>
                                                                                 </label>
-                                                                                    <span id="selhorarios" style="visibility: hidden">
+                                                                                    <span id="selhorarios" >
                                                                                         <select id="horarios"
                                                                                             class="form-control"
                                                                                             name="horarios" required
-                                                                                            onchange="checkSolicitImplant()">
+                                                                                            onchange="pctHabilitaBtnSolicitar('btnSolicita')">
                                                                                             <option id="select_0"
                                                                                                 value="0">Selecione
                                                                                             </option>
@@ -1199,38 +1120,12 @@
                                                                                                 title="De 09hs às 12hs"
                                                                                                 disabled>Manhã
                                                                                             </option>
-                                                                                            {{-- <option id="select_9"
-                                                                                                value="9" disabled>
-                                                                                                09-10hs
-                                                                                            </option>
-                                                                                            <option id="select_10"
-                                                                                                value="10" disabled>
-                                                                                                10-11hs
-                                                                                            </option>
-                                                                                            <option id="select_11"
-                                                                                                value="11" disabled>
-                                                                                                11-12hs
-                                                                                            </option> --}}
                                                                                             <option id="select_3"
                                                                                                 value="3"
                                                                                                 title="De 13hs às 18hs"
                                                                                                 disabled>Tarde
                                                                                             </option>
-                                                                                            {{-- <option id="select_13"
-                                                                                                value="13" disabled>
-                                                                                                13-14hs</option>
-                                                                                            <option id="select_14"
-                                                                                                value="14" disabled>
-                                                                                                14-15hs</option>
-                                                                                            <option id="select_15"
-                                                                                                value="15" disabled>
-                                                                                                15-16hs</option>
-                                                                                            <option id="select_16"
-                                                                                                value="16" disabled>
-                                                                                                16-17hs</option>
-                                                                                            <option id="select_17"
-                                                                                                value="17" disabled>
-                                                                                                17-18hs</option> --}}
+                                                                                            
                                                                                             <option id="select_18"
                                                                                                 value="18" disabled
                                                                                                 title="Apenas emergências">
@@ -1243,32 +1138,41 @@
 
                                                                     </div>
                                                                 </div>
-                                                                {{-- <div class="custom-control custom-checkbox">
-                                        <input class="custom-control-input custom-control-input-danger" data-toggle="tooltip" title="Só marque se for realmente Urgente!" type="checkbox" id="checkUrgente" name="checkUrgente" value="1" onclick="urgente()">
-                                        <label for="checkUrgente" class="custom-control-label" data-toggle="tooltip" title="Só marque se for realmente Urgente!">Urgente!</label>
-                                      </div> --}}
+                                                                
                                                             </div>
                                                         </div>
                                                     </div>
                                             </div>
-                                            <div class="modal-footer">
-                                                <input type="text" name="enviarEquip" id="enviarEquip"
-                                                    style="visibility: hidden">
-                                                <button type="button" class="btn btn-outline-secondary"
-                                                    data-dismiss="modal" id="btnCancela">Cancelar</button>
-                                                <button type="submit" name="submitbuttonSolicit" value="1"
-                                                    class="btn btn-outline-primary swalSolicitSuccess" style="visibility: hidden"
-                                                    id="btnSolicita">Solicitar
-                                                </button>
-                                                <button type="button" class="btn btn-success" style="display: none"
-                                                    id="spinnerFinalizando">
-                                                    <span class="spinner-border spinner-border-sm"></span>
-                                                    Enviando...
-                                                </button>
+                                            <div class="modal-footer" style="justify-content: flex-start">
 
+                                                    <div>
+                                                        <button type="submit" name="submitbuttonSolicit" value="1"
+                                                            class="btn btn-primary swalSolicitSuccess"  style="visibility: hidden"
+                                                            id="btnSolicita">Solicitar Implantação
+                                                        </button>
+                                                    </div>
+                                                    <div class="custom-control custom-checkbox">
+                                                        <input class="custom-control-input custom-control-input-danger custom-control-input-outline" type="checkbox" name="notEmail" id="notEmail" >
+                                                        <label for="notEmail" class="custom-control-label">Não enviar e-mail</label>
+                                                    </div>
+                                                    </form>
+
+                                                    <div>
+                                                        <button type="button" class="btn btn-success" style="display: none"
+                                                            id="spinnerFinalizando">
+                                                            <span class="spinner-border spinner-border-sm"></span>
+                                                            Enviando...
+                                                        </button>
+                                                    
+                                                        <input type="text" name="enviarEquip" id="enviarEquip"
+                                                            style="visibility: hidden">
+                                                        <button type="button" class="btn btn-outline-secondary float-right"
+                                                            data-dismiss="modal" id="btnCancela">Cancelar
+                                                        </button>
+                                                    </div>
+                                               
 
                                             </div>
-                                            </form>
                                         </div>
                                     </div>
                                 </div>
@@ -1292,401 +1196,194 @@
                                                 </button>
                                             </div>
                                             <div class="modal-body">
-
                                                 <form action="{{ route('new_solicita') }}" method="POST">
                                                     @csrf
                                                     <input type="number" name="idPctRecolhe" id="idPctRecolhe"
                                                         value="{{ $pctSel->id }}" style="display: none">
                                                     <div class="row">
-                                                        <div class="col-md-12">
+                                                        <div>
                                                             <div class="card card-default" style="padding-bottom: 0px">
-                                                                
-                                                                <div class="card-body p-0">
-                                                                    <div class="bs-stepper linear">
-                                                                        <div class="bs-stepper-header" role="tablist">
-                                                                            <!-- your steps here -->
-                                                                            <div class="step active"
-                                                                                data-target="#equip-parts">
-                                                                                <button type="button"
-                                                                                    class="step-trigger" role="tab"
-                                                                                    aria-controls="equip-parts"
-                                                                                    id="equip-parts-trigger"
-                                                                                    aria-selected="true">
-                                                                                    <span
-                                                                                        class="bs-stepper-circle">1</span>
-                                                                                    <span
-                                                                                        class="bs-stepper-label">Equipamentos</span>
-                                                                                </button>
+                                                                <div class="card-body" >
+                                                                    <div class="row">
+                                                                        <div class="col-md-6">
+                                                                            <div id="selectMotivo" class="form-group">
+                                                                                <label
+                                                                                    for="motivo">Motivo:</label>
+                                                                                <select name="motivo"
+                                                                                    id="motivo"
+                                                                                    class="form-control select"
+                                                                                    style="width: 100%;"
+                                                                                    aria-hidden="true"
+                                                                                    required
+                                                                                    onchange="habilitarBtnSolicitar()">
+                                                                                    <option value="9"
+                                                                                        selected disabled>Selecione
+                                                                                        um motivo</option>
+                                                                                    <option value="1"
+                                                                                        title="Paciente recebeu alta">
+                                                                                        Alta</option>
+                                                                                    <option value="2"
+                                                                                        title="Paciente foi a óbito">
+                                                                                        Óbito</option>
+                                                                                    <option value="3"
+                                                                                        title="Paciente não usa o equipamento">
+                                                                                        Não precisa mais do equipamento</option>
+                                                                                    <option value="4"
+                                                                                        title="Paciente internado sem previsão de alta">
+                                                                                        Paciente Internado
+                                                                                    </option>
+                                                                                    <option value="5"
+                                                                                        title="Recolher - Equipamento não atende a necessidade do paciente">
+                                                                                        Não atende a
+                                                                                        necessidade</option>
+                                                                                    <option value="6"
+                                                                                        title="Paciente migrou para outro home care">
+                                                                                        Troca de home care
+                                                                                    </option>
+                                                                                    {{-- <option value="7"
+                                                                                        title="Equipamento não está funcionamento corretamente">
+                                                                                        Trocar Equipamento
+                                                                                    </option> --}}
+                                                                                    {{-- <option value = "8">Outro</option> --}}
+                                                                                </select>
                                                                             </div>
-                                                                            <div class="line"></div>
-                                                                            <div class="step"
-                                                                                data-target="#agendamento-parts">
-                                                                                <button type="button"
-                                                                                    class="step-trigger" role="tab"
-                                                                                    aria-controls="agendamento-parts"
-                                                                                    id="agendamento-parts-trigger"
-                                                                                    aria-selected="false"
-                                                                                    disabled="disabled">
-                                                                                    <span
-                                                                                        class="bs-stepper-circle">2</span>
-                                                                                    <span
-                                                                                        class="bs-stepper-label">Agendamento</span>
-                                                                                    <input type="text" name="hsAtual"
-                                                                                        id="hsAtual" style="display: none">
-                                                                                </button>
+                                                                            <textarea name="txtMotivo" id="txtMotivo" cols="100%" rows="1" style="display: none"></textarea>
+                                                                            <div>
+                                                                                <div class="card-body table-responsive p-0">
+                                                                                    <table
+                                                                                        class="table table-sm table-striped table-head-fixed text-nowrap"
+                                                                                        id="tableEquipsRecolhe"
+                                                                                        style="visibility: hidden">
+                                                                                        <thead>
+                                                                                            <tr>
+                                                                                                <th></th>
+                                                                                                <th>Patr /
+                                                                                                    Equipamento
+                                                                                                </th>
+                                                                                            </tr>
+                                                                                        </thead>
+                                                                                        <tbody>
+                                                                                            @foreach ($equipsPct as $equipImplant)
+                                                                                                <tr class="tr-row"
+                                                                                                    style="vertical-align: middle; line-height: 100%">
+                                                                                                    <td>
+                                                                                                        <div style="margin-left: -40px"
+                                                                                                            id="checkSelEquipRecolhe"
+                                                                                                            class="checkSelEquipRecolhe form-check col-sm-6"
+                                                                                                            onclick="ContarSelecionadosRecolhe()">
+                                                                                                            {{-- <input class="qtdDoItem" type="number" min="0" value="0" onchange="qtdSolicitada(this.value)" style="width: 50px"> --}}
+                                                                                                            {{-- <input type="number" onchange="cadastraNotaImportada(this.value)" class="form-control disciplina" name="" value="0"> --}}
+                                                                                                            <input
+                                                                                                                class="checkbox checkbox-recolhe"
+                                                                                                                type="checkbox"
+                                                                                                                id=" {{ $equipImplant->id }}"
+                                                                                                                name=" {{ $equipImplant->name_equip }}"
+                                                                                                                onclick="coletaDadosRecolhe()"
+                                                                                                                style="margin-left: 7px; transform: scale(1.2)">
+                                                                                                        </div>
+                                                                                                    </td>
+                                                                                                    <td id="nomeEquipRecolhe"
+                                                                                                        class="nomeEquipRecolhe">
+                                                                                                        {{ $equipImplant->patr }}-
+                                                                                                        {{ $equipImplant->name_equip }}
+                                                                                                    </td>
+                                                                                                </tr>
+                                                                                            @endforeach
+                                                                                        </tbody>
+                                                                                    </table>
+                                                                                </div>
+                                                                                <p id="QtdequipsSelecionadosRecolhe"
+                                                                                    style="margin-left: 10px">
+                                                                                </p>
+                                                                                
+                                                                                <input type="text"
+                                                                                    name="enviarEquipRecolhe"
+                                                                                    id="enviarEquipRecolhe"
+                                                                                    style="display: none">
+                                                                                <p id="txtcama"></p>
                                                                             </div>
-                                                                            <div class="line"></div>
-                                                                            {{-- <div class="step"
-                                                                                data-target="#finalizar-parts">
-                                                                                <button type="button"
-                                                                                    class="step-trigger" role="tab"
-                                                                                    aria-controls="finalizar-parts"
-                                                                                    id="finalizar-parts-trigger"
-                                                                                    aria-selected="false"
-                                                                                    disabled="disabled">
-                                                                                    <span
-                                                                                        class="bs-stepper-circle">3</span>
-                                                                                    <span
-                                                                                        class="bs-stepper-label">Finalizar</span>
-                                                                                </button>
-                                                                            </div> --}}
                                                                         </div>
-                                                                        <div class="bs-stepper-content"
-                                                                            style="padding-bottom: 0px">
-                                                                            <!-- your steps content here -->
-
-                                                                            <div id="equip-parts"
-                                                                                class="content active dstepper-block"
-                                                                                role="tabpanel"
-                                                                                aria-labelledby="equip-parts-trigger">
-                                                                                <div>
-
-                                                                                    
-                                                                                    <div class="row">
-                                                                                                                                                                                
-                                                                                        <div class="col-md-6">
-
-                                                                                            <div id="selectMotivo" class="form-group">
-                                                                                                <label
-                                                                                                    for="motivo">Motivo:</label>
-                                                                                                <select name="motivo"
-                                                                                                    id="motivo"
-                                                                                                    class="form-control select"
-                                                                                                    style="width: 100%;"
-                                                                                                    aria-hidden="true"
-                                                                                                    required
-                                                                                                    onchange="habilitarBtnSolicitar()">
-                                                                                                    <option value="9"
-                                                                                                        selected disabled>Selecione
-                                                                                                        um motivo</option>
-                                                                                                    <option value="1"
-                                                                                                        title="Paciente recebeu alta">
-                                                                                                        Alta</option>
-                                                                                                    <option value="2"
-                                                                                                        title="Paciente foi a óbito">
-                                                                                                        Óbito</option>
-                                                                                                    <option value="3"
-                                                                                                        title="Paciente não usa o equipamento">
-                                                                                                        Não precisa mais do equipamento</option>
-                                                                                                    <option value="4"
-                                                                                                        title="Paciente internado sem previsão de alta">
-                                                                                                        Paciente Internado
-                                                                                                    </option>
-                                                                                                    <option value="5"
-                                                                                                        title="Recolher - Equipamento não atende a necessidade do paciente">
-                                                                                                        Não atende a
-                                                                                                        necessidade</option>
-                                                                                                    <option value="6"
-                                                                                                        title="Paciente migrou para outro home care">
-                                                                                                        Troca de home care
-                                                                                                    </option>
-                                                                                                    {{-- <option value="7"
-                                                                                                        title="Equipamento não está funcionamento corretamente">
-                                                                                                        Trocar Equipamento
-                                                                                                    </option> --}}
-                                                                                                    {{-- <option value = "8">Outro</option> --}}
-                                                                                                </select>
-                                                                                            </div>
-                                                                                            <textarea name="txtMotivo" id="txtMotivo" cols="100%" rows="1" style="display: none"></textarea>
-                                                                                        </div>
-
-                                                                                        <div class="form-group col-sm-6">
-                                                                                            <div
-                                                                                                class="card-body table-responsive p-0">
-                                                                                                <table
-                                                                                                    class="table table-sm table-striped table-head-fixed text-nowrap"
-                                                                                                    id="tableEquipsRecolhe"
-                                                                                                    style="visibility: hidden">
-                                                                                                    <thead>
-                                                                                                        <tr>
-                                                                                                            <th></th>
-                                                                                                            <th>Patr /
-                                                                                                                Equipamento
-                                                                                                            </th>
-                                                                                                        </tr>
-                                                                                                    </thead>
-                                                                                                    <tbody>
-                                                                                                        @foreach ($equipsPct as $equipImplant)
-                                                                                                            <tr class="tr-row"
-                                                                                                                style="vertical-align: middle; line-height: 100%">
-                                                                                                                <td>
-                                                                                                                    <div style="margin-left: -40px"
-                                                                                                                        id="checkSelEquipRecolhe"
-                                                                                                                        class="checkSelEquipRecolhe form-check col-sm-6"
-                                                                                                                        onclick="ContarSelecionadosRecolhe()">
-                                                                                                                        {{-- <input class="qtdDoItem" type="number" min="0" value="0" onchange="qtdSolicitada(this.value)" style="width: 50px"> --}}
-                                                                                                                        {{-- <input type="number" onchange="cadastraNotaImportada(this.value)" class="form-control disciplina" name="" value="0"> --}}
-                                                                                                                        <input
-                                                                                                                            class="checkbox checkbox-recolhe"
-                                                                                                                            type="checkbox"
-                                                                                                                            id=" {{ $equipImplant->id }}"
-                                                                                                                            name=" {{ $equipImplant->name_equip }}"
-                                                                                                                            onclick="coletaDadosRecolhe()"
-                                                                                                                            style="margin-left: 7px; transform: scale(1.2)">
-                                                                                                                    </div>
-                                                                                                                </td>
-                                                                                                                <td id="nomeEquipRecolhe"
-                                                                                                                    class="nomeEquipRecolhe">
-                                                                                                                    {{ $equipImplant->patr }}-
-                                                                                                                    {{ $equipImplant->name_equip }}
-                                                                                                                </td>
-                                                                                                            </tr>
-                                                                                                        @endforeach
-                                                                                                    </tbody>
-                                                                                                </table>
-                                                                                            </div>
-                                                                                            <p id="QtdequipsSelecionadosRecolhe"
-                                                                                                style="margin-left: 10px">
-                                                                                            </p>
-                                                                                            <textarea name="textEquipsRecolhe" id="textEquipsRecolhe" style="display: none"></textarea>
-                                                                                            <input type="text"
-                                                                                                name="enviarEquipRecolhe"
-                                                                                                id="enviarEquipRecolhe"
-                                                                                                style="display: none">
-                                                                                            <p id="txtcama"></p>
-                                                                                        </div>
-                                                                                        
-                                                                                    </div>
-                                                                                    
+                                                                        <div class="col-md-6">
+                                                                            <div class=" row form-group ">
+                                                                                <div class="col-sm-8 input-group date" id="dataAgendamento" >
+                                                                                    <label>
+                                                                                        Agendamento recolhe:
+                                                                                        <i class="fas fa-info-circle" style="color: blue" data-toggle="tooltip" title="Dia que deseja o atendimento"></i>
+                                                                                    </label>
+                                                                                    <input type="date" class="col-sm-8" id="dtAgendamentoRecolhe" name="dtAgendamentoRecolhe" class="form-control datetimepicker-input" required onchange="selHoraRecolhe()">
                                                                                 </div>
-                                                                            </div>
-
-                                                                            <div id="agendamento-parts"
-                                                                                class="content" role="tabpanel"
-                                                                                aria-labelledby="agendamento-parts-trigger">
-                                                                                <div class=" row form-group">
-
-                                                                                    {{-- <div class="col-sm-6"> --}}
-
-                                                                                        {{-- <div class="card-body table-responsive p-0" --}}
-                                                                                            {{-- style="height: 200px;"> --}}
-                                                                                            {{-- <table
-                                                                                                class="table table-sm table-head-fixed text-nowrap">
-                                                                                                <thead>
-                                                                                                    <tr>
-                                                                                                        <th style="width: 10px"
-                                                                                                            colspan="3">
-                                                                                                            Solicitações
-                                                                                                            Pendentes</th>
-                                                                                                    </tr>
-                                                                                                </thead>
-                                                                                                <tbody>
-                                                                                                    <small>
-                                                                                                        @foreach ($solicitacoesPend as $item)
-                                                                                                            <tr>
-                                                                                                                <td>{{ date('d/m', strtotime($item->date_agenda)) }}
-                                                                                                                </td>
-                                                                                                                <td>
-                                                                                                                    @switch($item->hour_agenda)
-                                                                                                                        @case(1)
-                                                                                                                            Dia todo
-                                                                                                                        @break
-
-                                                                                                                        @case(2)
-                                                                                                                            Manhã
-                                                                                                                        @break
-
-                                                                                                                        @case(3)
-                                                                                                                            Tarde
-                                                                                                                        @break
-
-                                                                                                                        @case(9)
-                                                                                                                            09-10hs
-                                                                                                                        @break
-
-                                                                                                                        @case(10)
-                                                                                                                            10-11hs
-                                                                                                                        @break
-
-                                                                                                                        @case(11)
-                                                                                                                            11-12hs
-                                                                                                                        @break
-
-                                                                                                                        @case(13)
-                                                                                                                            13-14hs
-                                                                                                                        @break
-
-                                                                                                                        @case(14)
-                                                                                                                            14-15hs
-                                                                                                                        @break
-
-                                                                                                                        @case(15)
-                                                                                                                            15-16hs
-                                                                                                                        @break
-
-                                                                                                                        @case(16)
-                                                                                                                            16-17hs
-                                                                                                                        @break
-
-                                                                                                                        @case(17)
-                                                                                                                            17-18hs
-                                                                                                                        @break
-
-                                                                                                                        @case(18)
-                                                                                                                            +18hs
-                                                                                                                        @break
-
-                                                                                                                        @default
-                                                                                                                    @endswitch
-                                                                                                                </td>
-                                                                                                                <td>
-                                                                                                                    {{ $item->bairro }}
-                                                                                                                    {{ $item->nome }}
-                                                                                                                </td>
-                                                                                                            </tr>
-                                                                                                        @endforeach
-                                                                                                    </small>
-                                                                                                </tbody>
-                                                                                            </table> --}}
-                                                                                        {{-- </div> --}}
-
-                                                                                    {{-- </div> --}}
-
-                                                                                    <div class="row">
-                                                                                        <div class="col-sm-8 input-group date" id="dataAgendamento" >
-                                                                                            <label>
-                                                                                                Agendamento recolhe:
-                                                                                                <i class="fas fa-info-circle" style="color: blue" data-toggle="tooltip" title="Dia que deseja o atendimento"></i>
-                                                                                            </label>
-                                                                                            <input type="date" class="col-sm-8" id="dtAgendamentoRecolhe" name="dtAgendamentoRecolhe" class="form-control datetimepicker-input" required onchange="selHoraRecolhe()">
-                                                                                        </div>
-                                                                                        <div class="col-sm-4">
-                                                                                            <label class="float-right">Horário:
-                                                                                                <i class="fas fa-clock"
-                                                                                                style="color: blue"
-                                                                                                data-toggle="tooltip"
-                                                                                                title="Horário aproximado"></i>
-                                                                                            </label>
-                                                                                                <span id="selhorariosRecolhe" style="visibility: hidden">
-                                                                                                    <select id="horariosRecolhe"
-                                                                                                        class="form-control"
-                                                                                                        name="horariosRecolhe" required
-                                                                                                        onchange="checkSolicit()">
-                                                                                                        <option id="select_0" disabled selected
-                                                                                                            value="0">Selecione
-                                                                                                        </option>
-                                                                                                        <option id="select_1"
-                                                                                                            value="1"
-                                                                                                            title="Qualquer horário do dia.">
-                                                                                                            Dia todo</option>
-                                                                                                        <option id="select_2"
-                                                                                                            value="2"
-                                                                                                            title="De 09hs às 12hs"
-                                                                                                            >Manhã
-                                                                                                        </option>
-                                                                                                        {{-- <option id="select_9"
-                                                                                                            value="9" disabled>
-                                                                                                            09-10hs
-                                                                                                        </option>
-                                                                                                        <option id="select_10"
-                                                                                                            value="10" disabled>
-                                                                                                            10-11hs
-                                                                                                        </option>
-                                                                                                        <option id="select_11"
-                                                                                                            value="11" disabled>
-                                                                                                            11-12hs
-                                                                                                        </option> --}}
-                                                                                                        <option id="select_3"
-                                                                                                            value="3"
-                                                                                                            title="De 13hs às 18hs"
-                                                                                                            >Tarde
-                                                                                                        </option>
-                                                                                                        {{-- <option id="select_13"
-                                                                                                            value="13" disabled>
-                                                                                                            13-14hs</option>
-                                                                                                        <option id="select_14"
-                                                                                                            value="14" disabled>
-                                                                                                            14-15hs</option>
-                                                                                                        <option id="select_15"
-                                                                                                            value="15" disabled>
-                                                                                                            15-16hs</option>
-                                                                                                        <option id="select_16"
-                                                                                                            value="16" disabled>
-                                                                                                            16-17hs</option>
-                                                                                                        <option id="select_17"
-                                                                                                            value="17" disabled>
-                                                                                                            17-18hs</option> --}}
-                                                                                                        <option id="select_18"
-                                                                                                            value="18" 
-                                                                                                            title="Apenas emergências">
-                                                                                                            +18hs*</option>
-                                                                                                    </select>
-                                                                                                </span>
-                                                                                        </div>
-
-                                                                                    </div>
+                                                                                <div class="col-sm-4">
+                                                                                    <label>Horário:
+                                                                                        <i class="fas fa-clock"
+                                                                                        style="color: blue"
+                                                                                        data-toggle="tooltip"
+                                                                                        title="Horário aproximado"></i>
+                                                                                    </label>
+                                                                                    <span id="selhorariosRecolhe" style="visibility: hidden">
+                                                                                        <select id="horariosRecolhe"
+                                                                                            class="form-control"
+                                                                                            name="horariosRecolhe" required
+                                                                                            onchange="pctHabilitaBtnSolicitar('btnSolicitaRecolhe')">
+                                                                                            <option id="select_0" disabled selected
+                                                                                                value="0">Selecione
+                                                                                            </option>
+                                                                                            <option id="select_1"
+                                                                                                value="1"
+                                                                                                title="Qualquer horário do dia.">
+                                                                                                Dia todo</option>
+                                                                                            <option id="select_2"
+                                                                                                value="2"
+                                                                                                title="De 09hs às 12hs"
+                                                                                                >Manhã
+                                                                                            </option>
+                                                                                            <option id="select_3"
+                                                                                                value="3"
+                                                                                                title="De 13hs às 18hs"
+                                                                                                >Tarde
+                                                                                            </option>
+                                                                                            <option id="select_18"
+                                                                                                value="18" 
+                                                                                                title="Apenas emergências">
+                                                                                                +18hs*</option>
+                                                                                        </select>
+                                                                                    </span>
                                                                                 </div>
+                                                                                
                                                                             </div>
-
-                                                                            <div class="form-group">
+                                                                            <div class="row form-group">
                                                                                 <label
                                                                                     for="obsSolicitacaoRecolhe">Observações:</label>
                                                                                 <textarea class="form-control" name="obsSolicitacaoRecolhe" id="obsSolicitacaoRecolhe" onkeyup="obsNotNull()"
                                                                                     cols="100%" rows="2"  placeholder="Observações sobre a solicitação" maxlength="150"></textarea>
                                                                             </div>
-                                                                            {{-- <div id="finalizar-parts"
-                                                                                class="content" role="tabpanel"
-                                                                                aria-labelledby="finalizar-parts-trigger">
-                                                                                <div class="form-group">
-                                                                                    <label for="resumoSolicit">Para
-                                                                                        prosseguir Confirme na opção abaixo e
-                                                                                        clique em Solicitar. Para alterar
-                                                                                        clique em Voltar.</label>
-                                                                                    <textarea name="resumoSolicit" id="resumoSolicit" style="width: 100%" rows="4" readonly></textarea>
-                                                                                    <div class="form-check">
-                                                                                        <input class="form-check-input"
-                                                                                            name="checkSolicitOk"
-                                                                                            id="checkSolicitOk"
-                                                                                            type="checkbox"
-                                                                                            onclick="checkSolicit()">
-                                                                                        <label class="form-check-label"
-                                                                                            for="checkSolicitOk">Confirmo a
-                                                                                            solicitação.</label>
-                                                                                    </div>
-                                                                                </div>
-
-                                                                            </div> --}}
+                                                                        </div>
                                                                     </div>
+                                                                    <div name="textEquipsRecolhe" id="textEquipsRecolhe" style="color: red"></div>
+                                                                    {{-- <p name="equipsrecolhe" id="textEquipsRecolhe"></p> --}}
+                                                                    <input type="text" name="EquipRecolhe" id="EquipRecolhe" style="display: none">
+                                                                    
+                                                                    <div id="fooRecolhe"></div>
                                                                 </div>
-                                                               
+
+                                                                
                                                             </div>
-                                                            <!-- /.card -->
                                                         </div>
                                                     </div>
-
-
-                                                </div>
+                                                            <!-- /.card -->
                                             </div>
-
-
+                                                    
                                             <div class="modal-footer">
-
+                                                    
                                                 <div>
                                                     <button type="submit" name="submitbuttonSolicit" value="2"
-                                                        class="btn  btn-success swalSolicitSuccess"
-                                                        onclick="viewSpinner()" id="btnSolicitaRecolhe"
-                                                        >Solicitar
+                                                        class="btn  btn-danger swalSolicitSuccess"
+                                                        onclick="viewSpinner()" id="btnSolicitaRecolhe" style="visibility: hidden"
+                                                        >Solicitar Recolhimento
                                                     </button>
+                                                </div>
+                                                <div class="custom-control custom-checkbox">
+                                                    <input class="custom-control-input custom-control-input-danger custom-control-input-outline" type="checkbox" name="notEmailRecolhe" id="notEmailRecolhe" >
+                                                    <label for="notEmailRecolhe" class="custom-control-label">Não enviar e-mail</label>
                                                 </div>
                                                 </form>
 
@@ -1697,10 +1394,10 @@
                                                         Voltar</button>
                                                     {{-- <button id="btnVoltar2" class="btn btn-primary btn-sm" onclick="stepper.previous(); desativaBtns3()" style="visibility: hidden"><i class="fas fa-arrow-left"></i> Voltar</button> --}}
 
-                                                    <button id="btnAvancar" class="btn btn-outline-primary "
+                                                    {{-- <button id="btnAvancar" class="btn btn-outline-primary "
                                                         onclick="stepper.next(); desativarBtnAvancar()"
                                                         style="visibility: hidden">Avançar <i
-                                                            class="fas fa-arrow-right"></i></button>
+                                                            class="fas fa-arrow-right"></i></button> --}}
                                                     {{-- <button id="btnAvancar2" class="btn btn-primary btn-sm" onclick="stepper.next()" style="visibility: hidden" onmouseup="ativaBtns3()">Avançar <i class="fas fa-arrow-right"></i></button> --}}
 
                                                     <div class="float-right">
@@ -1812,7 +1509,7 @@
                                                                                             <input type="text"
                                                                                                 name="enviarEquipTroca"
                                                                                                 id="enviarEquipTroca"
-                                                                                                style="display: none">
+                                                                                                >
                                                                                             <p id="txtcama"></p>
                                                                                         </div>
                                                                                         <div class="col-md-6">
@@ -1903,6 +1600,10 @@
                                                             onclick="viewSpinner()" id="btnSolicitaTroca"  id="modalTroca" tabindex="-1"
                                                             role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true" style="visibility: hidden">Solicitar
                                                         </button>
+                                                    </div>
+                                                    <div class="custom-control custom-checkbox">
+                                                        <input class="custom-control-input custom-control-input-danger custom-control-input-outline" type="checkbox" name="notEmailTroca" id="notEmailTroca" >
+                                                        <label for="notEmailTroca" class="custom-control-label">Não enviar e-mail</label>
                                                     </div>
                                                 </form>
 
@@ -2015,6 +1716,8 @@
     <script src={{ asset('js/buttons.html5.min.js') }}></script>
     <script src={{ asset('js/buttons.print.min.js') }}></script>
     <script src={{ asset('js/buttons.colVis.min.js') }}></script>
+    <script src={{ asset('js/buscacep.js') }}></script>
+    
 
     <!-- BS-Stepper -->
     <script src={{ asset('js/bs-stepper.min.js') }}></script>

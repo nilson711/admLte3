@@ -132,13 +132,13 @@ function ContarSelecionadosRecolhe(){
     //torna visível o botão avançar
 
     
-    if (selecionados > 0) {
-        document.getElementById('btnAvancar').style.visibility = "visible";
-        // document.getElementById('selectMotivo').style.visibility = "visible";
-    } else {
-        // document.getElementById('selectMotivo').style.visibility = "hidden";
-        document.getElementById('btnAvancar').style.visibility = "hidden";
-    }
+    // if (selecionados > 0) {
+    //     document.getElementById('btnAvancar').style.visibility = "visible";
+    //     // document.getElementById('selectMotivo').style.visibility = "visible";
+    // } else {
+    //     // document.getElementById('selectMotivo').style.visibility = "hidden";
+    //     document.getElementById('btnAvancar').style.visibility = "hidden";
+    // }
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -161,13 +161,13 @@ function ContarSelecionadosTroca(){
     //torna visível o botão avançar
 
     
-    if (selecionados > 0) {
-        document.getElementById('btnAvancar').style.visibility = "visible";
-        // document.getElementById('selectMotivo').style.visibility = "visible";
-    } else {
-        // document.getElementById('selectMotivo').style.visibility = "hidden";
-        document.getElementById('btnAvancar').style.visibility = "hidden";
-    }
+    // if (selecionados > 0) {
+    //     document.getElementById('btnAvancar').style.visibility = "visible";
+    //     // document.getElementById('selectMotivo').style.visibility = "visible";
+    // } else {
+    //     // document.getElementById('selectMotivo').style.visibility = "hidden";
+    //     document.getElementById('btnAvancar').style.visibility = "hidden";
+    // }
 }
 
 /*********************************************************************************************************************************
@@ -224,7 +224,7 @@ function ContarSelecionadosTroca(){
             case '3':
             // document.getElementById('btnConferido').style.visibility = "visible";
             // alert ("Esta solicitação é um troca!");
-            document.querySelector("#enviarEquipTroca").value = e;
+            // document.querySelector("#enviarEquipTroca").value = e;
             break;
 
         default:
@@ -266,8 +266,10 @@ function ContarSelecionadosTroca(){
  * Função BUSCA OS EQUIPAMENTOS DO PACIENTES QUE ESTÃO SELECIONADOS TROCA/MANUTENÇÃO
  */
   function coletaDadosTroca(){
+        var ids = document.getElementsByClassName('checkbox');  //Seleciona todos os objetos da classe "checkbox"
         var patrs = document.getElementsByClassName('checkbox');  //Seleciona todos os objetos da classe "checkbox"
-        coletaIDsTroca(patrs);
+        coletaIDsTroca(ids);
+        coletaPatrTroca(patrs);
  }
 
  /*********************************************************************************************************************************
@@ -313,7 +315,7 @@ function ContarSelecionadosTroca(){
         return html + "<li>" + item + "</li>";
             }, "");
 
-    document.querySelector("#enviarEquipRecolhe").value = sum;
+    document.querySelector("#enviarEquipTroca").value = sum;
  }
 
 /*********************************************************************************************************************************
@@ -336,7 +338,9 @@ function ContarSelecionadosTroca(){
         return html + "<li>" + item + "</li>";
             }, "");
     // document.querySelector("#fooRecolhe").innerHTML = codeHTML;
-    document.querySelector("#textEquipsTroca").innerHTML = sum;
+    document.querySelector("#textEquipsRecolhe").innerHTML = sum;
+    document.querySelector("#EquipRecolhe").value = sum;
+    console.log(sum);
  }
 
  /*********************************************************************************************************************************
@@ -601,8 +605,11 @@ function txtMin (txtInput, btn){
     if(document.getElementById(txtInput).value.length > 10){
         // alert('validou +10');
         document.getElementById(btn).style.visibility = 'visible';
+        document.getElementById(btn).removeAttribute("disabled");
+        
     }else{
         document.getElementById(btn).style.visibility = 'hidden';
+        document.getElementById(btn).setAttribute("disabled");
     }
 }
 
@@ -622,7 +629,7 @@ function obsForNull(){
 
 function habilitaSpinner(){
     document.getElementById('spinnerFinalizando').style.visibility = "visible";
-    // document.getElementById('btnConclui').style.visibility = "hidden";
+    document.getElementById('btnConclui').style.visibility = "hidden";
     // alert("mostrar o spinner");
 }
 
@@ -965,7 +972,7 @@ function selHoraRecolhe(){
     var atual_mes = hoje.getUTCMonth();
     var atual_ano = hoje.getUTCFullYear();
 
-    // console.log('nr '  + sel_data.getUTCDay());   //número do dia da semana (0=dom, 1=seg, 2=ter, 3=qua, 4=qui, 5=sex, 6=sab)
+    console.log('nr '  + sel_data.getUTCDay());   //número do dia da semana (0=dom, 1=seg, 2=ter, 3=qua, 4=qui, 5=sex, 6=sab)
     // console.log(tem_cama);
     // console.log('dia ' + sel_dia);                //retorna o dia do mês (1 a 31)
     // console.log('dia atual ' + atual_dia);         //retorna o dia de hoje (1 a 31)
@@ -976,8 +983,8 @@ function selHoraRecolhe(){
 
     //Busca dentro do input dos equipamentos selecionado se tem alguma CAMA
     var tem_cama = document.getElementById('textEquipsRecolhe').value;
-    var test_cama = tem_cama.indexOf("CAMA");
-    console.log(test_cama);
+    // var test_cama = tem_cama.indexOf("CAMA");
+    console.log(tem_cama);
 
     //Verifica se o dia da semana é sábado ou domingo
     if (nr_day == 6 || nr_day == 0) {
@@ -1119,9 +1126,9 @@ function checkSolicit(equipSel, btn){
 
 /*******************************************************************************************************************/
 
-function checkSolicitImplant(){
-    document.getElementById('btnSolicita').style.visibility = "visible";
-    console.log('achei vc');
+function pctHabilitaBtnSolicitar(btn){
+    document.getElementById(btn).style.visibility = "visible";
+    console.log('habilita o botão Solicitar');
 }
 
 function offBtnSolicita(){
@@ -1150,3 +1157,36 @@ function desativarBtnVoltar(){
     document.getElementById('btnAvancar').style.visibility = "visible";
 }
 
+function funcReagenda($op){
+    var obs_reagenda = document.getElementById('obs_reagenda');
+    obs_reagenda.removeAttribute("disabled");
+    obs_reagenda.focus();
+    obs_reagenda.value = null;
+    console.log($op);
+    if ($op == 1) {
+        document.getElementById('btnAgenda').removeAttribute("disabled");
+        document.getElementById('btnNotAgenda').disabled = true;
+        document.getElementById('rowAgenda').style.visibility = "visible";
+    } else {
+        document.getElementById('btnNotAgenda').removeAttribute("disabled");
+        document.getElementById('btnAgenda').disabled = true;
+        document.getElementById('rowAgenda').style.visibility = "hidden";
+        
+    }
+   
+}
+
+function habilitaOutro(e, o){
+    console.log (e . o);
+    // document.getElementById(o).removeAttribute("disabled");
+}
+
+function coletaRetirados(){
+    var itemRetirado = document.getElementById('itemRetirado').innerText;
+    var retirados = document.getElementById('retirados')
+    retirados.value = itemRetirado;
+    
+    console.log(coletaIDs(itemRetirado));
+
+
+}

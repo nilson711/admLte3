@@ -7,6 +7,7 @@
             document.getElementById('bairro').value=("");
             document.getElementById('cidade').value=("");
             document.getElementById('uf').value=("");
+            document.getElementById('cep').value=("");
             // document.getElementById('ibge').value=("");
     }
 
