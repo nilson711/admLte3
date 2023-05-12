@@ -70,7 +70,7 @@
                                                                     <input type="text" class="form-control" name="Pct"
                                                                         id="Pct" placeholder="Nome Completo do Paciente"
                                                                         maxlength="50" value="{{ $pctSel->name_pct }}"
-                                                                        style="text-align: center; font-weight: bold; color:blue">
+                                                                        style="text-align: center; fontfont-weight: bold; color:blue">
                                                                 </div>
                                                                 <ul class="list-group list-group-unbordered mb-3">
                                                                     <li class="list-group-item">
@@ -679,7 +679,9 @@
                                                           @endswitch
 
                                                         </td>
-                                                        <td>{{ $solicitacao->id }}</td>
+                                                        <td>
+                                                            <a href="{{ route('edit_solicit', $solicitacao->id) }}">{{$solicitacao->id}}</a>
+                                                        </td>
                                                         <td>
                                                           {{ $solicitacao->equips_solicit }}
                                                           ({{ $solicitacao->obs_solicit }})

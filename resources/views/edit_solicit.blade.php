@@ -85,8 +85,8 @@
                         
                         <table>
                             <tr>
-                              <td><i class="fas fa-user-injured fa-2x"></i> </td>
-                              <td><strong>{{ $atual->name_pct }}</strong></td>
+                                <td><a href="/editPct/{{$atual->id}}"><i class="fas fa-user-injured fa-2x"></i> </a></td>
+                                <td><strong>{{ $atual->name_pct }}</strong></td>
                             </tr>
                         </table>
                         

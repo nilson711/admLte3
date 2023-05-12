@@ -1167,10 +1167,12 @@ function funcReagenda($op){
         document.getElementById('btnAgenda').removeAttribute("disabled");
         document.getElementById('btnNotAgenda').disabled = true;
         document.getElementById('rowAgenda').style.visibility = "visible";
+        document.getElementById('dtSelReagenda').style.visibility = "visible";
     } else {
         document.getElementById('btnNotAgenda').removeAttribute("disabled");
         document.getElementById('btnAgenda').disabled = true;
         document.getElementById('rowAgenda').style.visibility = "hidden";
+        document.getElementById('dtSelReagenda').style.visibility = "hidden";
         
     }
    

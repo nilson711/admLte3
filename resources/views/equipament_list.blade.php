@@ -323,6 +323,12 @@
                                             @endif
                                             @endforeach
                                         @endif
+                                        <form action={{route('retirarEquipPct', $equipImplantado->id)}}>
+                                            @csrf
+                                            <button class="btn btn-sm"  data-toggle="tooltip" title="Retirar este equipamento" style="color: red"><i class="fas fa-trash"></i></button>
+                                        </form>
+                                        
+
                                     </td>
 
                                     </td>

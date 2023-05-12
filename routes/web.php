@@ -64,6 +64,7 @@ Route::get('/edit_solicit/{id}', [App\Http\Controllers\SolicitacaoController::cl
 
 Route::post('/cancelAllEquipsSolicit/{solicit_equip}', [App\Http\Controllers\SolicitacaoController::class, 'cancelAllEquipsSolicit'])->name('cancelAllEquipsSolicit');
 Route::post('/cancelOneEquipSolicit/{idEquip}/{solicit_equip?}', [App\Http\Controllers\SolicitacaoController::class, 'cancelOneEquipSolicit'])->name('cancelOneEquipSolicit');
+Route::post('/retirarEquipPct/{idEquip}', [App\Http\Controllers\SolicitacaoController::class, 'retirarEquipPct'])->name('retirarEquipPct');
 
 Route::get('/fim_solicitacao', [App\Http\Controllers\SolicitacaoController::class, 'iniciar_solicit'])->name('fim_solicitacao');
 
