@@ -38,12 +38,12 @@
         
     @endforeach
   </div>
-    <div>
+    <div class="row">
         @foreach ($solicitacoes as $solicitacao )
         <a href="{{route('edit_solicit', $solicitacao->id)}}">
 
         {{-- @if ($solicitacao->priority == 0) --}}
-            <div class="col-12">
+            <div class="col-md-12">
                 <div class="info-box">
                   
                   <span class="info-box-icon bg-info" style="width: 60px">

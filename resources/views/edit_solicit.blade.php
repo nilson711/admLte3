@@ -93,8 +93,13 @@
                         {{-- <i class="fas fa-map-marker-alt"></i> --}}
                         {{ $atual->rua }} - nº {{ $atual->nr }}
                         {{ $atual->compl }} - {{ $atual->bairro }} <br> {{$cityPct}}<br>
-                        <i class="fas fa-phone"></i>
-                        {{$atual->tel_resp}} - {{$atual->resp}} <br> 
+                        <i class="fab fa-whatsapp"></i>
+                        
+                        <input type="hidden" name="telN" id="telN" value="{{$atual->tel_resp}}">
+                        <a href="#" id="linkWp" target="_blanck" >
+                            {{$atual->tel_resp}} - {{$atual->resp}} <br> 
+                        </a>
+                      
                         <i class="fas fa-phone"></i>
                         {{$atual->tel_resp2}} - {{$atual->resp2}}<br>
                         <strong>Obs: </strong> 
@@ -103,9 +108,9 @@
                         <div class="row">
                             <div class="col-md-12">
                                 <div>
-                                    <div class="card-header">
+                                    {{-- <div class="card-header">
                                         <h3 class="card-title"></h3>
-                                    </div>
+                                    </div> --}}
                                     <div>
                                         <div>
                                             <div>
@@ -115,55 +120,76 @@
                                                         
                                                         @if ($solicitSel->type_solicit == 1)
                                                             <label for="exampleInputEmail1">Solicitados</label>
+                                                       
+                                                            @foreach (explode(',', $atual->equips_solicit) as $itemEquip)
+                                                                <li>{{$itemEquip}}</li>
+                                                            @endforeach
+
                                                         @endif
+
+                                                        @foreach ($equipsSel as $itemSel)
+                                                            <li>{{ $itemSel->patr }} - {{ $itemSel->name_equip }}</li>
+                                                        @endforeach
+
+                                                       
+                                                        <hr>
                                                         <div>
+                                                            
                                                             @foreach (explode(',', $atual->equips_solicit) as $itemEquip)
                                                                 {{-- Separa os itens por vírgula e joga numa lista --}}
+                                                                <form action="{{ route('add_equip_pct') }}"
+                                                                    method="post">
+                                                                    @csrf
+                                                                    <input type="text" name="solicitForEquip"
+                                                                        value="{{ $solicitSel->id }}"
+                                                                        style="display: none">
                                                                 <div class="form-group">
                                                                     <div>
-                                                                        @if ($solicitSel->type_solicit == 1 )
-                                                                            <li class="li_itens">{{ $itemEquip }}</li>
-                                                                        @endif
-                                                                       
-                                                                        {{-- <i class="fas fa-plus"></i> --}}
-                                                                        <form action="{{ route('add_equip_pct') }}"
-                                                                            method="post">
-                                                                            @csrf
-                                                                            <input type="text" name="solicitForEquip"
-                                                                                value="{{ $solicitSel->id }}"
-                                                                                style="display: none">
-                                                                            @if ($solicitSel->type_solicit == 1 or $solicitSel->type_solicit == 3)
-                                                                                @if ($atual->status_solicit < 1)
-                                                                                    <div class="input-group input-group-sm">
-                                                                                        <select name="selectEquip"
-                                                                                            class="selectEquip form-control select2 select2-hidden-accessible"
-                                                                                            onchange="coletaProdutoSelecionado()"
-                                                                                            on style="width: 100%;"
-                                                                                            aria-hidden="true">
-                                                                                            <option value="" selected>
-                                                                                                Selecione</option>
-                                                                                            @foreach ($equips as $equip)
-                                                                                                <option
-                                                                                                    value="{{ $equip->id }}">
-                                                                                                    {{ $equip->patr }} -
-                                                                                                    {{ $equip->name_equip }}
-                                                                                                </option>
-                                                                                            @endforeach
-                                                                                        </select>
-                                                                                    </div>
+                                                                        <div id="equipSelecionados"></div>
+                                                                        <div class="row">
+                                                                            <div class="col-md-3">
+                                                                                @if ($solicitSel->type_solicit == 1 )
+                                                                                    <li class="li_itens">{{ $itemEquip }}</li>
                                                                                 @endif
-                                                                                <hr>
-                                                                            @endif
+
+                                                                            </div>
+                                                                            <div class="col-md-6">
+
+                                                                                @if ($solicitSel->type_solicit == 1 or $solicitSel->type_solicit == 3)
+                                                                                    @if ($atual->status_solicit < 1)
+                                                                                        <div class="input-group input-group-sm">
+                                                                                            <select name="selectEquip"
+                                                                                                class="selectEquip form-control select2 select2-hidden-accessible"
+                                                                                                onchange="coletaProdutoSelecionado()"
+                                                                                                on style="width: 100%;"
+                                                                                                aria-hidden="true">
+                                                                                                <option value="" selected>
+                                                                                                    Selecione</option>
+                                                                                                @foreach ($equips as $equip)
+                                                                                                    <option
+                                                                                                        value="{{ $equip->id }}">
+                                                                                                        {{ $equip->patr }} -
+                                                                                                        {{ $equip->name_equip }}
+                                                                                                    </option>
+                                                                                                @endforeach
+                                                                                            </select>
+                                                                                        </div>
+                                                                                    @endif
+                                                                                    
+                                                                                @endif
+                                                                            </div>
+
+                                                                        </div>
+                                                                      
+                                                                        {{-- <i class="fas fa-plus"></i> --}}
                                                                                 
                                                                             <input type="text" name="pctForEquip"
                                                                                 value="{{ $atual->id }}"
                                                                                 style="display: none">
-                                                                            <div id="equipSelecionados"
-                                                                               ></div>
+                                                                            
                                                                             <input type="text" name="enviarEquip"
                                                                                 id="enviarEquip" 
-                                                                                style="display: none"
-                                                                                >
+                                                                                style="display: none">
 
                                                                             <!-- Modal Conferir -->
                                                                             <div class="modal fade" id="modalConferir"
@@ -260,7 +286,7 @@
                                                                                                 @endif
                                                                                                 </span>
                                                                                                 
-                                                                                                <hr>
+                                                                                                {{-- <hr> --}}
                                                                                             @endif
                                                                                             
                                                                                                 <!-- Modal Confirma Exclusão Equip -->
@@ -789,8 +815,8 @@
         <script src={{ asset('js/buttons.print.min.js') }}></script>
         <script src={{ asset('js/buttons.colVis.min.js') }}></script>
         <script src={{ asset('js/functions-equips.js') }} defer></script>
-        <script src={{ asset('js/botFeedback.js') }} defer></script>
-        <script src={{ asset('js/chamarBot.js') }} defer></script>
+        {{-- <script src={{ asset('js/botFeedback.js') }} defer></script> --}}
+        {{-- <script src={{ asset('js/chamarBot.js') }} defer></script> --}}
 
 
         <script>
@@ -979,6 +1005,7 @@
 
             function soNumeros(v) {
                 return v.replace(/\D/g, "")
+               
             }
 
             function telefone(v) {
@@ -1269,7 +1296,23 @@
             $("#radioTroca").on('click', function() {
                 document.getElementById('btnConclui').style.display = "none";
             });
+
+
+            function limparNumeroTelefone(telefone) {
+            return telefone.replace(/[\(\)\-\s]/g, '');
+
+            }
+
+            // monta o link da api whatsapp para enviar msg
+            let numeroTelefoneFormatado = document.getElementById('telN').value;
+            let numeroTelefoneLimpo = limparNumeroTelefone(numeroTelefoneFormatado);
+            // console.log(numeroTelefoneLimpo); // Saída: "1234567890"
+            document.getElementById("linkWp").href = "https://wa.me/55" + numeroTelefoneLimpo;
+           
+
         </script>
+
+        
 
 
     @stop

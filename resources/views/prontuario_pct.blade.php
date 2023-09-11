@@ -78,11 +78,12 @@
                                                                             <select name="hc" id="hc"
                                                                                 class="form-control select"
                                                                                 style="width: 100%;" aria-hidden="true"
-                                                                                required>]
+                                                                                required>
                                                                                 @foreach ($clientes as $cliente)
                                                                                     <option value="{{ $cliente->id }}"
                                                                                         {{ $cliente->id == $pctSel->id_hc ? 'selected' : '' }}>
-                                                                                        {{ $cliente->cliente }}</option>
+                                                                                        {{ $cliente->cliente }}
+                                                                                    </option>
                                                                                 @endforeach
                                                                             </select>
                                                                         </a>
@@ -148,7 +149,11 @@
                                                                         value="{{ $pctSel->resp }}">
                                                                 </div>
                                                                 <div class="col-sm-2">
-                                                                    <label for="tel_resp" style="color: white">.</label>
+                                                                    <label for="tel_resp" style="color: white">
+                                                                        <a href="#" id="linkWp" target="_blanck" >
+                                                                            <i class="fab fa-whatsapp"></i> Link Whatsapp
+                                                                        </a>
+                                                                    </label>
                                                                     <input type="text" class="form-control"
                                                                         title="Celular Ex: (61) 99234-5678" name="tel_resp"
                                                                         id="tel_resp" onkeypress="mascara(this, telefone)"
@@ -2169,6 +2174,17 @@
         var campo = document.querySelector('textarea');
             campo.value = '';
         
+        
+            function limparNumeroTelefone(telefone) {
+            return telefone.replace(/[\(\)\-\s]/g, '');
+
+            }
+
+            // monta o link da api whatsapp para enviar msg
+            let numeroTelefoneFormatado = document.getElementById('tel_resp').value;
+            let numeroTelefoneLimpo = limparNumeroTelefone(numeroTelefoneFormatado);
+            // console.log(numeroTelefoneLimpo); // Saída: "1234567890"
+            document.getElementById("linkWp").href = "https://wa.me/55" + numeroTelefoneLimpo;
     </script>
 
 

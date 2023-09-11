@@ -406,9 +406,18 @@ public function iniciar_solicit(Request $request, $id){
                                                     ON P.name_equip = E.name_equip
                                                     WHERE E.id = $equip AND P.id_hc = $nrHcPct
                                                     ;");
-                                    
-                                    //CONVERTE O ARRAY $PREÇO EM STRING
+
+                                // SE O ARRAY NÃO VIER VAZIO
+                                if ($preco) {
+                                    $preco = $preco;
                                     $vlpreco = value($preco[0]); 
+                                } else {
+                                    $preco = 0;
+                                    $vlpreco = $preco; 
+                                }
+                                    
+                                // dd($preco);
+                                    //CONVERTE O ARRAY $PREÇO EM STRING
                                     $collectionpreco = collect($vlpreco);           //transforma o array em uma collection
                                     $addEpreco = $collectionpreco->implode(',');    //transforma a collecttion em string
 
@@ -792,7 +801,7 @@ public function cancelOneEquipSolicit (Request $request, $idEquip, $solicit_equi
 
 ///========================================================================================================================
  //EXCLUI O EQUIPAMENTO DO PACIENTE ATUAL
-public function retirarEquipPct (Request $request, $idEquip){
+public function retirarEquipPct ($idEquip){
 
     dd('retirar equipamento');
 

@@ -1189,6 +1189,4 @@ function coletaRetirados(){
     retirados.value = itemRetirado;
     
     console.log(coletaIDs(itemRetirado));
-
-
 }
